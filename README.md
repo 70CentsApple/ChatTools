@@ -1,5 +1,7 @@
 # ChatNotifier
 
+README.md is written in Chinese, for Engish version, please [view README_en.md](README_en.md).
+
 你说得对，但是《ChatNotifier》是由 70CentsApple 自主研发的一款 Minecraft Fabric 模组。模组运行在一个叫做「Minecraft」的客户端内，在这里，玩家可以高度自定义「消息提示内容、消息提示方式」等，找回被忽略掉的消息——同时，逐步发掘「Minecraft消息」的真相。
 
 ## 特色功能
