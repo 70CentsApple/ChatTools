@@ -1,0 +1,7 @@
+{  "key.kyrptconfig.config.restartRequired": "重启游戏后生效",
+  "key.kyrptconfig.config.exit": "取消",
+  "key.kyrptconfig.config.saveExit": "完成",
+  "key.kyrptconfig.config.true": "启用",
+  "key.kyrptconfig.config.false": "禁用",
+  "key.kyrptconfig.config.reset": "重置"
+}
