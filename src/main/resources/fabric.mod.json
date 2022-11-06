@@ -15,7 +15,7 @@
     "bilibili": "https://space.bilibili.com/442361724"
   },
 
-  "license": "CC0-1.0",
+  "license": "GPL-3.0",
   "icon": "icon.png",
 
   "environment": "*",
