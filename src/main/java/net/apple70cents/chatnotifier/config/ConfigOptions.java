@@ -26,6 +26,7 @@ public class ConfigOptions implements AbstractConfigFile {
     public boolean toastNotify = false;
     public boolean highlightEnabled = true;
     public String highlightPrefix = "&a→ &6";
+    public boolean enforceOverwriting = false;
 
     public static Screen buildScreen(Screen screen) {
         ConfigScreen configScreen = new ConfigScreen(screen, new TranslatableText("key.chatnotifier.configScreen"));

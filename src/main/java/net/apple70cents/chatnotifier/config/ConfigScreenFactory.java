@@ -96,6 +96,7 @@ public class ConfigScreenFactory {
         SubItem<?> sub = (SubItem<?>) new SubItem<>(new TranslatableText("key.chatnotifier.settings.highlightSettings"));
         sub.addConfigItem(new BooleanItem(parseName("enableHighlight"), options.highlightEnabled, true).setSaveConsumer(b -> options.highlightEnabled = b));
         sub.addConfigItem(new TextItem(parseName("highlightPrefix"), options.highlightPrefix, "&a→ &6").setSaveConsumer(t -> options.highlightPrefix = t)).setToolTip(new TranslatableText("key.chatnotifier.settings.highlightPrefixDescription"));
+        sub.addConfigItem(new BooleanItem(parseName("enforceOverwriting"), options.enforceOverwriting, false).setSaveConsumer(b -> options.enforceOverwriting = b));
         return sub;
     }
 

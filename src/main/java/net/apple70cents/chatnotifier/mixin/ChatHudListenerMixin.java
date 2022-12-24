@@ -49,7 +49,7 @@ public abstract class ChatHudListenerMixin {
 
             // 弹窗提示
             if (config.toastNotify && !this.client.isWindowFocused()) {
-                MyToastNotification.toast(new TranslatableText("key.chatnotifier.toast.title").getString(),text.getString());
+                MyToastNotification.toast(new TranslatableText("key.chatnotifier.toast.title").getString(), text.getString());
             }
 
             // ActionBar 提示
@@ -63,15 +63,18 @@ public abstract class ChatHudListenerMixin {
             }
 
             // 高亮提示
-            if (config.highlightEnabled) {
-                String prefix = config.highlightPrefix.replace('&', '§').replace("\\§", "&");
-                Text highlightedMsg = (Text) new TranslatableText(prefix + text.getString());
-
-                if (type != MessageType.CHAT) {
-                    this.client.inGameHud.getChatHud().addMessage(highlightedMsg);
-                } else {
-                    this.client.inGameHud.getChatHud().queueMessage(highlightedMsg);
-                }
+            String prefix = config.highlightPrefix.replace('&', '§').replace("\\§", "&");
+            Text highlightedMsg;
+            if(config.enforceOverwriting) {
+                highlightedMsg = (Text) new TranslatableText(prefix + text.getString());
+            } else {
+                highlightedMsg = (Text) new TranslatableText(prefix).append(text);
+            }
+            Text targetMsg = config.highlightEnabled ? highlightedMsg : text;
+            if (type != MessageType.CHAT) {
+                this.client.inGameHud.getChatHud().addMessage(targetMsg);
+            } else {
+                this.client.inGameHud.getChatHud().queueMessage(targetMsg);
             }
             ci.cancel();
         }
