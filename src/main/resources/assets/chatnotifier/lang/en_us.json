@@ -1,7 +1,7 @@
 {
   "key.chatnotifier.modname": "ChatNotifier",
   "key.chatnotifier.configScreen": "Config ChatNotifier",
-  "key.chatnotifier.category": "Main",
+  "key.chatnotifier.category.main": "Main",
   "key.chatnotifier.match": "§a§lThere's a message you should notify.",
   "key.chatnotifier.settings.enableMod": "Enable ChatNotifier",
   "key.chatnotifier.settings.enableModDescription": "Toggles the entire mod.",
@@ -16,7 +16,7 @@
   "key.chatnotifier.settings.toastNotify": "§6Toast Notification",
   "key.chatnotifier.settings.toastNotifyDescription": "§6* In-development feature, may not work. <br>§rWhen Minecraft is running in the background, you will be alerted <br>with a Toast Notification when you receive a concern message.",
   "key.chatnotifier.settings.highlightSettings": "Highlight Settings",
-  "key.chatnotifier.settings.highlightDescription": "Please use \"&\" for color code prefix, and \"\\&\" for \"&\".<br> <br>- Enforce Overwriting:<br>Enabling this feature will make the text that was interactive non-interactive, <br>but allows you to apply custom color codes in the custom prefix; <br>Disabling this feature will prevent you from applying custom color <br>codes in the custom prefix for the prefix that follows it, but the interactivity <br>of the text will remain unchanged.",
+  "key.chatnotifier.settings.highlightDescription": "Please use \"&\" for color code prefix, and \"\\&\" for \"&\".<br> <br>- Enforce Overwriting:<br>Enabling this feature will make the text that was interactive non-interactive, <br>but allows you to apply custom color codes in the custom prefix; <br>Disabling this feature will prevent you from applying custom color codes <br>in the custom prefix for the prefix that follows it, but the interactivity <br>of the text will remain unchanged.",
   "key.chatnotifier.settings.enableHighlight": "Highlight Subscribed Messages",
   "key.chatnotifier.settings.highlightPrefix": "Highlight Prefix",
   "key.chatnotifier.settings.highlightPrefixDescription": "Please use \"&\" for color code prefix, and \"\\&\" for \"&\".",
@@ -29,5 +29,12 @@
   "key.chatnotifier.settings.pitch": "Pitch",
   "key.chatnotifier.settings.actionbarSettings": "Actionbar Settings",
   "key.chatnotifier.settings.enableActionbar": "Notify at actionbar",
-  "key.chatnotifier.toast.title": "Message from Minecraft:"
+  "key.chatnotifier.toast.title": "Message from Minecraft:",
+  "key.chatnotifier.category.allow": "Allow List",
+  "key.chatnotifier.category.ban": "Ban List",
+  "key.chatnotifier.regex.placeholder": "[EDIT ME]",
+  "key.chatnotifier.regex.add": "Add new",
+  "key.chatnotifier.regex.remove": "Remove",
+  "key.chatnotifier.regex.edit": "Click here to edit",
+  "key.chatnotifier.regex.value": "Value"
 }

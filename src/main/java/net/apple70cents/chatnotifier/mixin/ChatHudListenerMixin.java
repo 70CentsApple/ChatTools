@@ -33,9 +33,27 @@ public abstract class ChatHudListenerMixin {
     @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
     public void onChatMessage(MessageType type, Text text, UUID senderUuid, CallbackInfo ci) {
         ConfigOptions config = ChatNotifier.getConfig();
+        // 匹配机制
+        boolean shouldMatch = false;
+        for (int i = 0; i < config.allowList.size(); i++) {
+            if (Pattern.compile(config.allowList.get(i).value, Pattern.MULTILINE).matcher(text.getString()).find() || // 匹配白名单正则表达式
+                    (config.matchSelfName && Pattern.compile(this.client.player.getName().getString(), Pattern.MULTILINE).matcher(text.getString()).find())) { // 应匹配名字 && 匹配名字
+                shouldMatch = true;
+                break;
+            }
+        }
+        for (int i = 0; i < config.banList.size(); i++) {
+            if (Pattern.compile(config.banList.get(i).value, Pattern.MULTILINE).matcher(text.getString()).find() || // 匹配黑名单正则表达式
+                    (config.ignoreSystemMessage && type.equals(MessageType.SYSTEM))) { // 应忽略系统消息 && 系统消息
+                shouldMatch = false;
+                break;
+            }
+        }
+        /*
         boolean shouldMatch = (Pattern.compile(config.chatNotifyRegEx, Pattern.MULTILINE).matcher(text.getString()).find()
                 || (config.matchSelfName && Pattern.compile(this.client.player.getName().getString(), Pattern.MULTILINE).matcher(text.getString()).find())
         ) && !(config.ignoreSystemMessage && type.equals(MessageType.SYSTEM)); // (匹配正则表达式 || (应匹配名字 && 匹配名字) ) && !(应忽略系统消息 && 系统消息)
+         */
         if (!config.modEnabled) {
         } // 启用 ChatNotifier 则向下走
         else if (!shouldMatch) {
@@ -65,7 +83,7 @@ public abstract class ChatHudListenerMixin {
             // 高亮提示
             String prefix = config.highlightPrefix.replace('&', '§').replace("\\§", "&");
             Text highlightedMsg;
-            if(config.enforceOverwriting) {
+            if (config.enforceOverwriting) {
                 highlightedMsg = (Text) new TranslatableText(prefix + text.getString());
             } else {
                 highlightedMsg = (Text) new TranslatableText(prefix).append(text);

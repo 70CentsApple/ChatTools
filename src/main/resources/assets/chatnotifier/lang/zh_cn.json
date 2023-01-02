@@ -1,10 +1,10 @@
 {
   "key.chatnotifier.modname": "ChatNotifier",
   "key.chatnotifier.configScreen": "配置 ChatNotifier",
-  "key.chatnotifier.category": "§f注意：请用下方§a§l完成键§r§f完成您的更改，出于一些§m特性§r§f原因用Esc键退出将§6§l不会§r§f保存更改",
+  "key.chatnotifier.category.main": "基本",
   "key.chatnotifier.match": "§a§l聊天栏中有您关注的信息",
   "key.chatnotifier.settings.enableMod": "启用ChatNotifier（总开关）",
-  "key.chatnotifier.settings.enableModDescription": "ChatNotifier 模组的总开关",
+  "key.chatnotifier.settings.enableModDescription": "ChatNotifier 的总开关",
   "key.chatnotifier.settings.regex": "匹配正则表达式",
   "key.chatnotifier.settings.regexDescription": "内容遵循 §a正则表达式（RegEx）§r 语法",
   "key.chatnotifier.settings.ignoreSelf": "§6忽略自己发出的消息",
@@ -12,7 +12,7 @@
   "key.chatnotifier.settings.matchSelfName": "匹配玩家自己的昵称",
   "key.chatnotifier.settings.matchSelfNameDescription": "例如，如果您的昵称为Foo，则会匹配含有Foo的信息",
   "key.chatnotifier.settings.ignoreSystemMessage": "§6忽略系统消息",
-  "key.chatnotifier.settings.ignoreSystemMessageDescription": "§6* 不建议在服务器中启用，尤其是安装了聊天插件的服务器<br>§6（可能会发生意料之外的错误）",
+  "key.chatnotifier.settings.ignoreSystemMessageDescription": "§6* 不建议在服务器中启用，尤其是安装了聊天插件的服务器<br>§6（可能会发生意料之外的失效）",
   "key.chatnotifier.settings.toastNotify": "§6后台弹窗提醒",
   "key.chatnotifier.settings.toastNotifyDescription": "§6* 开发中功能，不一定生效<br>§r当游戏在后台运行时收到关注消息，将会以一个弹窗的方式提醒您",
   "key.chatnotifier.settings.highlightSettings": "高亮选项",
@@ -29,5 +29,12 @@
   "key.chatnotifier.settings.pitch": "音高",
   "key.chatnotifier.settings.actionbarSettings": "行动栏选项",
   "key.chatnotifier.settings.enableActionbar": "行动栏（标题栏上方显示）提示",
-  "key.chatnotifier.toast.title": "来自 Minecraft 的关注信息"
+  "key.chatnotifier.toast.title": "来自 Minecraft 的关注信息",
+  "key.chatnotifier.category.allow": "匹配白名单",
+  "key.chatnotifier.category.ban": "匹配黑名单",
+  "key.chatnotifier.regex.placeholder": "[点击此处编辑]",
+  "key.chatnotifier.regex.add": "添加",
+  "key.chatnotifier.regex.remove": "移除",
+  "key.chatnotifier.regex.edit": "点击编辑",
+  "key.chatnotifier.regex.value": "匹配值（正则表达式）"
 }

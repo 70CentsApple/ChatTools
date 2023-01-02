@@ -16,6 +16,9 @@ import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChatNotifier implements ModInitializer {
     // This logger is used to write text to the console and the log file.
     // It is considered best practice to use your mod id as the logger's name.
@@ -23,7 +26,8 @@ public class ChatNotifier implements ModInitializer {
     public static final String MODID = "chatnotifier";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static ConfigManager.SingleConfigManager config = new ConfigManager.SingleConfigManager(MODID,new ConfigOptions());
-
+    public static List<ConfigOptions.RegexUnit> allowList = new ArrayList<>();
+    public static List<ConfigOptions.RegexUnit> banList = new ArrayList<>();
     @Override
     public void onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -52,5 +56,14 @@ public class ChatNotifier implements ModInitializer {
 
     public static ConfigOptions getConfig() {
         return (ConfigOptions) config.getConfig();
+    }
+
+    public static void addRegexUnit(String type){
+        if(type.equals("ALLOW")) {
+            getConfig().allowList.add(new ConfigOptions.RegexUnit());
+        } else if(type.equals("BAN")){
+            getConfig().banList.add(new ConfigOptions.RegexUnit());
+        }
+        config.save();
     }
 }
