@@ -24,7 +24,7 @@
       "net.apple70cents.chatnotifier.ChatNotifier"
     ],
     "modmenu": [
-      "net.apple70cents.chatnotifier.config.ModMenuIntegration"
+      "net.apple70cents.chatnotifier.config.ModMenuScreen"
     ]
   },
   "mixins": [

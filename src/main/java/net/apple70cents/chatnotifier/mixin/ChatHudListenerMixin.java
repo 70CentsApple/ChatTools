@@ -1,10 +1,13 @@
 package net.apple70cents.chatnotifier.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.apple70cents.chatnotifier.ChatNotifier;
 import net.apple70cents.chatnotifier.MyToastNotification;
-import net.apple70cents.chatnotifier.config.ConfigOptions;
+import net.apple70cents.chatnotifier.config.ModConfig;
+import net.apple70cents.chatnotifier.config.ModConfigProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudListener;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.MessageType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -23,6 +26,8 @@ import java.awt.*;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import static net.apple70cents.chatnotifier.ChatNotifier.config;
+
 @Mixin(ChatHudListener.class)
 public abstract class ChatHudListenerMixin {
 
@@ -32,18 +37,20 @@ public abstract class ChatHudListenerMixin {
 
     @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
     public void onChatMessage(MessageType type, Text text, UUID senderUuid, CallbackInfo ci) {
-        ConfigOptions config = ChatNotifier.getConfig();
+        ModConfig config = ChatNotifier.config;
         // 匹配机制
         boolean shouldMatch = false;
         for (int i = 0; i < config.allowList.size(); i++) {
-            if (Pattern.compile(config.allowList.get(i).value, Pattern.MULTILINE).matcher(text.getString()).find() || // 匹配白名单正则表达式
-                    (config.matchSelfName && Pattern.compile(this.client.player.getName().getString(), Pattern.MULTILINE).matcher(text.getString()).find())) { // 应匹配名字 && 匹配名字
+            if (Pattern.compile(config.allowList.get(i), Pattern.MULTILINE).matcher(text.getString()).find()){ // 匹配白名单正则表达式
                 shouldMatch = true;
                 break;
             }
         }
+        if(config.matchSelfName && Pattern.compile(this.client.player.getName().getString(), Pattern.MULTILINE).matcher(text.getString()).find()){ // 应匹配名字 && 匹配名字
+            shouldMatch = true;
+        }
         for (int i = 0; i < config.banList.size(); i++) {
-            if (Pattern.compile(config.banList.get(i).value, Pattern.MULTILINE).matcher(text.getString()).find() || // 匹配黑名单正则表达式
+            if (Pattern.compile(config.banList.get(i), Pattern.MULTILINE).matcher(text.getString()).find() || // 匹配黑名单正则表达式
                     (config.ignoreSystemMessage && type.equals(MessageType.SYSTEM))) { // 应忽略系统消息 && 系统消息
                 shouldMatch = false;
                 break;
@@ -71,24 +78,24 @@ public abstract class ChatHudListenerMixin {
             }
 
             // ActionBar 提示
-            if (config.actionbarNotifyEnabled) {
+            if (config.actionbarSettings.actionbarNotifyEnabled) {
                 this.client.player.sendMessage(new TranslatableText("key.chatnotifier.match"), true);
             }
 
             // 音效提示
-            if (config.soundNotifyEnabled) {
-                this.client.player.playSound(new SoundEvent(new Identifier(config.chatNotifySound)), SoundCategory.PLAYERS, config.chatNotifyVolume, config.chatNotifyPitch);
+            if (config.soundSettings.soundNotifyEnabled) {
+                this.client.player.playSound(new SoundEvent(new Identifier(config.soundSettings.chatNotifySound)), SoundCategory.PLAYERS, config.soundSettings.chatNotifyVolume, config.soundSettings.chatNotifyPitch);
             }
 
             // 高亮提示
-            String prefix = config.highlightPrefix.replace('&', '§').replace("\\§", "&");
+            String prefix = config.highlightSettings.highlightPrefix.replace('&', '§').replace("\\§", "&");
             Text highlightedMsg;
-            if (config.enforceOverwriting) {
+            if (config.highlightSettings.enforceOverwriting) {
                 highlightedMsg = (Text) new TranslatableText(prefix + text.getString());
             } else {
                 highlightedMsg = (Text) new TranslatableText(prefix).append(text);
             }
-            Text targetMsg = config.highlightEnabled ? highlightedMsg : text;
+            Text targetMsg = config.highlightSettings.highlightEnabled ? highlightedMsg : text;
             if (type != MessageType.CHAT) {
                 this.client.inGameHud.getChatHud().addMessage(targetMsg);
             } else {
