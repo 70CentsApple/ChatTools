@@ -1,17 +1,25 @@
-# ChatNotifier
+# ChatTools
 
-ChatNotifier is a Minecraft Fabric Mod. This client mod allows you to be alerted when you receive a specified message (matching a Regular Expression).
+ChatTools is a Minecraft Fabric client mod.
 
-## Features
-- Toast Messages
+This module is intended to provide some handy features for chatting.
 
-![Toast Notify](images/toastEn.png)
-- Highlight
+## Featured features
+### Reminder function:
+- Message highlighting
 
-In this example, the username 70CentsApple is matched and the "Ignore own messages" option is turned on.
+Help you find where the message is (customizable colors, prefixes, etc.)
 
-![Highlight](images/highlightEn.png)
+This example matches the username 70CentsApple and has the "ignore own messages" option turned on.
 
-- Notify with sound
-- Notify at Actionbar
-- Regular Expressions are supported
+![highlight](images/highlight.png)
+
+- Sound alerts
+- Actionbar alerts
+- RegEx support
+
+### Chat injection function
+### Macro speech function
+- UNDER DEVELOPMENT
+### Chat avatar and bubble
+- UNDER DEVELOPMENT

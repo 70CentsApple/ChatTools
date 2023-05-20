@@ -1,17 +1,17 @@
-package net.apple70cents.chatnotifier.config;
+package net.apple70cents.chattools.config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModConfigFallback extends ModConfig{
+public class ModConfigFallback extends ModClothConfig{
     public boolean modEnabled = true;
     public boolean shouldShowWelcomeMessage = true;
 
     public static class SoundSettings{
         public boolean soundNotifyEnabled = true;
         public String chatNotifySound = "block.note_block.bit";
-        public Float chatNotifyVolume = 1.0F;
-        public Float chatNotifyPitch = 1.0F;
+        public int chatNotifyVolume = 80;
+        public int chatNotifyPitch = 10;
     }
     public SoundSettings soundSettings = new SoundSettings();
 
@@ -33,4 +33,10 @@ public class ModConfigFallback extends ModConfig{
     public boolean toastNotify = false;
     public List<String> allowList = new ArrayList<>(); // 十分肤色正确的变量名
     public List<String> banList = new ArrayList<>(); // 十分肤色正确的变量名
+
+    public boolean injectorEnabled = false;
+    public String injectorString = "I said {text} ~";
+    public List<String> injectorBanList = new ArrayList<>() {{
+        add("^\\d+$|^[.$/].*|\\ball\\b");
+    }};
 }

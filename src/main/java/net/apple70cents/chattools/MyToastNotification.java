@@ -1,4 +1,4 @@
-package net.apple70cents.chatnotifier;
+package net.apple70cents.chattools;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class MyToastNotification {
                     System.setProperty("java.awt.headless", "false");
                 SystemTray tray = SystemTray.getSystemTray();
                 Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
-                TrayIcon trayIcon = new TrayIcon(image, "ChatNotifier");
+                TrayIcon trayIcon = new TrayIcon(image, "ChatTools");
                 try {
                     tray.add(trayIcon);
                 } catch (AWTException e) {

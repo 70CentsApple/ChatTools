@@ -1,10 +1,9 @@
-package net.apple70cents.chatnotifier.mixin;
+package net.apple70cents.chattools.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.apple70cents.chatnotifier.ChatNotifier;
-import net.apple70cents.chatnotifier.MyToastNotification;
-import net.apple70cents.chatnotifier.config.ModConfig;
-import net.apple70cents.chatnotifier.config.ModConfigProvider;
+import net.apple70cents.chattools.ChatTools;
+import net.apple70cents.chattools.MyToastNotification;
+import net.apple70cents.chattools.config.ModClothConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudListener;
 import net.minecraft.client.gui.screen.Screen;
@@ -26,7 +25,7 @@ import java.awt.*;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static net.apple70cents.chatnotifier.ChatNotifier.config;
+import static net.apple70cents.chattools.ChatTools.config;
 
 @Mixin(ChatHudListener.class)
 public abstract class ChatHudListenerMixin {
@@ -37,7 +36,7 @@ public abstract class ChatHudListenerMixin {
 
     @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
     public void onChatMessage(MessageType type, Text text, UUID senderUuid, CallbackInfo ci) {
-        ModConfig config = ChatNotifier.config;
+        ModClothConfig config = ModClothConfig.get();
         // 匹配机制
         boolean shouldMatch = false;
         for (int i = 0; i < config.allowList.size(); i++) {
@@ -62,29 +61,29 @@ public abstract class ChatHudListenerMixin {
         ) && !(config.ignoreSystemMessage && type.equals(MessageType.SYSTEM)); // (匹配正则表达式 || (应匹配名字 && 匹配名字) ) && !(应忽略系统消息 && 系统消息)
          */
         if (!config.modEnabled) {
-        } // 启用 ChatNotifier 则向下走
+        } // 启用 ChatTools 则向下走
         else if (!shouldMatch) {
         } // 匹配 Regex 则向下走
         else if (config.ignoreSelf && (senderUuid.equals(this.client.player.getUuid()))) {
         } // 如果 忽略自己的信息且是消息自己发出的 则 什么都不做
         else {
             // 下面的是主要代码
-            ChatNotifier.LOGGER.info("Found the latest chat message matches customized RegEx");
+            ChatTools.LOGGER.info("[ChatTools] Found the latest chat message matches customized RegEx");
             System.setProperty("java.awt.headless", "false");
 
             // 弹窗提示
             if (config.toastNotify && !this.client.isWindowFocused()) {
-                MyToastNotification.toast(new TranslatableText("key.chatnotifier.toast.title").getString(), text.getString());
+                MyToastNotification.toast(new TranslatableText("key.chattools.toast.title").getString(), text.getString());
             }
 
             // ActionBar 提示
             if (config.actionbarSettings.actionbarNotifyEnabled) {
-                this.client.player.sendMessage(new TranslatableText("key.chatnotifier.match"), true);
+                this.client.player.sendMessage(new TranslatableText("key.chattools.match"), true);
             }
 
             // 音效提示
             if (config.soundSettings.soundNotifyEnabled) {
-                this.client.player.playSound(new SoundEvent(new Identifier(config.soundSettings.chatNotifySound)), SoundCategory.PLAYERS, config.soundSettings.chatNotifyVolume, config.soundSettings.chatNotifyPitch);
+                this.client.player.playSound(new SoundEvent(new Identifier(config.soundSettings.chatNotifySound)), SoundCategory.PLAYERS, config.soundSettings.chatNotifyVolume*0.01F, config.soundSettings.chatNotifyPitch*0.1F);
             }
 
             // 高亮提示

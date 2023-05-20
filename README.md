@@ -1,15 +1,13 @@
-# ChatNotifier
+# ChatTools
 
 README.md is written in Chinese, for Engish version, please [view README_en.md](README_en.md).
 
-你说得对，但是《ChatNotifier》是由 70CentsApple 自主研发的一款 Minecraft Fabric 模组。模组运行在一个叫做「Minecraft」的客户端内，在这里，玩家可以高度自定义「消息提示内容、消息提示方式」等，找回被忽略掉的消息——同时，逐步发掘「Minecraft消息」的真相。
+ChatTools 是一款 Minecraft Fabric 客户端模组。
+
+本模组意在提供一些聊天方面的便捷功能。
 
 ## 特色功能
-- 后台运行时弹窗提醒
-
-让您不错过每一条你需要注意的消息（笑
-
-![Toast Notify](images/toast.png)
+### 提醒功能：
 - 消息高亮提醒
 
 怕您找不到消息在哪里（可自定义颜色与前缀等）
@@ -21,3 +19,9 @@ README.md is written in Chinese, for Engish version, please [view README_en.md](
 - 声音提醒
 - Actionbar 提醒
 - 支持正则表达式
+
+### 聊天注入功能
+### 一键（宏）发言功能
+- ~~（在做了在做了）~~
+### 聊天头像及气泡
+- ~~（在做了在做了）~~

@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "chatnotifier",
+  "id": "chattools",
   "version": "${version}",
 
-  "name": "ChatNotifier",
-  "description": "Notifies if a message can be matched by a RegEx",
+  "name": "ChatTools",
+  "description": "Chat Toolkit",
   "authors": [
     "70CentsApple"
   ],
   "contact": {
     "homepage": "https://70centsapple.github.io/",
-    "sources": "https://github.com/70CentsApple/ChatNotifier",
-    "issues": "https://github.com/70CentsApple/ChatNotifier/issues",
+    "sources": "https://github.com/70CentsApple/ChatTools",
+    "issues": "https://github.com/70CentsApple/ChatTools/issues",
     "bilibili": "https://space.bilibili.com/442361724"
   },
 
@@ -21,14 +21,14 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.apple70cents.chatnotifier.ChatNotifier"
+      "net.apple70cents.chattools.ChatTools"
     ],
     "modmenu": [
-      "net.apple70cents.chatnotifier.config.ModMenuScreen"
+      "net.apple70cents.chattools.config.ModMenuScreen"
     ]
   },
   "mixins": [
-    "chatnotifier.mixins.json"
+    "chattools.mixins.json"
   ],
 
   "depends": {

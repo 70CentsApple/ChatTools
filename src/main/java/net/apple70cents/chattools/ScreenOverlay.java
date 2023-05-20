@@ -1,4 +1,4 @@
-package net.apple70cents.chatnotifier;
+package net.apple70cents.chattools;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Overlay;
