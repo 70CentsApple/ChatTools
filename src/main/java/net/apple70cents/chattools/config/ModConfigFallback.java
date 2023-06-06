@@ -1,5 +1,9 @@
 package net.apple70cents.chattools.config;
 
+import me.shedaniel.clothconfig2.api.Modifier;
+import me.shedaniel.clothconfig2.api.ModifierKeyCode;
+import net.minecraft.client.util.InputUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,4 +43,11 @@ public class ModConfigFallback extends ModClothConfig{
     public List<String> injectorBanList = new ArrayList<>() {{
         add("^\\d+$|^[.$/].*|\\ball\\b");
     }};
+
+    public String quickRepeatKey = InputUtil.UNKNOWN_KEY.getTranslationKey();
+    public CustomModifier quickRepeatKeyModifier = CustomModifier.NONE;
+
+    public boolean chatBubblesEnabled = true;
+    public long chatBubblesLifetime = 8;
+    public int chatBubblesYOffset = 8;
 }

@@ -4,9 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.MyToastNotification;
 import net.apple70cents.chattools.config.ModClothConfig;
+import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudListener;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.MessageType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -19,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
@@ -34,8 +37,22 @@ public abstract class ChatHudListenerMixin {
     @Final
     private MinecraftClient client;
 
-    @Inject(method = "onChatMessage", at = @At("HEAD"), cancellable = true)
-    public void onChatMessage(MessageType type, Text text, UUID senderUuid, CallbackInfo ci) {
+    @Inject(method = "onChatMessage", at = @At("HEAD"),cancellable = true)
+    public void onChatMessage(MessageType type, Text message, UUID senderUuid, CallbackInfo ci) {
+        if(config.chatBubblesEnabled){
+            BubbleRenderer.addChatBubble(message);
+        }
+
+        message = highlightAndNotify(type,message,senderUuid);
+        if (type != MessageType.CHAT) {
+            this.client.inGameHud.getChatHud().addMessage(message);
+        } else {
+            this.client.inGameHud.getChatHud().queueMessage(message);
+        }
+        ci.cancel();
+    }
+
+    private Text highlightAndNotify(MessageType type,Text text,UUID senderUuid){
         ModClothConfig config = ModClothConfig.get();
         // 匹配机制
         boolean shouldMatch = false;
@@ -55,11 +72,6 @@ public abstract class ChatHudListenerMixin {
                 break;
             }
         }
-        /*
-        boolean shouldMatch = (Pattern.compile(config.chatNotifyRegEx, Pattern.MULTILINE).matcher(text.getString()).find()
-                || (config.matchSelfName && Pattern.compile(this.client.player.getName().getString(), Pattern.MULTILINE).matcher(text.getString()).find())
-        ) && !(config.ignoreSystemMessage && type.equals(MessageType.SYSTEM)); // (匹配正则表达式 || (应匹配名字 && 匹配名字) ) && !(应忽略系统消息 && 系统消息)
-         */
         if (!config.modEnabled) {
         } // 启用 ChatTools 则向下走
         else if (!shouldMatch) {
@@ -95,12 +107,8 @@ public abstract class ChatHudListenerMixin {
                 highlightedMsg = (Text) new TranslatableText(prefix).append(text);
             }
             Text targetMsg = config.highlightSettings.highlightEnabled ? highlightedMsg : text;
-            if (type != MessageType.CHAT) {
-                this.client.inGameHud.getChatHud().addMessage(targetMsg);
-            } else {
-                this.client.inGameHud.getChatHud().queueMessage(targetMsg);
-            }
-            ci.cancel();
+            return targetMsg;
         }
+        return text;
     }
 }

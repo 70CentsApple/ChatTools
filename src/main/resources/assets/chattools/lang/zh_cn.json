@@ -1,11 +1,13 @@
 {
   "key.chattools.modname": "ChatTools",
+  "key.chattools.enable": "启用 ChatTools",
+  "key.chattools.disable": "禁用 ChatTools",
   "text.config.chattools.title": "配置 ChatTools",
   "key.chattools.category.main": "基本",
   "key.chattools.category.notifier": "聊天提醒",
   "key.chattools.category.injector": "注入聊天",
-  "key.chattools.category.bubble": "聊天气泡",
   "key.chattools.category.quickchat": "快捷发言",
+  "key.chattools.category.bubble": "聊天气泡",
   "key.chattools.match": "§a§l聊天栏中有您关注的信息",
   "text.config.chattools.option.modEnabled": "启用ChatTools（总开关）",
   "text.config.chattools.option.modEnabled.@Tooltip": "ChatTools 的总开关",
@@ -40,6 +42,12 @@
   "text.config.chattools.option.injectorEnabled.@Tooltip": "聊天注入功能允许你为您的消息添加前缀或后缀等",
   "text.config.chattools.option.injectorString": "文本",
   "text.config.chattools.option.injectorString.@Tooltip": "§o{text}§r ：你说的话",
-  "text.config.chattools.option.injectorBanList": "匹配黑名单"
+  "text.config.chattools.option.injectorBanList": "匹配黑名单",
+  "text.config.chattools.option.quickRepeat": "一键复读（自己的话）",
+  "text.config.chattools.option.quickRepeatModifier": "修饰符",
+  "text.config.chattools.option.quickRepeatFailure": "§6复读失败：不存在上一条消息",
+  "text.config.chattools.option.chatBubblesEnabled": "启用聊天气泡",
+  "text.config.chattools.option.chatBubblesLifetime": "聊天气泡持续时间（秒）",
+  "text.config.chattools.option.chatBubblesYOffset": "聊天气泡Y轴偏移量"
 
 }

@@ -1,11 +1,13 @@
 {
   "key.chattools.modname": "ChatTools",
+  "key.chattools.enable": "ChatTools Enabled",
+  "key.chattools.disable": "ChatTools Disabled",
   "text.config.chattools.title": "Config ChatTools",
   "key.chattools.category.main": "Main",
   "key.chattools.category.notifier": "Notifier",
   "key.chattools.category.injector": "Injector",
-  "key.chattools.category.bubble": "Bubble",
   "key.chattools.category.quickchat": "Quick Chat",
+  "key.chattools.category.bubble": "Bubble",
   "key.chattools.match": "§a§lThere's a message you should notify.",
   "text.config.chattools.option.modEnabled": "Enable ChatTools",
   "text.config.chattools.option.modEnabled.@Tooltip": "Toggles the entire mod.",
@@ -36,10 +38,16 @@
   "text.config.chattools.option.allowList.@Tooltip": "Will match following inputs.\nRegEx is supported.",
   "text.config.chattools.option.banList": "Ban List",
   "text.config.chattools.option.banList.@Tooltip": "Will not match following inputs.\nRegEx is supported.",
-  "text.config.chattools.option.injectorEnabled": "Enabled Injector",
+  "text.config.chattools.option.injectorEnabled": "Enable Injector",
   "text.config.chattools.option.injectorEnabled.@Tooltip": "Chat injector allows you to automatically add prefixes, suffixes, etc.",
   "text.config.chattools.option.injectorString": "Text",
   "text.config.chattools.option.injectorString.@Tooltip": "Statement §o{text}§r refers to your text",
-  "text.config.chattools.option.injectorBanList": "Auto-Disable when matches:"
+  "text.config.chattools.option.injectorBanList": "Auto-Disable when matches:",
+  "text.config.chattools.option.quickRepeat": "Quick Repeat",
+  "text.config.chattools.option.quickRepeatModifier": "Quick Repeat Modifier",
+  "text.config.chattools.option.quickRepeatFailure": "§6No previous message.",
+  "text.config.chattools.option.chatBubblesEnabled": "Enable Chat Bubbles",
+  "text.config.chattools.option.chatBubblesLifetime": "Chat Bubbles Lifetime",
+  "text.config.chattools.option.chatBubblesYOffset": "Chat Bubbles Y Offset"
 
 }

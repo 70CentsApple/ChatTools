@@ -3,14 +3,14 @@ package net.apple70cents.chattools.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.terraformersmc.modmenu.util.mod.Mod;
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.apple70cents.chattools.ChatTools;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -59,6 +59,18 @@ public class ModClothConfig {
         add("^\\d+$|^[.$/].*|\\ball\\b");
     }};
 
+    public String quickRepeatKey = InputUtil.UNKNOWN_KEY.getTranslationKey();
+    public enum CustomModifier{
+        SHIFT,
+        ALT,
+        CTRL,
+        NONE
+    }
+    public CustomModifier quickRepeatKeyModifier = CustomModifier.NONE;
+
+    public boolean chatBubblesEnabled = true;
+    public long chatBubblesLifetime = 8;
+    public int chatBubblesYOffset = 8;
 
     public static void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -81,8 +93,9 @@ public class ModClothConfig {
             }
         } catch (Exception e) {
             if (file.exists()) {
-                ChatTools.LOGGER.warn("[ChatTools] Couldn't understand the config, deleting it.");
-                file.delete();
+                ChatTools.LOGGER.warn("[ChatTools] Couldn't understand the config.");
+                e.printStackTrace();
+                // file.delete();
             } else {
                 ChatTools.LOGGER.warn("[ChatTools] Couldn't find the config.");
             }
@@ -184,6 +197,28 @@ public class ModClothConfig {
                 .setDefaultValue(new ModConfigFallback().injectorBanList)
                 .setSaveConsumer(v -> config.injectorBanList = v).build());
 
+        // ========== Quick Chat Category ==========
+        ConfigCategory quickChatCategory = builder.getOrCreateCategory(new TranslatableText("key.chattools.category.quickchat"));
+        quickChatCategory.addEntry(eb.startKeyCodeField(new TranslatableText("text.config.chattools.option.quickRepeat"),InputUtil.fromTranslationKey(config.quickRepeatKey))
+                .setDefaultValue(InputUtil.fromTranslationKey(new ModConfigFallback().quickRepeatKey))
+                .setKeySaveConsumer(key -> config.quickRepeatKey = key.getTranslationKey()).build());
+        quickChatCategory.addEntry(eb.startEnumSelector(new TranslatableText("text.config.chattools.option.quickRepeatModifier"),CustomModifier.class,config.quickRepeatKeyModifier)
+                .setDefaultValue(new ModConfigFallback().quickRepeatKeyModifier)
+                .setSaveConsumer(v -> config.quickRepeatKeyModifier = v).build());
+
+        // ========== Chat Bubbles Category ==========
+        ConfigCategory chatBubblesCategory = builder.getOrCreateCategory(new TranslatableText("key.chattools.category.bubble"));
+        chatBubblesCategory.addEntry(eb.startBooleanToggle(new TranslatableText("text.config.chattools.option.chatBubblesEnabled"), config.chatBubblesEnabled)
+                .setDefaultValue(new ModConfigFallback().chatBubblesEnabled)
+                .setSaveConsumer(v -> config.chatBubblesEnabled = v).build());
+        chatBubblesCategory.addEntry(eb.startLongSlider(new TranslatableText("text.config.chattools.option.chatBubblesLifetime"), config.chatBubblesLifetime,1,60)
+                .setDefaultValue(new ModConfigFallback().chatBubblesLifetime)
+                .setMin(1L).setMax(60L)
+                .setSaveConsumer(v -> config.chatBubblesLifetime = v).build());
+        chatBubblesCategory.addEntry(eb.startIntSlider(new TranslatableText("text.config.chattools.option.chatBubblesYOffset"), config.chatBubblesYOffset,-20,20)
+                .setDefaultValue(new ModConfigFallback().chatBubblesYOffset)
+                .setMin(-20).setMax(20)
+                .setSaveConsumer(v -> config.chatBubblesYOffset = v).build());
         return builder;
     }
 }
