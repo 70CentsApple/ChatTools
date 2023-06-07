@@ -52,6 +52,13 @@ public abstract class ChatHudListenerMixin {
         ci.cancel();
     }
 
+    /**
+     * **尝试**高亮消息并做对应的消息提醒功能
+     * @param type 消息类型
+     * @param text 消息
+     * @param senderUuid 发送者UUID
+     * @return 经过高亮处理后的消息
+     */
     private Text highlightAndNotify(MessageType type,Text text,UUID senderUuid){
         ModClothConfig config = ModClothConfig.get();
         // 匹配机制

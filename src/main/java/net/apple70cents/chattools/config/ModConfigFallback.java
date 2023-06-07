@@ -2,6 +2,7 @@ package net.apple70cents.chattools.config;
 
 import me.shedaniel.clothconfig2.api.Modifier;
 import me.shedaniel.clothconfig2.api.ModifierKeyCode;
+import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.minecraft.client.util.InputUtil;
 
 import java.util.ArrayList;
@@ -41,11 +42,13 @@ public class ModConfigFallback extends ModClothConfig{
     public boolean injectorEnabled = false;
     public String injectorString = "I said {text} ~";
     public List<String> injectorBanList = new ArrayList<>() {{
-        add("^\\d+$|^[.$/].*|\\ball\\b");
+        add("^\\d+$|^[.#%$/].*|\\ball\\b");
     }};
 
     public String quickRepeatKey = InputUtil.UNKNOWN_KEY.getTranslationKey();
     public CustomModifier quickRepeatKeyModifier = CustomModifier.NONE;
+    public boolean macroChatEnabled = true;
+    public List<MacroChat.MacroUnit> macroChatList = new ArrayList<>();
 
     public boolean chatBubblesEnabled = true;
     public long chatBubblesLifetime = 8;

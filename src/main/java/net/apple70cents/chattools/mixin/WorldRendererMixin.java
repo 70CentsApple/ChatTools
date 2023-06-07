@@ -1,12 +1,8 @@
 package net.apple70cents.chattools.mixin;
 
-import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;

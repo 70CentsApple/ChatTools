@@ -5,6 +5,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.apple70cents.chattools.config.ModConfigFallback;
 import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
+import net.apple70cents.chattools.features.quickchat.MacroChat;
+import net.apple70cents.chattools.features.quickchat.QuickRepeat;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
@@ -51,13 +53,22 @@ public class ChatTools implements ModInitializer {
         config = CONFIGS_LOADED ? ModClothConfig.get() : new ModConfigFallback();
 
         // 注册 Quick Repeat
-        ClientTickEvents.START_WORLD_TICK.register(client -> checkQuickRepeat());
+        ClientTickEvents.START_WORLD_TICK.register(client -> QuickRepeat.checkQuickRepeat());
+
+        // 注册 Macro Chat
+        ClientTickEvents.START_WORLD_TICK.register(client -> MacroChat.tick());
 
         // 注册指令
         ClientCommandManager.DISPATCHER.register((LiteralArgumentBuilder<FabricClientCommandSource>) getBuilder());
     }
 
-    private static boolean isKeyPressedOrMouseKeyClicked(String translationKey, ModClothConfig.CustomModifier modifier) {
+    /**
+     * 键盘指定按键 或 鼠标侧键 与修饰键被按下
+     * @param translationKey 按键的键值（例如key.mouse.4）
+     * @param modifier 修饰符键值
+     * @return 是否符合要求
+     */
+    public static boolean isKeyPressedOrMouseKeyClicked(String translationKey, ModClothConfig.CustomModifier modifier) {
         MinecraftClient mc = MinecraftClient.getInstance();
         long handle = mc.getWindow().getHandle();
         InputUtil.Key key = InputUtil.fromTranslationKey(translationKey);
@@ -78,30 +89,10 @@ public class ChatTools implements ModInitializer {
     }
 
 
-    private static boolean keyWasPressed;
-
-    public static void checkQuickRepeat() {
-        if (config.quickRepeatKey.equals(InputUtil.UNKNOWN_KEY.getTranslationKey())) {
-            return;
-        }
-
-        if (isKeyPressedOrMouseKeyClicked(config.quickRepeatKey, config.quickRepeatKeyModifier)) {
-            if (!keyWasPressed) {
-                keyWasPressed = true;
-                ChatTools.LOGGER.info("[ChatTools] Triggered the latest command.");
-                MinecraftClient mc = MinecraftClient.getInstance();
-                List<String> history = mc.inGameHud.getChatHud().getMessageHistory();
-                if (history.isEmpty()) {
-                    mc.player.sendMessage(new TranslatableText("text.config.chattools.option.quickRepeatFailure"), true);
-                } else {
-                    mc.player.sendChatMessage(history.get(history.size() - 1));
-                }
-            }
-        } else {
-            keyWasPressed = false;
-        }
-    }
-
+    /**
+     * 获取指令参数构造器
+     * @return 指令参数构造器
+     */
     static LiteralArgumentBuilder<?> getBuilder() {
         return literal("chattools")
                 .then(literal("opengui") // chattools opengui
@@ -122,6 +113,10 @@ public class ChatTools implements ModInitializer {
                         }));
     }
 
+    /**
+     * 打开 GUI
+     * @return 命令成功状态码
+     */
     static int opengui() {
         MinecraftClient.getInstance().player.sendMessage(new TranslatableText("text.config.chattools.title"), true);
         MinecraftClient.getInstance().setOverlay(new ScreenOverlay(MinecraftClient.getInstance(), ModClothConfig.getConfigBuilder().setParentScreen(null).build()));

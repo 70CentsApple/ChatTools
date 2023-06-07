@@ -20,6 +20,5 @@ This example matches the username 70CentsApple and has the "ignore own messages"
 
 ### Chat injection function
 ### Macro speech function
-- UNDER DEVELOPMENT
-### Chat avatar and bubble
-- UNDER DEVELOPMENT
+### Chat bubble
+### and so on...

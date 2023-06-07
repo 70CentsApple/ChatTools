@@ -22,23 +22,13 @@ import java.lang.annotation.Annotation;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuScreen implements ModMenuApi {
-//    private static final GuiRegistry defaultGuiRegistry =
-//            DefaultGuiTransformers.apply(DefaultGuiProviders.apply(new GuiRegistry()));
-
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> {
-            if(!ChatTools.CONFIGS_LOADED)return null;
-
+            if(!ChatTools.CONFIGS_LOADED){
+                return null;
+            }
             return ModClothConfig.getConfigBuilder().setParentScreen(parent).build();
-//            return new ConfigScreenProvider<>(
-//                    (ConfigManager<ModConfig>) AutoConfig.getConfigHolder(ModConfig.class),
-//                    getGuiRegistryAccess(), parent).get();
         };
     }
-
-//    public static GuiRegistryAccess getGuiRegistryAccess() {
-//        return new ComposedGuiRegistryAccess(defaultGuiRegistry,
-//                AutoConfig.getGuiRegistry(ModConfig.class), new DefaultGuiRegistryAccess());
-//    }
 }

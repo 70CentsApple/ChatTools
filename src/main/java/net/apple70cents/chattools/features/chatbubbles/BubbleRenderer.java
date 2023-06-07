@@ -25,14 +25,18 @@ public class BubbleRenderer {
     static TextRenderer textRenderer = mc.textRenderer;
 
     protected static class BubbleUnit {
-        String text;
+        Text text;
         long startTime;
 
-        BubbleUnit(String text, long startTime) {
+        BubbleUnit(Text text, long startTime) {
             this.text = text;
             this.startTime = startTime;
         }
 
+        /**
+         * 获取存在时间（毫秒）
+         * @return 气泡存在时间
+         */
         public long getLifetime() {
             return System.currentTimeMillis() - startTime;
         }
@@ -41,9 +45,17 @@ public class BubbleRenderer {
             return "Lifetime:" + getLifetime() + ", Text:" + text;
         }
 
-        void render(MatrixStack matrixStack, float partialTicks, Camera camera, PlayerEntity sender) {
+        /**
+         * 渲染单个气泡
+         * @param matrixStack 矩阵栈
+         * @param partialTicks 平滑插值用参数（tickDelta）
+         * @param camera 摄像机视角
+         * @param sender 信息发送者（应该渲染到谁头上）
+         */
+        public void render(MatrixStack matrixStack, float partialTicks, Camera camera, PlayerEntity sender) {
             EntityRenderDispatcher renderDispatcher = mc.getEntityRenderDispatcher();
             matrixStack.push();
+            // 平滑插值
             double x = sender.prevX + (sender.getX() - sender.prevX) * partialTicks;
             double y = sender.prevY + (sender.getY() - sender.prevY) * partialTicks;
             double z = sender.prevZ + (sender.getZ() - sender.prevZ) * partialTicks;
@@ -59,7 +71,6 @@ public class BubbleRenderer {
 
 
             float xOffset = -textRenderer.getWidth(text) / 2.0F;
-
             textRenderer.draw(text, xOffset, 0, 553648127, false, matrix4f, immediate, true, 1056964608, 15728640);
             textRenderer.draw(text, xOffset, 0, -1, false, matrix4f, immediate, false, 0, 15728640);
 
@@ -69,6 +80,12 @@ public class BubbleRenderer {
 
     private static Map<String, BubbleUnit> bubbleMap = new HashMap<>();
 
+    /**
+     * 负责渲染气泡的总逻辑
+     * @param matrixStack 矩阵栈
+     * @param partialTicks 平滑插值用参数（tickDelta）
+     * @param camera 摄像机视角
+     */
     public static void render(MatrixStack matrixStack, float partialTicks, Camera camera) {
         if (bubbleMap.isEmpty()) {
             return;
@@ -89,26 +106,40 @@ public class BubbleRenderer {
         }
     }
 
+    /**
+     * 添加聊天气泡
+     * @param text 消息
+     */
     public static void addChatBubble(Text text) {
         String message = text.getString();
         String sender = findPlayerName(MinecraftClient.getInstance().world.getPlayers(), message);
         if (sender == null) {
             return;
         }
-        bubbleMap.put(sender, new BubbleUnit(message, System.currentTimeMillis()));
+        bubbleMap.put(sender, new BubbleUnit(text, System.currentTimeMillis()));
     }
 
+    /**
+     * 获取消息中出现的第一个玩家名称
+     * （大多数情况下是发送者）
+     * @param playerNameList 玩家列表（通常是`MinecraftClient.getInstance().world.getPlayers()`）
+     * @param inputString 消息
+     * @return 玩家名称 或 null
+     */
     public static String findPlayerName(List<AbstractClientPlayerEntity> playerNameList, String inputString) {
+        int minIndex = inputString.length();
+        String firstPlayerName = null;
         for (AbstractClientPlayerEntity player : playerNameList) {
             String playerName = player.getDisplayName().getString();
             String regex = "\\b" + Pattern.quote(playerName) + "\\b";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(inputString);
 
-            if (matcher.find()) {
-                return matcher.group();
+            if (matcher.find() && matcher.start() < minIndex) {
+                minIndex = matcher.start();
+                firstPlayerName = matcher.group();
             }
         }
-        return null;
+        return firstPlayerName;
     }
 }
