@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.TranslatableText;
 
+import static net.apple70cents.chattools.ChatTools.config;
 import static net.apple70cents.chattools.ChatTools.isKeyPressedOrMouseKeyClicked;
 
 public class MacroChat {
@@ -70,6 +71,8 @@ public class MacroChat {
         public void tick() {
             if (key.equals(InputUtil.UNKNOWN_KEY.getTranslationKey())) {
                 return;
+            } else if(MinecraftClient.getInstance().currentScreen != null){ // 只有当前overlay为空才能继续
+                return;
             }
             boolean lazyModePass = true;
             if (mode == MacroMode.LAZY) {
@@ -112,6 +115,9 @@ public class MacroChat {
      * 聊天宏的主要逻辑
      */
     public static void tick() {
+        if(!config.macroChatEnabled){
+            return;
+        }
         for (MacroUnit macro : ModClothConfig.get().macroChatList) {
             macro.tick();
         }

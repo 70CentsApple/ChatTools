@@ -30,6 +30,7 @@ public class ModClothConfig {
 
 
     public boolean modEnabled = true;
+    public boolean displayChatTimeEnabled = true;
     public boolean shouldShowWelcomeMessage = true;
 
     public static class SoundSettings {
@@ -143,6 +144,8 @@ public class ModClothConfig {
         ConfigCategory mainCategory = builder.getOrCreateCategory(new TranslatableText("key.chattools.category.main"));
         // 启用ChatTools（总开关）
         mainCategory.addEntry(eb.startBooleanToggle(new TranslatableText("text.config.chattools.option.modEnabled"), config.modEnabled).setDefaultValue(new ModConfigFallback().modEnabled).setTooltip(new TranslatableText("text.config.chattools.option.modEnabled.@Tooltip")).setSaveConsumer(v -> config.modEnabled = v).build());
+        // 启用显示聊天时间
+        mainCategory.addEntry(eb.startBooleanToggle(new TranslatableText("text.config.chattools.option.displayChatTimeEnabled"), config.displayChatTimeEnabled).setDefaultValue(new ModConfigFallback().displayChatTimeEnabled).setSaveConsumer(v -> config.displayChatTimeEnabled = v).build());
 
         // ========== Notifier Category ==========
         ConfigCategory notifierCategory = builder.getOrCreateCategory(new TranslatableText("key.chattools.category.notifier"));
@@ -203,6 +206,8 @@ public class ModClothConfig {
         quickChatCategory.addEntry(eb.startKeyCodeField(new TranslatableText("text.config.chattools.option.quickRepeat"), InputUtil.fromTranslationKey(config.quickRepeatKey)).setDefaultValue(InputUtil.fromTranslationKey(new ModConfigFallback().quickRepeatKey)).setKeySaveConsumer(key -> config.quickRepeatKey = key.getTranslationKey()).build());
         // 复读修饰符
         quickChatCategory.addEntry(eb.startEnumSelector(new TranslatableText("text.config.chattools.option.quickRepeatModifier"), CustomModifier.class, config.quickRepeatKeyModifier).setDefaultValue(new ModConfigFallback().quickRepeatKeyModifier).setSaveConsumer(v -> config.quickRepeatKeyModifier = v).build());
+        // 启用宏
+        quickChatCategory.addEntry(eb.startBooleanToggle(new TranslatableText("text.config.chattools.option.macroChatEnabled"), config.macroChatEnabled).setDefaultValue(new ModConfigFallback().macroChatEnabled).setSaveConsumer(v -> config.macroChatEnabled = v).build());
         // 宏列表
         quickChatCategory.addEntry(new NestedListListEntry<MacroChat.MacroUnit, MultiElementListEntry<MacroChat.MacroUnit>>(new TranslatableText("text.config.chattools.option.macroChatList"), config.macroChatList, true, // 启用默认展开
                 Optional::empty, // Tooltip
