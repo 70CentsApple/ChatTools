@@ -4,11 +4,11 @@
   "package": "net.apple70cents.chattools.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ClientPlayerEntityMixin"
+    "ClientPlayNetworkHandler",
+    "EntityRendererMixin"
   ],
   "client": [
-    "ChatHudListenerMixin",
-    "WorldRendererMixin"
+    "ChatHudMixin",
   ],
   "injectors": {
     "defaultRequire": 1

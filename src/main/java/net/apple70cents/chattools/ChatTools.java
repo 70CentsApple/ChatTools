@@ -1,36 +1,28 @@
 package net.apple70cents.chattools;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.apple70cents.chattools.config.ModConfigFallback;
-import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.apple70cents.chattools.features.quickchat.QuickRepeat;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.api.ModInitializer;;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.*;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -63,7 +55,7 @@ public class ChatTools implements ModInitializer {
         });
 
         // 注册指令
-        ClientCommandManager.DISPATCHER.register((LiteralArgumentBuilder<FabricClientCommandSource>) getBuilder());
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register((LiteralArgumentBuilder<ServerCommandSource>) getBuilder()));
     }
 
     /**
@@ -100,21 +92,21 @@ public class ChatTools implements ModInitializer {
      * @return 指令参数构造器
      */
     static LiteralArgumentBuilder<?> getBuilder() {
-        return literal("chattools")
+        return CommandManager.literal("chattools")
                 .then(literal("opengui") // chattools opengui
                         .executes(t -> opengui()))
                 .then(literal("on") // chattools on
                         .executes(t -> {
                             config.modEnabled = true;
                             ChatTools.LOGGER.info("[ChatTools] Command Executed: Enabled ChatTools");
-                            MinecraftClient.getInstance().player.sendMessage(new TranslatableText("key.chattools.enable"), true);
+                            MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.enable"), true);
                             return Command.SINGLE_SUCCESS;
                         }))
                 .then(literal("off") // chattools off
                         .executes(t -> {
                             config.modEnabled = false;
                             ChatTools.LOGGER.info("[ChatTools] Command Executed: Disabled ChatTools");
-                            MinecraftClient.getInstance().player.sendMessage(new TranslatableText("key.chattools.disable"), true);
+                            MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.disable"), true);
                             return Command.SINGLE_SUCCESS;
                         }));
     }
@@ -125,7 +117,7 @@ public class ChatTools implements ModInitializer {
      * @return 命令成功状态码
      */
     static int opengui() {
-        MinecraftClient.getInstance().player.sendMessage(new TranslatableText("text.config.chattools.title"), true);
+        MinecraftClient.getInstance().player.sendMessage(Text.translatable("text.config.chattools.title"), true);
         MinecraftClient.getInstance().setOverlay(new ScreenOverlay(MinecraftClient.getInstance(), ModClothConfig.getConfigBuilder().setParentScreen(null).build()));
         ChatTools.LOGGER.info("[ChatTools] Command Executed: GUI opened");
         return Command.SINGLE_SUCCESS;

@@ -53,5 +53,5 @@ public class ModConfigFallback extends ModClothConfig{
 
     public boolean chatBubblesEnabled = true;
     public long chatBubblesLifetime = 8;
-    public int chatBubblesYOffset = 8;
+    public int chatBubblesYOffset = 3;
 }

@@ -3,8 +3,11 @@ package net.apple70cents.chattools.features.quickchat;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 
 import static net.apple70cents.chattools.ChatTools.config;
 import static net.apple70cents.chattools.ChatTools.isKeyPressedOrMouseKeyClicked;
@@ -71,7 +74,7 @@ public class MacroChat {
         public void tick() {
             if (key.equals(InputUtil.UNKNOWN_KEY.getTranslationKey())) {
                 return;
-            } else if(MinecraftClient.getInstance().currentScreen != null){ // 只有当前overlay为空才能继续
+            } else if (MinecraftClient.getInstance().currentScreen != null) { // 只有当前overlay为空才能继续
                 return;
             }
             boolean lazyModePass = true;
@@ -79,31 +82,21 @@ public class MacroChat {
                 long handle = MinecraftClient.getInstance().getWindow().getHandle();
                 // 太不优雅了 得改掉
                 lazyModePass = switch (modifier) {
-                    case NONE -> !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT));
-                    case SHIFT -> !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL));
-                    case ALT -> !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT));
-                    case CTRL -> !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT)
-                            || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT));
+                    case NONE ->
+                            !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT));
+                    case SHIFT ->
+                            !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL));
+                    case ALT ->
+                            !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT));
+                    case CTRL ->
+                            !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT));
                 };
             }
             if (isKeyPressedOrMouseKeyClicked(key, modifier) && lazyModePass) {
                 if (!keyWasPressed) {
                     keyWasPressed = true;
                     ChatTools.LOGGER.info("[ChatTools] Triggered Macro: " + command);
-                    MinecraftClient.getInstance().player.sendChatMessage(command);
+                    sendPlayerChat(command);
                 }
             } else {
                 keyWasPressed = false;
@@ -111,11 +104,28 @@ public class MacroChat {
         }
     }
 
+    public static boolean sendPlayerChat(String chatText) {
+        chatText = StringHelper.truncateChat(StringUtils.normalizeSpace(chatText.trim()));
+        if (chatText.isEmpty()) {
+            return true;
+        } else {
+            MinecraftClient.getInstance().inGameHud.getChatHud().addToMessageHistory(chatText);
+
+            if (chatText.startsWith("/")) {
+                MinecraftClient.getInstance().player.networkHandler.sendChatCommand(chatText.substring(1));
+            } else {
+                MinecraftClient.getInstance().player.networkHandler.sendChatMessage(chatText);
+            }
+
+            return true;
+        }
+    }
+
     /**
      * 聊天宏的主要逻辑
      */
     public static void tick() {
-        if(!config.macroChatEnabled){
+        if (!config.macroChatEnabled) {
             return;
         }
         for (MacroUnit macro : ModClothConfig.get().macroChatList) {
