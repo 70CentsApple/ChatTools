@@ -11,6 +11,7 @@
   "key.chattools.match": "§a§lThere's a message you should notify.",
   "text.config.chattools.option.modEnabled": "Enable ChatTools",
   "text.config.chattools.option.modEnabled.@Tooltip": "Toggles the entire mod.",
+  "text.config.chattools.option.displayChatTimeEnabled": "Display Message Time",
   "text.config.chattools.option.ignoreSelf": "§6Ignore My Own Message",
   "text.config.chattools.option.ignoreSelf.@Tooltip": "§6* Might not work in some servers.",
   "text.config.chattools.option.matchSelfName": "Match My Nickname",

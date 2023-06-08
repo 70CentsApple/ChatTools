@@ -11,6 +11,7 @@
   "key.chattools.match": "§a§l聊天栏中有您关注的信息",
   "text.config.chattools.option.modEnabled": "启用ChatTools（总开关）",
   "text.config.chattools.option.modEnabled.@Tooltip": "ChatTools 的总开关",
+  "text.config.chattools.option.displayChatTimeEnabled": "显示聊天时间",
   "text.config.chattools.option.ignoreSelf": "§6忽略自己发出的消息",
   "text.config.chattools.option.ignoreSelf.@Tooltip": "§6* 在服务器中不一定可用",
   "text.config.chattools.option.matchSelfName": "匹配玩家自己的昵称",

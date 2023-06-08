@@ -56,7 +56,11 @@ public class ChatTools implements ModInitializer {
         ClientTickEvents.START_WORLD_TICK.register(client -> QuickRepeat.checkQuickRepeat());
 
         // 注册 Macro Chat
-        ClientTickEvents.START_WORLD_TICK.register(client -> MacroChat.tick());
+        ClientTickEvents.START_WORLD_TICK.register(client -> {
+            if (config.macroChatEnabled) {
+                MacroChat.tick();
+            }
+        });
 
         // 注册指令
         ClientCommandManager.DISPATCHER.register((LiteralArgumentBuilder<FabricClientCommandSource>) getBuilder());
@@ -64,8 +68,9 @@ public class ChatTools implements ModInitializer {
 
     /**
      * 键盘指定按键 或 鼠标侧键 与修饰键被按下
+     *
      * @param translationKey 按键的键值（例如key.mouse.4）
-     * @param modifier 修饰符键值
+     * @param modifier       修饰符键值
      * @return 是否符合要求
      */
     public static boolean isKeyPressedOrMouseKeyClicked(String translationKey, ModClothConfig.CustomModifier modifier) {
@@ -91,6 +96,7 @@ public class ChatTools implements ModInitializer {
 
     /**
      * 获取指令参数构造器
+     *
      * @return 指令参数构造器
      */
     static LiteralArgumentBuilder<?> getBuilder() {
@@ -115,6 +121,7 @@ public class ChatTools implements ModInitializer {
 
     /**
      * 打开 GUI
+     *
      * @return 命令成功状态码
      */
     static int opengui() {

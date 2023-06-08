@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ModConfigFallback extends ModClothConfig{
     public boolean modEnabled = true;
+    public boolean displayChatTimeEnabled = true;
     public boolean shouldShowWelcomeMessage = true;
 
     public static class SoundSettings{
