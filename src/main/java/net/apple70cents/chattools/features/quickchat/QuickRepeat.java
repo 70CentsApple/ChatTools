@@ -5,7 +5,8 @@ import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
+import net.minecraft.text.Text;
 
 import java.util.List;
 
@@ -23,17 +24,16 @@ public class QuickRepeat {
         if (config.quickRepeatKey.equals(InputUtil.UNKNOWN_KEY.getTranslationKey())) {
             return;
         }
-
-        if (isKeyPressedOrMouseKeyClicked(config.quickRepeatKey, config.quickRepeatKeyModifier)) {
+        if (isKeyPressedOrMouseKeyClicked(config.quickRepeatKey, config.quickRepeatKeyModifier) && MinecraftClient.getInstance().currentScreen == null) {
             if (!keyWasPressed) {
                 keyWasPressed = true;
                 ChatTools.LOGGER.info("[ChatTools] Triggered the latest command.");
                 MinecraftClient mc = MinecraftClient.getInstance();
                 List<String> history = mc.inGameHud.getChatHud().getMessageHistory();
                 if (history.isEmpty()) {
-                    mc.player.sendMessage(new TranslatableText("text.config.chattools.option.quickRepeatFailure"), true);
+                    mc.player.sendMessage(Text.translatable("text.config.chattools.option.quickRepeatFailure"), true);
                 } else {
-                    mc.player.sendChatMessage(history.get(history.size() - 1));
+                    MacroChat.sendPlayerChat(history.get(history.size() - 1));
                 }
             }
         } else {
