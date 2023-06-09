@@ -3,8 +3,8 @@
   "id": "chattools",
   "version": "${version}",
 
-  "name": "ChatTools",
-  "description": "Chat Toolkit",
+  "name": "Chat Tools",
+  "description": "A toolkit that provides great chat-related features.",
   "authors": [
     "70CentsApple"
   ],
@@ -18,7 +18,7 @@
   "license": "GPL-3.0",
   "icon": "icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "net.apple70cents.chattools.ChatTools"

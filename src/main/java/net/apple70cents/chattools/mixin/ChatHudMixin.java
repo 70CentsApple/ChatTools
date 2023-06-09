@@ -1,7 +1,6 @@
 package net.apple70cents.chattools.mixin;
 
 import net.apple70cents.chattools.ChatTools;
-import net.apple70cents.chattools.MyToastNotification;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
 import net.minecraft.client.MinecraftClient;
@@ -46,6 +45,12 @@ public abstract class ChatHudMixin {
             BubbleRenderer.addChatBubble(message);
         }
         message = highlightAndNotify(message, indicator);
+
+        // 处理昵称隐藏
+        if (config.nickHiderSettings.nickHiderEnabled) {
+            message = Text.of(message.getString().replace(MinecraftClient.getInstance().player.getDisplayName().getString(), config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+        }
+
         // 显示聊天时间
         if (config.displayChatTimeEnabled) {
             LocalDateTime currentTime = LocalDateTime.now();
@@ -106,22 +111,25 @@ public abstract class ChatHudMixin {
                 shouldMatch = false;
             }
         }
-        if (!config.modEnabled) {
-        } // 启用 ChatTools 则向下走
-        else if (!shouldMatch) {
-        } // 匹配 Regex 则向下走
-        else if (config.ignoreSelf && (this.client.player.getName().getString().equals(BubbleRenderer.findPlayerName(MinecraftClient.getInstance().world.getPlayers(), text.getString())))) {
-            // 这里不再是UUID审查了
-        } // 如果 忽略自己的信息且是消息自己发出的 则 什么都不做
-        else {
+        if (!config.modEnabled) { // 启用 ChatTools 则向下走
+            return text;
+        } else if (!shouldMatch) { // 匹配 Regex 则向下走
+            return text;
+        } else if (config.ignoreSelf && (this.client.player.getName().getString().equals(BubbleRenderer.findPlayerName(MinecraftClient.getInstance().world.getPlayers(), text.getString())))) {
+            // 判断发件人为自己 与 `忽略自身消息`启用
+            // 这里不再使用UUID审查了
+            return text;
+        } else {
             // 下面的是主要代码
             ChatTools.LOGGER.info("[ChatTools] Found the latest chat message matches customized RegEx");
-            System.setProperty("java.awt.headless", "false");
 
-            // 弹窗提示
+            // System.setProperty("java.awt.headless", "false");
+            // ~~弹窗提示~~ FIXME 弹个鸡毛啊弹窗提示都废除掉了
+            /*
             if (config.toastNotify && !this.client.isWindowFocused()) {
                 MyToastNotification.toast(Text.translatable("key.chattools.toast.title").getString(), text.getString());
             }
+             */
 
             // ActionBar 提示
             if (config.actionbarSettings.actionbarNotifyEnabled) {
@@ -137,13 +145,11 @@ public abstract class ChatHudMixin {
             String prefix = config.highlightSettings.highlightPrefix.replace('&', '§').replace("\\§", "&");
             Text highlightedMsg;
             if (config.highlightSettings.enforceOverwriting) {
-                highlightedMsg = (Text) Text.translatable(prefix + text.getString());
+                highlightedMsg = Text.translatable(prefix + text.getString());
             } else {
-                highlightedMsg = (Text) Text.translatable(prefix).append(text);
+                highlightedMsg = Text.translatable(prefix).append(text);
             }
-            Text targetMsg = config.highlightSettings.highlightEnabled ? highlightedMsg : text;
-            return targetMsg;
+            return config.highlightSettings.highlightEnabled ? highlightedMsg : text;
         }
-        return text;
     }
 }

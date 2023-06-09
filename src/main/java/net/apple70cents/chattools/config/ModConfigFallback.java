@@ -1,7 +1,5 @@
 package net.apple70cents.chattools.config;
 
-import me.shedaniel.clothconfig2.api.Modifier;
-import me.shedaniel.clothconfig2.api.ModifierKeyCode;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.minecraft.client.util.InputUtil;
 
@@ -11,6 +9,11 @@ import java.util.List;
 public class ModConfigFallback extends ModClothConfig{
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
+    public static class NickHiderSettings{
+        public boolean nickHiderEnabled = false;
+        public String nickHiderText = "&6You&r";
+    }
+    public NickHiderSettings nickHiderSettings = new NickHiderSettings();
     public boolean shouldShowWelcomeMessage = true;
 
     public static class SoundSettings{
@@ -28,7 +31,7 @@ public class ModConfigFallback extends ModClothConfig{
 
     public static class HighlightSettings{
         public boolean highlightEnabled = true;
-        public String highlightPrefix = "&a→ &6";
+        public String highlightPrefix = "&a→ &r";
         public boolean enforceOverwriting = false;
     }
     public HighlightSettings highlightSettings = new HighlightSettings();

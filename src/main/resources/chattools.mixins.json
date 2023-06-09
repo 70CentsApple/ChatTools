@@ -9,6 +9,7 @@
   ],
   "client": [
     "ChatHudMixin",
+    "PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

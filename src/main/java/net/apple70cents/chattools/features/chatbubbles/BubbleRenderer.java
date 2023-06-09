@@ -4,15 +4,12 @@ import net.apple70cents.chattools.config.ModClothConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +53,10 @@ public class BubbleRenderer {
          * @param light           光照
          */
         public void render(Entity entity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+            Text renderText = text;
+            if (config.nickHiderSettings.nickHiderEnabled) {
+                renderText = Text.of(text.getString().replace(MinecraftClient.getInstance().player.getDisplayName().getString(),config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+            }
             int yOffset = "deadmau5".equals(text.getString()) ? -10 : 0;
             EntityRenderDispatcher renderDispatcher = mc.getEntityRenderDispatcher();
             matrixStack.push();
@@ -63,9 +64,9 @@ public class BubbleRenderer {
             matrixStack.multiply(renderDispatcher.getRotation());
             matrixStack.scale(-0.025F, -0.025F, 0.025F);
             Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
-            float xOffset = -textRenderer.getWidth(text) / 2.0F;
-            textRenderer.draw(text, xOffset, yOffset, 553648127, false, matrix4f, vertexConsumers, TextRenderer.TextLayerType.SEE_THROUGH, 1056964608, 15728640);
-            textRenderer.draw(text, xOffset, yOffset, -1, false, matrix4f, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 15728640);
+            float xOffset = -textRenderer.getWidth(renderText) / 2.0F;
+            textRenderer.draw(renderText, xOffset, yOffset, 553648127, false, matrix4f, vertexConsumers, TextRenderer.TextLayerType.SEE_THROUGH, 1056964608, 15728640);
+            textRenderer.draw(renderText, xOffset, yOffset, -1, false, matrix4f, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 15728640);
             matrixStack.pop();
         }
     }

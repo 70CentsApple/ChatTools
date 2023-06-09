@@ -29,6 +29,11 @@ public class ModClothConfig {
 
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
+    public static class NickHiderSettings{
+        public boolean nickHiderEnabled = false;
+        public String nickHiderText = "&6You&r";
+    }
+    public NickHiderSettings nickHiderSettings = new NickHiderSettings();
     public boolean shouldShowWelcomeMessage = true;
 
     public static class SoundSettings {
@@ -48,7 +53,7 @@ public class ModClothConfig {
 
     public static class HighlightSettings {
         public boolean highlightEnabled = true;
-        public String highlightPrefix = "&a→ &6";
+        public String highlightPrefix = "&a→ &r";
         public boolean enforceOverwriting = false;
     }
 
@@ -69,7 +74,7 @@ public class ModClothConfig {
     public String quickRepeatKey = InputUtil.UNKNOWN_KEY.getTranslationKey();
 
     public enum CustomModifier {
-        SHIFT, ALT, CTRL, NONE;
+        SHIFT, ALT, CTRL, NONE
     }
 
     public CustomModifier quickRepeatKeyModifier = CustomModifier.NONE;
@@ -144,6 +149,13 @@ public class ModClothConfig {
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.modEnabled"), config.modEnabled).setDefaultValue(new ModConfigFallback().modEnabled).setTooltip(Text.translatable("text.config.chattools.option.modEnabled.@Tooltip")).setSaveConsumer(v -> config.modEnabled = v).build());
         // 启用显示聊天时间
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.displayChatTimeEnabled"), config.displayChatTimeEnabled).setDefaultValue(new ModConfigFallback().displayChatTimeEnabled).setSaveConsumer(v -> config.displayChatTimeEnabled = v).build());
+        // 隐藏昵称选项
+        SubCategoryBuilder nickHiderSettings = eb.startSubCategory(Text.translatable("text.config.chattools.option.nickHiderSettings"));
+        // - 启用隐藏昵称
+        nickHiderSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderEnabled"),config.nickHiderSettings.nickHiderEnabled).setDefaultValue(new ModConfigFallback().nickHiderSettings.nickHiderEnabled).setSaveConsumer(v -> config.nickHiderSettings.nickHiderEnabled = v).build());
+        // - 自定义昵称
+        nickHiderSettings.add(eb.startStrField(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderText"), config.nickHiderSettings.nickHiderText).setDefaultValue(new ModConfigFallback().nickHiderSettings.nickHiderText).setTooltip(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderText.@Tooltip")).setSaveConsumer(v -> config.nickHiderSettings.nickHiderText = v).build());
+        mainCategory.addEntry(nickHiderSettings.build());
 
         // ========== Notifier Category ==========
         ConfigCategory notifierCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.notifier"));
@@ -228,7 +240,7 @@ public class ModClothConfig {
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.macroChatCommand"), defaultMacro.getCommand()).setDefaultValue(defaultMacro.getCommand()).setSaveConsumer(v -> macroUnitRef.get().setCommand(v)).build());
                         }}, false);
                     } else { // 现有宏
-                        Text displayText = Text.of("");
+                        Text displayText;
                         if (macroUnit.getKey().equals(InputUtil.UNKNOWN_KEY.getTranslationKey())) {
                             // 显示文字：新建宏
                             displayText = Text.translatable("text.config.chattools.option.macroChatNew");
@@ -243,9 +255,9 @@ public class ModClothConfig {
                         }
                         return new MultiElementListEntry<>(displayText, macroUnit, new ArrayList<>() {{
                             add(eb.startKeyCodeField(Text.translatable("text.config.chattools.option.macroChatKey"), InputUtil.fromTranslationKey(macroUnit.getKey())).setDefaultValue(InputUtil.fromTranslationKey(macroUnit.getKey())).setKeySaveConsumer(key -> macroUnit.setKey(key.getTranslationKey())).build());
-                            add(eb.startEnumSelector(Text.translatable("text.config.chattools.option.macroChatModifier"), CustomModifier.class, macroUnit.getModifier()).setDefaultValue(macroUnit.getModifier()).setSaveConsumer(v -> macroUnit.setModifier(v)).build());
-                            add(eb.startEnumSelector(Text.translatable("text.config.chattools.option.macroChatMode"), MacroChat.MacroMode.class, macroUnit.getMode()).setDefaultValue(macroUnit.getMode()).setSaveConsumer(v -> macroUnit.setMode(v)).setTooltip(Text.translatable("text.config.chattools.option.macroChatMode.@Tooltip")).build());
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.macroChatCommand"), macroUnit.getCommand()).setDefaultValue(macroUnit.getCommand()).setSaveConsumer(v -> macroUnit.setCommand(v)).build());
+                            add(eb.startEnumSelector(Text.translatable("text.config.chattools.option.macroChatModifier"), CustomModifier.class, macroUnit.getModifier()).setDefaultValue(macroUnit.getModifier()).setSaveConsumer(macroUnit::setModifier).build());
+                            add(eb.startEnumSelector(Text.translatable("text.config.chattools.option.macroChatMode"), MacroChat.MacroMode.class, macroUnit.getMode()).setDefaultValue(macroUnit.getMode()).setSaveConsumer(macroUnit::setMode).setTooltip(Text.translatable("text.config.chattools.option.macroChatMode.@Tooltip")).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.macroChatCommand"), macroUnit.getCommand()).setDefaultValue(macroUnit.getCommand()).setSaveConsumer(macroUnit::setCommand).build());
                         }}, false);
                     }
                 }));
