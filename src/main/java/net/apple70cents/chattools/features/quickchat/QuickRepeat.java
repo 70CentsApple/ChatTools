@@ -23,7 +23,9 @@ public class QuickRepeat {
         if (config.quickRepeatKey.equals(InputUtil.UNKNOWN_KEY.getTranslationKey())) {
             return;
         }
-
+        if (MinecraftClient.getInstance().currentScreen != null) {
+            return;
+        }
         if (isKeyPressedOrMouseKeyClicked(config.quickRepeatKey, config.quickRepeatKeyModifier)) {
             if (!keyWasPressed) {
                 keyWasPressed = true;
