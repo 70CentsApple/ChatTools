@@ -29,11 +29,14 @@ public class ModClothConfig {
 
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
-    public static class NickHiderSettings{
+
+    public static class NickHiderSettings {
         public boolean nickHiderEnabled = false;
         public String nickHiderText = "&6You&r";
     }
+
     public NickHiderSettings nickHiderSettings = new NickHiderSettings();
+    public int maxHistorySize = 500;
     public boolean shouldShowWelcomeMessage = true;
 
     public static class SoundSettings {
@@ -61,7 +64,18 @@ public class ModClothConfig {
     public boolean ignoreSelf = true;
     public boolean matchSelfName = true;
     public boolean ignoreSystemMessage = true;
-    public boolean toastNotify = false;
+
+    public enum ToastMode {
+        POWERSHELL, AWT
+    }
+
+    public static class ToastNotifySettings {
+        public boolean toastNotifyEnabled = false;
+        public ToastMode toastNotifyMode = ToastMode.POWERSHELL;
+    }
+
+    public ToastNotifySettings toastNotifySettings = new ToastNotifySettings();
+
     public List<String> allowList = new ArrayList<>(); // 十分肤色正确的变量名
     public List<String> banList = new ArrayList<>(); // 十分肤色正确的变量名
 
@@ -152,10 +166,12 @@ public class ModClothConfig {
         // 隐藏昵称选项
         SubCategoryBuilder nickHiderSettings = eb.startSubCategory(Text.translatable("text.config.chattools.option.nickHiderSettings"));
         // - 启用隐藏昵称
-        nickHiderSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderEnabled"),config.nickHiderSettings.nickHiderEnabled).setDefaultValue(new ModConfigFallback().nickHiderSettings.nickHiderEnabled).setSaveConsumer(v -> config.nickHiderSettings.nickHiderEnabled = v).build());
+        nickHiderSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderEnabled"), config.nickHiderSettings.nickHiderEnabled).setDefaultValue(new ModConfigFallback().nickHiderSettings.nickHiderEnabled).setSaveConsumer(v -> config.nickHiderSettings.nickHiderEnabled = v).build());
         // - 自定义昵称
         nickHiderSettings.add(eb.startStrField(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderText"), config.nickHiderSettings.nickHiderText).setDefaultValue(new ModConfigFallback().nickHiderSettings.nickHiderText).setTooltip(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderText.@Tooltip")).setSaveConsumer(v -> config.nickHiderSettings.nickHiderText = v).build());
         mainCategory.addEntry(nickHiderSettings.build());
+        // 最大聊天记录数量
+        mainCategory.addEntry(eb.startIntSlider(Text.translatable("text.config.chattools.option.maxHistorySize"), config.maxHistorySize, 10, 10000).setDefaultValue(new ModConfigFallback().maxHistorySize).setTooltip(Text.translatable("text.config.chattools.option.maxHistorySize.@Tooltip")).setSaveConsumer(v -> config.maxHistorySize = v).build());
 
         // ========== Notifier Category ==========
         ConfigCategory notifierCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.notifier"));
@@ -181,6 +197,13 @@ public class ModClothConfig {
         highlightSettings.add(eb.startStrField(Text.translatable("text.config.chattools.option.highlightSettings.highlightPrefix"), config.highlightSettings.highlightPrefix).setDefaultValue(new ModConfigFallback().highlightSettings.highlightPrefix).setTooltip(Text.translatable("text.config.chattools.option.highlightSettings.highlightPrefix.@Tooltip")).setSaveConsumer(v -> config.highlightSettings.highlightPrefix = v).build());
         // - 启用强制覆盖原聊天
         highlightSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.highlightSettings.enforceOverwriting"), config.highlightSettings.enforceOverwriting).setDefaultValue(new ModConfigFallback().highlightSettings.enforceOverwriting).setTooltip(Text.translatable("text.config.chattools.option.highlightSettings.enforceOverwriting.@Tooltip")).setSaveConsumer(v -> config.highlightSettings.enforceOverwriting = v).build());
+        // 弹窗提示
+        SubCategoryBuilder toastNotifySettings = eb.startSubCategory(Text.translatable("text.config.chattools.option.toastNotifySettings")).setTooltip(Text.translatable("text.config.chattools.option.toastNotifySettings.@Tooltip"));
+        // - 启用弹窗提示
+        toastNotifySettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.toastNotifySettings.toastNotifyEnabled"), config.toastNotifySettings.toastNotifyEnabled).setDefaultValue(new ModConfigFallback().toastNotifySettings.toastNotifyEnabled).setSaveConsumer(v -> config.toastNotifySettings.toastNotifyEnabled = v).build());
+        // - 弹窗提醒模式
+        toastNotifySettings.add(eb.startEnumSelector(Text.translatable("text.config.chattools.option.toastNotifySettings.toastNotifyMode"), ToastMode.class, config.toastNotifySettings.toastNotifyMode).setDefaultValue(new ModConfigFallback().toastNotifySettings.toastNotifyMode).setTooltip(Text.translatable("text.config.chattools.option.toastNotifySettings.toastNotifyMode.@Tooltip")).setSaveConsumer(v -> config.toastNotifySettings.toastNotifyMode = v).build());
+        notifierCategory.addEntry(toastNotifySettings.build());
         notifierCategory.addEntry(soundSettings.build());
         notifierCategory.addEntry(actionbarSettings.build());
         notifierCategory.addEntry(highlightSettings.build());
@@ -190,12 +213,7 @@ public class ModClothConfig {
         notifierCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.matchSelfName"), config.matchSelfName).setDefaultValue(new ModConfigFallback().matchSelfName).setTooltip(Text.translatable("text.config.chattools.option.matchSelfName.@Tooltip")).setSaveConsumer(v -> config.matchSelfName = v).build());
         // 启用忽略系统消息
         notifierCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.ignoreSystemMessage"), config.ignoreSystemMessage).setDefaultValue(new ModConfigFallback().ignoreSystemMessage).setTooltip(Text.translatable("text.config.chattools.option.ignoreSystemMessage.@Tooltip")).setSaveConsumer(v -> config.ignoreSystemMessage = v).build());
-        /*
-        notifierCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.toastNotify"), config.toastNotify)
-                .setDefaultValue(new ModConfigFallback().toastNotify)
-                .setTooltip(Text.translatable("text.config.chattools.option.toastNotify.@Tooltip"))
-                .setSaveConsumer(v -> config.toastNotify = v).build());
-         */
+
         // 匹配白名单
         notifierCategory.addEntry(eb.startStrList(Text.translatable("text.config.chattools.option.allowList"), config.allowList).setDefaultValue(new ModConfigFallback().allowList).setTooltip(Text.translatable("text.config.chattools.option.allowList.@Tooltip")).setSaveConsumer(v -> config.allowList = v).build());
         // 匹配黑名单

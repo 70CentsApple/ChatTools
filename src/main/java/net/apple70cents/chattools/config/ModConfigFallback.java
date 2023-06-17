@@ -39,7 +39,11 @@ public class ModConfigFallback extends ModClothConfig{
     public boolean ignoreSelf = true;
     public boolean matchSelfName = true;
     public boolean ignoreSystemMessage = true;
-    public boolean toastNotify = false;
+    public static class ToastNotifySettings{
+        public boolean toastNotifyEnabled = false;
+        public ToastMode toastNotifyMode = ToastMode.POWERSHELL;
+    }
+    public ToastNotifySettings toastNotifySettings = new ToastNotifySettings();
     public List<String> allowList = new ArrayList<>(); // 十分肤色正确的变量名
     public List<String> banList = new ArrayList<>(); // 十分肤色正确的变量名
 
