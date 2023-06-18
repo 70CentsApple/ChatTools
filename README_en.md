@@ -32,7 +32,7 @@ Support custom sound effects.
 Remind attention to messages in the action bar.
 - Highlight\
 Support custom highlighting prefix.\
-![Highlight](<images/Highlight.png>)
+![Highlight Function](<images/Highlight Function.png>)
 - Allow List\
 The contents of the list will be matched.
 - Ban List\

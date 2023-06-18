@@ -32,7 +32,7 @@ Chat Tools的大部分功能支持高度个性化，请在配置页面进行配�
 在动作栏提醒关注的消息
 - 高亮选项（Highlight）
 支持自定义高亮前缀（匹配到的消息前面加前缀）
-![Highlight](<images/Highlight.png>)
+![Highlight Function](<images/Highlight Function.png>)
 - 匹配白名单（Allow List）\
 列表中的内容将会被匹配
 - 匹配黑名单（Ban List）\
