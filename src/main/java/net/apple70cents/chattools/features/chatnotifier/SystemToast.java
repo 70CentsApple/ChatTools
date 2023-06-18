@@ -1,11 +1,9 @@
 package net.apple70cents.chattools.features.chatnotifier;
 
 import net.apple70cents.chattools.ChatTools;
-import net.minecraft.client.MinecraftClient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Method;
 
 public class SystemToast {
 
@@ -35,13 +33,12 @@ public class SystemToast {
 //            ChatTools.LOGGER.info("[ChatTools] Toast Notified with Powershell, but not isDesktopSupported().");
 //            return;
 //        }
+        // FIXME 只有系统消息能被弹窗（其它的会试图弹窗但是因为在后台出于奇妙原因弹不出来）
         try {
             ChatTools.LOGGER.info("[ChatTools] Toast Notified with Powershell.");
-            Method getWindowTitleMethod = MinecraftClient.class.getDeclaredMethod("getWindowTitle");
-            getWindowTitleMethod.setAccessible(true);
             String command = "powershell.exe -ExecutionPolicy Bypass -Command \"[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null;$xml = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02);$xml.GetElementsByTagName('text')[0].AppendChild($xml.CreateTextNode(\\\""
                     + (caption + "`r`n" + text) + "\\\"));$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('"
-                    + getWindowTitleMethod.invoke(MinecraftClient.getInstance()) + "');$notifier.Show($toast);\"";
+                    + "Minecraft Chat Tools Mod" + "');$notifier.Show($toast);\"";
             ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
             builder.start();
         } catch (Exception e) {
