@@ -109,7 +109,10 @@ public class BubbleRenderer {
      */
     public static void addChatBubble(Text text) {
         String message = text.getString();
-        String sender = findPlayerName(MinecraftClient.getInstance().world.getPlayers(), message);
+        if (mc.world == null) {
+            return;
+        }
+        String sender = findPlayerName(mc.world.getPlayers(), message);
         if (sender == null) {
             return;
         }
