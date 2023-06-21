@@ -50,12 +50,14 @@ public class BubbleRenderer {
          * @param entity          玩家（用来获取身高用）（趴下时会改变名牌高度）
          * @param matrixStack     矩阵栈
          * @param vertexConsumers 顶点（？
-         * @param light           光照
          */
-        public void render(Entity entity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+        public void render(Entity entity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers) {
+            if(mc.player == null){
+                return;
+            }
             Text renderText = text;
             if (config.nickHiderSettings.nickHiderEnabled) {
-                renderText = Text.of(text.getString().replace(MinecraftClient.getInstance().player.getDisplayName().getString(),config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+                renderText = Text.of(text.getString().replace(mc.player.getDisplayName().getString(),config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
             }
             int yOffset = "deadmau5".equals(text.getString()) ? -10 : 0;
             EntityRenderDispatcher renderDispatcher = mc.getEntityRenderDispatcher();
@@ -71,7 +73,7 @@ public class BubbleRenderer {
         }
     }
 
-    private static Map<String, BubbleUnit> bubbleMap = new HashMap<>();
+    private static final Map<String, BubbleUnit> bubbleMap = new HashMap<>();
 
     /**
      * 负责渲染气泡的总逻辑
@@ -79,10 +81,11 @@ public class BubbleRenderer {
      * @param entity   玩家
      * @param matrices 矩阵栈
      * @param vertex   vertex
-     * @param light    光照
      */
-    public static void render(Entity entity, MatrixStack matrices, VertexConsumerProvider vertex, int light) {
+    public static void render(Entity entity, MatrixStack matrices, VertexConsumerProvider vertex) {
         if (bubbleMap.isEmpty()) {
+            return;
+        }else if (mc.world == null) {
             return;
         }
         for (AbstractClientPlayerEntity sender : mc.world.getPlayers()) {
@@ -97,7 +100,7 @@ public class BubbleRenderer {
             }
             double d = mc.getEntityRenderDispatcher().getSquaredDistanceToCamera(sender);
             if (d <= 4096.0) {
-                bubbleMap.get(name).render(entity, matrices, vertex, light);
+                bubbleMap.get(name).render(entity, matrices, vertex);
             }
         }
     }

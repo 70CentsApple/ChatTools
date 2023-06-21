@@ -1,4 +1,4 @@
-[>>Simplified Chinese<<](README.md).
+[>>Simplified Chinese<<](README.md)
 
 # Chat Tools
 Chat Tools is a Minecraft Fabric Mod that provides players with numerous useful chat features. \

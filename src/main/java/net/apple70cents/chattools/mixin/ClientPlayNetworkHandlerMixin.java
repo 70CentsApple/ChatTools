@@ -18,8 +18,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
     @ModifyVariable(method = "sendChatMessage", at = @At("HEAD"), argsOnly = true)
     public String sendMessage(String message) {
         ChatNotifier.setJustSentMessage(true);
-        if (!config.injectorEnabled) {
-        } else {
+        if (config.injectorEnabled) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             boolean shouldMatch = true;
             for (String s : config.injectorBanList) {
@@ -28,12 +27,13 @@ public abstract class ClientPlayNetworkHandlerMixin {
                     break;
                 }
             }
-            if (!shouldMatch) {
-            } else {
+            if (shouldMatch) {
                 ChatTools.LOGGER.info("[ChatTools] Chat Formatted.");
                 message = config.injectorString.replace("{text}", message);
             }
-            message = message.replace("{pos}", String.format("(%d,%d,%d)", (int)player.getX(),(int)player.getY(),(int)player.getZ()));
+            if (player != null) {
+                message = message.replace("{pos}", String.format("(%d,%d,%d)", (int) player.getX(), (int) player.getY(), (int) player.getZ()));
+            }
         }
         return message;
     }

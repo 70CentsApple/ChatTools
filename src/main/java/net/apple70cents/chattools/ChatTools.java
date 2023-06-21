@@ -66,9 +66,7 @@ public class ChatTools implements ModInitializer {
         InputUtil.Key key = InputUtil.fromTranslationKey(translationKey);
         int keyCode = key.getCode();
 
-        if ((modifier.equals(ModClothConfig.CustomModifier.ALT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT)))
-                || (modifier.equals(ModClothConfig.CustomModifier.SHIFT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT)))
-                || (modifier.equals(ModClothConfig.CustomModifier.CTRL) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL)))) {
+        if ((modifier.equals(ModClothConfig.CustomModifier.ALT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT))) || (modifier.equals(ModClothConfig.CustomModifier.SHIFT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT))) || (modifier.equals(ModClothConfig.CustomModifier.CTRL) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL)))) {
             return false;
         }
 
@@ -87,23 +85,24 @@ public class ChatTools implements ModInitializer {
      * @return 指令参数构造器
      */
     static LiteralArgumentBuilder<?> getBuilder() {
-        return CommandManager.literal("chattools")
-                .then(literal("opengui") // chattools opengui
-                        .executes(t -> opengui()))
-                .then(literal("on") // chattools on
-                        .executes(t -> {
-                            config.modEnabled = true;
-                            ChatTools.LOGGER.info("[ChatTools] Command Executed: Enabled ChatTools");
-                            MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.enable"), true);
-                            return Command.SINGLE_SUCCESS;
-                        }))
-                .then(literal("off") // chattools off
-                        .executes(t -> {
-                            config.modEnabled = false;
-                            ChatTools.LOGGER.info("[ChatTools] Command Executed: Disabled ChatTools");
-                            MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.disable"), true);
-                            return Command.SINGLE_SUCCESS;
-                        }));
+        return CommandManager.literal("chattools").then(literal("opengui") // chattools opengui
+                .executes(t -> opengui())).then(literal("on") // chattools on
+                .executes(t -> {
+                    config.modEnabled = true;
+                    ChatTools.LOGGER.info("[ChatTools] Command Executed: Enabled ChatTools");
+                    if (MinecraftClient.getInstance().player != null) {
+                        MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.enable"), true);
+                    }
+                    return Command.SINGLE_SUCCESS;
+                })).then(literal("off") // chattools off
+                .executes(t -> {
+                    config.modEnabled = false;
+                    ChatTools.LOGGER.info("[ChatTools] Command Executed: Disabled ChatTools");
+                    if (MinecraftClient.getInstance().player != null) {
+                        MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.disable"), true);
+                    }
+                    return Command.SINGLE_SUCCESS;
+                }));
     }
 
     /**
@@ -112,7 +111,9 @@ public class ChatTools implements ModInitializer {
      * @return 命令成功状态码
      */
     static int opengui() {
-        MinecraftClient.getInstance().player.sendMessage(Text.translatable("text.config.chattools.title"), true);
+        if (MinecraftClient.getInstance().player != null) {
+            MinecraftClient.getInstance().player.sendMessage(Text.translatable("text.config.chattools.title"), true);
+        }
         MinecraftClient.getInstance().setOverlay(new ScreenOverlay(MinecraftClient.getInstance(), ModClothConfig.getConfigBuilder().setParentScreen(null).build()));
         ChatTools.LOGGER.info("[ChatTools] Command Executed: GUI opened");
         return Command.SINGLE_SUCCESS;

@@ -1,11 +1,9 @@
 package net.apple70cents.chattools.features.quickchat;
 
-import com.terraformersmc.modmenu.util.mod.Mod;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -31,7 +29,9 @@ public class QuickRepeat {
                 MinecraftClient mc = MinecraftClient.getInstance();
                 List<String> history = mc.inGameHud.getChatHud().getMessageHistory();
                 if (history.isEmpty()) {
-                    mc.player.sendMessage(Text.translatable("text.config.chattools.option.quickRepeatFailure"), true);
+                    if(mc.player != null){
+                        mc.player.sendMessage(Text.translatable("text.config.chattools.option.quickRepeatFailure"), true);
+                    }
                 } else {
                     MacroChat.sendPlayerChat(history.get(history.size() - 1));
                 }

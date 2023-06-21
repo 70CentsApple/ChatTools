@@ -11,20 +11,18 @@ public class SystemToast {
         ChatTools.LOGGER.info("[ChatTools] Toast Notified with AWT.");
         System.setProperty("java.awt.headless", "false");
         System.out.println("GraphicsEnvironment.isHeadless() = " + GraphicsEnvironment.isHeadless());
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                if (GraphicsEnvironment.isHeadless()) System.setProperty("java.awt.headless", "false");
-                SystemTray tray = SystemTray.getSystemTray();
-                Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
-                TrayIcon trayIcon = new TrayIcon(image, "ChatTools");
-                try {
-                    tray.add(trayIcon);
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                }
-                trayIcon.displayMessage(caption, text, TrayIcon.MessageType.NONE);
-                tray.remove(trayIcon);
+        SwingUtilities.invokeLater(() -> {
+            if (GraphicsEnvironment.isHeadless()) System.setProperty("java.awt.headless", "false");
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
+            TrayIcon trayIcon = new TrayIcon(image, "ChatTools");
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException e) {
+                e.printStackTrace();
             }
+            trayIcon.displayMessage(caption, text, TrayIcon.MessageType.NONE);
+            tray.remove(trayIcon);
         });
     }
 

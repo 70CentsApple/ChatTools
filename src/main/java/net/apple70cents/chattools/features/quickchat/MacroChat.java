@@ -3,9 +3,8 @@ package net.apple70cents.chattools.features.quickchat;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,13 +54,6 @@ public class MacroChat {
             this.command = command;
         }
 
-        public MacroUnit(InputUtil.Key key, ModClothConfig.CustomModifier modifier, MacroMode mode, String command) {
-            this.key = key.getTranslationKey();
-            this.modifier = modifier;
-            this.mode = mode;
-            this.command = command;
-        }
-
         public MacroUnit() {
             this.key = InputUtil.UNKNOWN_KEY.getTranslationKey();
             this.modifier = ModClothConfig.CustomModifier.NONE;
@@ -104,20 +96,20 @@ public class MacroChat {
         }
     }
 
-    public static boolean sendPlayerChat(String chatText) {
+    public static void sendPlayerChat(String chatText) {
         chatText = StringHelper.truncateChat(StringUtils.normalizeSpace(chatText.trim()));
-        if (chatText.isEmpty()) {
-            return true;
-        } else {
+        if (!chatText.isEmpty()) {
             MinecraftClient.getInstance().inGameHud.getChatHud().addToMessageHistory(chatText);
-
+            ClientPlayerEntity player = MinecraftClient.getInstance().player;
             if (chatText.startsWith("/")) {
-                MinecraftClient.getInstance().player.networkHandler.sendChatCommand(chatText.substring(1));
+                if (player != null) {
+                    player.networkHandler.sendChatCommand(chatText.substring(1));
+                }
             } else {
-                MinecraftClient.getInstance().player.networkHandler.sendChatMessage(chatText);
+                if (player != null) {
+                    player.networkHandler.sendChatMessage(chatText);
+                }
             }
-
-            return true;
         }
     }
 
