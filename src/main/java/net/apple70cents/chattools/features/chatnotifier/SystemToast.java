@@ -4,6 +4,9 @@ import net.apple70cents.chattools.ChatTools;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class SystemToast {
 
@@ -38,7 +41,20 @@ public class SystemToast {
                     + (caption + "`r`n" + text) + "\\\"));$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('"
                     + "Minecraft Chat Tools Mod" + "');$notifier.Show($toast);\"";
             ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
-            builder.start();
+            builder.redirectErrorStream(true);
+            // 启动进程
+            Process process = builder.start();
+
+            // 获取进程输出流
+            InputStream inputStream = process.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "GBK"));
+
+            // 读取输出
+            String line;
+            while ((line = reader.readLine()) != null) {
+                ChatTools.LOGGER.info(line);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

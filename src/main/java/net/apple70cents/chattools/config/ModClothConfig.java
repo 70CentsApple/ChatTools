@@ -10,6 +10,7 @@ import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -171,7 +172,13 @@ public class ModClothConfig {
         nickHiderSettings.add(eb.startStrField(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderText"), config.nickHiderSettings.nickHiderText).setDefaultValue(new ModConfigFallback().nickHiderSettings.nickHiderText).setTooltip(Text.translatable("text.config.chattools.option.nickHiderSettings.nickHiderText.@Tooltip")).setSaveConsumer(v -> config.nickHiderSettings.nickHiderText = v).build());
         mainCategory.addEntry(nickHiderSettings.build());
         // 最大聊天记录数量
-        mainCategory.addEntry(eb.startIntSlider(Text.translatable("text.config.chattools.option.maxHistorySize"), config.maxHistorySize, 10, 10000).setDefaultValue(new ModConfigFallback().maxHistorySize).setTooltip(Text.translatable("text.config.chattools.option.maxHistorySize.@Tooltip")).setSaveConsumer(v -> config.maxHistorySize = v).build());
+        Text label = Text.translatable("text.config.chattools.option.maxHistorySize");
+        Text tooltip = Text.translatable("text.config.chattools.option.maxHistorySize.@Tooltip");
+        if (FabricLoader.getInstance().isModLoaded("tweakermore")) {
+            label = Text.translatable("key.chattools.conflict").append(label);
+            tooltip = Text.translatable("key.chattools.conflictTooltip", "TweakerMore").append(tooltip);
+        }
+        mainCategory.addEntry(eb.startIntSlider(label, config.maxHistorySize, 10, 10000).setDefaultValue(new ModConfigFallback().maxHistorySize).setTooltip(tooltip).setSaveConsumer(v -> config.maxHistorySize = v).build());
 
         // ========== Notifier Category ==========
         ConfigCategory notifierCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.notifier"));

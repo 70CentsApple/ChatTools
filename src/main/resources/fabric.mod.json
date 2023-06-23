@@ -9,7 +9,7 @@
     "70CentsApple"
   ],
   "contact": {
-    "homepage": "https://70centsapple.github.io/",
+    "homepage": "https://modrinth.com/mod/chat-tools",
     "sources": "https://github.com/70CentsApple/ChatTools",
     "issues": "https://github.com/70CentsApple/ChatTools/issues",
     "bilibili": "https://space.bilibili.com/442361724"
@@ -39,6 +39,13 @@
     "cloth-config": "*"
   },
   "suggests": {
-    "another-mod": "*"
+    "modmenu": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.modrinth": "https://modrinth.com/mod/chat-tools"
+      }
+    }
   }
 }

@@ -9,6 +9,8 @@
   "key.chattools.category.quickchat": "Chat Keybindings",
   "key.chattools.category.bubble": "Bubble",
   "key.chattools.match": "§a§lGot noticeable chats!",
+  "key.chattools.conflict": "§c[!] ",
+  "key.chattools.conflictTooltip": "§cThis feature conflicts with §e%s§c and is automatically disabled.\nPlease change it in the corresponding mod.\n§r",
   "text.config.chattools.option.modEnabled": "Enable Chat Tools",
   "text.config.chattools.option.modEnabled.@Tooltip": "Toggles the entire mod.",
   "text.config.chattools.option.displayChatTimeEnabled": "Show Timestamp",

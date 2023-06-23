@@ -74,7 +74,7 @@ public class ChatNotifier {
     }
 
     /**
-     * **尝试**高亮消息并做对应的消息提醒功能
+     * <i>尝试</i>高亮消息并做对应的消息提醒功能
      *
      * @param text 消息
      * @return 经过高亮处理后的消息
