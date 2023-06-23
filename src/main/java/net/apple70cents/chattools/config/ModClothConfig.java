@@ -30,6 +30,7 @@ public class ModClothConfig {
 
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
+    public String displayChatTimeFormatter = "&e[HH:mm:ss] &r";
     public boolean restoreMessagesEnabled = true;
 
     public static class NickHiderSettings {
@@ -165,6 +166,8 @@ public class ModClothConfig {
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.modEnabled"), config.modEnabled).setDefaultValue(new ModConfigFallback().modEnabled).setTooltip(Text.translatable("text.config.chattools.option.modEnabled.@Tooltip")).setSaveConsumer(v -> config.modEnabled = v).build());
         // 启用显示聊天时间
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.displayChatTimeEnabled"), config.displayChatTimeEnabled).setDefaultValue(new ModConfigFallback().displayChatTimeEnabled).setSaveConsumer(v -> config.displayChatTimeEnabled = v).build());
+        // 聊天时间格式
+        mainCategory.addEntry(eb.startStrField(Text.translatable("text.config.chattools.option.displayChatTimeFormatter"), config.displayChatTimeFormatter).setDefaultValue(new ModConfigFallback().displayChatTimeFormatter).setTooltip(Text.translatable("text.config.chattools.option.displayChatTimeFormatter.@Tooltip")).setSaveConsumer(v -> config.displayChatTimeFormatter = v).build());
         // 启用保留聊天记录
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.restoreMessagesEnabled"), config.restoreMessagesEnabled).setDefaultValue(new ModConfigFallback().restoreMessagesEnabled).setTooltip(Text.translatable("text.config.chattools.option.restoreMessagesEnabled.@Tooltip")).setSaveConsumer(v -> config.restoreMessagesEnabled = v).build());
         // 隐藏昵称选项

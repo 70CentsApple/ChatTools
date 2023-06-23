@@ -14,6 +14,8 @@
   "text.config.chattools.option.modEnabled": "Enable Chat Tools",
   "text.config.chattools.option.modEnabled.@Tooltip": "Toggles the entire mod.",
   "text.config.chattools.option.displayChatTimeEnabled": "Show Timestamp",
+  "text.config.chattools.option.displayChatTimeFormatter": "Timestamp Format",
+  "text.config.chattools.option.displayChatTimeFormatter.@Tooltip": "Please use \"&\" for color code prefix, and \"\\&\" for \"&\".",
   "text.config.chattools.option.restoreMessagesEnabled": "Restore Messages",
   "text.config.chattools.option.restoreMessagesEnabled.@Tooltip": "Restore messages from previous sessions.",
   "text.config.chattools.option.nickHiderSettings": "Nickname Hider",

@@ -16,6 +16,7 @@ import net.minecraft.util.Identifier;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
@@ -52,15 +53,37 @@ public class ChatNotifier {
             // 获取时区偏移量
             ZoneOffset zoneOffset = ZoneId.systemDefault().getRules().getOffset(currentTime);
             String offsetString = zoneOffset.getId();
-            // §e[hh:mm:ss] §r
-            Text shortTimeDisplay = Text.of(String.format("§e[%d:%02d:%02d] §r", currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond()));
-            // yyyy/MM/dd hh:mm:ss UTC±XX:XX
+            Text shortTimeDisplay = Text.of(dealWithTimeFormatter(config.displayChatTimeFormatter));
+            // yyyy/MM/dd HH:mm:ss UTC±XX:XX
             Text longTimeDisplay = Text.of(String.format("%4d/%d/%d %d:%02d:%02d\nUTC%s", currentTime.getYear(), currentTime.getMonth().getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
             message = stylish((MutableText) shortTimeDisplay,
                     // 悬停文本
                     (style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, longTimeDisplay)))).append(message);
         }
         return message;
+    }
+
+    private static String dealWithTimeFormatter(String formatter) {
+        formatter = formatter.replace('&', '§').replace("\\§", "和");
+        // Yes I know it is a stupid way, but it works.
+        formatter = formatter.replace("§4", "红").replace("§c", "粉").replace("§6", "金") // dark_red red gold
+                .replace("§e", "黄").replace("§2", "绿").replace("§a", "翠") // yellow dark_green green
+                .replace("§b", "青").replace("§3", "黛").replace("§1", "蓝") // aqua dark_aqua dark_blue
+                .replace("§9", "缥").replace("§d", "赬").replace("§5", "紫") // blue light_purple dark_purple
+                .replace("§f", "白").replace("§7", "灰").replace("§8", "暗") // white gray dark_gray
+                .replace("§0", "黑").replace("§r", "重").replace("§l", "粗") // black reset bold
+                .replace("§o", "斜").replace("§n", "下").replace("§m", "线") // italic underline strike
+                .replace("§k", "乱").replace('[', '左').replace(']', '右'); // shuffled '[' ']'
+        String timeDisplay = LocalDateTime.now().format(DateTimeFormatter.ofPattern(formatter));
+        timeDisplay = timeDisplay.replace("红", "§4").replace("粉", "§c").replace("金", "§6") // dark_red red gold
+                .replace("黄", "§e").replace("绿", "§2").replace("翠", "§a") // yellow dark_green green
+                .replace("青", "§b").replace("黛", "§3").replace("蓝", "§1") // aqua dark_aqua dark_blue
+                .replace("缥", "§9").replace("赬", "§d").replace("紫", "§5") // blue light_purple dark_purple
+                .replace("白", "§f").replace("灰", "§7").replace("暗", "§8") // white gray dark_gray
+                .replace("黑", "§0").replace("重", "§r").replace("粗", "§l") // black reset bold
+                .replace("斜", "§o").replace("下", "§n").replace("线", "§m") // italic underline strike
+                .replace("乱", "§k").replace('左', '[').replace('右', ']'); // shuffled '[' ']'
+        return timeDisplay.replace('和', '&');
     }
 
     /**
