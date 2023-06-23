@@ -14,6 +14,8 @@
   "text.config.chattools.option.modEnabled": "启用Chat Tools（总开关）",
   "text.config.chattools.option.modEnabled.@Tooltip": "Chat Tools 的总开关",
   "text.config.chattools.option.displayChatTimeEnabled": "显示聊天时间",
+  "text.config.chattools.option.restoreMessagesEnabled": "储存聊天记录",
+  "text.config.chattools.option.restoreMessagesEnabled.@Tooltip": "在切换会话之后从上一个会话储存聊天记录",
   "text.config.chattools.option.nickHiderSettings": "隐藏自己昵称",
   "text.config.chattools.option.nickHiderSettings.nickHiderEnabled": "启用昵称隐藏",
   "text.config.chattools.option.nickHiderSettings.nickHiderText": "自定义昵称",

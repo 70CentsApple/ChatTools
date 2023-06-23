@@ -6,10 +6,8 @@ import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import static net.apple70cents.chattools.ChatTools.config;
@@ -17,10 +15,16 @@ import static net.apple70cents.chattools.ChatTools.config;
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
 
-    // FROM https://github.com/JackFred2/MoreChatHistory/blob/main/src/main/java/red/jackf/morechathistory/mixins/MixinChatHud.java
+    @Inject(method = "clear", at = @At("HEAD"), cancellable = true)
+    public void restoreMessages(boolean clearHistory, CallbackInfo ci) {
+        if (config.restoreMessagesEnabled) {
+            ci.cancel(); // 取消清除聊天记录
+        }
+    }
+
     @ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", constant = @Constant(intValue = 100), require = 0)
     public int modifyMaxHistorySize(int originalMaxSize) {
-        if(FabricLoader.getInstance().isModLoaded("tweakermore")){
+        if (FabricLoader.getInstance().isModLoaded("tweakermore")) {
             return originalMaxSize;
         } else {
             return config.maxHistorySize;

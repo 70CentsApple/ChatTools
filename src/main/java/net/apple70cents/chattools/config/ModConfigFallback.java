@@ -9,6 +9,7 @@ import java.util.List;
 public class ModConfigFallback extends ModClothConfig{
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
+    public boolean restoreMessagesEnabled = true;
     public static class NickHiderSettings{
         public boolean nickHiderEnabled = false;
         public String nickHiderText = "&6You&r";

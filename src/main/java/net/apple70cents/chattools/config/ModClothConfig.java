@@ -30,6 +30,7 @@ public class ModClothConfig {
 
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
+    public boolean restoreMessagesEnabled = true;
 
     public static class NickHiderSettings {
         public boolean nickHiderEnabled = false;
@@ -164,6 +165,8 @@ public class ModClothConfig {
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.modEnabled"), config.modEnabled).setDefaultValue(new ModConfigFallback().modEnabled).setTooltip(Text.translatable("text.config.chattools.option.modEnabled.@Tooltip")).setSaveConsumer(v -> config.modEnabled = v).build());
         // 启用显示聊天时间
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.displayChatTimeEnabled"), config.displayChatTimeEnabled).setDefaultValue(new ModConfigFallback().displayChatTimeEnabled).setSaveConsumer(v -> config.displayChatTimeEnabled = v).build());
+        // 启用保留聊天记录
+        mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.restoreMessagesEnabled"), config.restoreMessagesEnabled).setDefaultValue(new ModConfigFallback().restoreMessagesEnabled).setTooltip(Text.translatable("text.config.chattools.option.restoreMessagesEnabled.@Tooltip")).setSaveConsumer(v -> config.restoreMessagesEnabled = v).build());
         // 隐藏昵称选项
         SubCategoryBuilder nickHiderSettings = eb.startSubCategory(Text.translatable("text.config.chattools.option.nickHiderSettings"));
         // - 启用隐藏昵称

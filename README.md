@@ -15,6 +15,8 @@ Chat Tools的大部分功能支持高度个性化，请在配置页面进行配�
 - 显示聊天时间（Show Timestamp）\
 在信息前面插入一个时间戳\
 ![Timestamp](<images/Timestamp.png>)
+- 储存聊天记录（Restore Messages）\
+在切换会话之后从上一个会话储存聊天记录
 - 隐藏自己昵称（Nickname Hider）\
 在自己视角里隐藏自己真实昵称\
 ![Nickname Hider](<images/Nickname Hider.png>)

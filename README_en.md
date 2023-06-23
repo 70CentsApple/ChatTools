@@ -15,6 +15,8 @@ Contains the basic settings of Chat Tools
 - Show Timestamp \
 Inserts a timestamp in front of the message.\
 ![Timestamp](<images/Timestamp.png>)
+- Restore Messages\
+Restore messages from previous sessions.
 - Nickname Hider \
 Hides your real nickname in your own view.\
 ![Nickname Hider](<images/Nickname Hider.png>)
