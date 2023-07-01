@@ -66,8 +66,8 @@ public class ChatNotifier {
         formatter = formatter.replace('&', '§').replace("\\§", "&");
         LocalDateTime time = LocalDateTime.now();
         formatter = formatter.replace("{hour}", String.format("%d", time.getHour())) // hour
-                .replace("{minute}", String.format("%2d", time.getMinute())) // minute
-                .replace("{second}", String.format("%2d", time.getSecond())); // second
+                .replace("{minute}", String.format("%02d", time.getMinute())) // minute
+                .replace("{second}", String.format("%02d", time.getSecond())); // second
         return formatter;
     }
 
