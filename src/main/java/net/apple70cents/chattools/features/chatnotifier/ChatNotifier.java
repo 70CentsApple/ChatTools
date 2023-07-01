@@ -42,13 +42,13 @@ public class ChatNotifier {
 
         // 处理昵称隐藏
         if (config.nickHiderSettings.nickHiderEnabled && client.player != null) {
-            message = Text.of(message.getString().replace(client.player.getDisplayName().getString(), config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+            if (message.getString().contains(client.player.getName().getString())) {
+                message = Text.of(message.getString().replace(client.player.getDisplayName().getString(), config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+            }
         }
 
         // 显示聊天时间
         if (config.displayChatTimeEnabled) {
-            // TODO 自定义的Timestamp格式
-            // TODO 兼容Compact Chat
             LocalDateTime currentTime = LocalDateTime.now();
             // 获取时区偏移量
             ZoneOffset zoneOffset = ZoneId.systemDefault().getRules().getOffset(currentTime);

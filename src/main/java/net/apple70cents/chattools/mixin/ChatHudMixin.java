@@ -32,6 +32,7 @@ public abstract class ChatHudMixin {
     }
 
     @ModifyArgs(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V"))
+    // TODO 兼容Compact Chat
     public void dealWithMessage(Args args) {
         Text message = args.get(0);
         MessageIndicator indicator = args.get(3);

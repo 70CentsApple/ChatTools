@@ -31,7 +31,7 @@
   "text.config.chattools.option.ignoreSystemMessage": "§6忽略系统消息",
   "text.config.chattools.option.ignoreSystemMessage.@Tooltip": "§6* 不建议在服务器中启用，尤其是安装了聊天插件的服务器\n§6（可能会发生意料之外的失效）",
   "text.config.chattools.option.toastNotifySettings": "§6后台弹窗提醒",
-  "text.config.chattools.option.toastNotifySettings.@Tooltip": "§6* 开发中功能，不一定生效\n§r当游戏在后台运行时收到关注消息，将会以一个弹窗的方式提醒您",
+  "text.config.chattools.option.toastNotifySettings.@Tooltip": "§6* 开发中功能，不一定生效§r\n当游戏§6在后台运行（失去焦点）时§r收到关注消息，将会以一个弹窗的方式提醒您",
   "text.config.chattools.option.toastNotifySettings.toastNotifyEnabled": "启用弹窗提醒",
   "text.config.chattools.option.toastNotifySettings.toastNotifyMode": "弹窗提醒模式",
   "text.config.chattools.option.toastNotifySettings.toastNotifyMode.@Tooltip": "所有模式都只考虑了Windows系统\n§6POWERSHELL§r: 通过Powershell触发弹窗\n\n§6AWT§r：通过Java AWT组件触发弹窗\n（不一定可用因为在Minecraft运行环境中java.awt.headless == true）",
