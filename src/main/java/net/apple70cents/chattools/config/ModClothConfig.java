@@ -30,7 +30,7 @@ public class ModClothConfig {
 
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
-    public String displayChatTimeFormatter = "&e[HH:mm:ss] &r";
+    public String displayChatTimeFormatter = "&e[{hour}:{minute}:{second}] &r";
     public boolean restoreMessagesEnabled = true;
 
     public static class NickHiderSettings {

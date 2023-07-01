@@ -28,9 +28,9 @@ public abstract class EntityRendererMixin {
         ModClothConfig config = ModClothConfig.get();
         if (!config.nickHiderSettings.nickHiderEnabled) {
             return text;
-        } else if(MinecraftClient.getInstance().player == null){
+        } else if (MinecraftClient.getInstance().player == null) {
             return text;
-        } else if (text.getString().contains(MinecraftClient.getInstance().player.getName().getString())){
+        } else if (text.getString().contains(MinecraftClient.getInstance().player.getName().getString())) {
             text = Text.of(text.getString().replace(MinecraftClient.getInstance().player.getName().getString(), // 替换实体nametag中的玩家名称（如果有）
                     config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
         }

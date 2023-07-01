@@ -15,7 +15,7 @@
   "text.config.chattools.option.modEnabled.@Tooltip": "Chat Tools 的总开关",
   "text.config.chattools.option.displayChatTimeEnabled": "显示聊天时间",
   "text.config.chattools.option.displayChatTimeFormatter": "聊天时间格式",
-  "text.config.chattools.option.displayChatTimeFormatter.@Tooltip": "使用 & 来代替 变色符号，使用 \\& 来代替 &",
+  "text.config.chattools.option.displayChatTimeFormatter.@Tooltip": "使用 & 来代替 变色符号，使用 \\& 来代替 &\n§o{hour}§r：小时\n§o{minute}§r：分钟\n§o{second}§r：秒",
   "text.config.chattools.option.restoreMessagesEnabled": "储存聊天记录",
   "text.config.chattools.option.restoreMessagesEnabled.@Tooltip": "在切换会话之后从上一个会话储存聊天记录",
   "text.config.chattools.option.nickHiderSettings": "隐藏自己昵称",

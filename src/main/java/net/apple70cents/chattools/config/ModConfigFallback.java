@@ -9,7 +9,7 @@ import java.util.List;
 public class ModConfigFallback extends ModClothConfig{
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
-    public String displayChatTimeFormatter = "&e[HH:mm:ss] &r";
+    public String displayChatTimeFormatter = "&e[{hour}:{minute}:{second}] &r";
     public boolean restoreMessagesEnabled = true;
     public static class NickHiderSettings{
         public boolean nickHiderEnabled = false;
