@@ -83,6 +83,7 @@ public class MacroChat {
                     case CTRL ->
                             !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT));
                 };
+                lazyModePass = lazyModePass & !InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_F3);
             }
             if (isKeyPressedOrMouseKeyClicked(key, modifier) && lazyModePass) {
                 if (!keyWasPressed) {
