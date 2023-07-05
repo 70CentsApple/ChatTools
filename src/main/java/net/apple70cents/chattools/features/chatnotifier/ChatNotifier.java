@@ -19,6 +19,8 @@ import java.time.ZoneOffset;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
+import static net.apple70cents.chattools.ChatTools.replaceText;
+
 public class ChatNotifier {
     static MinecraftClient client = MinecraftClient.getInstance();
     static ModClothConfig config = ModClothConfig.get();
@@ -42,7 +44,10 @@ public class ChatNotifier {
         // 处理昵称隐藏
         if (config.nickHiderSettings.nickHiderEnabled && client.player != null) {
             if (message.getString().contains(client.player.getName().getString())) {
-                message = Text.of(message.getString().replace(client.player.getDisplayName().getString(), config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+                message = replaceText((MutableText) message, // 原消息
+                        client.player.getDisplayName().getString(), // 玩家名称
+                        config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&") // 自定义名称
+                );
             }
         }
 

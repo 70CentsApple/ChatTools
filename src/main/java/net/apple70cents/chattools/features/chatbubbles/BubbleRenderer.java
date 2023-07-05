@@ -8,6 +8,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.joml.Matrix4f;
 
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static net.apple70cents.chattools.ChatTools.replaceText;
 
 public class BubbleRenderer {
     static ModClothConfig config = ModClothConfig.get();
@@ -41,7 +44,7 @@ public class BubbleRenderer {
         }
 
         public String toString() {
-            return "Lifetime:" + getLifetime() + ", Text:" + text;
+            return "[\"lifetime\": " + getLifetime() + ", \"text\": " + text + "]";
         }
 
         /**
@@ -52,14 +55,14 @@ public class BubbleRenderer {
          * @param vertexConsumers 顶点（？
          */
         public void render(Entity entity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers) {
-            if(mc.player == null){
+            if (mc.player == null) {
                 return;
             }
             Text renderText = text;
             if (config.nickHiderSettings.nickHiderEnabled) {
-                renderText = Text.of(text.getString().replace(mc.player.getDisplayName().getString(),config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+                renderText = replaceText((MutableText) renderText, mc.player.getDisplayName().getString(), config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&"));
             }
-            int yOffset = "deadmau5".equals(text.getString()) ? -10 : 0;
+            int yOffset = "deadmau5".equals(text.getString()) ? -10 : 0; // 保留Minecraft原本的致敬彩蛋，这样才知道我玩的是MC
             EntityRenderDispatcher renderDispatcher = mc.getEntityRenderDispatcher();
             matrixStack.push();
             matrixStack.translate(0.0F, entity.getNameLabelHeight() + config.chatBubblesYOffset / 10.0F, 0.0F);
@@ -85,7 +88,7 @@ public class BubbleRenderer {
     public static void render(Entity entity, MatrixStack matrices, VertexConsumerProvider vertex) {
         if (bubbleMap.isEmpty()) {
             return;
-        }else if (mc.world == null) {
+        } else if (mc.world == null) {
             return;
         }
         for (AbstractClientPlayerEntity sender : mc.world.getPlayers()) {
@@ -126,7 +129,7 @@ public class BubbleRenderer {
      * 获取消息中出现的第一个玩家名称
      * （大多数情况下是发送者）
      *
-     * @param playerNameList 玩家列表（通常是`MinecraftClient.getInstance().world.getPlayers()`）
+     * @param playerNameList 玩家列表（通常是<code>MinecraftClient.getInstance().world.getPlayers()</code>）
      * @param inputString    消息
      * @return 玩家名称 或 null
      */

@@ -7,12 +7,15 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static net.apple70cents.chattools.ChatTools.replaceText;
 
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
@@ -31,8 +34,8 @@ public abstract class EntityRendererMixin {
         } else if (MinecraftClient.getInstance().player == null) {
             return text;
         } else if (text.getString().contains(MinecraftClient.getInstance().player.getName().getString())) {
-            text = Text.of(text.getString().replace(MinecraftClient.getInstance().player.getName().getString(), // 替换实体nametag中的玩家名称（如果有）
-                    config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&")));
+            // 替换实体nametag中的玩家名称（如果有）
+            text = replaceText((MutableText) text, MinecraftClient.getInstance().player.getName().getString(), config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&"));
         }
         return text;
     }

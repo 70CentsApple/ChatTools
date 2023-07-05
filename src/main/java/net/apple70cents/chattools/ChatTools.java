@@ -1,5 +1,6 @@
 package net.apple70cents.chattools;
 
+import com.google.gson.*;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.config.ModClothConfig;
@@ -14,6 +15,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -78,6 +80,39 @@ public class ChatTools implements ModInitializer {
         return false;
     }
 
+    /**
+     * 替换MutableText
+     *
+     * @param text      代替换文本
+     * @param oldString 旧文本
+     * @param newString 新文本
+     * @return 替换后文本
+     */
+    public static MutableText replaceText(MutableText text, String oldString, String newString) {
+        String json = Text.Serializer.toJson(text);
+        JsonElement jsonElement = new Gson().fromJson(json, JsonObject.class);
+        replaceFieldValue(jsonElement, oldString, newString);
+        return Text.Serializer.fromJson(new Gson().toJson(jsonElement));
+    }
+
+    private static void replaceFieldValue(JsonElement jsonElement, String oldValue, String newValue) {
+        if (jsonElement.isJsonObject()) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            for (String key : jsonObject.keySet()) {
+                JsonElement value = jsonObject.get(key);
+                if (value.isJsonPrimitive() && value.getAsString().equals(oldValue)) {
+                    jsonObject.addProperty(key, newValue);
+                } else {
+                    replaceFieldValue(value, oldValue, newValue);
+                }
+            }
+        } else if (jsonElement.isJsonArray()) {
+            JsonArray jsonArray = jsonElement.getAsJsonArray();
+            for (JsonElement element : jsonArray) {
+                replaceFieldValue(element, oldValue, newValue);
+            }
+        }
+    }
 
     /**
      * 获取指令参数构造器
