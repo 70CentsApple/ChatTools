@@ -5,7 +5,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -15,9 +17,13 @@ import static net.apple70cents.chattools.ChatTools.config;
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
 
+    @Shadow
+    public abstract void addMessage(Text message);
+
     @Inject(method = "clear", at = @At("HEAD"), cancellable = true)
     public void restoreMessages(boolean clearHistory, CallbackInfo ci) {
         if (config.restoreMessagesEnabled) {
+            this.addMessage(Text.translatable("text.config.chattools.option.restoredMessages").formatted(Formatting.GRAY));
             ci.cancel(); // 取消清除聊天记录
         }
     }
