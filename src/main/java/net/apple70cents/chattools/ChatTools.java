@@ -100,8 +100,8 @@ public class ChatTools implements ModInitializer {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             for (String key : jsonObject.keySet()) {
                 JsonElement value = jsonObject.get(key);
-                if (value.isJsonPrimitive() && value.getAsString().equals(oldValue)) {
-                    jsonObject.addProperty(key, newValue);
+                if (value.isJsonPrimitive() && value.getAsString().contains(oldValue)) {
+                    jsonObject.addProperty(key, value.getAsString().replace(oldValue, newValue));
                 } else {
                     replaceFieldValue(value, oldValue, newValue);
                 }
