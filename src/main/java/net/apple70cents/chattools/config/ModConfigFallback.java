@@ -6,51 +6,59 @@ import net.minecraft.client.util.InputUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModConfigFallback extends ModClothConfig{
+public class ModConfigFallback extends ModClothConfig {
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
     public String displayChatTimeFormatter = "&e[{hour}:{minute}:{second}] &r";
     public boolean restoreMessagesEnabled = true;
-    public static class NickHiderSettings{
+
+    public static class NickHiderSettings {
         public boolean nickHiderEnabled = false;
         public String nickHiderText = "&6You&r";
     }
+
     public NickHiderSettings nickHiderSettings = new NickHiderSettings();
     public boolean shouldShowWelcomeMessage = true;
 
-    public static class SoundSettings{
+    public static class SoundSettings {
         public boolean soundNotifyEnabled = true;
         public String chatNotifySound = "block.note_block.bit";
         public int chatNotifyVolume = 80;
         public int chatNotifyPitch = 10;
     }
+
     public SoundSettings soundSettings = new SoundSettings();
 
-    public static class ActionbarSettings{
+    public static class ActionbarSettings {
         public boolean actionbarNotifyEnabled = true;
     }
+
     public ActionbarSettings actionbarSettings = new ActionbarSettings();
 
-    public static class HighlightSettings{
+    public static class HighlightSettings {
         public boolean highlightEnabled = true;
         public String highlightPrefix = "&a→ &r";
         public boolean enforceOverwriting = false;
     }
+
     public HighlightSettings highlightSettings = new HighlightSettings();
 
     public boolean ignoreSelf = true;
     public boolean matchSelfName = true;
     public boolean ignoreSystemMessage = true;
-    public static class ToastNotifySettings{
+
+    public static class ToastNotifySettings {
         public boolean toastNotifyEnabled = false;
         public ToastMode toastNotifyMode = ToastMode.POWERSHELL;
     }
+
     public ToastNotifySettings toastNotifySettings = new ToastNotifySettings();
     public List<String> allowList = new ArrayList<>(); // 十分肤色正确的变量名
     public List<String> banList = new ArrayList<>(); // 十分肤色正确的变量名
 
     public boolean injectorEnabled = false;
-    public String injectorString = "I said {text} ~";
+
+    public List<InjectorUnit> injectorList = new ArrayList<>();
     public List<String> injectorBanList = new ArrayList<>() {{
         add("^\\d+$|^[.#%$/].*|\\ball\\b");
     }};

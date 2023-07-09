@@ -10,7 +10,7 @@ import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -83,7 +83,35 @@ public class ModClothConfig {
     public List<String> banList = new ArrayList<>(); // 十分肤色正确的变量名
 
     public boolean injectorEnabled = false;
-    public String injectorString = "I said {text} ~";
+
+    public static class InjectorUnit {
+        private String address;
+        private String formatter;
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getFormatter() {
+            return formatter;
+        }
+
+        public void setFormatter(String formatter) {
+            this.formatter = formatter;
+        }
+
+
+        public InjectorUnit() {
+            this.address = "*";
+            this.formatter = "{text}";
+        }
+    }
+
+    public List<InjectorUnit> injectorList = new ArrayList<>();
     public List<String> injectorBanList = new ArrayList<>() {{
         add("^\\d+$|^[.#%$/].*|\\ball\\b");
     }};
@@ -180,10 +208,10 @@ public class ModClothConfig {
         // 最大聊天记录数量
         Text label = Text.translatable("text.config.chattools.option.maxHistorySize");
         Text tooltip = Text.translatable("text.config.chattools.option.maxHistorySize.@Tooltip");
-        if (FabricLoader.getInstance().isModLoaded("tweakermore")) {
-            label = Text.translatable("key.chattools.conflict").append(label);
-            tooltip = Text.translatable("key.chattools.conflictTooltip", "TweakerMore").append(tooltip);
-        }
+//        if (FabricLoader.getInstance().isModLoaded("tweakermore")) {
+//            label = Text.translatable("key.chattools.conflict").append(label);
+//            tooltip = Text.translatable("key.chattools.conflictTooltip", "TweakerMore").append(tooltip);
+//        }
         mainCategory.addEntry(eb.startIntSlider(label, config.maxHistorySize, 10, 10000).setDefaultValue(new ModConfigFallback().maxHistorySize).setTooltip(tooltip).setSaveConsumer(v -> config.maxHistorySize = v).build());
 
         // ========== Notifier Category ==========
@@ -236,8 +264,39 @@ public class ModClothConfig {
         ConfigCategory injectorCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.injector"));
         // 启用聊天注入
         injectorCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.injectorEnabled"), config.injectorEnabled).setDefaultValue(new ModConfigFallback().injectorEnabled).setTooltip(Text.translatable("text.config.chattools.option.injectorEnabled.@Tooltip")).setSaveConsumer(v -> config.injectorEnabled = v).build());
-        // 聊天注入文本
-        injectorCategory.addEntry(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), config.injectorString).setDefaultValue(new ModConfigFallback().injectorString).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setSaveConsumer(v -> config.injectorString = v).build());
+        // 聊天注入规则列表
+        if (MinecraftClient.getInstance().getCurrentServerEntry() == null) {
+            label = Text.translatable("text.config.chattools.option.injectorList", "§f-");
+        } else {
+            label = Text.translatable("text.config.chattools.option.injectorList", "§f" + MinecraftClient.getInstance().getCurrentServerEntry().address);
+        }
+        injectorCategory.addEntry(new NestedListListEntry<InjectorUnit, MultiElementListEntry<InjectorUnit>>(label, config.injectorList, true, // 启用默认展开
+                () -> {
+                    return Optional.of(new net.minecraft.text.MutableText[]{Text.translatable("text.config.chattools.option.injectorList.@Tooltip")});
+                }, // Tooltip
+                v -> config.injectorList = v, // Save Consumer
+                () -> new ModConfigFallback().injectorList, // 默认值
+                eb.getResetButtonKey(), // 重置按钮键值
+                true, // 启用删除键
+                true, // 在列表前面插入新内容
+                (injectorUnit, __) -> {
+                    AtomicReference<InjectorUnit> injectorUnitRef = new AtomicReference<>(injectorUnit);
+                    if (injectorUnit == null) { // 新建宏
+                        Text displayText = Text.translatable("text.config.chattools.option.injectorNew");
+                        InjectorUnit defaultInjectorRule = new InjectorUnit();
+                        injectorUnitRef.set(defaultInjectorRule); // 设置初始值
+                        return new MultiElementListEntry<>(displayText, defaultInjectorRule, new ArrayList<>() {{
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), defaultInjectorRule.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(defaultInjectorRule.address).setSaveConsumer(v -> injectorUnitRef.get().address = v).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), defaultInjectorRule.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(defaultInjectorRule.formatter).setSaveConsumer(v -> injectorUnitRef.get().formatter = v).build());
+                        }}, false);
+                    } else { // 现有宏
+                        Text displayText = Text.translatable("text.config.chattools.option.injectorDisplay", "§6" + injectorUnit.address, injectorUnit.formatter);
+                        return new MultiElementListEntry<>(displayText, injectorUnit, new ArrayList<>() {{
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), injectorUnit.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(new InjectorUnit().address).setSaveConsumer(v -> injectorUnitRef.get().address = v).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), injectorUnit.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(new InjectorUnit().formatter).setSaveConsumer(v -> injectorUnitRef.get().formatter = v).build());
+                        }}, false);
+                    }
+                }));
         // 注入器匹配黑名单（自动禁用名单）
         injectorCategory.addEntry(eb.startStrList(Text.translatable("text.config.chattools.option.injectorBanList"), config.injectorBanList).setDefaultValue(new ModConfigFallback().injectorBanList).setSaveConsumer(v -> config.injectorBanList = v).build());
 
