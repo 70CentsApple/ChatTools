@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 
 public class ModClothConfig {
     private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "chat_tools.json");
@@ -290,7 +291,8 @@ public class ModClothConfig {
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), defaultInjectorRule.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(defaultInjectorRule.formatter).setSaveConsumer(v -> injectorUnitRef.get().formatter = v).build());
                         }}, false);
                     } else { // 现有宏
-                        Text displayText = Text.translatable("text.config.chattools.option.injectorDisplay", "§6" + injectorUnit.address, injectorUnit.formatter);
+                        String colorPrefix = ("*".equals(injectorUnit.address) || (MinecraftClient.getInstance().getCurrentServerEntry()!=null && Pattern.compile(injectorUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
+                        Text displayText = Text.translatable("text.config.chattools.option.injectorDisplay", colorPrefix + injectorUnit.address, injectorUnit.formatter);
                         return new MultiElementListEntry<>(displayText, injectorUnit, new ArrayList<>() {{
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), injectorUnit.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(new InjectorUnit().address).setSaveConsumer(v -> injectorUnitRef.get().address = v).build());
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), injectorUnit.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(new InjectorUnit().formatter).setSaveConsumer(v -> injectorUnitRef.get().formatter = v).build());

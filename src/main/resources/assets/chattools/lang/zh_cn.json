@@ -58,7 +58,7 @@
   "text.config.chattools.option.injectorEnabled": "启用聊天注入",
   "text.config.chattools.option.injectorEnabled.@Tooltip": "聊天注入功能允许你为您的消息添加前缀或后缀等",
   "text.config.chattools.option.injectorList": "注入规则列表 §6(当前服务器地址： %s§6 )§r",
-  "text.config.chattools.option.injectorList.@Tooltip": "在不同的服务器应用不同的注入规则，\n更靠前的内容优先级更高。\n每个单元对应规则会被触发当且仅当\n所在服务器地址被匹配+聊天内容不在匹配黑名单中",
+  "text.config.chattools.option.injectorList.@Tooltip": "在不同的服务器应用不同的注入规则。\n更靠前的内容优先级更高。\n只有§o所在服务器地址被匹配§r且§o聊天内容不在匹配黑名单中§r时\n对应单元的规则才会被触发",
   "text.config.chattools.option.injectorDisplay": "§e[ %s§e ]§r %s",
   "text.config.chattools.option.injectorNew": "新建规则",
   "text.config.chattools.option.injectorAddress": "服务器地址",
