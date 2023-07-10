@@ -57,7 +57,7 @@
   "text.config.chattools.option.banList.@Tooltip": "黑名单中的内容将不被匹配，\n内容遵循 §a正则表达式（RegEx）§r 语法",
   "text.config.chattools.option.injectorEnabled": "启用聊天注入",
   "text.config.chattools.option.injectorEnabled.@Tooltip": "聊天注入功能允许你为您的消息添加前缀或后缀等",
-  "text.config.chattools.option.injectorList": "注入规则列表 §6(当前服务器地址： %s§6 )§r",
+  "text.config.chattools.option.injectorList": "注入规则列表 §6（当前服务器地址： %s§6 ）§r",
   "text.config.chattools.option.injectorList.@Tooltip": "在不同的服务器应用不同的注入规则。\n更靠前的内容优先级更高。\n只有§o所在服务器地址被匹配§r且§o聊天内容不在匹配黑名单中§r时\n对应单元的规则才会被触发",
   "text.config.chattools.option.injectorDisplay": "§e[ %s§e ]§r %s",
   "text.config.chattools.option.injectorNew": "新建规则",
@@ -80,5 +80,15 @@
   "text.config.chattools.option.macroChatCommand": "宏内容",
   "text.config.chattools.option.chatBubblesEnabled": "启用聊天气泡",
   "text.config.chattools.option.chatBubblesLifetime": "气泡持续时间（秒）",
-  "text.config.chattools.option.chatBubblesYOffset": "气泡Y轴偏移量"
+  "text.config.chattools.option.chatBubblesYOffset": "气泡Y轴偏移量",
+  "text.config.chattools.option.chatBubblesRulesList": "聊天气泡规则列表 §6（当前服务器地址： %s§6 ）§r",
+  "text.config.chattools.option.chatBubblesRulesList.@Tooltip": "为不同的服务器应用不同的聊天气泡规则。\n更靠前的内容优先级更高。",
+  "text.config.chattools.option.chatBubblesDisplay": "§e[ %s§e ] [回退：%s§e]§r %s",
+  "text.config.chattools.option.chatBubblesNew": "新建规则",
+  "text.config.chattools.option.chatBubblesAddress": "服务器地址",
+  "text.config.chattools.option.chatBubblesAddress.@Tooltip": "当目前服务器地址匹配此字段时按照对应规则进行气泡渲染\n内容遵循 §a正则表达式（RegEx）§r 语法\n可以使用 §o*§r 表示任意内容",
+  "text.config.chattools.option.chatBubblesPattern": "规则",
+  "text.config.chattools.option.chatBubblesPattern.@Tooltip": "内容遵循 §a正则表达式（RegEx）§r 语法\n使用组<name>表示匹配的玩家名称\n使用组<message>表示匹配的消息内容",
+  "text.config.chattools.option.chatBubblesFallback": "回退",
+  "text.config.chattools.option.chatBubblesFallback.@Tooltip": "即使消息不被匹配，但如果消息里包含任意玩家昵称，\n也在此玩家头上渲染气泡\n（注意：这种情况下消息将会原封不动地渲染出来）"
 }

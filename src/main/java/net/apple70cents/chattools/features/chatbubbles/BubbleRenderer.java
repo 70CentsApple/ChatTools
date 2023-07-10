@@ -21,6 +21,42 @@ import java.util.regex.Pattern;
 import static net.apple70cents.chattools.ChatTools.replaceText;
 
 public class BubbleRenderer {
+    public static class BubbleRuleUnit {
+        private String address;
+        private String pattern;
+        private boolean fallback;
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public boolean isFallback() {
+            return fallback;
+        }
+
+        public void setFallback(boolean fallback) {
+            this.fallback = fallback;
+        }
+
+        public BubbleRuleUnit() {
+            this.address = "*";
+            this.pattern = "<(?<name>.*)> (?<message>.*)";
+            this.fallback = false;
+        }
+    }
+
     static ModClothConfig config = ModClothConfig.get();
     static MinecraftClient mc = MinecraftClient.getInstance();
     static TextRenderer textRenderer = mc.textRenderer;
@@ -31,6 +67,10 @@ public class BubbleRenderer {
 
         BubbleUnit(Text text, long startTime) {
             this.text = text;
+            this.startTime = startTime;
+        }
+        BubbleUnit(String str, long startTime) {
+            this.text = Text.of(str);
             this.startTime = startTime;
         }
 
@@ -95,7 +135,7 @@ public class BubbleRenderer {
             String name = sender.getDisplayName().getString();
             if (!bubbleMap.containsKey(name)) {
                 continue;
-            } else if (!entity.getDisplayName().getString().equals(findPlayerName(mc.world.getPlayers(), bubbleMap.get(name).text.getString()))) {
+            } else if (!entity.getDisplayName().getString().equals(name)) {
                 continue;// 不是渲染对象
             } else if (bubbleMap.get(name).getLifetime() >= config.chatBubblesLifetime * 1000) {
                 bubbleMap.remove(name); // 超时被移除
@@ -118,11 +158,34 @@ public class BubbleRenderer {
         if (mc.world == null) {
             return;
         }
-        String sender = findPlayerName(mc.world.getPlayers(), message);
-        if (sender == null) {
-            return;
+        String pattern = "";
+        boolean serverAddressPass = false;
+        boolean fallback = false;
+        for (BubbleRuleUnit unit : config.bubbleRuleList) {
+            if (mc.getCurrentServerEntry() == null){
+                continue;
+            }
+            if ("*".equals(unit.getAddress()) || Pattern.compile(unit.getAddress()).matcher(mc.getCurrentServerEntry().address).matches()) {
+                serverAddressPass = true;
+                pattern = unit.getPattern();
+                fallback = unit.isFallback();
+                break;
+            }
         }
-        bubbleMap.put(sender, new BubbleUnit(text, System.currentTimeMillis()));
+        if (serverAddressPass && !pattern.isEmpty()){
+            Matcher matcher = Pattern.compile(pattern).matcher(message);
+            if(matcher.find()){
+                String name = matcher.group("name");
+                String messageContext = matcher.group("message");
+                bubbleMap.put(name, new BubbleUnit(messageContext, System.currentTimeMillis()));
+            } else if(fallback) {
+                String sender = findPlayerName(mc.world.getPlayers(), message);
+                if (sender == null) {
+                    return;
+                }
+                bubbleMap.put(sender, new BubbleUnit(text, System.currentTimeMillis()));
+            }
+        }
     }
 
     /**

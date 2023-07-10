@@ -62,7 +62,7 @@
   "text.config.chattools.option.injectorNew": "New Rule",
   "text.config.chattools.option.injectorDisplay": "§e[ %s§e ]§r %s",
   "text.config.chattools.option.injectorAddress": "Address",
-  "text.config.chattools.option.injectorAddress.@Tooltip": "Modify your text when the current\nserver address matches this field.\nRegEx is supported.\nYou can use §o*§r for arbitrary content",
+  "text.config.chattools.option.injectorAddress.@Tooltip": "Modify your text when the current\nserver address matches this field.\nRegEx is supported.\nYou can use §o*§r for arbitrary content.",
   "text.config.chattools.option.injectorString": "Pattern",
   "text.config.chattools.option.injectorString.@Tooltip": "Please use \"&\" for color code prefix, and \"\\&\" for \"&\".\nStatements:\n§o{text}§r refers to your text.\n§o{pos}§r refers to your position.",
   "text.config.chattools.option.injectorBanList": "Auto-Disable when matches:",
@@ -80,6 +80,15 @@
   "text.config.chattools.option.macroChatCommand": "Command",
   "text.config.chattools.option.chatBubblesEnabled": "Enable Chat Bubbles",
   "text.config.chattools.option.chatBubblesLifetime": "Chat Bubbles Lifetime",
-  "text.config.chattools.option.chatBubblesYOffset": "Chat Bubbles Y Offset"
-
+  "text.config.chattools.option.chatBubblesYOffset": "Chat Bubbles Y Offset",
+  "text.config.chattools.option.chatBubblesRulesList": "Bubble Rules §6(Current Server Address: %s§6 )§r",
+  "text.config.chattools.option.chatBubblesRulesList.@Tooltip": "Apply different bubble rules on different servers.\nThe more preceding content has higher priority.",
+  "text.config.chattools.option.chatBubblesDisplay": "§e[ %s§e ] [ Fallback: %s§e]§r %s",
+  "text.config.chattools.option.chatBubblesNew": "New Rule",
+  "text.config.chattools.option.chatBubblesAddress": "Address",
+  "text.config.chattools.option.chatBubblesAddress.@Tooltip": "Apply the rule when the current\nserver address matches this field.\nRegEx is supported.\nYou can use §o*§r for arbitrary content.",
+  "text.config.chattools.option.chatBubblesPattern": "Rule",
+  "text.config.chattools.option.chatBubblesPattern.@Tooltip": "RegEx is supported.\nUse group §o<name>§r to match player name.\nUse group §o<message>§r to match chat context.",
+  "text.config.chattools.option.chatBubblesFallback": "Fallback",
+  "text.config.chattools.option.chatBubblesFallback.@Tooltip": "If the message contains a player name,\nrender the message anyway above the player,\neven if the messages doesn't match the rule.\n(Note that in this case the message will not be modified.)"
 }

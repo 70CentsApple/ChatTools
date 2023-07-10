@@ -9,6 +9,7 @@ import me.shedaniel.clothconfig2.gui.entries.MultiElementListEntry;
 import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.apple70cents.chattools.ChatTools;
+import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
@@ -130,6 +131,9 @@ public class ModClothConfig {
     public boolean chatBubblesEnabled = true;
     public long chatBubblesLifetime = 8;
     public int chatBubblesYOffset = 3;
+    public List<BubbleRenderer.BubbleRuleUnit> bubbleRuleList = new ArrayList<>() {{
+        add(new BubbleRenderer.BubbleRuleUnit());
+    }};
 
     /**
      * 保存配置
@@ -282,7 +286,7 @@ public class ModClothConfig {
                 true, // 在列表前面插入新内容
                 (injectorUnit, __) -> {
                     AtomicReference<InjectorUnit> injectorUnitRef = new AtomicReference<>(injectorUnit);
-                    if (injectorUnit == null) { // 新建宏
+                    if (injectorUnit == null) { // 新建
                         Text displayText = Text.translatable("text.config.chattools.option.injectorNew");
                         InjectorUnit defaultInjectorRule = new InjectorUnit();
                         injectorUnitRef.set(defaultInjectorRule); // 设置初始值
@@ -290,8 +294,8 @@ public class ModClothConfig {
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), defaultInjectorRule.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(defaultInjectorRule.address).setSaveConsumer(v -> injectorUnitRef.get().address = v).build());
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), defaultInjectorRule.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(defaultInjectorRule.formatter).setSaveConsumer(v -> injectorUnitRef.get().formatter = v).build());
                         }}, false);
-                    } else { // 现有宏
-                        String colorPrefix = ("*".equals(injectorUnit.address) || (MinecraftClient.getInstance().getCurrentServerEntry()!=null && Pattern.compile(injectorUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
+                    } else { // 现有
+                        String colorPrefix = ("*".equals(injectorUnit.address) || (MinecraftClient.getInstance().getCurrentServerEntry() != null && Pattern.compile(injectorUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
                         Text displayText = Text.translatable("text.config.chattools.option.injectorDisplay", colorPrefix + injectorUnit.address, injectorUnit.formatter);
                         return new MultiElementListEntry<>(displayText, injectorUnit, new ArrayList<>() {{
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), injectorUnit.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(new InjectorUnit().address).setSaveConsumer(v -> injectorUnitRef.get().address = v).build());
@@ -362,6 +366,42 @@ public class ModClothConfig {
         chatBubblesCategory.addEntry(eb.startLongSlider(Text.translatable("text.config.chattools.option.chatBubblesLifetime"), config.chatBubblesLifetime, 1, 60).setDefaultValue(new ModConfigFallback().chatBubblesLifetime).setMin(1L).setMax(60L).setSaveConsumer(v -> config.chatBubblesLifetime = v).build());
         // 气泡Y轴偏移量
         chatBubblesCategory.addEntry(eb.startIntSlider(Text.translatable("text.config.chattools.option.chatBubblesYOffset"), config.chatBubblesYOffset, -20, 20).setDefaultValue(new ModConfigFallback().chatBubblesYOffset).setMin(-20).setMax(20).setSaveConsumer(v -> config.chatBubblesYOffset = v).build());
+        // 气泡规则
+        if (MinecraftClient.getInstance().getCurrentServerEntry() == null) {
+            label = Text.translatable("text.config.chattools.option.chatBubblesRulesList", "§f-");
+        } else {
+            label = Text.translatable("text.config.chattools.option.chatBubblesRulesList", "§f" + MinecraftClient.getInstance().getCurrentServerEntry().address);
+        }
+        chatBubblesCategory.addEntry(new NestedListListEntry<BubbleRenderer.BubbleRuleUnit, MultiElementListEntry<BubbleRenderer.BubbleRuleUnit>>(label, config.bubbleRuleList, true, // 启用默认展开
+                () -> {
+                    return Optional.of(new net.minecraft.text.MutableText[]{Text.translatable("text.config.chattools.option.chatBubblesRulesList.@Tooltip")});
+                }, // Tooltip
+                v -> config.bubbleRuleList = v, // Save Consumer
+                () -> new ModConfigFallback().bubbleRuleList, // 默认值
+                eb.getResetButtonKey(), // 重置按钮键值
+                true, // 启用删除键
+                true, // 在列表前面插入新内容
+                (bubbleRuleUnit, __) -> {
+                    AtomicReference<BubbleRenderer.BubbleRuleUnit> bubbleRuleUnitRef = new AtomicReference<>(bubbleRuleUnit);
+                    if (bubbleRuleUnit == null) { // 新建
+                        Text displayText = Text.translatable("text.config.chattools.option.chatBubblesNew");
+                        BubbleRenderer.BubbleRuleUnit defaultRule = new BubbleRenderer.BubbleRuleUnit();
+                        bubbleRuleUnitRef.set(defaultRule); // 设置初始值
+                        return new MultiElementListEntry<>(displayText, defaultRule, new ArrayList<>() {{
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesAddress"), defaultRule.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesAddress.@Tooltip")).setDefaultValue(defaultRule.getAddress()).setSaveConsumer(bubbleRuleUnitRef.get()::setAddress).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesPattern"), defaultRule.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesPattern.@Tooltip")).setDefaultValue(defaultRule.getPattern()).setSaveConsumer(bubbleRuleUnitRef.get()::setPattern).build());
+                            add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.chatBubblesFallback"), defaultRule.isFallback()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesFallback.@Tooltip")).setDefaultValue(defaultRule.isFallback()).setSaveConsumer(bubbleRuleUnitRef.get()::setFallback).build());
+                        }}, false);
+                    } else { // 现有
+                        String colorPrefix = ("*".equals(bubbleRuleUnit.getAddress()) || (MinecraftClient.getInstance().getCurrentServerEntry() != null && Pattern.compile(bubbleRuleUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
+                        Text displayText = Text.translatable("text.config.chattools.option.chatBubblesDisplay", colorPrefix + bubbleRuleUnit.getAddress(), bubbleRuleUnit.isFallback()?"§a✔":"§c✘", bubbleRuleUnit.getPattern());
+                        return new MultiElementListEntry<>(displayText, bubbleRuleUnit, new ArrayList<>() {{
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesAddress"), bubbleRuleUnit.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesAddress.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getAddress()).setSaveConsumer(bubbleRuleUnitRef.get()::setAddress).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesPattern"), bubbleRuleUnit.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesPattern.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getPattern()).setSaveConsumer(bubbleRuleUnitRef.get()::setPattern).build());
+                            add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.chatBubblesFallback"), bubbleRuleUnit.isFallback()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesFallback.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().isFallback()).setSaveConsumer(bubbleRuleUnitRef.get()::setFallback).build());
+                        }}, false);
+                    }
+                }));
 
         return builder;
     }
