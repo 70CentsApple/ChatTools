@@ -69,6 +69,7 @@ public class BubbleRenderer {
             this.text = text;
             this.startTime = startTime;
         }
+
         BubbleUnit(String str, long startTime) {
             this.text = Text.of(str);
             this.startTime = startTime;
@@ -162,23 +163,27 @@ public class BubbleRenderer {
         boolean serverAddressPass = false;
         boolean fallback = false;
         for (BubbleRuleUnit unit : config.bubbleRuleList) {
-            if (mc.getCurrentServerEntry() == null){
-                continue;
-            }
-            if ("*".equals(unit.getAddress()) || Pattern.compile(unit.getAddress()).matcher(mc.getCurrentServerEntry().address).matches()) {
+            if (mc.getCurrentServerEntry() == null) {
+                if ("*".equals(unit.getAddress())) {
+                    serverAddressPass = true;
+                    pattern = unit.getPattern();
+                    fallback = unit.isFallback();
+                    break;
+                }
+            } else if ("*".equals(unit.getAddress()) || Pattern.compile(unit.getAddress()).matcher(mc.getCurrentServerEntry().address).matches()) {
                 serverAddressPass = true;
                 pattern = unit.getPattern();
                 fallback = unit.isFallback();
                 break;
             }
         }
-        if (serverAddressPass && !pattern.isEmpty()){
+        if (serverAddressPass && !pattern.isEmpty()) {
             Matcher matcher = Pattern.compile(pattern).matcher(message);
-            if(matcher.find()){
+            if (matcher.find()) {
                 String name = matcher.group("name");
                 String messageContext = matcher.group("message");
                 bubbleMap.put(name, new BubbleUnit(messageContext, System.currentTimeMillis()));
-            } else if(fallback) {
+            } else if (fallback) {
                 String sender = findPlayerName(mc.world.getPlayers(), message);
                 if (sender == null) {
                     return;
