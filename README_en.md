@@ -41,7 +41,7 @@ The contents of the list will be matched.
 The contents of the list will not be matched. (Its priority is greater than Allow List)
 
 ## Formatter Section
-Format your own messages using the specified pattern
+Format your own messages using the specified pattern. You can apply different rules to different servers. [See Bubble Rules](#bubble-section).
 - Pattern\
 Automatically format the replacement style.\
 For example: \
@@ -70,3 +70,6 @@ Set hotkeys for frequently used commands.\
 - Enable Chat Bubbles\
 Renders a chat bubble over one's head.\
 ![Chat Bubbles](<images/Chat Bubbles.png>)
+- Bubble Rules\
+Apply different bubble rules on different servers.\
+![Bubble Rules](<images/Bubble Rules.png>)

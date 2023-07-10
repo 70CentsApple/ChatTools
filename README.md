@@ -41,7 +41,7 @@ Chat Tools的大部分功能支持高度个性化，请在配置页面进行配�
 列表中的内容将不会被匹配（优先级大于白名单列表）
 
 ## 注入聊天（Formatter Section）
-使用指定样式格式化自己的消息
+使用指定样式格式化自己的消息，可以根据不同服务器应用不同的规则（请参考[聊天气泡](#聊天气泡bubble-section)规则）
 - 注入文本（Pattern）\
 即自动格式化替换的样式\
 例如：\
@@ -70,3 +70,6 @@ Chat Tools的默认正则表达式字串 `^\d+$|^[.#%$/].*|\ball\b` 即可满足
 - 启用聊天气泡（Enable Chat Bubbles）\
 在玩家头上渲染聊天气泡\
 ![Chat Bubbles](<images/Chat Bubbles.png>)
+- 聊天气泡规则（Bubble Rules）\
+为不同的服务器应用不同的聊天气泡规则\
+![Bubble Rules](<images/Bubble Rules.png>)
