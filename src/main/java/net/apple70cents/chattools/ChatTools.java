@@ -21,6 +21,8 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.regex.Pattern;
+
 import static net.minecraft.server.command.CommandManager.literal;
 
 
@@ -138,6 +140,16 @@ public class ChatTools implements ModInitializer {
                     }
                     return Command.SINGLE_SUCCESS;
                 }));
+    }
+
+    /**
+     * 消息洗涤（去除「§.」）
+     *
+     * @param str 原消息
+     * @return 洗涤后的消息
+     */
+    public static String wash_message(String str) {
+        return Pattern.compile("§.").matcher(str).replaceAll("");
     }
 
     /**

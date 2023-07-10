@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.apple70cents.chattools.ChatTools.replaceText;
+import static net.apple70cents.chattools.ChatTools.wash_message;
 
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
@@ -33,7 +34,7 @@ public abstract class EntityRendererMixin {
             return text;
         } else if (MinecraftClient.getInstance().player == null) {
             return text;
-        } else if (text.getString().contains(MinecraftClient.getInstance().player.getName().getString())) {
+        } else if (wash_message(text.getString()).contains(MinecraftClient.getInstance().player.getName().getString())) {
             // 替换实体nametag中的玩家名称（如果有）
             text = replaceText((MutableText) text, MinecraftClient.getInstance().player.getName().getString(), config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&"));
         }

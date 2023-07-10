@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static net.apple70cents.chattools.ChatTools.replaceText;
+import static net.apple70cents.chattools.ChatTools.wash_message;
 
 public class BubbleRenderer {
     public static class BubbleRuleUnit {
@@ -136,7 +137,7 @@ public class BubbleRenderer {
             String name = sender.getDisplayName().getString();
             if (!bubbleMap.containsKey(name)) {
                 continue;
-            } else if (!entity.getDisplayName().getString().equals(name)) {
+            } else if (!wash_message(entity.getDisplayName().getString()).equals(name)) {
                 continue;// 不是渲染对象
             } else if (bubbleMap.get(name).getLifetime() >= config.chatBubblesLifetime * 1000) {
                 bubbleMap.remove(name); // 超时被移除
@@ -155,7 +156,7 @@ public class BubbleRenderer {
      * @param text 消息
      */
     public static void addChatBubble(Text text) {
-        String message = text.getString();
+        String message = wash_message(text.getString());
         if (mc.world == null) {
             return;
         }

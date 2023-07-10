@@ -20,6 +20,7 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 import static net.apple70cents.chattools.ChatTools.replaceText;
+import static net.apple70cents.chattools.ChatTools.wash_message;
 
 public class ChatNotifier {
     static MinecraftClient client = MinecraftClient.getInstance();
@@ -43,7 +44,7 @@ public class ChatNotifier {
 
         // 处理昵称隐藏
         if (config.nickHiderSettings.nickHiderEnabled && client.player != null) {
-            if (message.getString().contains(client.player.getName().getString())) {
+            if (wash_message(message.getString()).contains(client.player.getName().getString())) {
                 message = replaceText((MutableText) message, // 原消息
                         client.player.getDisplayName().getString(), // 玩家名称
                         config.nickHiderSettings.nickHiderText.replace('&', '§').replace("\\§", "&") // 自定义名称
@@ -98,16 +99,16 @@ public class ChatNotifier {
         // 匹配机制
         boolean shouldMatch = false;
         for (int i = 0; i < config.allowList.size(); i++) {
-            if (Pattern.compile(config.allowList.get(i), Pattern.MULTILINE).matcher(text.getString()).find()) { // 匹配白名单正则表达式
+            if (Pattern.compile(config.allowList.get(i), Pattern.MULTILINE).matcher(wash_message(text.getString())).find()) { // 匹配白名单正则表达式
                 shouldMatch = true;
                 break;
             }
         }
-        if (config.matchSelfName && client.player != null && Pattern.compile(client.player.getName().getString(), Pattern.MULTILINE).matcher(text.getString()).find()) { // 应匹配名字 && 匹配名字
+        if (config.matchSelfName && client.player != null && Pattern.compile(client.player.getName().getString(), Pattern.MULTILINE).matcher(wash_message(text.getString())).find()) { // 应匹配名字 && 匹配名字
             shouldMatch = true;
         }
         for (int i = 0; i < config.banList.size(); i++) {
-            if (Pattern.compile(config.banList.get(i), Pattern.MULTILINE).matcher(text.getString()).find()) {// 匹配黑名单正则表达式
+            if (Pattern.compile(config.banList.get(i), Pattern.MULTILINE).matcher(wash_message(text.getString())).find()) {// 匹配黑名单正则表达式
                 shouldMatch = false;
                 break;
             }
@@ -136,9 +137,9 @@ public class ChatNotifier {
             // 弹窗提示
             if (config.toastNotifySettings.toastNotifyEnabled && !client.isWindowFocused()) {
                 if (ModClothConfig.ToastMode.POWERSHELL.equals(config.toastNotifySettings.toastNotifyMode)) {
-                    SystemToast.toastWithPowershell(Text.translatable("key.chattools.toast.title").getString(), text.getString());
+                    SystemToast.toastWithPowershell(Text.translatable("key.chattools.toast.title").getString(), wash_message(text.getString()));
                 } else if (ModClothConfig.ToastMode.AWT.equals(config.toastNotifySettings.toastNotifyMode)) {
-                    SystemToast.toastWithAWT(Text.translatable("key.chattools.toast.title").getString(), text.getString());
+                    SystemToast.toastWithAWT(Text.translatable("key.chattools.toast.title").getString(), wash_message(text.getString()));
                 }
             }
 
