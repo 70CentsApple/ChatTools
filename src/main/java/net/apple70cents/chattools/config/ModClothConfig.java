@@ -27,6 +27,11 @@ import java.util.regex.Pattern;
 
 public class ModClothConfig {
     private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "chat_tools.json");
+
+    public static File getFile() {
+        return file;
+    }
+
     private static ModClothConfig INSTANCE = new ModClothConfig();
 
 
@@ -373,9 +378,7 @@ public class ModClothConfig {
             label = Text.translatable("text.config.chattools.option.chatBubblesRulesList", "§f" + MinecraftClient.getInstance().getCurrentServerEntry().address);
         }
         chatBubblesCategory.addEntry(new NestedListListEntry<BubbleRenderer.BubbleRuleUnit, MultiElementListEntry<BubbleRenderer.BubbleRuleUnit>>(label, config.bubbleRuleList, true, // 启用默认展开
-                () -> {
-                    return Optional.of(new net.minecraft.text.MutableText[]{Text.translatable("text.config.chattools.option.chatBubblesRulesList.@Tooltip")});
-                }, // Tooltip
+                () -> Optional.of(new net.minecraft.text.MutableText[]{Text.translatable("text.config.chattools.option.chatBubblesRulesList.@Tooltip")}), // Tooltip
                 v -> config.bubbleRuleList = v, // Save Consumer
                 () -> new ModConfigFallback().bubbleRuleList, // 默认值
                 eb.getResetButtonKey(), // 重置按钮键值
@@ -394,7 +397,7 @@ public class ModClothConfig {
                         }}, false);
                     } else { // 现有
                         String colorPrefix = ("*".equals(bubbleRuleUnit.getAddress()) || (MinecraftClient.getInstance().getCurrentServerEntry() != null && Pattern.compile(bubbleRuleUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
-                        Text displayText = Text.translatable("text.config.chattools.option.chatBubblesDisplay", colorPrefix + bubbleRuleUnit.getAddress(), bubbleRuleUnit.isFallback()?"§a✔":"§c✘", bubbleRuleUnit.getPattern());
+                        Text displayText = Text.translatable("text.config.chattools.option.chatBubblesDisplay", colorPrefix + bubbleRuleUnit.getAddress(), bubbleRuleUnit.isFallback() ? "§a✔" : "§c✘", bubbleRuleUnit.getPattern());
                         return new MultiElementListEntry<>(displayText, bubbleRuleUnit, new ArrayList<>() {{
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesAddress"), bubbleRuleUnit.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesAddress.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getAddress()).setSaveConsumer(bubbleRuleUnitRef.get()::setAddress).build());
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesPattern"), bubbleRuleUnit.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesPattern.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getPattern()).setSaveConsumer(bubbleRuleUnitRef.get()::setPattern).build());

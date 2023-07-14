@@ -1,6 +1,9 @@
 package net.apple70cents.chattools;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.config.ModClothConfig;
@@ -14,9 +17,9 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,24 +125,37 @@ public class ChatTools implements ModInitializer {
      * @return 指令参数构造器
      */
     static LiteralArgumentBuilder<?> getBuilder() {
-        return CommandManager.literal("chattools").then(literal("opengui") // chattools opengui
-                .executes(t -> opengui())).then(literal("on") // chattools on
-                .executes(t -> {
+        return literal("chattools")
+                // chattools opengui
+                .then(literal("opengui").executes(t -> opengui()))
+                // chattools on
+                .then(literal("on").executes(t -> {
                     config.modEnabled = true;
                     ChatTools.LOGGER.info("[ChatTools] Command Executed: Enabled ChatTools");
                     if (MinecraftClient.getInstance().player != null) {
                         MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.enable"), true);
                     }
                     return Command.SINGLE_SUCCESS;
-                })).then(literal("off") // chattools off
-                .executes(t -> {
+                }))
+                // chattools off
+                .then(literal("off").executes(t -> {
                     config.modEnabled = false;
                     ChatTools.LOGGER.info("[ChatTools] Command Executed: Disabled ChatTools");
                     if (MinecraftClient.getInstance().player != null) {
                         MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.disable"), true);
                     }
                     return Command.SINGLE_SUCCESS;
-                }));
+                }))
+                // chattools config
+                .then(literal("config")
+                        // chattools config openfile
+                        .then(literal("openfile").executes(t -> {
+                            Util.getOperatingSystem().open(ModClothConfig.getFile());
+                            if (MinecraftClient.getInstance().player != null) {
+                                MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.requireRestart"),false);
+                            }
+                            return Command.SINGLE_SUCCESS;
+                        })));
     }
 
     /**
