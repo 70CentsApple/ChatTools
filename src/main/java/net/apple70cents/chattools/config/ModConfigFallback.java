@@ -12,6 +12,7 @@ public class ModConfigFallback extends ModClothConfig {
     public boolean displayChatTimeEnabled = true;
     public String displayChatTimeFormatter = "&e[{hour}:{minute}:{second}] &r";
     public boolean restoreMessagesEnabled = true;
+    public boolean shouldShowRestoreMessagesText = true;
 
     public static class NickHiderSettings {
         public boolean nickHiderEnabled = false;

@@ -39,6 +39,7 @@ public class ModClothConfig {
     public boolean displayChatTimeEnabled = true;
     public String displayChatTimeFormatter = "&e[{hour}:{minute}:{second}] &r";
     public boolean restoreMessagesEnabled = true;
+    public boolean shouldShowRestoreMessagesText = true;
 
     public static class NickHiderSettings {
         public boolean nickHiderEnabled = false;
@@ -206,8 +207,13 @@ public class ModClothConfig {
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.displayChatTimeEnabled"), config.displayChatTimeEnabled).setDefaultValue(new ModConfigFallback().displayChatTimeEnabled).setSaveConsumer(v -> config.displayChatTimeEnabled = v).build());
         // 聊天时间格式
         mainCategory.addEntry(eb.startStrField(Text.translatable("text.config.chattools.option.displayChatTimeFormatter"), config.displayChatTimeFormatter).setDefaultValue(new ModConfigFallback().displayChatTimeFormatter).setTooltip(Text.translatable("text.config.chattools.option.displayChatTimeFormatter.@Tooltip")).setSaveConsumer(v -> config.displayChatTimeFormatter = v).build());
-        // 启用保留聊天记录
-        mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.restoreMessagesEnabled"), config.restoreMessagesEnabled).setDefaultValue(new ModConfigFallback().restoreMessagesEnabled).setTooltip(Text.translatable("text.config.chattools.option.restoreMessagesEnabled.@Tooltip")).setSaveConsumer(v -> config.restoreMessagesEnabled = v).build());
+        // 保留聊天记录选项
+        SubCategoryBuilder restoreMessageSettings = eb.startSubCategory(Text.translatable("text.config.chattools.option.restoreMessagesSettings")).setTooltip(Text.translatable("text.config.chattools.option.restoreMessagesSettings.@Tooltip"));
+        // - 启用保留聊天记录
+        restoreMessageSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.restoreMessagesEnabled"), config.restoreMessagesEnabled).setDefaultValue(new ModConfigFallback().restoreMessagesEnabled).setTooltip(Text.translatable("text.config.chattools.option.restoreMessagesEnabled.@Tooltip")).setSaveConsumer(v -> config.restoreMessagesEnabled = v).build());
+        // - 保留聊天记录文字显示
+        restoreMessageSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.showRestoreMessagesTextEnabled"), config.shouldShowRestoreMessagesText).setDefaultValue(new ModConfigFallback().shouldShowRestoreMessagesText).setTooltip(Text.translatable("text.config.chattools.option.showRestoreMessagesTextEnabled.@Tooltip")).setSaveConsumer(v -> config.shouldShowRestoreMessagesText = v).build());
+        mainCategory.addEntry(restoreMessageSettings.build());
         // 隐藏昵称选项
         SubCategoryBuilder nickHiderSettings = eb.startSubCategory(Text.translatable("text.config.chattools.option.nickHiderSettings"));
         // - 启用隐藏昵称
