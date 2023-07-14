@@ -15,7 +15,7 @@ import static net.apple70cents.chattools.ChatTools.config;
 public class InGameHudMixin {
     @Inject(method = "clear", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;clear(Z)V"), cancellable = true)
     public void restoreMessages(CallbackInfo ci) {
-        if (!config.restoreMessagesEnabled) {
+        if (!config.modEnabled || !config.restoreMessagesEnabled) {
             return;
         }
         if (config.shouldShowRestoreMessagesText) {

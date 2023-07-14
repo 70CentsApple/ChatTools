@@ -33,8 +33,6 @@ public class ModClothConfig {
     }
 
     private static ModClothConfig INSTANCE = new ModClothConfig();
-
-
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
     public String displayChatTimeFormatter = "&e[{hour}:{minute}:{second}] &r";
@@ -210,7 +208,7 @@ public class ModClothConfig {
         // 保留聊天记录选项
         SubCategoryBuilder restoreMessageSettings = eb.startSubCategory(Text.translatable("text.config.chattools.option.restoreMessagesSettings")).setTooltip(Text.translatable("text.config.chattools.option.restoreMessagesSettings.@Tooltip"));
         // - 启用保留聊天记录
-        restoreMessageSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.restoreMessagesEnabled"), config.restoreMessagesEnabled).setDefaultValue(new ModConfigFallback().restoreMessagesEnabled).setTooltip(Text.translatable("text.config.chattools.option.restoreMessagesEnabled.@Tooltip")).setSaveConsumer(v -> config.restoreMessagesEnabled = v).build());
+        restoreMessageSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.restoreMessagesEnabled"), config.restoreMessagesEnabled).setDefaultValue(new ModConfigFallback().restoreMessagesEnabled).setSaveConsumer(v -> config.restoreMessagesEnabled = v).build());
         // - 保留聊天记录文字显示
         restoreMessageSettings.add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.showRestoreMessagesTextEnabled"), config.shouldShowRestoreMessagesText).setDefaultValue(new ModConfigFallback().shouldShowRestoreMessagesText).setTooltip(Text.translatable("text.config.chattools.option.showRestoreMessagesTextEnabled.@Tooltip")).setSaveConsumer(v -> config.shouldShowRestoreMessagesText = v).build());
         mainCategory.addEntry(restoreMessageSettings.build());

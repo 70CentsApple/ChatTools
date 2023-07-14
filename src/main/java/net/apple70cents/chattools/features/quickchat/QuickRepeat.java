@@ -19,6 +19,9 @@ public class QuickRepeat {
      * 处理一键复读逻辑
      */
     public static void checkQuickRepeat() {
+        if (!config.modEnabled) {
+            return;
+        }
         if (config.quickRepeatKey.equals(InputUtil.UNKNOWN_KEY.getTranslationKey())) {
             return;
         }
@@ -29,7 +32,7 @@ public class QuickRepeat {
                 MinecraftClient mc = MinecraftClient.getInstance();
                 List<String> history = mc.inGameHud.getChatHud().getMessageHistory();
                 if (history.isEmpty()) {
-                    if(mc.player != null){
+                    if (mc.player != null) {
                         mc.player.sendMessage(Text.translatable("text.config.chattools.option.quickRepeatFailure"), true);
                     }
                 } else {

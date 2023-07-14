@@ -22,6 +22,9 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @ModifyVariable(method = "sendChatMessage", at = @At("HEAD"), argsOnly = true)
     public String sendMessage(String message) {
+        if (!config.modEnabled) {
+            return message;
+        }
         ChatNotifier.setJustSentMessage(true);
         if (config.injectorEnabled) {
             String formatter = "{text}";

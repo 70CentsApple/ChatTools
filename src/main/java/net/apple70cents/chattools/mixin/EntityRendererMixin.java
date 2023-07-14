@@ -20,17 +20,18 @@ import static net.apple70cents.chattools.ChatTools.wash_message;
 
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
+    ModClothConfig config = ModClothConfig.get();
+
     @Inject(method = "render", at = @At(value = "HEAD"))
     private void render(Entity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (ModClothConfig.get().chatBubblesEnabled) {
+        if (config.modEnabled && config.chatBubblesEnabled) {
             BubbleRenderer.render(entity, matrices, vertexConsumers);
         }
     }
 
     @ModifyVariable(method = "renderLabelIfPresent", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
     public Text nickHiderChangeLabel(Text text) {
-        ModClothConfig config = ModClothConfig.get();
-        if (!config.nickHiderSettings.nickHiderEnabled) {
+        if (!config.modEnabled || !config.nickHiderSettings.nickHiderEnabled) {
             return text;
         } else if (MinecraftClient.getInstance().player == null) {
             return text;
