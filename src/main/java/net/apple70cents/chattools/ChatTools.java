@@ -51,7 +51,7 @@ public class ChatTools implements ModInitializer {
 
         // 注册 Macro Chat
         ClientTickEvents.START_WORLD_TICK.register(client -> {
-            if (config.macroChatEnabled) {
+            if (config.modEnabled && config.macroChatEnabled) {
                 MacroChat.tick();
             }
         });

@@ -33,8 +33,6 @@ public class ModClothConfig {
     }
 
     private static ModClothConfig INSTANCE = new ModClothConfig();
-
-
     public boolean modEnabled = true;
     public boolean displayChatTimeEnabled = true;
     public String displayChatTimeFormatter = "&e[{hour}:{minute}:{second}] &r";
