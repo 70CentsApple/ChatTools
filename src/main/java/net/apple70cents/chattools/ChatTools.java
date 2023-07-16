@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.apple70cents.chattools.config.ModConfigFallback;
@@ -19,13 +20,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Pair;
 import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
+import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 
@@ -152,10 +157,51 @@ public class ChatTools implements ModInitializer {
                         .then(literal("openfile").executes(t -> {
                             Util.getOperatingSystem().open(ModClothConfig.getFile());
                             if (MinecraftClient.getInstance().player != null) {
-                                MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.requireRestart"),false);
+                                MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.requireRestart"), false);
                             }
                             return Command.SINGLE_SUCCESS;
-                        })));
+                        })))
+                // TODO chattools regex_checker
+                .then(literal("regex_checker")
+                        // one arg
+                        .then(argument("regex", StringArgumentType.string()).executes(t -> {
+                                    if (MinecraftClient.getInstance().player != null) {
+                                        var result = regex_checker(StringArgumentType.getString(t, "regex"));
+                                        MinecraftClient.getInstance().player.sendMessage(Text.literal(result.getRight()).formatted(result.getLeft() ? Formatting.GREEN : Formatting.RED), false);
+                                    }
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                                // two args
+                                .then(argument("test_context", StringArgumentType.string()).executes(t -> {
+                                    if (MinecraftClient.getInstance().player != null) {
+                                        var result = regex_checker(StringArgumentType.getString(t, "regex"));
+                                        if (!result.getLeft()) {
+                                            MinecraftClient.getInstance().player.sendMessage(Text.literal(result.getRight()).formatted(Formatting.RED), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        }
+                                        if (Pattern.compile(StringArgumentType.getString(t, "regex")).matcher(StringArgumentType.getString(t, "test_context")).find()) {
+                                            MinecraftClient.getInstance().player.sendMessage(Text.literal(String.format("Context [%s] could pass the RegEx test!", StringArgumentType.getString(t, "test_context"))).formatted(Formatting.GREEN));
+                                        } else {
+                                            MinecraftClient.getInstance().player.sendMessage(Text.literal(String.format("Context [%s] could NOT pass the RegEx test!", StringArgumentType.getString(t, "test_context"))).formatted(Formatting.RED));
+                                        }
+                                    }
+                                    return Command.SINGLE_SUCCESS;
+                                }))));
+    }
+
+    /**
+     * 检查正则表达式
+     *
+     * @param pattern 正则表达式
+     * @return Pair&lt;解析成功或否, 提示字段(如果解析成功为"PASS")&gt;
+     */
+    public static Pair<Boolean, String> regex_checker(String pattern) {
+        try {
+            Pattern.compile(pattern);
+        } catch (PatternSyntaxException e) {
+            return new Pair<>(false, e.getMessage().replace("\r", ""));
+        }
+        return new Pair<>(true, "There's nothing wrong with the RegEx pattern.");
     }
 
     /**

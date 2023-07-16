@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class ModClothConfig {
     private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "chat_tools.json");
@@ -196,6 +198,35 @@ public class ModClothConfig {
         builder.setSavingRunnable(ModClothConfig::save);
         ConfigEntryBuilder eb = builder.entryBuilder();
         final ModClothConfig config = ModClothConfig.get();
+        Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER = (v) -> {
+            try {
+                Pattern.compile(v);
+                return Optional.empty();
+            } catch (PatternSyntaxException e) {
+                return Optional.of(Text.of(e.getDescription()));
+            }
+        };
+        Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR = (v) -> {
+            if ("*".equals(v)) return Optional.empty();
+            try {
+                Pattern.compile(v);
+                return Optional.empty();
+            } catch (PatternSyntaxException e) {
+                return Optional.of(Text.of(e.getDescription()));
+            }
+        };
+        Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS = (v) -> {
+            try {
+                Pattern.compile(v);
+                if(v.contains("<name>") && v.contains("<message>")){
+                    return Optional.empty();
+                } else {
+                    return Optional.of(Text.literal("Should include both <name> and <message> groups."));
+                }
+            } catch (PatternSyntaxException e) {
+                return Optional.of(Text.of(e.getDescription()));
+            }
+        };
 
         // ========== Main Category ==========
         ConfigCategory mainCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.main"));
@@ -300,15 +331,15 @@ public class ModClothConfig {
                         InjectorUnit defaultInjectorRule = new InjectorUnit();
                         injectorUnitRef.set(defaultInjectorRule); // 设置初始值
                         return new MultiElementListEntry<>(displayText, defaultInjectorRule, new ArrayList<>() {{
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), defaultInjectorRule.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(defaultInjectorRule.address).setSaveConsumer(v -> injectorUnitRef.get().address = v).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), defaultInjectorRule.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(defaultInjectorRule.address).setSaveConsumer(v -> injectorUnitRef.get().address = v).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
                             add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), defaultInjectorRule.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(defaultInjectorRule.formatter).setSaveConsumer(v -> injectorUnitRef.get().formatter = v).build());
                         }}, false);
                     } else { // 现有
                         String colorPrefix = ("*".equals(injectorUnit.address) || (MinecraftClient.getInstance().getCurrentServerEntry() != null && Pattern.compile(injectorUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
                         Text displayText = Text.translatable("text.config.chattools.option.injectorDisplay", colorPrefix + injectorUnit.address, injectorUnit.formatter);
                         return new MultiElementListEntry<>(displayText, injectorUnit, new ArrayList<>() {{
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), injectorUnit.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(new InjectorUnit().address).setSaveConsumer(v -> injectorUnitRef.get().address = v).build());
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), injectorUnit.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(new InjectorUnit().formatter).setSaveConsumer(v -> injectorUnitRef.get().formatter = v).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorAddress"), injectorUnit.address).setTooltip(Text.translatable("text.config.chattools.option.injectorAddress.@Tooltip")).setDefaultValue(new InjectorUnit().address).setSaveConsumer(injectorUnit::setAddress).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.injectorString"), injectorUnit.formatter).setTooltip(Text.translatable("text.config.chattools.option.injectorString.@Tooltip")).setDefaultValue(new InjectorUnit().formatter).setSaveConsumer(injectorUnit::setFormatter).build());
                         }}, false);
                     }
                 }));
@@ -395,17 +426,17 @@ public class ModClothConfig {
                         BubbleRenderer.BubbleRuleUnit defaultRule = new BubbleRenderer.BubbleRuleUnit();
                         bubbleRuleUnitRef.set(defaultRule); // 设置初始值
                         return new MultiElementListEntry<>(displayText, defaultRule, new ArrayList<>() {{
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesAddress"), defaultRule.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesAddress.@Tooltip")).setDefaultValue(defaultRule.getAddress()).setSaveConsumer(bubbleRuleUnitRef.get()::setAddress).build());
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesPattern"), defaultRule.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesPattern.@Tooltip")).setDefaultValue(defaultRule.getPattern()).setSaveConsumer(bubbleRuleUnitRef.get()::setPattern).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesAddress"), defaultRule.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesAddress.@Tooltip")).setDefaultValue(defaultRule.getAddress()).setSaveConsumer(bubbleRuleUnitRef.get()::setAddress).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesPattern"), defaultRule.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesPattern.@Tooltip")).setDefaultValue(defaultRule.getPattern()).setSaveConsumer(bubbleRuleUnitRef.get()::setPattern).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS).build());
                             add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.chatBubblesFallback"), defaultRule.isFallback()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesFallback.@Tooltip")).setDefaultValue(defaultRule.isFallback()).setSaveConsumer(bubbleRuleUnitRef.get()::setFallback).build());
                         }}, false);
                     } else { // 现有
                         String colorPrefix = ("*".equals(bubbleRuleUnit.getAddress()) || (MinecraftClient.getInstance().getCurrentServerEntry() != null && Pattern.compile(bubbleRuleUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
                         Text displayText = Text.translatable("text.config.chattools.option.chatBubblesDisplay", colorPrefix + bubbleRuleUnit.getAddress(), bubbleRuleUnit.isFallback() ? "§a✔" : "§c✘", bubbleRuleUnit.getPattern());
                         return new MultiElementListEntry<>(displayText, bubbleRuleUnit, new ArrayList<>() {{
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesAddress"), bubbleRuleUnit.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesAddress.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getAddress()).setSaveConsumer(bubbleRuleUnitRef.get()::setAddress).build());
-                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesPattern"), bubbleRuleUnit.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesPattern.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getPattern()).setSaveConsumer(bubbleRuleUnitRef.get()::setPattern).build());
-                            add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.chatBubblesFallback"), bubbleRuleUnit.isFallback()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesFallback.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().isFallback()).setSaveConsumer(bubbleRuleUnitRef.get()::setFallback).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesAddress"), bubbleRuleUnit.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesAddress.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getAddress()).setSaveConsumer(bubbleRuleUnit::setAddress).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.chatBubblesPattern"), bubbleRuleUnit.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesPattern.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().getPattern()).setSaveConsumer(bubbleRuleUnit::setPattern).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS).build());
+                            add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.chatBubblesFallback"), bubbleRuleUnit.isFallback()).setTooltip(Text.translatable("text.config.chattools.option.chatBubblesFallback.@Tooltip")).setDefaultValue(new BubbleRenderer.BubbleRuleUnit().isFallback()).setSaveConsumer(bubbleRuleUnit::setFallback).build());
                         }}, false);
                     }
                 }));
