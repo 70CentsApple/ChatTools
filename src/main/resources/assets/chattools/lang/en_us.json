@@ -33,8 +33,6 @@
   "text.config.chattools.option.ignoreSelf.@Tooltip": "§6* Might not work in some servers.",
   "text.config.chattools.option.matchSelfName": "Match My Nickname",
   "text.config.chattools.option.matchSelfName.@Tooltip": "For example, if your nickname is Foo, \nthen messages containing Foo will be matched.",
-  "text.config.chattools.option.ignoreSystemMessage": "§6Ignore System Messages",
-  "text.config.chattools.option.ignoreSystemMessage.@Tooltip": "§6* Not recommended to be enabled in servers, \n§6especially those with chat plugins installed \n(unexpected errors may occur).",
   "text.config.chattools.option.toastNotifySettings": "§6Toast Notification",
   "text.config.chattools.option.toastNotifySettings.@Tooltip": "§6* EXPERIMENTAL§r\nWhen Minecraft is running §6in the background (not focused)§r, you will be alerted \nwith a Toast Notification when you receive a concern message.",
   "text.config.chattools.option.toastNotifySettings.toastNotifyEnabled": "Enable Toast Notification",

@@ -33,8 +33,6 @@
   "text.config.chattools.option.ignoreSelf.@Tooltip": "§6* 在服务器中不一定可用",
   "text.config.chattools.option.matchSelfName": "匹配玩家自己的昵称",
   "text.config.chattools.option.matchSelfName.@Tooltip": "例如，如果您的昵称为Foo，则会匹配含有Foo的信息",
-  "text.config.chattools.option.ignoreSystemMessage": "§6忽略系统消息",
-  "text.config.chattools.option.ignoreSystemMessage.@Tooltip": "§6* 不建议在服务器中启用，尤其是安装了聊天插件的服务器\n§6（可能会发生意料之外的失效）",
   "text.config.chattools.option.toastNotifySettings": "§6后台弹窗提醒",
   "text.config.chattools.option.toastNotifySettings.@Tooltip": "§6* 实验性功能§r\n当游戏§6在后台运行（失去焦点）时§r收到关注消息，将会以一个弹窗的方式提醒您",
   "text.config.chattools.option.toastNotifySettings.toastNotifyEnabled": "启用弹窗提醒",
