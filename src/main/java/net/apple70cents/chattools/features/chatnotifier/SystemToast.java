@@ -13,9 +13,12 @@ public class SystemToast {
     public static void toastWithAWT(String caption, String text) {
         ChatTools.LOGGER.info("[ChatTools] Toast Notified with AWT.");
         System.setProperty("java.awt.headless", "false");
-        System.out.println("GraphicsEnvironment.isHeadless() = " + GraphicsEnvironment.isHeadless());
+        ChatTools.LOGGER.warn(String.format("[ChatTools] Set java.awt.headless to %s.", GraphicsEnvironment.isHeadless()));
         SwingUtilities.invokeLater(() -> {
-            if (GraphicsEnvironment.isHeadless()) System.setProperty("java.awt.headless", "false");
+            if (GraphicsEnvironment.isHeadless()) {
+                System.setProperty("java.awt.headless", "false");
+                ChatTools.LOGGER.warn(String.format("[ChatTools] GraphicsEnvironment.isHeadless() was true, but now it is set to %s.", GraphicsEnvironment.isHeadless()));
+            }
             SystemTray tray = SystemTray.getSystemTray();
             Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
             TrayIcon trayIcon = new TrayIcon(image, "ChatTools");
@@ -37,9 +40,8 @@ public class SystemToast {
         // FIXME 只有系统消息能被弹窗（其它的会试图弹窗但是因为在后台出于奇妙原因弹不出来）
         try {
             ChatTools.LOGGER.info("[ChatTools] Toast Notified with Powershell.");
-            String command = "powershell.exe -ExecutionPolicy Bypass -Command \"[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null;$xml = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02);$xml.GetElementsByTagName('text')[0].AppendChild($xml.CreateTextNode('"
-                    + (caption + "'+\\\"`r`n\\\"+'" + text) + "'));$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('"
-                    + "Minecraft Chat Tools Mod" + "');$notifier.Show($toast);\"";
+            String COMMAND_TEMPLATE = "powershell.exe -ExecutionPolicy Bypass -Command \"[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null;$xml = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02);$xml.GetElementsByTagName('text')[0].AppendChild($xml.CreateTextNode('%s'));$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('%s');$notifier.Show($toast);\"";
+            String command = String.format(COMMAND_TEMPLATE, (caption + "'+\\\"`r`n\\\"+'" + text.replace("\n", "'+\\\"`r`n\\\"+'")), "Minecraft Chat Tools Mod");
             ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
             builder.redirectErrorStream(true);
             // 启动进程
