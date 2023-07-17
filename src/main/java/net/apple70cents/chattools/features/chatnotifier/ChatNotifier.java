@@ -40,7 +40,7 @@ public class ChatNotifier {
         if (config.chatBubblesEnabled) {
             BubbleRenderer.addChatBubble(message);
         }
-        message = highlightAndNotify(message, indicator);
+        message = highlightAndNotify(message);
 
         // 处理昵称隐藏
         if (config.nickHiderSettings.nickHiderEnabled && client.player != null) {
@@ -95,7 +95,7 @@ public class ChatNotifier {
      * @param text 消息
      * @return 经过高亮处理后的消息
      */
-    private static Text highlightAndNotify(Text text, MessageIndicator indicator) {
+    private static Text highlightAndNotify(Text text) {
         // 匹配机制
         boolean shouldMatch = false;
         for (int i = 0; i < config.allowList.size(); i++) {
@@ -111,12 +111,6 @@ public class ChatNotifier {
             if (Pattern.compile(config.banList.get(i), Pattern.MULTILINE).matcher(wash_message(text.getString())).find()) {// 匹配黑名单正则表达式
                 shouldMatch = false;
                 break;
-            }
-        }
-        // 应忽略系统消息 && 系统消息
-        if (indicator != null) {
-            if (config.ignoreSystemMessage && (indicator.equals(MessageIndicator.system()) || indicator.equals(MessageIndicator.singlePlayer()))) {
-                shouldMatch = false;
             }
         }
         if (!config.modEnabled) { // 启用 ChatTools 则向下走

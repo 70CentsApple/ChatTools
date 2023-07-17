@@ -47,7 +47,6 @@ public class ModConfigFallback extends ModClothConfig {
 
     public boolean ignoreSelf = true;
     public boolean matchSelfName = true;
-    public boolean ignoreSystemMessage = true;
 
     public static class ToastNotifySettings {
         public boolean toastNotifyEnabled = false;

@@ -74,7 +74,6 @@ public class ModClothConfig {
     public HighlightSettings highlightSettings = new HighlightSettings();
     public boolean ignoreSelf = true;
     public boolean matchSelfName = true;
-    public boolean ignoreSystemMessage = true;
 
     public enum ToastMode {
         POWERSHELL, AWT
@@ -146,6 +145,7 @@ public class ModClothConfig {
      */
 
     public static void save() {
+        // TODO 过滤空白字串
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ChatTools.LOGGER.info("[ChatTools] Saving configs.");
         try (FileWriter writer = new FileWriter(file)) {
@@ -298,7 +298,7 @@ public class ModClothConfig {
         // 启用匹配玩家自己的昵称
         notifierCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.matchSelfName"), config.matchSelfName).setDefaultValue(new ModConfigFallback().matchSelfName).setTooltip(Text.translatable("text.config.chattools.option.matchSelfName.@Tooltip")).setSaveConsumer(v -> config.matchSelfName = v).build());
         // 启用忽略系统消息
-        notifierCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.ignoreSystemMessage"), config.ignoreSystemMessage).setDefaultValue(new ModConfigFallback().ignoreSystemMessage).setTooltip(Text.translatable("text.config.chattools.option.ignoreSystemMessage.@Tooltip")).setSaveConsumer(v -> config.ignoreSystemMessage = v).build());
+        // notifierCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.ignoreSystemMessage"), config.ignoreSystemMessage).setDefaultValue(new ModConfigFallback().ignoreSystemMessage).setTooltip(Text.translatable("text.config.chattools.option.ignoreSystemMessage.@Tooltip")).setSaveConsumer(v -> config.ignoreSystemMessage = v).build());
 
         // 匹配白名单
         notifierCategory.addEntry(eb.startStrList(Text.translatable("text.config.chattools.option.allowList"), config.allowList).setDefaultValue(new ModConfigFallback().allowList).setTooltip(Text.translatable("text.config.chattools.option.allowList.@Tooltip")).setSaveConsumer(v -> config.allowList = v).build());

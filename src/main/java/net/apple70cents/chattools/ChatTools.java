@@ -161,7 +161,6 @@ public class ChatTools implements ModInitializer {
                             }
                             return Command.SINGLE_SUCCESS;
                         })))
-                // TODO chattools regex_checker
                 .then(literal("regex_checker")
                         // one arg
                         .then(argument("regex", StringArgumentType.string()).executes(t -> {
