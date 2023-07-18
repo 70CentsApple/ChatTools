@@ -145,7 +145,6 @@ public class ModClothConfig {
      */
 
     public static void save() {
-        // TODO 过滤空白字串
         INSTANCE.allowList.removeIf(String::isBlank);
         INSTANCE.banList.removeIf(String::isBlank);
         INSTANCE.injectorBanList.removeIf(String::isBlank);
