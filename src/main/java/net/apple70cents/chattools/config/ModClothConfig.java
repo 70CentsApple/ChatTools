@@ -146,6 +146,9 @@ public class ModClothConfig {
 
     public static void save() {
         // TODO 过滤空白字串
+        INSTANCE.allowList.removeIf(String::isBlank);
+        INSTANCE.banList.removeIf(String::isBlank);
+        INSTANCE.injectorBanList.removeIf(String::isBlank);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ChatTools.LOGGER.info("[ChatTools] Saving configs.");
         try (FileWriter writer = new FileWriter(file)) {
