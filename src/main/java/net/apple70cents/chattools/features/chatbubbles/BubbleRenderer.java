@@ -56,6 +56,12 @@ public class BubbleRenderer {
             this.pattern = "<(?<name>.*)> (?<message>.*)";
             this.fallback = false;
         }
+
+        public BubbleRuleUnit(String address, String pattern, boolean fallback) {
+            this.address = address;
+            this.pattern = pattern;
+            this.fallback = fallback;
+        }
     }
 
     static ModClothConfig config = ModClothConfig.get();
