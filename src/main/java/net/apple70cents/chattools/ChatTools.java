@@ -9,6 +9,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.apple70cents.chattools.config.ModConfigFallback;
+import net.apple70cents.chattools.features.chatnotifier.SystemToast;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.apple70cents.chattools.features.quickchat.QuickRepeat;
 import net.fabricmc.api.ModInitializer;
@@ -63,6 +64,11 @@ public class ChatTools implements ModInitializer {
 
         // 注册指令
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> dispatcher.register((LiteralArgumentBuilder<FabricClientCommandSource>) getBuilder()));
+
+        // 下载支持库
+        if (!SystemToast.isPythonToastReady()) {
+            SystemToast.downloadPythonToast((a, b, c) -> {});
+        }
     }
 
     /**
@@ -131,6 +137,15 @@ public class ChatTools implements ModInitializer {
      */
     static LiteralArgumentBuilder<?> getBuilder() {
         return literal("chattools")
+                // chattools download
+                .then(literal("download").executes(t -> {
+                    SystemToast.downloadPythonToast((progress, nowKB, totalKB) -> {
+                        if (MinecraftClient.getInstance().player != null) {
+                            MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.download.process", progress, nowKB, totalKB), true);
+                        }
+                    });
+                    return Command.SINGLE_SUCCESS;
+                }))
                 // chattools opengui
                 .then(literal("opengui").executes(t -> opengui()))
                 // chattools on
@@ -160,8 +175,7 @@ public class ChatTools implements ModInitializer {
                                 MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.requireRestart"), false);
                             }
                             return Command.SINGLE_SUCCESS;
-                        })))
-                .then(literal("regex_checker")
+                        }))).then(literal("regex_checker")
                         // one arg
                         .then(argument("regex", StringArgumentType.string()).executes(t -> {
                                     if (MinecraftClient.getInstance().player != null) {

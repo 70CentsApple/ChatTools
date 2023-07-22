@@ -1,14 +1,124 @@
 package net.apple70cents.chattools.features.chatnotifier;
 
 import net.apple70cents.chattools.ChatTools;
+import net.fabricmc.loader.api.FabricLoader;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Path;
 
 public class SystemToast {
+    public static void downloadPythonToast(TriConsumer<Integer, Integer, Integer> processSupplier) {
+        String dir = FabricLoader.getInstance().getGameDir() + "/chattools/";
+        // Delete if exists
+        try {
+            if (new File(dir + "ChatToolsToast.exe").exists()) {
+                ChatTools.LOGGER.warn("[ChatTools] found existing ChatToolsToast file, deleting it.");
+                new File(dir + "ChatToolsToast.exe").delete();
+            }
+            if (new File(dir + "ChatToolsIcon.ico").exists()) {
+                ChatTools.LOGGER.warn("[ChatTools] found existing ChatToolsIcon file, deleting it.");
+                new File(dir + "ChatToolsIcon.ico").delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Start the file download in a new thread
+        Thread downloadThread = new Thread(() -> {
+            try {
+                FileOutputStream fileOutputStream1 = new FileOutputStream(Path.of(dir + "ChatToolsToast.exe").toFile());
+                HttpURLConnection connection1 = (HttpURLConnection) new URL("https://70centsapple.github.io/files/ChatToolsToast.exe").openConnection();
+                FileOutputStream fileOutputStream2 = new FileOutputStream(Path.of(dir + "ChatToolsIcon.ico").toFile());
+                HttpURLConnection connection2 = (HttpURLConnection) new URL("https://70centsapple.github.io/files/ChatToolsIcon.ico").openConnection();
+
+                int bytesRead;
+                int totalBytesRead = 0;
+
+                int fileSize = connection1.getContentLength() + connection2.getContentLength();
+                ChatTools.LOGGER.info(String.format("[ChatTools] Downloading ChatToolsToast.exe to %s", dir));
+                connection1.connect();
+                try (ReadableByteChannel readableByteChannel = Channels.newChannel(connection1.getInputStream()); FileChannel fileChannel = fileOutputStream1.getChannel()) {
+                    byte[] buffer = new byte[4096];
+                    while ((bytesRead = readableByteChannel.read(ByteBuffer.wrap(buffer))) != -1) {
+                        fileChannel.write(ByteBuffer.wrap(buffer, 0, bytesRead));
+                        totalBytesRead += bytesRead;
+                        // Calculate download progress
+                        int progress = (int) ((double) totalBytesRead / fileSize * 100);
+                        processSupplier.accept(progress, totalBytesRead / 1024, fileSize / 1024);
+                        System.out.print("\rProgress: " + progress + "%");
+                    }
+                }
+                ChatTools.LOGGER.info(String.format("[ChatTools] Downloading ChatToolsIcon.ico to %s", dir));
+                connection2.connect();
+                try (ReadableByteChannel readableByteChannel = Channels.newChannel(connection2.getInputStream()); FileChannel fileChannel = fileOutputStream2.getChannel()) {
+                    byte[] buffer = new byte[4096];
+                    while ((bytesRead = readableByteChannel.read(ByteBuffer.wrap(buffer))) != -1) {
+                        fileChannel.write(ByteBuffer.wrap(buffer, 0, bytesRead));
+                        totalBytesRead += bytesRead;
+                        // Calculate download progress
+                        int progress = (int) ((double) totalBytesRead / fileSize * 100);
+                        processSupplier.accept(progress, totalBytesRead / 1024, fileSize / 1024);
+                        System.out.print("\rProgress: " + progress + "%");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        downloadThread.start();
+    }
+
+    public static boolean isPythonToastReady() {
+        var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToast.exe");
+        if (!file.exists()) {
+            return false;
+        }
+        try {
+            URL downloadUrl = new URL("https://70centsapple.github.io/files/ChatToolsToast.exe");
+            HttpURLConnection connection = (HttpURLConnection) downloadUrl.openConnection();
+            int fileSize = connection.getContentLength();
+            return fileSize == file.length();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // if it is offline, we assert it is ready.
+            return true;
+        }
+    }
+
+    public static void toastWithPython(String caption, String text) {
+        Thread thread = new Thread(() -> {
+            var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToast.exe");
+            var iconFile = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsIcon.ico");
+            String command = String.format("%s %s %s %s", file, '"'+caption+'"', '"'+text.replace("\n","\\n")+'"', iconFile);
+            ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
+            builder.redirectErrorStream(true);
+            try {
+                // 启动进程
+                Process process = builder.start();
+
+                // 获取进程输出流
+                InputStream inputStream = process.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "GBK"));
+
+                // 读取输出
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    ChatTools.LOGGER.info(line);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+    }
 
     public static void toastWithAWT(String caption, String text) {
         ChatTools.LOGGER.info("[ChatTools] Toast Notified with AWT.");

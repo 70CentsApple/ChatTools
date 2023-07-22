@@ -76,12 +76,12 @@ public class ModClothConfig {
     public boolean matchSelfName = true;
 
     public enum ToastMode {
-        POWERSHELL, AWT
+        PYTHON, POWERSHELL, AWT
     }
 
     public static class ToastNotifySettings {
         public boolean toastNotifyEnabled = false;
-        public ToastMode toastNotifyMode = ToastMode.POWERSHELL;
+        public ToastMode toastNotifyMode = ToastMode.PYTHON;
     }
 
     public ToastNotifySettings toastNotifySettings = new ToastNotifySettings();
@@ -137,7 +137,7 @@ public class ModClothConfig {
     public long chatBubblesLifetime = 8;
     public int chatBubblesYOffset = 3;
     public List<BubbleRenderer.BubbleRuleUnit> bubbleRuleList = new ArrayList<>() {{
-        add(new BubbleRenderer.BubbleRuleUnit(".*\\.hypixel\\.net","(?<name>\\S+): (?<message>.*)",false));
+        add(new BubbleRenderer.BubbleRuleUnit(".*\\.hypixel\\.net", "(?<name>\\S+): (?<message>.*)", false));
         add(new BubbleRenderer.BubbleRuleUnit());
     }};
 
@@ -221,7 +221,7 @@ public class ModClothConfig {
         Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS = (v) -> {
             try {
                 Pattern.compile(v);
-                if(v.contains("<name>") && v.contains("<message>")){
+                if (v.contains("<name>") && v.contains("<message>")) {
                     return Optional.empty();
                 } else {
                     return Optional.of(Text.literal("Should include both <name> and <message> groups."));
