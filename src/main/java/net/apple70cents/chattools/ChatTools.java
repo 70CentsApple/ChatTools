@@ -66,6 +66,7 @@ public class ChatTools implements ModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> dispatcher.register((LiteralArgumentBuilder<FabricClientCommandSource>) getBuilder()));
 
         // 下载支持库
+        LOGGER.info(SystemToast.isPythonToastReady() ? "[ChatTools] Python Toast is ready!" : "[ChatTools] Python Toast is not ready, will be downloading later soon.");
         if (!SystemToast.isPythonToastReady()) {
             SystemToast.downloadPythonToast((a, b, c) -> {
             });
