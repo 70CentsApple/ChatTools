@@ -18,8 +18,12 @@ import java.nio.file.Path;
 public class SystemToast {
     public static void downloadPythonToast(TriConsumer<Integer, Integer, Integer> processSupplier) {
         String dir = FabricLoader.getInstance().getGameDir() + "/chattools/";
-        // Delete if exists
         try {
+            // mkdir if the folder does not exist
+            if (!new File(dir).exists()) {
+                new File(dir).mkdirs();
+            }
+            // Delete if exists
             if (new File(dir + "ChatToolsToast.exe").exists()) {
                 ChatTools.LOGGER.warn("[ChatTools] found existing ChatToolsToast file, deleting it.");
                 new File(dir + "ChatToolsToast.exe").delete();
