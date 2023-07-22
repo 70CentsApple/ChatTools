@@ -67,8 +67,22 @@ public class ChatTools implements ModInitializer {
 
         // 下载支持库
         if (!SystemToast.isPythonToastReady()) {
-            SystemToast.downloadPythonToast((a, b, c) -> {});
+            SystemToast.downloadPythonToast((a, b, c) -> {
+            });
         }
+
+        // 展示welcome message
+        ClientTickEvents.START_WORLD_TICK.register(client -> {
+            if (config.shouldShowWelcomeMessage) {
+                if (MinecraftClient.getInstance().player != null) {
+                    MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.welcomeMessage"), false);
+                    LOGGER.info("[ChatTools] Shown welcome message.");
+                    config.shouldShowWelcomeMessage = false;
+                    ModClothConfig.save();
+                }
+            }
+        });
+
     }
 
     /**
@@ -84,7 +98,10 @@ public class ChatTools implements ModInitializer {
         InputUtil.Key key = InputUtil.fromTranslationKey(translationKey);
         int keyCode = key.getCode();
 
-        if ((modifier.equals(ModClothConfig.CustomModifier.ALT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT))) || (modifier.equals(ModClothConfig.CustomModifier.SHIFT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT))) || (modifier.equals(ModClothConfig.CustomModifier.CTRL) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL)))) {
+        if ((modifier.equals(ModClothConfig.CustomModifier.ALT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_ALT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_ALT))) // alt
+                || (modifier.equals(ModClothConfig.CustomModifier.SHIFT) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT))) // shift
+                || (modifier.equals(ModClothConfig.CustomModifier.CTRL) && !(InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_CONTROL) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_CONTROL))) // ctrl
+        ) {
             return false;
         }
 
