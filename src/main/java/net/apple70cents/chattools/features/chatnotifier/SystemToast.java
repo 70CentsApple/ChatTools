@@ -101,7 +101,7 @@ public class SystemToast {
         Thread thread = new Thread(() -> {
             var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToast.exe");
             var iconFile = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsIcon.ico");
-            String command = String.format("%s %s %s %s", file, '"'+caption+'"', '"'+text.replace("\n","\\n")+'"', iconFile);
+            String command = String.format("%s %s %s %s", '"' + file.toString() + '"', '"' + caption + '"', '"' + text.replace("\n", "\\n") + '"', iconFile);
             ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
             builder.redirectErrorStream(true);
             try {
@@ -117,7 +117,7 @@ public class SystemToast {
                 while ((line = reader.readLine()) != null) {
                     ChatTools.LOGGER.info(line);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
