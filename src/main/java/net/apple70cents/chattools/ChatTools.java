@@ -157,6 +157,7 @@ public class ChatTools implements ModInitializer {
         return literal("chattools")
                 // chattools download
                 .then(literal("download").executes(t -> {
+                    ChatTools.LOGGER.info("[ChatTools] Command Executed: Trying to download Python Toast dependencies");
                     SystemToast.downloadPythonToast((progress, nowKB, totalKB) -> {
                         if (MinecraftClient.getInstance().player != null) {
                             MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.download.process", progress, nowKB, totalKB), true);

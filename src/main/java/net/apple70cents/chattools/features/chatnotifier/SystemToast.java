@@ -108,8 +108,8 @@ public class SystemToast {
         if (!isPythonToastReady()) {
             if (MinecraftClient.getInstance().player != null) {
                 MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.pythonToastNotReady"),true);
-                return;
             }
+            return;
         }
         Thread thread = new Thread(() -> {
             var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToast.exe");
