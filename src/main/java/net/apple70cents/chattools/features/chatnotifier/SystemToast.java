@@ -2,6 +2,8 @@ package net.apple70cents.chattools.features.chatnotifier;
 
 import net.apple70cents.chattools.ChatTools;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import javax.swing.*;
@@ -89,15 +91,26 @@ public class SystemToast {
             URL downloadUrl = new URL("https://70centsapple.github.io/files/ChatToolsToast.exe");
             HttpURLConnection connection = (HttpURLConnection) downloadUrl.openConnection();
             int fileSize = connection.getContentLength();
-            return fileSize == file.length();
+            if (fileSize != 0){
+                return fileSize == file.length();
+            } else {
+                // if it could not connect to the url, we assert it is ready.
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            // if it is offline, we assert it is ready.
+            // if there is something wrong, we assert it is ready.
             return true;
         }
     }
 
     public static void toastWithPython(String caption, String text) {
+        if (!isPythonToastReady()) {
+            if (MinecraftClient.getInstance().player != null) {
+                MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.pythonToastNotReady"),true);
+                return;
+            }
+        }
         Thread thread = new Thread(() -> {
             var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToast.exe");
             var iconFile = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsIcon.ico");

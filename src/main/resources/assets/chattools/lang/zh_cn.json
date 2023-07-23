@@ -11,6 +11,7 @@
   "key.chattools.category.quickchat": "快捷发言",
   "key.chattools.category.bubble": "聊天气泡",
   "key.chattools.match": "§a§l聊天栏中有您关注的信息",
+  "key.chattools.pythonToastNotReady": "§6§l弹窗提醒Python模式没准备好！请使用`/chattools download`来下载依赖文件。",
   "key.chattools.requireRestart": "请在编辑后重启 Minecraft 以应用",
   "key.chattools.conflict": "§c【冲突功能】",
   "key.chattools.conflictTooltip": "§c功能与 §e%s§c 模组冲突，Chat Tools中此功能已自动失效。\n§c请前往对应模组设置中更改。§r\n",
