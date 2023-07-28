@@ -50,7 +50,7 @@ public class ModConfigFallback extends ModClothConfig {
 
     public static class ToastNotifySettings {
         public boolean toastNotifyEnabled = false;
-        public ToastMode toastNotifyMode = ToastMode.PYTHON;
+        public ToastMode toastNotifyMode = ToastMode.ADDON;
     }
 
     public ToastNotifySettings toastNotifySettings = new ToastNotifySettings();

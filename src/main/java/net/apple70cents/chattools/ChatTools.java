@@ -66,9 +66,9 @@ public class ChatTools implements ModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> dispatcher.register((LiteralArgumentBuilder<FabricClientCommandSource>) getBuilder()));
 
         // 下载支持库
-        LOGGER.info(SystemToast.isPythonToastReady() ? "[ChatTools] Python Toast is ready!" : "[ChatTools] Python Toast is not ready, will be downloading later soon.");
-        if (!SystemToast.isPythonToastReady()) {
-            SystemToast.downloadPythonToast((a, b, c) -> {
+        LOGGER.info(SystemToast.isAddonToastReady() ? "[ChatTools] Addon Toast is ready!" : "[ChatTools] Addon Toast is not ready, will be downloading later soon.");
+        if (!SystemToast.isAddonToastReady()) {
+            SystemToast.downloadAddonToast((a, b, c) -> {
             });
         }
 
@@ -157,8 +157,8 @@ public class ChatTools implements ModInitializer {
         return literal("chattools")
                 // chattools download
                 .then(literal("download").executes(t -> {
-                    ChatTools.LOGGER.info("[ChatTools] Command Executed: Trying to download Python Toast dependencies");
-                    SystemToast.downloadPythonToast((progress, nowKB, totalKB) -> {
+                    ChatTools.LOGGER.info("[ChatTools] Command Executed: Trying to download Addon Toast dependencies");
+                    SystemToast.downloadAddonToast((progress, nowKB, totalKB) -> {
                         if (MinecraftClient.getInstance().player != null) {
                             MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.download.process", progress, nowKB, totalKB), true);
                         }

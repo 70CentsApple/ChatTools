@@ -76,12 +76,12 @@ public class ModClothConfig {
     public boolean matchSelfName = true;
 
     public enum ToastMode {
-        PYTHON, POWERSHELL, AWT
+        ADDON, POWERSHELL, AWT
     }
 
     public static class ToastNotifySettings {
         public boolean toastNotifyEnabled = false;
-        public ToastMode toastNotifyMode = ToastMode.PYTHON;
+        public ToastMode toastNotifyMode = ToastMode.ADDON;
     }
 
     public ToastNotifySettings toastNotifySettings = new ToastNotifySettings();
@@ -167,7 +167,11 @@ public class ModClothConfig {
         Gson gson = new Gson();
         try (FileReader reader = new FileReader(file)) {
             INSTANCE = gson.fromJson(reader, ModClothConfig.class);
+            if (INSTANCE.toastNotifySettings.toastNotifyMode == null) {
+                INSTANCE.toastNotifySettings.toastNotifyMode = ToastMode.ADDON;
+            }
             if (INSTANCE == null) {
+                ChatTools.LOGGER.warn("[ChatTools] Using default configs.");
                 INSTANCE = new ModClothConfig();
             }
         } catch (Exception e) {

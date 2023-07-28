@@ -18,7 +18,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
 
 public class SystemToast {
-    public static void downloadPythonToast(TriConsumer<Integer, Integer, Integer> processSupplier) {
+    public static void downloadAddonToast(TriConsumer<Integer, Integer, Integer> processSupplier) {
         String dir = FabricLoader.getInstance().getGameDir() + "/chattools/";
         try {
             // mkdir if the folder does not exist
@@ -26,13 +26,9 @@ public class SystemToast {
                 new File(dir).mkdirs();
             }
             // Delete if exists
-            if (new File(dir + "ChatToolsToast.exe").exists()) {
-                ChatTools.LOGGER.warn("[ChatTools] found existing ChatToolsToast file, deleting it.");
-                new File(dir + "ChatToolsToast.exe").delete();
-            }
-            if (new File(dir + "ChatToolsIcon.ico").exists()) {
-                ChatTools.LOGGER.warn("[ChatTools] found existing ChatToolsIcon file, deleting it.");
-                new File(dir + "ChatToolsIcon.ico").delete();
+            if (new File(dir + "ChatToolsToastv2.exe").exists()) {
+                ChatTools.LOGGER.warn("[ChatTools] found existing ChatToolsToastv2 file, deleting it.");
+                new File(dir + "ChatToolsToastv2.exe").delete();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,31 +36,14 @@ public class SystemToast {
         // Start the file download in a new thread
         Thread downloadThread = new Thread(() -> {
             try {
-                FileOutputStream fileOutputStream1 = new FileOutputStream(Path.of(dir + "ChatToolsToast.exe").toFile());
-                HttpURLConnection connection1 = (HttpURLConnection) new URL("https://70centsapple.github.io/files/ChatToolsToast.exe").openConnection();
-                FileOutputStream fileOutputStream2 = new FileOutputStream(Path.of(dir + "ChatToolsIcon.ico").toFile());
-                HttpURLConnection connection2 = (HttpURLConnection) new URL("https://70centsapple.github.io/files/ChatToolsIcon.ico").openConnection();
-
+                FileOutputStream fileOutputStream1 = new FileOutputStream(Path.of(dir + "ChatToolsToastv2.exe").toFile());
+                HttpURLConnection connection1 = (HttpURLConnection) new URL("https://gitlab.com/70CentsApple/70CentsApple.Gitlab.io/-/raw/main/files/ChatToolsToastv2.exe").openConnection();
                 int bytesRead;
                 int totalBytesRead = 0;
-
-                int fileSize = connection1.getContentLength() + connection2.getContentLength();
-                ChatTools.LOGGER.info(String.format("[ChatTools] Downloading ChatToolsToast.exe to %s", dir));
+                int fileSize = connection1.getContentLength();
+                ChatTools.LOGGER.info(String.format("[ChatTools] Downloading ChatToolsToastv2.exe to %s", dir));
                 connection1.connect();
                 try (ReadableByteChannel readableByteChannel = Channels.newChannel(connection1.getInputStream()); FileChannel fileChannel = fileOutputStream1.getChannel()) {
-                    byte[] buffer = new byte[4096];
-                    while ((bytesRead = readableByteChannel.read(ByteBuffer.wrap(buffer))) != -1) {
-                        fileChannel.write(ByteBuffer.wrap(buffer, 0, bytesRead));
-                        totalBytesRead += bytesRead;
-                        // Calculate download progress
-                        int progress = (int) ((double) totalBytesRead / fileSize * 100);
-                        processSupplier.accept(progress, totalBytesRead / 1024, fileSize / 1024);
-                        System.out.print("\rProgress: " + progress + "%");
-                    }
-                }
-                ChatTools.LOGGER.info(String.format("[ChatTools] Downloading ChatToolsIcon.ico to %s", dir));
-                connection2.connect();
-                try (ReadableByteChannel readableByteChannel = Channels.newChannel(connection2.getInputStream()); FileChannel fileChannel = fileOutputStream2.getChannel()) {
                     byte[] buffer = new byte[4096];
                     while ((bytesRead = readableByteChannel.read(ByteBuffer.wrap(buffer))) != -1) {
                         fileChannel.write(ByteBuffer.wrap(buffer, 0, bytesRead));
@@ -82,13 +61,13 @@ public class SystemToast {
         downloadThread.start();
     }
 
-    public static boolean isPythonToastReady() {
-        var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToast.exe");
+    public static boolean isAddonToastReady() {
+        var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToastv2.exe");
         if (!file.exists()) {
             return false;
         }
         try {
-            URL downloadUrl = new URL("https://70centsapple.github.io/files/ChatToolsToast.exe");
+            URL downloadUrl = new URL("https://gitlab.com/70CentsApple/70CentsApple.Gitlab.io/-/raw/main/files/ChatToolsToastv2.exe");
             HttpURLConnection connection = (HttpURLConnection) downloadUrl.openConnection();
             int fileSize = connection.getContentLength();
             if (fileSize != 0){
@@ -104,18 +83,18 @@ public class SystemToast {
         }
     }
 
-    public static void toastWithPython(String caption, String text) {
-        if (!isPythonToastReady()) {
+    public static void toastWithAddon(String caption, String text) {
+        if (!isAddonToastReady()) {
             if (MinecraftClient.getInstance().player != null) {
-                MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.pythonToastNotReady"),true);
+                MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.addonToastNotReady"),true);
             }
             return;
         }
         Thread thread = new Thread(() -> {
-            var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToast.exe");
-            var iconFile = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsIcon.ico");
-            String command = String.format("%s %s %s %s", '"' + file.toString() + '"', '"' + caption + '"', '"' + text.replace("\n", "\\n") + '"', iconFile);
-            ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
+            var file = new File(FabricLoader.getInstance().getGameDir() + "/chattools/", "ChatToolsToastv2.exe");
+            String command = String.format("%s %s %s", '"' + file.toString() + '"', '"' + caption + '"', '"' + text.replace("\n", "\\n") + '"');
+            ProcessBuilder builder = new ProcessBuilder(command);
+            System.out.println("builder.command() = " + builder.command());
             builder.redirectErrorStream(true);
             try {
                 // 启动进程
@@ -133,7 +112,7 @@ public class SystemToast {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
+        }, "Toast thread");
         thread.start();
     }
 
@@ -164,7 +143,6 @@ public class SystemToast {
 //            ChatTools.LOGGER.info("[ChatTools] Toast Notified with Powershell, but not isDesktopSupported().");
 //            return;
 //        }
-        // FIXME 只有系统消息能被弹窗（其它的会试图弹窗但是因为在后台出于奇妙原因弹不出来）
         try {
             ChatTools.LOGGER.info("[ChatTools] Toast Notified with Powershell.");
             String COMMAND_TEMPLATE = "powershell.exe -ExecutionPolicy Bypass -Command \"[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null;$xml = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02);$xml.GetElementsByTagName('text')[0].AppendChild($xml.CreateTextNode('%s'));$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('%s');$notifier.Show($toast);\"";

@@ -134,8 +134,8 @@ public class ChatNotifier {
                     SystemToast.toastWithPowershell(Text.translatable("key.chattools.toast.title").getString(), wash_message(text.getString()));
                 } else if (ModClothConfig.ToastMode.AWT.equals(config.toastNotifySettings.toastNotifyMode)) {
                     SystemToast.toastWithAWT(Text.translatable("key.chattools.toast.title").getString(), wash_message(text.getString()));
-                } else if (ModClothConfig.ToastMode.PYTHON.equals(config.toastNotifySettings.toastNotifyMode)) {
-                    SystemToast.toastWithPython(Text.translatable("key.chattools.toast.title").getString(), wash_message(text.getString()));
+                } else if (ModClothConfig.ToastMode.ADDON.equals(config.toastNotifySettings.toastNotifyMode)) {
+                    SystemToast.toastWithAddon(Text.translatable("key.chattools.toast.title").getString(), wash_message(text.getString()));
                 }
             }
 
