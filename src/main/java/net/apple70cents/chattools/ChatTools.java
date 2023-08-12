@@ -28,6 +28,7 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -66,8 +67,20 @@ public class ChatTools implements ModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> dispatcher.register((LiteralArgumentBuilder<FabricClientCommandSource>) getBuilder()));
 
         // 下载支持库
-        LOGGER.info(SystemToast.isAddonToastReady() ? "[ChatTools] Addon Toast is ready!" : "[ChatTools] Addon Toast is not ready, will be downloading later soon.");
-        if (!SystemToast.isAddonToastReady()) {
+        if (SystemToast.OS.contains("Windows 7") || SystemToast.OS.contains("Windows 8.1")) {
+            SystemToast.DOWNLOADS = new ArrayList<>() {{
+                add("toast-win7.exe");
+                add("ChatToolsIcon.ico");
+            }};
+        } else if (SystemToast.OS.contains("Windows 10") || SystemToast.OS.contains("Windows 11")) {
+            SystemToast.DOWNLOADS = new ArrayList<>() {{
+                add("toast-win10-and-win11.exe");
+                add("ChatToolsIcon.ico");
+            }};
+        } else {
+            SystemToast.DOWNLOADS = new ArrayList<>();
+        }
+        if (!SystemToast.isAddonToastReady(true)) {
             SystemToast.downloadAddonToast((a, b, c) -> {
             });
         }
