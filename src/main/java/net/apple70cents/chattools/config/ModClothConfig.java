@@ -456,7 +456,7 @@ public class ModClothConfig {
         // ========== Chat Responser Category ==========
         ConfigCategory chatResponserCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.responser"));
         // 启用聊天回应
-        chatResponserCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.responserEnabled"), config.chatResponserEnabled).setDefaultValue(new ModConfigFallback().chatResponserEnabled).setSaveConsumer(v -> config.chatResponserEnabled = v).build());
+        chatResponserCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.responserEnabled"), config.chatResponserEnabled).setDefaultValue(new ModConfigFallback().chatResponserEnabled).setSaveConsumer(v -> config.chatResponserEnabled = v).setTooltip(Text.translatable("text.config.chattools.option.responserEnabled.@Tooltip")).build());
         // 回应规则
         if (MinecraftClient.getInstance().getCurrentServerEntry() == null) {
             label = Text.translatable("text.config.chattools.option.responserRulesList", "§f-");

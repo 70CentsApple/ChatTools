@@ -27,6 +27,7 @@ public class ChatResponser {
         public String getPattern() {
             return pattern;
         }
+
         public void setPattern(String pattern) {
             this.pattern = pattern;
         }
@@ -80,7 +81,6 @@ public class ChatResponser {
         Matcher rawMessageMatcher = Pattern.compile(rawPattern).matcher(rawMessageReceived);
         while (matcher.find()) {
             String groupName = matcher.group("group");
-            System.out.println("groupName = " + groupName);
             if (rawMessageMatcher.find()) {
                 String context = rawMessageMatcher.group(groupName);
                 if (context != null && !context.isBlank()) { // 捕获到的组内容非空
@@ -123,8 +123,9 @@ public class ChatResponser {
             if (mc.player != null) {
                 message = message.replace("{pos}", String.format("(%d,%d,%d)", (int) mc.player.getX(), (int) mc.player.getY(), (int) mc.player.getZ()));
             }
+            ChatTools.LOGGER.info("[ChatTools] Respond to `" + pattern + "`, with message `" + message + "`");
             message = message.replace("\\{", "{").replace("\\}", "}");
-            ChatTools.sendPlayerChat(message,forceDisableInjector);
+            ChatTools.sendPlayerChat(message, forceDisableInjector);
         }
     }
 }
