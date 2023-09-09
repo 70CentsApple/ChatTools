@@ -112,6 +112,7 @@ public class ChatResponser {
                 if (Pattern.compile(unit.getPattern()).matcher(messageReceived).matches()) {
                     canResponse = true;
                     pattern = unit.getPattern();
+                    message = unit.getMessage();
                     forceDisableInjector = unit.isForceDisableInjector();
                     break;
                 }
