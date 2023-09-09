@@ -10,6 +10,7 @@ import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
+import net.apple70cents.chattools.features.chatresponser.ChatResponser;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
@@ -140,6 +141,10 @@ public class ModClothConfig {
         add(new BubbleRenderer.BubbleRuleUnit(".*\\.hypixel\\.net", "(?<name>\\S+): (?<message>.*)", false));
         add(new BubbleRenderer.BubbleRuleUnit());
     }};
+    public boolean chatResponserEnabled = false;
+    public List<ChatResponser.ResponserRuleUnit> responserRuleList = new ArrayList<>() {{
+        add(new ChatResponser.ResponserRuleUnit());
+    }};
 
     /**
      * 保存配置
@@ -205,7 +210,7 @@ public class ModClothConfig {
         builder.setSavingRunnable(ModClothConfig::save);
         ConfigEntryBuilder eb = builder.entryBuilder();
         final ModClothConfig config = ModClothConfig.get();
-        Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER = (v) -> {
+        final Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER = (v) -> {
             try {
                 Pattern.compile(v);
                 return Optional.empty();
@@ -213,7 +218,7 @@ public class ModClothConfig {
                 return Optional.of(Text.of(e.getDescription()));
             }
         };
-        Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR = (v) -> {
+        final Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR = (v) -> {
             if ("*".equals(v)) return Optional.empty();
             try {
                 Pattern.compile(v);
@@ -222,7 +227,7 @@ public class ModClothConfig {
                 return Optional.of(Text.of(e.getDescription()));
             }
         };
-        Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS = (v) -> {
+        final Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS = (v) -> {
             try {
                 Pattern.compile(v);
                 if (v.contains("<name>") && v.contains("<message>")) {
@@ -448,6 +453,46 @@ public class ModClothConfig {
                     }
                 }));
 
+        // ========== Chat Responser Category ==========
+        ConfigCategory chatResponserCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.responser"));
+        // 启用聊天回应
+        chatResponserCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.responserEnabled"), config.chatResponserEnabled).setDefaultValue(new ModConfigFallback().chatResponserEnabled).setSaveConsumer(v -> config.chatResponserEnabled = v).build());
+        // 回应规则
+        if (MinecraftClient.getInstance().getCurrentServerEntry() == null) {
+            label = Text.translatable("text.config.chattools.option.responserRulesList", "§f-");
+        } else {
+            label = Text.translatable("text.config.chattools.option.responserRulesList", "§f" + MinecraftClient.getInstance().getCurrentServerEntry().address);
+        }
+        chatResponserCategory.addEntry(new NestedListListEntry<ChatResponser.ResponserRuleUnit, MultiElementListEntry<ChatResponser.ResponserRuleUnit>>(label, config.responserRuleList, true, // 启用默认展开
+                () -> Optional.of(new net.minecraft.text.MutableText[]{Text.translatable("text.config.chattools.option.responserRulesList.@Tooltip")}), // Tooltip
+                v -> config.responserRuleList = v, // Save Consumer
+                () -> new ModConfigFallback().responserRuleList, // 默认值
+                eb.getResetButtonKey(), // 重置按钮键值
+                true, // 启用删除键
+                true, // 在列表前面插入新内容
+                (responserRuleUnit, __) -> {
+                    AtomicReference<ChatResponser.ResponserRuleUnit> responserUnitRef = new AtomicReference<>(new ChatResponser.ResponserRuleUnit());
+                    if (responserRuleUnit == null) { // 新建
+                        Text displayText = Text.translatable("text.config.chattools.option.responserNew");
+                        ChatResponser.ResponserRuleUnit defaultRule = new ChatResponser.ResponserRuleUnit();
+                        responserUnitRef.set(defaultRule); // 设置初始值
+                        return new MultiElementListEntry<>(displayText, defaultRule, new ArrayList<>() {{
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.responserAddress"), defaultRule.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.responserAddress.@Tooltip")).setDefaultValue(defaultRule.getAddress()).setSaveConsumer(responserUnitRef.get()::setAddress).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.responserMatchPattern"), defaultRule.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.responserMatchPattern.@Tooltip")).setDefaultValue(defaultRule.getPattern()).setSaveConsumer(responserUnitRef.get()::setPattern).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.responserString"), defaultRule.getMessage()).setTooltip(Text.translatable("text.config.chattools.option.responserString.@Tooltip")).setDefaultValue(defaultRule.getMessage()).setSaveConsumer(responserUnitRef.get()::setMessage).build());
+                            add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.responserForceDisableInjector"), defaultRule.isForceDisableInjector()).setTooltip(Text.translatable("text.config.chattools.option.responserForceDisableInjector.@Tooltip")).setDefaultValue(defaultRule.isForceDisableInjector()).setSaveConsumer(responserUnitRef.get()::setForceDisableInjector).build());
+                        }}, false);
+                    } else { // 现有
+                        String colorPrefix = ("*".equals(responserRuleUnit.getAddress()) || (MinecraftClient.getInstance().getCurrentServerEntry() != null && Pattern.compile(responserRuleUnit.getAddress()).matcher(MinecraftClient.getInstance().getCurrentServerEntry().address).matches())) ? "§a" : "§6";
+                        Text displayText = Text.translatable("text.config.chattools.option.responserDisplay", colorPrefix + responserRuleUnit.getAddress(), responserRuleUnit.isForceDisableInjector() ? "§a✔" : "§c✘", responserRuleUnit.getPattern(), responserRuleUnit.getMessage());
+                        return new MultiElementListEntry<>(displayText, responserRuleUnit, new ArrayList<>() {{
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.responserAddress"), responserRuleUnit.getAddress()).setTooltip(Text.translatable("text.config.chattools.option.responserAddress.@Tooltip")).setDefaultValue(new ChatResponser.ResponserRuleUnit().getAddress()).setSaveConsumer(responserRuleUnit::setAddress).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.responserMatchPattern"), responserRuleUnit.getPattern()).setTooltip(Text.translatable("text.config.chattools.option.responserMatchPattern.@Tooltip")).setDefaultValue(new ChatResponser.ResponserRuleUnit().getPattern()).setSaveConsumer(responserRuleUnit::setPattern).setErrorSupplier(REGEX_COMPILE_ERROR_SUPPLIER).build());
+                            add(eb.startStrField(Text.translatable("text.config.chattools.option.responserString"), responserRuleUnit.getMessage()).setTooltip(Text.translatable("text.config.chattools.option.responserString.@Tooltip")).setDefaultValue(new ChatResponser.ResponserRuleUnit().getMessage()).setSaveConsumer(responserRuleUnit::setMessage).build());
+                            add(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.responserForceDisableInjector"), responserRuleUnit.isForceDisableInjector()).setTooltip(Text.translatable("text.config.chattools.option.responserString.@Tooltip")).setDefaultValue(new ChatResponser.ResponserRuleUnit().isForceDisableInjector()).setSaveConsumer(responserRuleUnit::setForceDisableInjector).build());
+                        }}, false);
+                    }
+                }));
         return builder;
     }
 }

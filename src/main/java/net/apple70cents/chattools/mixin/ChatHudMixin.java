@@ -1,6 +1,7 @@
 package net.apple70cents.chattools.mixin;
 
 import net.apple70cents.chattools.features.chatnotifier.ChatNotifier;
+import net.apple70cents.chattools.features.chatresponser.ChatResponser;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.text.Text;
@@ -32,6 +33,9 @@ public abstract class ChatHudMixin {
         }
         Text message = args.get(0);
         MessageIndicator indicator = args.get(3);
+        if(config.chatResponserEnabled && !ChatNotifier.isJustSentMessage()){
+            ChatResponser.work(message.getString());
+        }
         args.set(0, ChatNotifier.deal(message, indicator));
     }
 }

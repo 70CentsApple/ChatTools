@@ -10,6 +10,7 @@
   "key.chattools.category.injector": "注入聊天",
   "key.chattools.category.quickchat": "快捷发言",
   "key.chattools.category.bubble": "聊天气泡",
+  "key.chattools.category.responser": "聊天回应",
   "key.chattools.match": "§a§l聊天栏中有您关注的信息",
   "key.chattools.addonToastNotReady": "§6§l弹窗提醒Addon模式没准备好！请使用`/chattools download`来下载依赖文件。",
   "key.chattools.requireRestart": "请在编辑后重启 Minecraft 以应用",
@@ -95,5 +96,19 @@
   "text.config.chattools.option.chatBubblesPattern": "规则",
   "text.config.chattools.option.chatBubblesPattern.@Tooltip": "内容遵循 §a正则表达式（RegEx）§r 语法\n使用组<name>表示匹配的玩家名称\n使用组<message>表示匹配的消息内容",
   "text.config.chattools.option.chatBubblesFallback": "回退",
-  "text.config.chattools.option.chatBubblesFallback.@Tooltip": "即使消息不被匹配，但如果消息里包含任意玩家昵称，\n也在此玩家头上渲染气泡\n（注意：这种情况下消息将会原封不动地渲染出来）"
+  "text.config.chattools.option.chatBubblesFallback.@Tooltip": "即使消息不被匹配，但如果消息里包含任意玩家昵称，\n也在此玩家头上渲染气泡\n（注意：这种情况下消息将会原封不动地渲染出来）",
+  "text.config.chattools.option.responserEnabled": "启用聊天回应",
+  "text.config.chattools.option.responserEnabled.@Tooltip": "聊天回应功能允许对于特定的聊天内容自动回复特定的信息",
+  "text.config.chattools.option.responserRulesList": "聊天回应规则列表 §6（当前服务器地址： %s§6 ）§r",
+  "text.config.chattools.option.responserRulesList.@Tooltip": "在不同的服务器应用不同的聊天回应规则。\n更靠前的内容优先级更高。",
+  "text.config.chattools.option.responserNew": "新建规则",
+  "text.config.chattools.option.responserDisplay": "§e[ %s§e ] [关闭注入：%s§e]§r %s §e→§r %s",
+  "text.config.chattools.option.responserAddress": "服务器地址",
+  "text.config.chattools.option.responserAddress.@Tooltip": "当目前服务器地址匹配此字段时按照对应规则进行聊天回应\n内容遵循 §a正则表达式（RegEx）§r 语法\n可以使用 §o*§r 表示任意内容",
+  "text.config.chattools.option.responserMatchPattern": "模式串",
+  "text.config.chattools.option.responserMatchPattern.@Tooltip": "当模式串被匹配，发送回应内容\n内容遵循 §a正则表达式（RegEx）§r 语法\n建议使用正则表达式组功能",
+  "text.config.chattools.option.responserString": "回应内容",
+  "text.config.chattools.option.responserString.@Tooltip": "§o{$GROUP}§r 将会被替换成匹配到的`$GROUP`组的内容\n§o{pos}§r 将被替换成你的坐标。",
+  "text.config.chattools.option.responserForceDisableInjector": "关闭注入",
+  "text.config.chattools.option.responserForceDisableInjector.@Tooltip": "发送回应内容时将不会尝试注入聊天。"
 }

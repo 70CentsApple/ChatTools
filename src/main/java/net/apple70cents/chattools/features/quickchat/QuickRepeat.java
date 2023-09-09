@@ -36,7 +36,7 @@ public class QuickRepeat {
                         mc.player.sendMessage(Text.translatable("text.config.chattools.option.quickRepeatFailure"), true);
                     }
                 } else {
-                    MacroChat.sendPlayerChat(history.get(history.size() - 1));
+                    ChatTools.sendPlayerChat(history.get(history.size() - 1));
                 }
             }
         } else {

@@ -9,6 +9,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.apple70cents.chattools.config.ModConfigFallback;
+import net.apple70cents.chattools.features.chatnotifier.ChatNotifier;
 import net.apple70cents.chattools.features.chatnotifier.SystemToast;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.apple70cents.chattools.features.quickchat.QuickRepeat;
@@ -18,12 +19,15 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
+import net.minecraft.util.StringHelper;
 import net.minecraft.util.Util;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -257,6 +261,37 @@ public class ChatTools implements ModInitializer {
      */
     public static String wash_message(String str) {
         return Pattern.compile("§.").matcher(str).replaceAll("");
+    }
+
+    public static void sendPlayerChat(String chatText, boolean forceDisableInjector) {
+        boolean oldStatus = config.injectorEnabled;
+        // 临时关闭
+        if (forceDisableInjector) {
+            config.injectorEnabled = false;
+        }
+        ChatNotifier.setJustSentMessage(true);
+        chatText = StringHelper.truncateChat(StringUtils.normalizeSpace(chatText.trim()));
+        if (!chatText.isEmpty()) {
+            MinecraftClient.getInstance().inGameHud.getChatHud().addToMessageHistory(chatText);
+            ClientPlayerEntity player = MinecraftClient.getInstance().player;
+            if (chatText.startsWith("/")) {
+                if (player != null) {
+                    player.networkHandler.sendChatCommand(chatText.substring(1));
+                }
+            } else {
+                if (player != null) {
+                    player.networkHandler.sendChatMessage(chatText);
+                }
+            }
+        }
+        // 重新开启
+        if (forceDisableInjector) {
+            config.injectorEnabled = oldStatus;
+        }
+    }
+
+    public static void sendPlayerChat(String chatText) {
+        sendPlayerChat(chatText, false);
     }
 
     /**

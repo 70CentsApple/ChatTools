@@ -1,6 +1,7 @@
 package net.apple70cents.chattools.config;
 
 import net.apple70cents.chattools.features.chatbubbles.BubbleRenderer;
+import net.apple70cents.chattools.features.chatresponser.ChatResponser;
 import net.apple70cents.chattools.features.quickchat.MacroChat;
 import net.minecraft.client.util.InputUtil;
 
@@ -75,5 +76,9 @@ public class ModConfigFallback extends ModClothConfig {
     public List<BubbleRenderer.BubbleRuleUnit> bubbleRuleList = new ArrayList<>(){{
         add(new BubbleRenderer.BubbleRuleUnit(".*\\.hypixel\\.net","(?<name>\\S+): (?<message>.*)",false));
         add(new BubbleRenderer.BubbleRuleUnit());
+    }};
+    public boolean chatResponserEnabled = false;
+    public List<ChatResponser.ResponserRuleUnit> responserRuleList = new ArrayList<>() {{
+        add(new ChatResponser.ResponserRuleUnit());
     }};
 }

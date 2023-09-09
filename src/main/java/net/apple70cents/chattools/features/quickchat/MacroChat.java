@@ -3,10 +3,7 @@ package net.apple70cents.chattools.features.quickchat;
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.config.ModClothConfig;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.StringHelper;
-import org.apache.commons.lang3.StringUtils;
 
 import static net.apple70cents.chattools.ChatTools.config;
 import static net.apple70cents.chattools.ChatTools.isKeyPressedOrMouseKeyClicked;
@@ -89,27 +86,10 @@ public class MacroChat {
                 if (!keyWasPressed) {
                     keyWasPressed = true;
                     ChatTools.LOGGER.info("[ChatTools] Triggered Macro: " + command);
-                    sendPlayerChat(command);
+                    ChatTools.sendPlayerChat(command);
                 }
             } else {
                 keyWasPressed = false;
-            }
-        }
-    }
-
-    public static void sendPlayerChat(String chatText) {
-        chatText = StringHelper.truncateChat(StringUtils.normalizeSpace(chatText.trim()));
-        if (!chatText.isEmpty()) {
-            MinecraftClient.getInstance().inGameHud.getChatHud().addToMessageHistory(chatText);
-            ClientPlayerEntity player = MinecraftClient.getInstance().player;
-            if (chatText.startsWith("/")) {
-                if (player != null) {
-                    player.networkHandler.sendChatCommand(chatText.substring(1));
-                }
-            } else {
-                if (player != null) {
-                    player.networkHandler.sendChatMessage(chatText);
-                }
             }
         }
     }
