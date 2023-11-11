@@ -21,8 +21,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 import net.minecraft.util.StringHelper;
@@ -45,6 +44,7 @@ public class ChatTools implements ModInitializer {
     public static Logger LOGGER;
     public static ModClothConfig config;
     public static boolean CONFIGS_LOADED;
+    public static final Style WEBSITE_URL_STYLE = Style.EMPTY.withUnderline(true).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq")).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("key.chattools.faq")));
 
     @Override
     public void onInitialize() {
@@ -93,7 +93,7 @@ public class ChatTools implements ModInitializer {
         ClientTickEvents.START_WORLD_TICK.register(client -> {
             if (config.shouldShowWelcomeMessage) {
                 if (MinecraftClient.getInstance().player != null) {
-                    MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.welcomeMessage"), false);
+                    MinecraftClient.getInstance().player.sendMessage(Text.translatable("key.chattools.welcomeMessage").setStyle(WEBSITE_URL_STYLE), false);
                     LOGGER.info("[ChatTools] Shown welcome message.");
                     config.shouldShowWelcomeMessage = false;
                     ModClothConfig.save();

@@ -29,10 +29,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class ModClothConfig {
-    private static final File file = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "chat_tools.json");
+    private static final File FILE = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().toFile(), "chat_tools.json");
 
     public static File getFile() {
-        return file;
+        return FILE;
     }
 
     private static ModClothConfig INSTANCE = new ModClothConfig();
@@ -156,7 +156,7 @@ public class ModClothConfig {
         INSTANCE.injectorBanList.removeIf(String::isBlank);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ChatTools.LOGGER.info("[ChatTools] Saving configs.");
-        try (FileWriter writer = new FileWriter(file)) {
+        try (FileWriter writer = new FileWriter(FILE)) {
             gson.toJson(INSTANCE, writer);
         } catch (Exception e) {
             ChatTools.LOGGER.error("[ChatTools] Couldn't save config.");
@@ -170,7 +170,7 @@ public class ModClothConfig {
     public static void load() {
         ChatTools.LOGGER.info("[ChatTools] Loading configs...");
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader(file)) {
+        try (FileReader reader = new FileReader(FILE)) {
             INSTANCE = gson.fromJson(reader, ModClothConfig.class);
             if (INSTANCE.toastNotifySettings.toastNotifyMode == null) {
                 INSTANCE.toastNotifySettings.toastNotifyMode = ToastMode.ADDON;
@@ -180,7 +180,7 @@ public class ModClothConfig {
                 INSTANCE = new ModClothConfig();
             }
         } catch (Exception e) {
-            if (file.exists()) {
+            if (FILE.exists()) {
                 ChatTools.LOGGER.warn("[ChatTools] Couldn't understand the config.");
                 e.printStackTrace();
                 // file.delete();
@@ -242,6 +242,8 @@ public class ModClothConfig {
 
         // ========== Main Category ==========
         ConfigCategory mainCategory = builder.getOrCreateCategory(Text.translatable("key.chattools.category.main"));
+        // 跳转 FAQ
+        mainCategory.addEntry(eb.startTextDescription(Text.translatable("key.chattools.faq").setStyle(ChatTools.WEBSITE_URL_STYLE)).build());
         // 启用ChatTools（总开关）
         mainCategory.addEntry(eb.startBooleanToggle(Text.translatable("text.config.chattools.option.modEnabled"), config.modEnabled).setDefaultValue(new ModConfigFallback().modEnabled).setTooltip(Text.translatable("text.config.chattools.option.modEnabled.@Tooltip")).setSaveConsumer(v -> config.modEnabled = v).build());
         // 启用显示聊天时间
@@ -328,9 +330,7 @@ public class ModClothConfig {
             label = Text.translatable("text.config.chattools.option.injectorList", "§f" + MinecraftClient.getInstance().getCurrentServerEntry().address);
         }
         injectorCategory.addEntry(new NestedListListEntry<InjectorUnit, MultiElementListEntry<InjectorUnit>>(label, config.injectorList, true, // 启用默认展开
-                () -> {
-                    return Optional.of(new net.minecraft.text.MutableText[]{Text.translatable("text.config.chattools.option.injectorList.@Tooltip")});
-                }, // Tooltip
+                () -> Optional.of(new net.minecraft.text.MutableText[]{Text.translatable("text.config.chattools.option.injectorList.@Tooltip")}), // Tooltip
                 v -> config.injectorList = v, // Save Consumer
                 () -> new ModConfigFallback().injectorList, // 默认值
                 eb.getResetButtonKey(), // 重置按钮键值
