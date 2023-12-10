@@ -1,6 +1,5 @@
 package net.apple70cents.chattools;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,7 +36,6 @@ import java.util.regex.PatternSyntaxException;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
-
 
 public class ChatTools implements ModInitializer {
     public static String MODID;
@@ -140,10 +138,9 @@ public class ChatTools implements ModInitializer {
      * @return 替换后文本
      */
     public static MutableText replaceText(MutableText text, String oldString, String newString) {
-        String json = Text.Serializer.toJson(text);
-        JsonElement jsonElement = new Gson().fromJson(json, JsonObject.class);
+        JsonElement jsonElement = Text.Serialization.toJsonTree(text);
         replaceFieldValue(jsonElement, oldString, newString);
-        return Text.Serializer.fromJson(new Gson().toJson(jsonElement));
+        return Text.Serialization.fromJsonTree(jsonElement);
     }
 
     private static void replaceFieldValue(JsonElement jsonElement, String oldValue, String newValue) {
@@ -242,7 +239,7 @@ public class ChatTools implements ModInitializer {
      * 检查正则表达式
      *
      * @param pattern 正则表达式
-     * @return Pair&lt;解析成功或否, 提示字段(如果解析成功为"PASS")&gt;
+     * @return Pair&lt;解析成功或否, 提示字段&gt;
      */
     public static Pair<Boolean, String> regex_checker(String pattern) {
         try {

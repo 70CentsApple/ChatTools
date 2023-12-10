@@ -7,7 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
@@ -15,10 +14,8 @@ import java.util.regex.Pattern;
 
 @Mixin(net.minecraft.client.network.ClientPlayNetworkHandler.class)
 public abstract class ClientPlayNetworkHandlerMixin {
-    @Shadow
-    @Final
-    private MinecraftClient client;
     ModClothConfig config = ModClothConfig.get();
+    final MinecraftClient client = MinecraftClient.getInstance();
 
     @ModifyVariable(method = "sendChatMessage", at = @At("HEAD"), argsOnly = true)
     public String sendMessage(String message) {

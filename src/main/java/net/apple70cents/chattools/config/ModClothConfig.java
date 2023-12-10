@@ -219,7 +219,9 @@ public class ModClothConfig {
             }
         };
         final Function<String, Optional<Text>> REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR = (v) -> {
-            if ("*".equals(v)) return Optional.empty();
+            if ("*".equals(v)) {
+                return Optional.empty();
+            }
             try {
                 Pattern.compile(v);
                 return Optional.empty();
