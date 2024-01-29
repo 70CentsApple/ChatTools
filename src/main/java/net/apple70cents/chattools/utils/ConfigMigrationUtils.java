@@ -4,8 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.apple70cents.chattools.config.ConfigStorage;
+import net.minecraft.client.MinecraftClient;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -46,18 +50,17 @@ public class ConfigMigrationUtils {
 
     public static void migrate(File configFile) {
         if (CONFIG_VERSION >= 1.0 && CONFIG_VERSION < 2.0) {
-            migrateFromV1ToV2(configFile, new File(ConfigMigrationUtils.class.getClassLoader()
-                                                                             .getResource("assets/chattools/migration_v1_to_v2.json")
-                                                                             .getFile()));
+            migrateFromV1ToV2(configFile, MinecraftClient.getInstance().getClass().getClassLoader()
+                                                         .getResourceAsStream("assets/chattools/migration_v1_to_v2.json"));
         }
     }
 
-    private static void migrateFromV1ToV2(File file, File migrationMappingsFile) {
+    private static void migrateFromV1ToV2(File file, InputStream migrationMappingsInputStream) {
         try {
             String content = new String(Files.readAllBytes(file.toPath()));
-            // 读取并解析映射文件
-            String mappingsContent = new String(Files.readAllBytes(migrationMappingsFile.toPath()));
-            JsonObject keyMappings = new Gson().fromJson(mappingsContent, JsonObject.class);
+            // reads and analyse mappings between v1 and v2
+            Reader reader = new InputStreamReader(migrationMappingsInputStream);
+            JsonObject keyMappings = new Gson().fromJson(reader, JsonObject.class);
 
             for (Map.Entry<String, JsonElement> ele : keyMappings.entrySet()) {
                 String oldKey = ele.getKey();

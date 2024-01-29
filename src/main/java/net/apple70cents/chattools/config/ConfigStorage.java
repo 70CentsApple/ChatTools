@@ -3,11 +3,9 @@ package net.apple70cents.chattools.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.apple70cents.chattools.utils.LoggerUtils;
+import net.minecraft.client.MinecraftClient;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +14,7 @@ import java.util.Map;
  */
 public class ConfigStorage {
     public static final File FILE = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir()
-                                                                                  .toFile(), "chat_tools.json");
+                                                                                 .toFile(), "chat_tools.json");
 
     private Map<String, Object> configMap;
 
@@ -46,10 +44,10 @@ public class ConfigStorage {
 
     public void readConfigFile(boolean loadDefault) {
         try {
-            BufferedReader reader;
+            Reader reader;
             if (loadDefault) {
-                reader = new BufferedReader(new FileReader(getClass().getClassLoader().getResource("assets/chattools/default_config.json")
-                                                                     .getFile()));
+                reader = new InputStreamReader(MinecraftClient.getInstance().getClass().getClassLoader()
+                                                              .getResourceAsStream("assets/chattools/default_config.json"));
             } else {
                 reader = new BufferedReader(new FileReader(FILE));
             }
