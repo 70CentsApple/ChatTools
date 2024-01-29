@@ -1,0 +1,231 @@
+{
+    "version": 2,
+    "content": [
+        {
+            "key": "category.general",
+            "content": [
+                {
+                    "type": "FAQ",
+                    "key": "general.FAQ"
+                },
+                {
+                    "type": "boolean",
+                    "key": "general.ChatTools.Enabled"
+                },
+                {
+                    "type": "sub",
+                    "key": "general.Timestamp",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "general.Timestamp.Enabled"
+                        },
+                        {
+                            "type": "String",
+                            "key": "general.Timestamp.Pattern"
+                        }
+                    ]
+                },
+                {
+                    "type": "sub",
+                    "key": "general.RestoreMessages",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "general.RestoreMessages.Enabled"
+                        },
+                        {
+                            "type": "boolean",
+                            "key": "general.RestoreMessages.SplitLineEnabled"
+                        }
+                    ]
+                },
+                {
+                    "type": "sub",
+                    "key": "general.NickHider",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "general.NickHider.Enabled"
+                        },
+                        {
+                            "type": "String",
+                            "key": "general.NickHider.Nickname"
+                        }
+                    ]
+                },
+                {
+                    "type": "intSlider",
+                    "key": "general.MaxHistoryLength",
+                    "min": 10,
+                    "max": 10000
+                }
+            ]
+        },
+        {
+            "key": "category.notifier",
+            "content": [
+                {
+                    "type": "sub",
+                    "key": "notifier.Toast",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "notifier.Toast.Enabled"
+                        },
+                        {
+                            "type": "EnumToastModes",
+                            "key": "notifier.Toast.Mode"
+                        }
+                    ]
+                },
+                {
+                    "type": "sub",
+                    "key": "notifier.Sound",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "notifier.Sound.Enabled"
+                        },
+                        {
+                            "type": "String",
+                            "key": "notifier.Sound.Type"
+                        },
+                        {
+                            "type": "intSlider",
+                            "key": "notifier.Sound.Volume",
+                            "min": 0,
+                            "max": 100
+                        },
+                        {
+                            "type": "intSlider",
+                            "key": "notifier.Sound.Pitch",
+                            "min": 0,
+                            "max": 20
+                        }
+                    ]
+                },
+                {
+                    "type": "sub",
+                    "key": "notifier.Actionbar",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "notifier.Actionbar.Enabled"
+                        }
+                    ]
+                },
+                {
+                    "type": "sub",
+                    "key": "notifier.Highlight",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "notifier.Highlight.Enabled"
+                        },
+                        {
+                            "type": "String",
+                            "key": "notifier.Highlight.Prefix"
+                        },
+                        {
+                            "type": "boolean",
+                            "key": "notifier.Highlight.OverwriteEnabled"
+                        }
+                    ]
+                },
+                {
+                    "type": "boolean",
+                    "key": "notifier.IgnoreMyMessageEnabled"
+                },
+                {
+                    "type": "boolean",
+                    "key": "notifier.MatchMyNameEnabled"
+                },
+                {
+                    "type": "StringList",
+                    "key": "notifier.AllowList"
+                },
+                {
+                    "type": "StringList",
+                    "key": "notifier.BanList"
+                }
+            ]
+        },
+        {
+            "key": "category.formatter",
+            "content": [
+                {
+                    "type": "boolean",
+                    "key": "formatter.Enabled"
+                },
+                {
+                    "type": "FormatterList",
+                    "key": "formatter.List"
+                },
+                {
+                    "type": "StringList",
+                    "key": "formatter.DisableOnMatchList"
+                }
+            ]
+        },
+        {
+            "key": "category.chatkeybindings",
+            "content": [
+                {
+                    "type": "keycode",
+                    "key": "chatkeybindings.RepeatKey"
+                },
+                {
+                    "type": "EnumKeyModifiers",
+                    "key": "chatkeybindings.RepeatKeyModifier"
+                },
+                {
+                    "type": "boolean",
+                    "key": "chatkeybindings.Macro.Enabled"
+                },
+                {
+                    "type": "MacroList",
+                    "key": "chatkeybindings.Macro.List"
+                }
+            ]
+        },
+        {
+            "key": "category.bubble",
+            "content": [
+                {
+                    "type": "boolean",
+                    "key": "bubble.Enabled"
+                },
+                {
+                    "type": "intSlider",
+                    "key": "bubble.Lifetime",
+                    "min": 1,
+                    "max": 60
+                },
+                {
+                    "type": "intSlider",
+                    "key": "bubble.YOffset",
+                    "min": -20,
+                    "max": 20
+                },
+                {
+                    "type": "BubbleList",
+                    "key": "bubble.List"
+                }
+            ]
+        },
+        {
+            "key": "category.responser",
+            "content": [
+                {
+                    "type": "boolean",
+                    "key": "responser.Enabled"
+                },
+                {
+                    "type": "ResponserList",
+                    "key": "responser.List"
+                }
+            ]
+        }
+    ]
+}

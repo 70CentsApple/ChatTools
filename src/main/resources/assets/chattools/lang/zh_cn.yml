@@ -1,0 +1,287 @@
+modmenu.nameTranslation.chattools: 聊天工具箱
+modmenu.descriptionTranslation.chattools: 一个提供了许多容易上手的好用的聊天功能的工具箱
+key:
+  chattools:
+    texts:
+      RestoreMessagesSplitLine: '§7==== 储存的聊天记录 ====§r'
+      welcomeMessage: 第一次使用 Chat Tools ？点击这里查看常见问题解答！
+      toast.title: 来自 Minecraft 的关注信息
+      actionbar.title: §a§l聊天栏中有您关注的信息
+      repeat.failure: §6§l复读失败：不存在上一条消息
+      download.process: '[Chat Tools] %s 下载进度：%s%% - （%sKB/%sKB）'
+      download.success: '§6[Chat Tools] 已完成下载！'
+      toast.failure: §6Toast 失败：附件未完整下载 或 模式不支持该平台§r
+      'on': 启用 Chat Tools [聊天工具箱]
+      'off': 禁用 Chat Tools [聊天工具箱]
+      requireRestart: 请在更改后重启 Minecraft 以应用更改
+    faq: '[常见问题解答]'
+    gui:
+      title: 配置 Chat Tools [聊天工具箱]
+    category:
+      general: 通用
+      notifier: 聊天提醒
+      formatter: 注入聊天
+      chatkeybindings: 快捷发言
+      bubble: 聊天气泡
+      responser: 自动响应
+    general:
+      ChatTools:
+        Enabled: 
+          .: 启用 Chat Tools [聊天工具箱]
+          '@Tooltip': 切换整个模组的开关。
+      Timestamp:
+        .: 时间戳
+        '@Tooltip': 在消息前插入时间戳。
+        Enabled:
+          .: 启用时间戳
+          '@Tooltip': 切换是否应插入时间戳。
+        Pattern:
+          .: 格式
+          '@Tooltip': |
+            时间戳的格式。
+            & -> 颜色代码前缀
+            \& -> &
+            {hour} -> 小时
+            {minute} -> 分钟
+            {second} -> 秒
+      RestoreMessages:
+        .: 储存聊天记录
+        '@Tooltip': 即使在切换到其他会话后也能恢复之前的会话。
+        Enabled:
+          .: 启用储存聊天记录
+          '@Tooltip': 切换是否应恢复消息。
+        SplitLineEnabled:
+          .: 启用分割线
+          '@Tooltip': 如果开启，切换会话时会在聊天中添加分割线。
+      NickHider:
+        .: 隐藏昵称
+        '@Tooltip': 在客户端层面替换你的名字。
+        Enabled:
+          .: 启用昵称隐藏
+          '@Tooltip': 切换是否应替换你的昵称。
+        Nickname:
+          .: 自定义昵称
+          '@Tooltip': |
+            用于替换的新昵称。
+            & -> 颜色代码前缀
+            \& -> &
+      MaxHistoryLength:
+        .: 最大历史记录长度
+        '@Tooltip': |
+          更改您的最大历史记录大小。
+          （Minecraft 默认：100）
+    notifier:
+      Toast:
+        .: 后台通知
+        '@Tooltip': |
+          当 Minecraft 在后台运行时推送 Toast 通知。
+          只有匹配的消息才会计入。
+        Enabled: 
+          .: 启用 Toast 通知
+          '@Tooltip': 切换是否推送 Toast 通知。
+        Mode:
+          .: 模式
+          '@Tooltip': |
+            §6ADDON§r: 通过触发额外的程序来推送 Toast 通知。 
+                需要下载额外文件，请使用 §o/chattools download§r 手动下载。
+            
+            §6POWERSHELL§r: 通过 PowerShell 命令推送 Toast 通知
+
+            §6AWT§r: 使用 Java AWT 库 推送 Toast 通知（通常没用，不建议使用。）
+      Sound:
+        .: 声音
+        '@Tooltip': |
+          播放声音效果。
+          只有匹配的消息才会计入。
+        Enabled:
+          .: 启用声音
+          '@Tooltip': 切换是否应播放声音效果。
+        Type:
+          .: 类型
+          '@Tooltip': 将要播放的声音效果的标识符。
+        Volume:
+          .: 音量
+          '@Tooltip': 更改声音的音量。
+        Pitch:
+          .: 音调
+          '@Tooltip': 更改声音的音调。
+      Actionbar:
+        .: 动作栏
+        '@Tooltip': |
+          显示动作栏消息。
+          只有匹配的消息才会计入。
+        Enabled:
+          .: 启用动作栏
+          '@Tooltip': 切换是否应有动作栏通知。 
+      Highlight:
+        .: 高亮
+        '@Tooltip': |
+          在消息前插入前缀。
+          只有匹配的消息才会计入。
+        Enabled:
+          .: 启用高亮
+          '@Tooltip': 切换是否应在消息前插入前缀。
+        Prefix:
+          .: 前缀
+          '@Tooltip': 将要插入的前缀。
+        OverwriteEnabled: 
+          .: 覆写原聊天
+          '@Tooltip': |
+            切换是否应覆写消息。 
+            原文本的属性将会被擦除并覆写。
+      IgnoreMyMessageEnabled: 
+        .: 忽略我自己的消息
+        '@Tooltip': 切换是否应从匹配中排除我自己的消息。
+      MatchMyNameEnabled:
+        .: 匹配我的昵称
+        '@Tooltip': |
+          切换是否应匹配我的昵称。
+          你也可以通过在下面的匹配白名单中添加你的昵称来实现。
+      AllowList:
+        .: 匹配白名单
+        '@Tooltip': |
+          此列表中的模式将用于匹配。
+          建议使用正则表达式。
+      BanList:
+        .: 匹配黑名单
+        '@Tooltip': |
+          此列表中的模式将会从匹配中排除。
+          建议使用正则表达式。
+    formatter:
+      Enabled:
+        .: 启用聊天注入
+        '@Tooltip': |
+          聊天注入允许你根据自定义规则格式化消息（添加前后缀等）。
+          切换是否应工作聊天注入。
+      List:
+        .: '规则 §6(当前服务器地址：%s§6)§r'
+        '@Tooltip': |
+          定义聊天注入的规则。
+          靠上的内容优先级更高。
+        '@New': 新规则
+        '@Display': §e[ %s§e ]§r %s
+        Address: 
+          .: 地址
+          '@Tooltip': |
+            此规则的服务器地址。
+            建议使用正则表达式。
+        Formatter:
+          .: 文本
+          '@Tooltip': |
+            格式化的模式串。
+            {text} -> 原始文本
+            {pos} -> (X,Y,Z)
+      DisableOnMatchList:
+        .: 自动禁用聊天注入列表
+        '@Tooltip': |
+          如果此列表中的任何模式串与你的文本匹配，
+          我们将自动禁用该文本的聊天注入。
+          建议使用正则表达式。
+    chatkeybindings:
+      RepeatKey:
+        .: 一键复读
+        '@Tooltip': |
+          §o人 类 的 本 质 是 __ __ __§r
+          按下此键，将重复你的最后一条消息。
+      RepeatKeyModifier:
+        .: 复读键修饰符
+        '@Tooltip': 你需要同时再按下此修饰键才能触发复读。
+      Macro:
+        Enabled:
+          .: 启用宏
+          '@Tooltip': 切换是否应工作以下宏。
+        List: 
+          .: 宏
+          '@Tooltip': 定义不同命令的快捷键。
+          '@New': 新规则
+          '@Display': §e[ %s§e ]§r %s
+          Key:
+            .: 宏按键
+            '@Tooltip': 激活此宏的键。
+          Modifier:
+            .: 修饰键
+            '@Tooltip': 你还需要同时激活此修饰键，以激活宏。
+          Mode:
+            .: 模式
+            '@Tooltip': |
+              以修饰符为无、宏按键为“D”键做例子：
+              §6LAZY§r: F3+D -> 无法激活
+                Ctrl+D -> 无法激活
+
+              §6GREEDY§r: F3+D -> 激活
+                Ctrl+D -> 激活
+          Command:
+            .: 内容
+            '@Tooltip': 激活此宏时将发送的内容。
+    bubble:
+      Enabled:
+        .: 启用聊天气泡
+        '@Tooltip': 切换是否应在说话者头上渲染气泡。
+      Lifetime:
+        .: 气泡持续时间
+        '@Tooltip': 每个气泡的持续时间（以秒为单位）。
+      YOffset:
+        .: 气泡Y轴偏移量
+        '@Tooltip': 气泡的Y轴偏移量。
+      List:
+        .: '规则 §6(当前服务器地址：%s§6)§r'
+        '@Tooltip': |
+          定义气泡的规则。
+          靠上的内容优先级更高。
+        '@New': 新规则
+        '@Display': '§e[ %s§e ] [回退：%s§e]§r %s'
+        Address: 
+          .: 地址
+          '@Tooltip': |
+            此规则的服务器地址。
+            建议使用正则表达式。
+        Pattern:
+          .: 模式
+          '@Tooltip': |
+            捕获消息中的发送者昵称和分离的聊天内容。
+            建议使用正则表达式。
+            应包括两个正则表达式组：
+              §6<name>§r: 昵称
+              §6<message>§r: 分离的消息内容
+        Fallback:
+          .: 回退
+          '@Tooltip': |
+            如果开启此选项，当我们在消息中发现昵称时，
+            我们将无论如何都会在其头上渲染一个气泡，
+            即使消息根本不匹配规则。
+
+            请注意，在这种情况下，气泡中显示的消息将不会被修改。
+    responser:
+      Enabled:
+        .: 启用自动响应
+        '@Tooltip': |
+          自动响应特定消息。
+          切换是否启用自动响应。
+      List:
+        .: '规则 §6(当前服务器地址：%s§6)§r'
+        '@Tooltip': |
+          定义响应器的规则。
+          靠上的内容优先级更高。
+          响应至多一次。
+        '@New': 新规则
+        '@Display': '§e[ %s§e ] [关闭注入：%s§e]§r %s §e→§r %s'
+        Address: 
+          .: 地址
+          '@Tooltip': |
+            此规则的服务器地址。
+            建议使用正则表达式。
+        Pattern:
+          .: 模式
+          '@Tooltip': |
+            匹配的模式。
+            建议使用正则表达式。
+            建议使用正则表达式的分组功能。
+        Message:
+          .: 响应消息
+          '@Tooltip': |
+            这将是你的自动响应消息。
+            {pos} -> (X,Y,Z)
+            {$GROUP} -> 匹配组`$GROUP`的内容
+        ForceDisableFormatter:
+          .: 禁用聊天注入
+          '@Tooltip': 切换是否在响应时临时关闭聊天注入的尝试。

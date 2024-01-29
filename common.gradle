@@ -1,0 +1,146 @@
+apply plugin: 'maven-publish'
+apply plugin: 'fabric-loom'
+apply plugin: 'io.github.juuxel.loom-quiltflower'
+apply plugin: 'com.replaymod.preprocess'
+apply plugin: 'me.fallenbreath.yamlang'
+
+int mcVersion = project.mcVersion
+
+preprocess {
+    tabIndentation = true
+}
+
+repositories {
+    maven {
+        url 'https://jitpack.io'
+    }
+    maven { url "https://maven.shedaniel.me/" } // Cloth Config
+    maven { url "https://maven.terraformersmc.com/releases/" } // Mod Menu
+}
+
+// https://github.com/FabricMC/fabric-loader/issues/783
+configurations {
+    modApi.exclude group: 'net.fabricmc', module: 'fabric-loader'
+}
+
+dependencies {
+    // loom
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    // https://linkie.shedaniel.dev/dependencies
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    modApi "com.terraformersmc:modmenu:${project.mod_menu_version}"
+}
+
+loom {
+    runConfigs.all {
+        // to make sure it generates all "Minecraft Client (:subproject_name)" applications
+        ideConfigGenerated = true
+        runDir '../../run'
+        vmArgs '-Dmixin.debug.export=true'
+    }
+}
+
+remapJar {
+    remapperIsolation = true
+}
+
+String FABRIC_API_MOD_ID
+String CLOTH_CONFIG_MOD_ID
+if (mcVersion >= 11800){
+    FABRIC_API_MOD_ID = 'fabric-api'
+    CLOTH_CONFIG_MOD_ID = 'cloth-config'
+} else {
+    FABRIC_API_MOD_ID = 'fabric'
+    CLOTH_CONFIG_MOD_ID = 'cloth-config2'
+}
+
+    JavaVersion JAVA_COMPATIBILITY
+if (mcVersion >= 11800) {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_17
+} else if (mcVersion >= 11700) {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_16
+} else {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_1_8
+}
+sourceCompatibility = JAVA_COMPATIBILITY
+targetCompatibility = JAVA_COMPATIBILITY
+
+String versionSuffix = ''
+String fullModVersion = project.mod_version + versionSuffix
+
+version = 'v' + fullModVersion
+group = project.maven_group
+archivesBaseName = project.archives_base_name + '-' + project.minecraft_version
+
+// See https://youtrack.jetbrains.com/issue/IDEA-296490
+// if IDEA complains about "Cannot resolve resource filtering of MatchingCopyAction" and you want to know why
+processResources {
+    inputs.property "id", project.mod_id
+    inputs.property "version", fullModVersion
+    inputs.property "minecraft_dependency", project.minecraft_dependency
+
+    filesMatching("fabric.mod.json") {
+        def valueMap = ["id"                  : project.mod_id,
+                        "version"             : fullModVersion,
+                        "minecraft_dependency": project.minecraft_dependency]
+        expand valueMap
+    }
+    filesMatching('chattools.mixins.json') {
+        filter { s -> s.replace('{{COMPATIBILITY_LEVEL}}', "JAVA_${JAVA_COMPATIBILITY.ordinal() + 1}") }
+    }
+    filesMatching('fabric.mod.json') {
+        filter { s -> s.replace('{{FABRIC_API}}', "${FABRIC_API_MOD_ID}") }
+        filter { s -> s.replace('{{CLOTH_CONFIG}}', "${CLOTH_CONFIG_MOD_ID}") }
+    }
+}
+
+// https://github.com/Fallen-Breath/yamlang
+yamlang {
+    targetSourceSets = [sourceSets.main]
+    inputDir = 'assets/chattools/lang'
+}
+
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    // withSourcesJar()
+}
+
+jar {
+    from(rootProject.file('LICENSE')) {
+        rename { "${it}_${project.archives_base_name}" }
+    }
+}
+
+// configure the maven publication
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId archivesBaseName
+
+            from components.java
+        }
+    }
+
+    // select the repositories you want to publish to
+    repositories {
+        // uncomment to publish to the local maven
+        // mavenLocal()
+    }
+}

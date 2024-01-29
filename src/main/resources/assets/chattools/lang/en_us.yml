@@ -1,0 +1,286 @@
+modmenu.nameTranslation.chattools: Chat Tools
+modmenu.descriptionTranslation.chattools: A toolkit that provides great chat-related features.
+key:
+  chattools:
+    texts:
+      RestoreMessagesSplitLine: '§7==== Restored Messages ====§r'
+      welcomeMessage: New to Chat Tools? Check out FAQs here!
+      toast.title: 'Message from Minecraft:'
+      actionbar.title: §a§lReceived subscribed messages!
+      repeat.failure: §6§lNo previous message.
+      download.process: '[Chat Tools] Downloading %s: %s%% - (%sKB/%sKB)'
+      download.success: '§6[Chat Tools] All addon files were downloaded successfully!'
+      toast.failure: '§6Toast failed: Files are not ready or unsupported platform.§r'
+      'on': Enable Chat Tools
+      'off': Disable Chat Tools
+      requireRestart: After editing, you'll need to restart Minecraft to apply changes.
+    faq: '[Frequently Asked Questions]'
+    gui:
+      title: Chat Tools Configuration
+    category:
+      general: General
+      notifier: Notifier
+      formatter: Formatter
+      chatkeybindings: Chat Keybindings
+      bubble: Bubble
+      responser: Responser
+    general:
+      ChatTools:
+        Enabled: 
+          .: Enable Chat Tools
+          '@Tooltip': Toggles the entire mod.
+      Timestamp:
+        .: Timestamp
+        '@Tooltip': It inserts a timestamp before messages.
+        Enabled:
+          .: Enable Timestamp
+          '@Tooltip': Toggles whether a timestamp should be inserted.
+        Pattern:
+          .: Pattern
+          '@Tooltip': |
+            The pattern for the timestamps.
+            & -> Color Code Prefix
+            \& -> &
+            {hour} -> Hour
+            {minute} -> Minute
+            {second} -> Second
+      RestoreMessages:
+        .: Restore Messages
+        '@Tooltip': It restores former sessions even after switching to another.
+        Enabled:
+          .: Enable Restore Messages
+          '@Tooltip': Toggles whether messages should be restored.
+        SplitLineEnabled:
+          .: Enable Split-line
+          '@Tooltip': If it is on, a split-line will be added to chat when switching sessions.
+      NickHider:
+        .: Nickname Hider
+        '@Tooltip': It replaces your name client-sidely.
+        Enabled:
+          .: Enable Nickname Hider
+          '@Tooltip': Toggles whether your nickname should be replaced.
+        Nickname:
+          .: New Nickname
+          '@Tooltip': |
+            Your new nickname for replacing.
+            & -> Color Code Prefix
+            \& -> &
+      MaxHistoryLength:
+        .: Max History Length
+        '@Tooltip': |
+          It changes your maximum history size.
+          (Minecraft Default: 100)
+    notifier:
+      Toast:
+        .: System Toast
+        '@Tooltip': |
+          It applies a toast notification when Minecraft is running background.
+          Only matched messages count.
+        Enabled: 
+          .: Enable Toast
+          '@Tooltip': Toggles whether we should apply toast notifications.
+        Mode:
+          .: Mode
+          '@Tooltip': |
+            §6ADDON§r: Toast by triggering add-ons. 
+                Extra files will be needed. Download them manually with §o/chattools download§r.
+            
+            §6POWERSHELL§r: Toast by powershell commands
+
+            §6AWT§r: Toast by using Java AWT (It usually not works. Don't use it.)
+      Sound:
+        .: Sound
+        '@Tooltip': |
+          It plays a sound effect.
+          Only matched messages count.
+        Enabled:
+          .: Enable Sound
+          '@Tooltip': Toggles whether the sound effect should be played.
+        Type:
+          .: Type
+          '@Tooltip': The identifier of the sound effect that is going to be played.
+        Volume:
+          .: Volume
+          '@Tooltip': It changes the volume of the sound.
+        Pitch:
+          .: Pitch
+          '@Tooltip': It changes the pitch of the sound.
+      Actionbar:
+        .: Actionbar
+        '@Tooltip': |
+          It shows an actionbar message.
+          Only matched messages count.
+        Enabled:
+          .: Enable Actionbar
+          '@Tooltip': Toggles actionbar notifications. 
+      Highlight:
+        .: Highlight
+        '@Tooltip': |
+          It inserts prefixes in front of the messages.
+          Only matched messages count.
+        Enabled:
+          .: Enable Highlight
+          '@Tooltip': Toggles whether we should insert prefixes in front of the messages.
+        Prefix:
+          .: Prefix
+          '@Tooltip': The prefix that is going to be inserted.
+        OverwriteEnabled: 
+          .: Enable Overwrite
+          '@Tooltip': |
+            Toggles whether the message should be overwritten. 
+            The property attributes of the text will be erased and overwritten.
+      IgnoreMyMessageEnabled: 
+        .: Ignore My Own Messages
+        '@Tooltip': Toggles whether my own messages should be picked out from being matched.
+      MatchMyNameEnabled:
+        .: Match My Nickname
+        '@Tooltip': |
+          Toggles whether my nickname should be matched.
+          You can also do this by adding your nickname below in Allow List
+      AllowList:
+        .: Allow List
+        '@Tooltip': |
+          Patterns in this list will be used for matching.
+          RegEx is recommended. 
+      BanList:
+        .: Ban List
+        '@Tooltip': |
+          Patterns in this list will be picked out from being matched.
+          RegEx is recommended. 
+    formatter:
+      Enabled:
+        .: Enable Formatter
+        '@Tooltip': |
+          Formatter allows you to format your message according to your rules.
+          It toggles whether Formatter should work.
+      List:
+        .: 'Rules §6(Current Server Address: %s §6)§r'
+        '@Tooltip': |
+          It defines the rules for Formatter.
+          The upper content has higher priority.
+        '@New': New Rule
+        '@Display': §e[ %s§e ]§r %s
+        Address: 
+          .: Address
+          '@Tooltip': |
+            The server address for this rule.
+            RegEx is recommended.
+        Formatter:
+          .: Formatter
+          '@Tooltip': |
+            The pattern for formatting.
+            {text} -> Original Text
+            {pos} -> (X,Y,Z)
+      DisableOnMatchList:
+        .: Disable-on-match List
+        '@Tooltip': |
+          If any of the patterns in this list matches your text,
+          we will automatically disable Formatter for that text.
+          RegEx is recommened.
+    chatkeybindings:
+      RepeatKey:
+        .: Repeat Key
+        '@Tooltip': On activating this key, the latest message of you will be repeated.
+      RepeatKeyModifier:
+        .: Repeat Key Modifier
+        '@Tooltip': You'll need to activate this modifier key as well, in order to repeat.
+      Macro:
+        Enabled:
+          .: Enable Command Keybindings
+          '@Tooltip': Toggles whether the macros below should work.
+        List: 
+          .: Command Keybindings
+          '@Tooltip': Define keybindings for different commands.
+          '@New': New Rule
+          '@Display': §e[ %s§e ]§r %s
+          Key:
+            .: Key
+            '@Tooltip': The key to activate this macro.
+          Modifier:
+            .: Modifier
+            '@Tooltip': You'll need to activate this modifier key as well, in order to activate the macro.
+          Mode:
+            .: Mode
+            '@Tooltip': |
+              Take key 'D' with no modifier as an example:
+              §6LAZY§r: F3+D -> Fail to activate
+                Ctrl+D -> Fail to activate
+
+              §6GREEDY§r: F3+D -> Activate
+                Ctrl+D -> Activate
+          Command:
+            .: Command
+            '@Tooltip': The command will be sent when this macro is activated.
+    bubble:
+      Enabled:
+        .: Enable Bubbles
+        '@Tooltip': Toggles whether a bubble should be rendered above the head of the speaker.
+      Lifetime:
+        .: Lifetime
+        '@Tooltip': It is the lifetime (in seconds) of each bubble.
+      YOffset:
+        .: Y Offset
+        '@Tooltip': It is the Y offset of the bubble.
+      List:
+        .: 'Rules §6(Current Server Address: %s §6)§r'
+        '@Tooltip': |
+          It defines the rules for bubbles.
+          The upper content has higher priority.
+        '@New': New Rule
+        '@Display': '§e[ %s§e ] [ Fallback: %s§e ]§r %s'
+        Address: 
+          .: Address
+          '@Tooltip': |
+            The server address for this rule.
+            RegEx is recommended.
+        Pattern:
+          .: Pattern
+          '@Tooltip': |
+            It catches the nickname of the sender and seperated chat of the messages.
+            RegEx is recommended.
+            It should include two RegEx groups:
+              §6<name>§r: The Nickname
+              §6<message>§r: The Seperated Message Content
+        Fallback:
+          .: Fallback
+          '@Tooltip': |
+            If this option is on, when we found a nickname in the message,
+            we will be rendering a bubble above his head anyway,
+            even if the message does not match the rule at all.
+
+            Please note that in this situation, the message shown in the
+            bubble is not going to be modified.
+    responser:
+      Enabled:
+        .: Enable Responser
+        '@Tooltip': |
+          Responser allows you to response automatically to specific messages.
+          It toggles whether Responser should work.
+      List:
+        .: 'Rules §6(Current Server Address: %s §6)§r'
+        '@Tooltip': |
+          It defines the rules for Responser.
+          The upper content has higher priority.
+          It will only respond once.
+        '@New': New Rule
+        '@Display': '§e[ %s§e ] [ Override: %s§e ]§r %s §e→§r %s'
+        Address: 
+          .: Address
+          '@Tooltip': |
+            The server address for this rule.
+            RegEx is recommended.
+        Pattern:
+          .: Pattern
+          '@Tooltip': |
+            The pattern for matching.
+            RegEx is recommended.
+            Using RegEx groups is recommended.
+        Message:
+          .: Response Message
+          '@Tooltip': |
+            This message will be your automatic response.
+            {pos} -> (X,Y,Z)
+            {$GROUP} -> The Content of the matched group `$GROUP`
+        ForceDisableFormatter:
+          .: Disable Formatter (Override)
+          '@Tooltip': Toggles whether Formatter should be off when responding.

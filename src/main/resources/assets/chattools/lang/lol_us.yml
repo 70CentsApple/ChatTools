@@ -1,0 +1,201 @@
+modmenu.nameTranslation.chattools: Chatz Stuffz
+modmenu.descriptionTranslation.chattools: It has gr8 functions 4 peeps 2 meow
+key:
+  chattools:
+    texts:
+      RestoreMessagesSplitLine: '§7==== Old Memory ====§r'
+      welcomeMessage: New to Chatz Stuffz? Smash me!
+      toast.title: 'Meowing from Meowcraft:'
+      actionbar.title: §a§lwuts in your chat?
+      repeat.failure: §6§lya didnt purr
+      download.process: 'Chatz Stuffz: Downloading %s %s%% - (%sKB/%sKB)'
+      download.success: '§6All addon fyles 4 Chatz Stuffz were done, yo.'
+      toast.failure: '§6Toaster failed: extra stuffz r not ready or ungood plutform.§r'
+      'on': Chatz Stuffz on
+      'off': Now its off
+      requireRestart: dont forget 2 restart Meowcraft later, yo.
+    faq: '[Wut Peeps Asks A Lot]'
+    gui:
+      title: Chatz Stuffz Configurashunz
+    category:
+      general: Just Stuffz
+      notifier: Meowifyer
+      formatter: Fancy Wordz
+      chatkeybindings: Keyz for Talkz
+      bubble: Bubbly Chat
+      responser: Auto-Meow
+    general:
+      ChatTools:
+        Enabled: 
+          .: Turn On Chatz Toolz
+          '@Tooltip': Like, flip the switch for all da meow magic.
+      Timestamp:
+        .: Timez Stampz
+        '@Tooltip': Puts what time it iz before messages, yo.
+        Enabled:
+          .: Make Timez Stampz
+          '@Tooltip': Choosy to show time or nah.
+        Pattern:
+          .: How It Lookz
+          '@Tooltip': "Da wayz da time lookz, yo.\n& -> Colorz Thingy\n\\& -> Just &\n{hour} -> What Hourz\n{minute} -> Da Minutez\n{second} -> Da Secondz"
+      RestoreMessages:
+        .: Get Back Old Meows
+        '@Tooltip': Brings back old chatz even if ya switchin' places.
+        Enabled:
+          .: Make Old Meows Come Back
+          '@Tooltip': Choosy to bring back old words or let 'em poof.
+        SplitLineEnabled:
+          .: Make A Line Thingy
+          '@Tooltip': Puts a line in da chat when ya switchin' places, ya know.
+      NickHider:
+        .: Hide-Yo-Name
+        '@Tooltip': Makes your name somethin' else, but just for you, secret stuff.
+        Enabled:
+          .: Do Da Name Hiding Thing
+          '@Tooltip': Choosy if ya wanna be incognito or nah.
+        Nickname:
+          .: New Sneaky Name
+          '@Tooltip': "Whatcha wanna be called, secret-agent style.\n& -> Colorz Thingy\n\\& -> &"
+      MaxHistoryLength:
+        .: Most Words Remembered
+        '@Tooltip': "How many old meows you can peep at. (Minecraft usual is 100)"
+    notifier:
+      Toast:
+        .: System Toasty Stuff
+        '@Tooltip': "Makes a toasty pop-up when Minecraft's chillin' in da back.\nOnly for da important meows, tho."
+        Enabled: 
+          .: Make Toasty Stuff
+          '@Tooltip': Choosy to get pop-up toasts or just keep 'em in da toaster.
+        Mode:
+          .: How It Do
+          '@Tooltip': "§6ADDON§r: Toasty with extra stuff. Need to grab extra files, yo.\n§6POWERSHELL§r: Toasty with powershell magic\n§6AWT§r: Toasty with Java AWT (Usually no worky, don't bother, yo)"
+      Sound:
+        .: Noise Maker
+        '@Tooltip': "Plays cool soundz.\nOnly when da right words pop up."
+        Enabled:
+          .: Do Da Noise Thing
+          '@Tooltip': Choosy to play sounds or keep it quiet.
+        Type:
+          .: What Noise
+          '@Tooltip': The kinda sound it's gonna make, yo.
+        Volume:
+          .: How Loud
+          '@Tooltip': Turn it up or down, ya know.
+        Pitch:
+          .: Sound High or Low
+          '@Tooltip': Make it squeaky or deep, your call.
+      Actionbar:
+        .: Action Thingy
+        '@Tooltip': "Shows stuff in da action bar.\nOnly for da special meows, tho."
+        Enabled:
+          .: Show In Action Bar
+          '@Tooltip': Choosy to show messages in da action thingy or nah.
+      Highlight:
+        .: Make It Shiny
+        '@Tooltip': "Puts some shiny stuff before messages.\nFor da ones that matter."
+        Enabled:
+          .: Shiny Stuff On
+          '@Tooltip': Choosy to make messages shiny or just plain.
+        Prefix:
+          .: Shiny Bitz
+          '@Tooltip': The shiny thing that goes in front.
+        OverwriteEnabled: 
+          .: Do Da Overwrite
+          '@Tooltip': "Choosy to redo da whole message.\nIt's like, poof, new stuff."
+      IgnoreMyMessageEnabled: 
+        .: Ignore Ma Own Meows
+        '@Tooltip': Choosy if ya wanna skip your own meows or not.
+      MatchMyNameEnabled:
+        .: Find My Sneaky Name
+        '@Tooltip': "Choosy to find when peeps say your name.\nYou can put your sneaky name in da list below, yo."
+      AllowList:
+        .: Da Yes-Yes List
+        '@Tooltip': "Patterns here are like, 'Yeah, let's notice these'.\nRegEx is da way, yo."
+      BanList:
+        .: Da No-No List
+        '@Tooltip': "Stuff here is like, 'Nah, ignore these dudes'.\nRegEx is still cool here."
+    formatter:
+      Enabled:
+        .: Make Words Fancy
+        '@Tooltip': "Lets ya fancy up your meows your way.\nChoosy if da fancy thing should work or just chill."
+      List:
+        .: 'Rules §6(Current Server: %s §6)§r'
+        '@Tooltip': "Sets da rules for fancy talk.\nTop stuff is boss, yo."
+        '@New': New Thing
+        '@Display': '§e[ %s§e ]§r %s'
+      DisableOnMatchList:
+        .: No-Fancy List
+        '@Tooltip': "If stuff here matches your meows,\nwe just don't do fancy, keepin' it simple."
+    chatkeybindings:
+      RepeatKey:
+        .: Say It Again Key
+        '@Tooltip': Hit this to repeat your last meow, like an echo, echo.
+      RepeatKeyModifier:
+        .: Fancy Key for Repeating
+        '@Tooltip': Gotta hit this too, to make the echo happen.
+      Macro:
+        Enabled:
+          .: Do Da Command Thing
+          '@Tooltip': Choosy to make the magic keys work or just be normal keys.
+        List: 
+          .: Magic Keys for Stuff
+          '@Tooltip': "Set keys for doing cool stuff quick.\nLike magic, but with buttons."
+          '@New': New Magic
+          '@Display': '§e[ %s§e ]§r %s'
+          Key:
+            .: The Magic Button
+            '@Tooltip': The button that makes things happen.
+          Modifier:
+            .: Fancy Button
+            '@Tooltip': Hit this fancy one too, for extra magic.
+          Mode:
+            .: How It Works
+            '@Tooltip': "Like, take 'D' with no fancy stuff:\n§6LAZY§r: F3+D -> Nah\nCtrl+D -> Nah\n\n§6GREEDY§r: F3+D -> Yup\nCtrl+D -> Yup"
+          Command:
+            .: What It Do
+            '@Tooltip': The magic that happens when you press it.
+    bubble:
+      Enabled:
+        .: Bubbles Everywhere
+        '@Tooltip': Choosy if ya wanna see talk bubbles over peeps' heads.
+      Lifetime:
+        .: Bubble Time
+        '@Tooltip': How long each bubble hangs around, in seconds, yo.
+      YOffset:
+        .: Bubble Height
+        '@Tooltip': How high or low the bubble floats.
+      List:
+        .: 'Rules §6(Current Server: %s §6)§r'
+        '@Tooltip': "Sets da rules for bubbles.\nTop stuff is boss, yo."
+        '@New': New Bubbly Rule
+        '@Display': '§e[ %s§e ] [ Fallback: %s§e ]§r %s'
+        Address: 
+          .: Where It's At
+          '@Tooltip': "Server address for this rule, yo.\nRegEx makes it cooler."
+        Pattern:
+          .: Catchy Thing
+          '@Tooltip': "Catches names and split chat in bubbles.\nRegEx is da way, yo.\nShould have two groups:\n  §6<name>§r: Da Name\n  §6<message>§r: What They Said"
+        Fallback:
+          .: Just In Case
+          '@Tooltip': "If on, when we see a name in da message,\nwe bubble it up anyway, even if it's not fitting da rule.\nNote: Bubble words stay same, no change."
+    responser:
+      Enabled:
+        .: Auto Meow Back
+        '@Tooltip': "Automagically meows back at specific stuff.\nChoosy if it should or just nap."
+      List:
+        .: 'Rules §6(Current Server: %s §6)§r'
+        '@Tooltip': "Sets da rules for auto-meowing.\nTop stuff is boss, meows once only."
+        '@New': New Meow
+        '@Display': '§e[ %s§e ] [ Override: %s§e ]§r %s §e→§r %s'
+        Address: 
+          .: Where It's At
+          '@Tooltip': "Server address for this rule, yo.\nRegEx makes it cooler."
+        Pattern:
+          .: What To Look For
+          '@Tooltip': "The pattern for finding stuff to meow back at.\nRegEx is da way, yo.\nUsing RegEx groups is like, super smart."
+        Message:
+          .: What To Say Back
+          '@Tooltip': "This is what you meow back.\n{pos} -> (X, Y, Z)\n{$GROUP} -> What matched in da '$GROUP'"
+        ForceDisableFormatter:
+          .: Turn Off Fancy Talk (Override)
+          '@Tooltip': Choosy to not fancy talk when meowing back.

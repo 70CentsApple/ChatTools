@@ -1,13 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.apple70cents.chattools.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "package": "net.apple70cents.chattools.mixins",
+  "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
   "mixins": [
     "ChatHudMixin",
     "ClientPlayNetworkHandlerMixin",
-    "EntityRendererMixin",
-    "InGameHudMixin"
+    "InGameHudMixin",
+    "EntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

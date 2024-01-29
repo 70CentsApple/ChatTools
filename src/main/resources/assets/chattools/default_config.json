@@ -1,0 +1,59 @@
+{
+  "config.version": 2,
+  "general.ChatTools.Enabled": true,
+  "general.ShowWelcomeMessageEnabled": true,
+  "general.Timestamp.Enabled": true,
+  "general.Timestamp.Pattern": "\u0026e[{hour}:{minute}:{second}] \u0026r",
+  "general.RestoreMessages.Enabled": true,
+  "general.RestoreMessages.SplitLineEnabled": true,
+  "general.NickHider.Enabled": false,
+  "general.NickHider.Nickname": "\u00266You\u0026r",
+  "general.MaxHistoryLength": 500,
+  "notifier.Toast.Enabled": false,
+  "notifier.Toast.Mode": "ADDON",
+  "notifier.Sound.Enabled": true,
+  "notifier.Sound.Type": "block.note_block.bit",
+  "notifier.Sound.Volume": 80,
+  "notifier.Sound.Pitch": 10,
+  "notifier.Actionbar.Enabled": true,
+  "notifier.Highlight.Enabled": true,
+  "notifier.Highlight.Prefix": "\u00266[!]\u0026r ",
+  "notifier.Highlight.OverwriteEnabled": false,
+  "notifier.IgnoreMyMessageEnabled": true,
+  "notifier.MatchMyNameEnabled": true,
+  "notifier.AllowList": [],
+  "notifier.BanList": [],
+  "formatter.Enabled": false,
+  "formatter.List": [],
+  "formatter.DisableOnMatchList": [
+    "^\\d+$|^[.#%$/].*|\\ball\\b"
+  ],
+  "chatkeybindings.RepeatKey": "key.keyboard.unknown",
+  "chatkeybindings.RepeatKeyModifier": "NONE",
+  "chatkeybindings.Macro.Enabled": true,
+  "chatkeybindings.Macro.List": [],
+  "bubble.Enabled": true,
+  "bubble.Lifetime": 8,
+  "bubble.YOffset": 3,
+  "bubble.List": [
+    {
+      "address": ".*\\.hypixel\\.net",
+      "pattern": "(?\u003cname\u003e\\S+): (?\u003cmessage\u003e.*)",
+      "fallback": false
+    },
+    {
+      "address": "*",
+      "pattern": "\u003c(?\u003cname\u003e.*)\u003e (?\u003cmessage\u003e.*)",
+      "fallback": false
+    }
+  ],
+  "responser.Enabled": false,
+  "responser.List": [
+    {
+      "address": "*",
+      "pattern": "Repeat my words:(?\u003cword\u003e.*)",
+      "message": "You said {word}.",
+      "forceDisableFormatter": false
+    }
+  ]
+}

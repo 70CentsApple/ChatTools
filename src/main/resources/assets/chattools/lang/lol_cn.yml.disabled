@@ -1,0 +1,175 @@
+key:
+  chattools: 
+    faq: '[常见疑难杂症]'
+    gui: 
+      title: 喵喵喵喵喵配置
+    category: 
+      general: 基本的喵
+      notifier: 喵喵通知器
+      formatter: 喵喵排版器
+      chatkeybindings: 喵键绑定
+      bubble: 泡泡
+      responser: 自动喵喵机
+    general: 
+      ChatTools: 
+        Enabled: 
+          .: 启用喵喵工具
+          @Tooltip: 整个喵喵世界的开关喵。
+        Timestamp: 
+          .: 时间戳
+          @Tooltip: 在信息前面加上现在几点喵。
+          Enabled: 
+            .: 启用时间戳
+            @Tooltip: 决定是否要显示现在几点喵。
+          Pattern: 
+            .: 样式
+            @Tooltip: 时间戳的样式喵。\n& -> 颜色代码前缀\n\\& -> &\nhour -> 小时\nminute -> 分钟\nsecond -> 秒
+        RestoreMessages: 
+          .: 恢复消息
+          @Tooltip: 切换会话后也能回看之前的喵喵。
+          Enabled: 
+            .: 启用消息恢复
+            @Tooltip: 切换会话时是否恢复消息喵。
+          SplitLineEnabled: 
+            .: 启用分割线
+            @Tooltip: 开了这个，切换会话时聊天里会有条分割线喵。
+        NickHider: 
+          .: 昵称隐藏器
+          @Tooltip: 把你的名字换成别的，只有你看得到喵。
+          Enabled: 
+            .: 启用昵称隐藏
+            @Tooltip: 决定是否要把你的名字换掉喵。
+          Nickname: 
+            .: 新昵称
+            @Tooltip: 你想换成什么名字喵。\n& -> 颜色代码前缀\n\\& -> &
+        MaxHistoryLength: 
+          .: 最大历史长度
+          @Tooltip: 你能回看多少条消息喵。（Minecraft默认是100条）
+    notifier: 
+      Toast: 
+        .: 系统吐司
+        @Tooltip: Minecraft在后台运行时，会用吐司通知你喵。\n只有符合条件的消息才会通知。
+        Enabled: 
+          .: 启用吐司
+          @Tooltip: 是否要用吐司通知喵。
+        Mode: 
+          .: 模式
+          @Tooltip: '§6附加模式§r: 触发附加吐司。需要手动下载额外文件喵。\n\n§6POWERSHELL模式§r: 用powershell命令弹吐司\n\n§6AWT模式§r: 用Java AWT弹吐司（通常不起作用，别用这个喵）'
+      Sound: 
+        .: 声音
+        @Tooltip: 会播放一个声音效果喵。\n只有符合条件的消息才会播放。
+        Enabled: 
+          .: 启用声音
+          @Tooltip: 是否要播放声音效果喵。
+        Type: 
+          .: 类型
+          @Tooltip: 将要播放的声音效果的标识符喵。
+        Volume: 
+          .: 音量
+          @Tooltip: 改变声音的音量喵。
+        Pitch: 
+          .: 音调
+          @Tooltip: 改变声音的音调喵。
+      Actionbar: 
+        .: 动作条
+        @Tooltip: 在动作条显示消息喵。\n只有符合条件的消息才会显示。
+        Enabled: 
+          .: 启用动作条
+          @Tooltip: 是否要在动作条显示消息喵。
+      Highlight: 
+        .: 高亮
+        @Tooltip: 在消息前面加上前缀喵。\n只有符合条件的消息才会加前缀。
+        Enabled: 
+          .: 启用高亮
+          @Tooltip: 是否要在消息前面加前缀喵。
+        Prefix: 
+          .: 前缀
+          @Tooltip: 将要加在消息前面的前缀喵。
+        OverwriteEnabled: 
+          .: 启用覆写
+          @Tooltip: 是否要覆写消息喵。\n文本的属性会被擦除和覆写喵。
+      IgnoreMyMessageEnabled: 
+        .: 忽略我自己的消息
+        @Tooltip: 我自己的消息要不要从匹配中排除喵。
+      MatchMyNameEnabled: 
+        .: 匹配我的昵称
+        @Tooltip: 是否匹配我的昵称喵。\n你也可以通过在下面的允许列表中添加你的昵称来实现这个功能喵。
+      AllowList: 
+        .: 允许列表
+        @Tooltip: 这个列表中的模式将用于匹配喵。\n推荐使用正则表达式喵。
+      BanList: 
+        .: 禁止列表
+        @Tooltip: 这个列表中的模式将从匹配中排除喵。\n推荐使用正则表达式喵。    
+    formatter: 
+      Enabled: 
+        .: 启用排版器
+        @Tooltip: 排版器允许你根据规则格式化你的消息喵。\n它决定排版器是否应该工作喵。
+      List: 
+        .: '规则 §6(当前服务器地址: %s §6)§r'
+        @Tooltip: 定义排版器的规则喵。\n上面的内容优先级更高喵。
+        @New: 新规则
+        @Display: '§e[ %s§e ]§r %s'
+      DisableOnMatchList: 
+        .: 匹配时禁用列表
+        @Tooltip: 如果这个列表中的任何模式匹配了你的文本，\n我们将自动禁用排版器对那个文本的处理喵。\n推荐使用正则表达式喵。
+    chatkeybindings: 
+      RepeatKey: 
+        .: 重复键
+        @Tooltip: 激活这个键时，你最近的一条消息将会重复喵。
+      RepeatKeyModifier: 
+        .: 重复键修饰键
+        @Tooltip: 你还需要激活这个修饰键，才能重复消息喵。
+      Macro: 
+        Enabled: 
+          .: 启用命令键绑定
+          @Tooltip: 是否应该启用下面的宏喵。
+        List: 
+          .: 命令键绑定
+          @Tooltip: 为不同的命令定义键绑定喵。
+          @New: 新规则
+          @Display: '§e[ %s§e ]§r %s'
+    bubble: 
+      Enabled: 
+        .: 启用泡泡
+        @Tooltip: 决定是否在说话者头上显示泡泡喵。
+      Lifetime: 
+        .: 生命周期
+        @Tooltip: 每个泡泡存在的秒数喵。
+      YOffset: 
+        .: Y偏移
+        @Tooltip: 泡泡在头上的偏移量喵。
+      List: 
+        .: '规则 §6(当前服务器地址: %s §6)§r'
+        @Tooltip: 定义泡泡的规则喵。\n上面的内容优先级更高喵。
+        @New: 新规则
+        @Display: '§e[ %s§e ] [ Fallback: %s§e ]§r %s'
+        Address: 
+          .: 地址
+          @Tooltip: 这个规则对应的服务器地址喵。\n推荐使用正则表达式喵。
+        Pattern: 
+          .: 模式
+          @Tooltip: '用于捕捉发送者的昵称和消息的分割喵。\n推荐使用正则表达式喵。\n应该包含两个正则表达式组：\n  §6<name>§r: 昵称\n  §6<message>§r: 分割后的消息内容'
+        Fallback: 
+          .: 回退
+          @Tooltip: 如果开启这个选项，当我们在消息中找到昵称时，\n即使消息完全不符合规则，\n也会在他头上显示泡泡喵。\n\n请注意，在这种情况下，泡泡中显示的消息内容不会被修改。
+    responser: 
+      Enabled: 
+        .: 启用自动回复
+        @Tooltip: 自动回复允许你对特定消息自动回复喵。\n它决定自动回复是否应该工作喵。
+      List: 
+        .: '规则 §6(当前服务器地址: %s §6)§r'
+        @Tooltip: 定义自动回复的规则喵。\n上面的内容优先级更高喵。\n它只会回应一次喵。
+        @New: 新规则
+        @Display: '§e[ %s§e ] [ Override: %s§e ]§r %s §e→§r %s'
+        Address: 
+          .: 地址
+          @Tooltip: 这个规则对应的服务器地址喵。\n推荐使用正则表达式喵。
+        Pattern: 
+          .: 模式
+          @Tooltip: 用于匹配的模式喵。\n推荐使用正则表达式喵。\n建议使用正则表达式组。
+        Message: 
+          .: 回复消息
+          @Tooltip: 这将是你的自动回复内容喵。\n{pos} -> (X,Y,Z)\n{$GROUP} -> 匹配组`$GROUP`的内容
+        ForceDisableFormatter: 
+          .: 禁用排版器（覆写）
+          @Tooltip: 决定是否在回复时关闭排版器喵。
