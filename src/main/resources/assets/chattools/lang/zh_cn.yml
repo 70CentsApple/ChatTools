@@ -1,4 +1,4 @@
-modmenu.nameTranslation.chattools: 聊天工具箱
+modmenu.nameTranslation.chattools: Chat Tools [聊天工具箱]
 modmenu.descriptionTranslation.chattools: 一个提供了许多容易上手的好用的聊天功能的工具箱
 key:
   chattools:
@@ -26,7 +26,7 @@ key:
       responser: 自动响应
     general:
       ChatTools:
-        Enabled: 
+        Enabled:
           .: 启用 Chat Tools [聊天工具箱]
           '@Tooltip': 切换整个模组的开关。
       Timestamp:
@@ -76,7 +76,7 @@ key:
         '@Tooltip': |
           当 Minecraft 在后台运行时推送 Toast 通知。
           只有匹配的消息才会计入。
-        Enabled: 
+        Enabled:
           .: 启用 Toast 通知
           '@Tooltip': 切换是否推送 Toast 通知。
         Mode:
@@ -112,7 +112,7 @@ key:
           只有匹配的消息才会计入。
         Enabled:
           .: 启用动作栏
-          '@Tooltip': 切换是否应有动作栏通知。 
+          '@Tooltip': 切换是否应有动作栏通知。
       Highlight:
         .: 高亮
         '@Tooltip': |
@@ -124,12 +124,12 @@ key:
         Prefix:
           .: 前缀
           '@Tooltip': 将要插入的前缀。
-        OverwriteEnabled: 
+        OverwriteEnabled:
           .: 覆写原聊天
           '@Tooltip': |
             切换是否应覆写消息。 
             原文本的属性将会被擦除并覆写。
-      IgnoreMyMessageEnabled: 
+      IgnoreMyMessageEnabled:
         .: 忽略我自己的消息
         '@Tooltip': 切换是否应从匹配中排除我自己的消息。
       MatchMyNameEnabled:
@@ -160,7 +160,7 @@ key:
           靠上的内容优先级更高。
         '@New': 新规则
         '@Display': §e[ %s§e ]§r %s
-        Address: 
+        Address:
           .: 地址
           '@Tooltip': |
             此规则的服务器地址。
@@ -190,7 +190,7 @@ key:
         Enabled:
           .: 启用宏
           '@Tooltip': 切换是否应工作以下宏。
-        List: 
+        List:
           .: 宏
           '@Tooltip': 定义不同命令的快捷键。
           '@New': 新规则
@@ -230,7 +230,7 @@ key:
           靠上的内容优先级更高。
         '@New': 新规则
         '@Display': '§e[ %s§e ] [回退：%s§e]§r %s'
-        Address: 
+        Address:
           .: 地址
           '@Tooltip': |
             此规则的服务器地址。
@@ -265,7 +265,7 @@ key:
           响应至多一次。
         '@New': 新规则
         '@Display': '§e[ %s§e ] [关闭注入：%s§e]§r %s §e→§r %s'
-        Address: 
+        Address:
           .: 地址
           '@Tooltip': |
             此规则的服务器地址。
