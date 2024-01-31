@@ -21,6 +21,12 @@ public class Repeat {
                 keyWasPressed = true;
                 LoggerUtils.info("[ChatTools] Triggered the latest command.");
                 MinecraftClient mc = MinecraftClient.getInstance();
+                // Note:
+                // Between versions 1.20.1 ~ 1.20.2, the return value type of `getMessageHistory()` had
+                // changed from `List` to `net.minecraft.util.collection.ArrayListDeque` (a.k.a `net/minecraft/class_8623` ),
+                // so if this code is compiled on 1.20.2+, there will be a mapping problem here on both 1.20 and 1.20.1,
+                // which can be solved by recompiling on either of those versions individually.
+                // I don't think it's a big problem, not gonna fix this ^v^
                 List<String> history = mc.inGameHud.getChatHud().getMessageHistory();
                 if (history.isEmpty()) {
                     MessageUtils.sendToActionbar(TextUtils.trans("texts.repeat.failure"));
