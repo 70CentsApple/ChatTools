@@ -20,6 +20,8 @@ Chat Tools的大部分功能支持高度个性化，请在配置页面进行配�
 - 隐藏自己昵称（Nickname Hider）  
 在自己视角里隐藏自己真实昵称  
 ![Nickname Hider](<images/Nickname Hider.png>)
+- 翻译器（Translator）  
+在聊天栏里按 Shift + Tab 开始翻译
 - 最大聊天记录数量（Max History Length）  
 调整游戏保留聊天记录上限  
 ![Max History Length](<images/Max History Length.png>)
@@ -53,7 +55,7 @@ Chat Tools的大部分功能支持高度个性化，请在配置页面进行配�
 这些情况包括（但不限于）：  
 向箱子商店插件售卖物品时在聊天栏输入的物品数量（或all）；  
 以各种特殊字符开头的指令。  
-Chat Tools的默认正则表达式字串 `^\d+$|^[. #%$/]. *|\ball\b` 即可满足需求，  
+Chat Tools的默认正则表达式字串 `^\d+$|^[.#%$/].*|\ball\b` 即可满足需求，  
 当然，您也可以更改或自行添加更多。
 
 ## 快捷发言（Chat Keybindings Section）

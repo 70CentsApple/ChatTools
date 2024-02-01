@@ -5,7 +5,7 @@ Chat Tools is a Minecraft Fabric Mod that provides players with numerous useful 
 Please install [Cloth Config](https://modrinth.com/mod/cloth-config) first.
 
 Most of the features of Chat Tools support a high degree of personalization, please configure them in the configuration page.  
-Configuration page startup method (please make sure [Cloth Config](https://modrinth.com/mod/cloth-config) is installed):
+To activate the configuration page (please make sure [Cloth Config](https://modrinth.com/mod/cloth-config) is installed):
 - Activate the command `/chattools opengui`
 - Chat Tools is linked to [Mod Menu](https://modrinth.com/mod/modmenu), and the Chat Tools configuration screen can be shown in Mod Menu.
 
@@ -20,12 +20,14 @@ Restore messages from previous sessions.
 - Nickname Hider  
 Hides your real nickname in your own view.  
 ![Nickname Hider](<images/Nickname Hider.png>)
+- Translator  
+Press Shift + Tab in your chat bar to start translation.
 - Max History Length  
 Adjusts the maximum number of chat history kept in the game.  
 ![Max History Length](<images/Max History Length.png>)
 
 ## Notifier Section
-Various chat notifier functions
+Various chat notifier features
 - Toast Notification  
 ![Toast](<images/Toast.gif>)
 - Sound  
@@ -53,7 +55,7 @@ In some cases, we **do not want** our text to be formatted.
 These situations include (but are not limited to):  
 The number of items (or `all`) sent in chat when selling items to the Chest Shop;  
 Commands that begin with various special characters.  
-Chat Tools' default RegEx string `^\d+$|^[. #%$/]. *|\ball\b` is all that is needed.  
+Chat Tools' default RegEx string `^\d+$|^[.#%$/].*|\ball\b` is all that is needed.  
 Of course, you can change it or add more yourself.
 
 ## Chat Keybindings Section

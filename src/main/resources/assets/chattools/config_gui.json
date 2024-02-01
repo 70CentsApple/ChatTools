@@ -55,6 +55,24 @@
                     ]
                 },
                 {
+                    "type": "sub",
+                    "key": "general.Translator",
+                    "content": [
+                        {
+                            "type": "boolean",
+                            "key": "general.Translator.Enabled"
+                        },
+                        {
+                            "type": "String",
+                            "key": "general.Translator.API"
+                        },
+                        {
+                            "type": "boolean",
+                            "key": "general.Translator.PostInstead"
+                        }
+                    ]
+                },
+                {
                     "type": "intSlider",
                     "key": "general.MaxHistoryLength",
                     "min": 10,

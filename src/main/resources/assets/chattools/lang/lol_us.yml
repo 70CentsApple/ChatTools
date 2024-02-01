@@ -11,6 +11,8 @@ key:
       download.process: 'Chatz Stuffz: Downloading %s %s%% - (%sKB/%sKB)'
       download.success: '§6All addon fyles 4 Chatz Stuffz were done, yo.'
       toast.failure: '§6Toaster failed: extra stuffz r not ready or ungood plutform.§r'
+      translator.requireApi: plz configure da transl8shun api first.
+      translator.await: '...'
       'on': Chatz Stuffz on
       'off': Now its off
       requireRestart: dont forget 2 restart Meowcraft later, yo.
@@ -26,7 +28,7 @@ key:
       responser: Auto-Meow
     general:
       ChatTools:
-        Enabled: 
+        Enabled:
           .: Turn On Chatz Toolz
           '@Tooltip': Like, flip the switch for all da meow magic.
       Timestamp:
@@ -56,6 +58,26 @@ key:
         Nickname:
           .: New Sneaky Name
           '@Tooltip': "Whatcha wanna be called, secret-agent style.\n& -> Colorz Thingy\n\\& -> &"
+      Translator:
+        .: Transl8shun
+        '@Tooltip': |
+          Moew somethin' in the chat bar and press Shift + Tab to translate it!
+          yall have 2 change the API yourself.
+        Enabled:
+          .: Start transl8ing!
+          '@Tooltip': Toggles whether the transl8or is at work.
+        API:
+          .: Transl8 API
+          '@Tooltip': |
+            Enter a link here and replace the moews to be transl8d with {text}.
+            If there is no {text}, the meows to be transl8d will be added to the end.
+        PostInstead:
+          .: POST or GET?
+          '@Tooltip': |
+            ok -> POST, no ok -> GET.
+            Note: nowadays, even if the request is sent as a POST,
+            the request parameters r still attached 2 da URL string.
+            Silly, isn't it?
       MaxHistoryLength:
         .: Most Words Remembered
         '@Tooltip': "How many old meows you can peep at. (Minecraft usual is 100)"
@@ -63,7 +85,7 @@ key:
       Toast:
         .: System Toasty Stuff
         '@Tooltip': "Makes a toasty pop-up when Minecraft's chillin' in da back.\nOnly for da important meows, tho."
-        Enabled: 
+        Enabled:
           .: Make Toasty Stuff
           '@Tooltip': Choosy to get pop-up toasts or just keep 'em in da toaster.
         Mode:
@@ -99,10 +121,10 @@ key:
         Prefix:
           .: Shiny Bitz
           '@Tooltip': The shiny thing that goes in front.
-        OverwriteEnabled: 
+        OverwriteEnabled:
           .: Do Da Overwrite
           '@Tooltip': "Choosy to redo da whole message.\nIt's like, poof, new stuff."
-      IgnoreMyMessageEnabled: 
+      IgnoreMyMessageEnabled:
         .: Ignore Ma Own Meows
         '@Tooltip': Choosy if ya wanna skip your own meows or not.
       MatchMyNameEnabled:
@@ -137,7 +159,7 @@ key:
         Enabled:
           .: Do Da Command Thing
           '@Tooltip': Choosy to make the magic keys work or just be normal keys.
-        List: 
+        List:
           .: Magic Keys for Stuff
           '@Tooltip': "Set keys for doing cool stuff quick.\nLike magic, but with buttons."
           '@New': New Magic
@@ -169,7 +191,7 @@ key:
         '@Tooltip': "Sets da rules for bubbles.\nTop stuff is boss, yo."
         '@New': New Bubbly Rule
         '@Display': '§e[ %s§e ] [ Fallback: %s§e ]§r %s'
-        Address: 
+        Address:
           .: Where It's At
           '@Tooltip': "Server address for this rule, yo.\nRegEx makes it cooler."
         Pattern:
@@ -187,7 +209,7 @@ key:
         '@Tooltip': "Sets da rules for auto-meowing.\nTop stuff is boss, meows once only."
         '@New': New Meow
         '@Display': '§e[ %s§e ] [ Override: %s§e ]§r %s §e→§r %s'
-        Address: 
+        Address:
           .: Where It's At
           '@Tooltip': "Server address for this rule, yo.\nRegEx makes it cooler."
         Pattern:

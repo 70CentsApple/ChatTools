@@ -6,8 +6,9 @@
   "mixins": [
     "ChatHudMixin",
     "ClientPlayNetworkHandlerMixin",
+    "EntityRendererMixin",
     "InGameHudMixin",
-    "EntityRendererMixin"
+    "ChatScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

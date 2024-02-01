@@ -1,5 +1,5 @@
 {
-  "config.version": 2,
+  "config.version": 2.1,
   "general.ChatTools.Enabled": true,
   "general.ShowWelcomeMessageEnabled": true,
   "general.Timestamp.Enabled": true,
@@ -8,6 +8,9 @@
   "general.RestoreMessages.SplitLineEnabled": true,
   "general.NickHider.Enabled": false,
   "general.NickHider.Nickname": "\u00266You\u0026r",
+  "general.Translator.Enabled": false,
+  "general.Translator.API": "",
+  "general.Translator.PostInstead": false,
   "general.MaxHistoryLength": 500,
   "notifier.Toast.Enabled": false,
   "notifier.Toast.Mode": "ADDON",

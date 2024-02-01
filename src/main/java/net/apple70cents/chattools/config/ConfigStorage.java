@@ -37,6 +37,7 @@ public class ConfigStorage {
             // if there is no conflict, the key is added to `configMap`, and the value comes from `defaultMap`.
             configMap.putIfAbsent(entry.getKey(), entry.getValue());
         }
+        configMap.put("config.version", defaultMap.get("config.version"));
         return this;
     }
 

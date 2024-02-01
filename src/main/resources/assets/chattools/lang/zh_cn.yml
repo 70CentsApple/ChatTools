@@ -11,6 +11,8 @@ key:
       download.process: '[Chat Tools] %s 下载进度：%s%% - （%sKB/%sKB）'
       download.success: '§6[Chat Tools] 已完成下载！'
       toast.failure: §6Toast 失败：附件未完整下载 或 模式不支持该平台§r
+      translator.requireApi: 请先配置翻译API
+      translator.await: '[正在响应……]'
       'on': 启用 Chat Tools [聊天工具箱]
       'off': 禁用 Chat Tools [聊天工具箱]
       requireRestart: 请在更改后重启 Minecraft 以应用更改
@@ -65,6 +67,24 @@ key:
             用于替换的新昵称。
             & -> 颜色代码前缀
             \& -> &
+      Translator:
+        .: 翻译器
+        '@Tooltip': |
+          在聊天栏中输入一些文字，按下 Shift + Tab 进行翻译
+          需要自行配置翻译API
+        Enabled:
+          .: 启用翻译器
+          '@Tooltip': 切换是否启用翻译器
+        API:
+          .: 翻译 API
+          '@Tooltip': |
+            在这里输入一个链接，使用{text}替换待翻译的文字。
+            如果没有{text}，将会把待翻译的文字添加到尾部。
+        PostInstead:
+          .: 以 POST 发送请求
+          '@Tooltip': |
+            如果启用此项，将以 POST 发送请求，否则使用 GET
+            请注意在现版本即使以 POST 发送请求，实际上仍是把请求参数附在 URL 后面的，比较鸡肋。
       MaxHistoryLength:
         .: 最大历史记录长度
         '@Tooltip': |
