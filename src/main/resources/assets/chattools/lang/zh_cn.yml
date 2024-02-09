@@ -13,6 +13,7 @@ key:
       toast.failure: §6Toast 失败：附件未完整下载 或 模式不支持该平台§r
       translator.requireApi: 请先配置翻译API
       translator.await: '[正在响应……]'
+      copy: 已复制到剪切板！
       'on': 启用 Chat Tools [聊天工具箱]
       'off': 禁用 Chat Tools [聊天工具箱]
       requireRestart: 请在更改后重启 Minecraft 以应用更改
@@ -70,11 +71,11 @@ key:
       Translator:
         .: 翻译器
         '@Tooltip': |
-          在聊天栏中输入一些文字，按下 Shift + Tab 进行翻译
-          需要自行配置翻译API
+          在聊天栏中输入一些文字，按下 Shift + Tab 进行翻译。
+          需要自行配置翻译API。
         Enabled:
           .: 启用翻译器
-          '@Tooltip': 切换是否启用翻译器
+          '@Tooltip': 切换是否启用翻译器。
         API:
           .: 翻译 API
           '@Tooltip': |
@@ -83,13 +84,20 @@ key:
         PostInstead:
           .: 以 POST 发送请求
           '@Tooltip': |
-            如果启用此项，将以 POST 发送请求，否则使用 GET
+            如果启用此项，将以 POST 发送请求，否则使用 GET。
             请注意在现版本即使以 POST 发送请求，实际上仍是把请求参数附在 URL 后面的，比较鸡肋。
       MaxHistoryLength:
         .: 最大历史记录长度
         '@Tooltip': |
           更改您的最大历史记录大小。
           （Minecraft 默认：100）
+      CopyAndDelete:
+        Enabled:
+          .: 启用复制与删除
+          '@Tooltip': |
+            启用复制与删除之后，在聊天栏中对准一条消息。
+            Shift + 左键 -> 复制到剪切板
+            Shift + 右键 -> 删除
     notifier:
       Toast:
         .: 后台通知

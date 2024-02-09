@@ -13,6 +13,7 @@ key:
       toast.failure: '§6Toast failed: Files are not ready or unsupported platform.§r'
       translator.requireApi: Please configure the translation API first.
       translator.await: '[awaiting...]'
+      copy: 'Copied To Clipboard!'
       'on': Enable Chat Tools
       'off': Disable Chat Tools
       requireRestart: After editing, you'll need to restart Minecraft to apply changes.
@@ -91,6 +92,13 @@ key:
         '@Tooltip': |
           It changes your maximum history size.
           (Minecraft Default: 100)
+      CopyAndDelete:
+        Enabled:
+          .: Enable Copy & Delete
+          '@Tooltip': |
+            After enabling this option, you can focus on a message in the Chat HUD and do:
+            Shift + LeftClick -> Copy to clipboard
+            Shift + RightClick -> Delete
     notifier:
       Toast:
         .: System Toast

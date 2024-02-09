@@ -16,7 +16,7 @@ public class Repeat {
     public static void tick() {
         String key = (String) ChatTools.CONFIG.get("chatkeybindings.RepeatKey");
         SpecialUnits.KeyModifiers modifier = SpecialUnits.KeyModifiers.valueOf((String) ChatTools.CONFIG.get("chatkeybindings.RepeatKeyModifier"));
-        if (KeyboardUtils.isKeyPressedWithModifier(key, modifier, SpecialUnits.MacroModes.GREEDY) && MinecraftClient.getInstance().currentScreen == null) {
+        if (KeyboardUtils.isKeyPressingWithModifier(key, modifier, SpecialUnits.MacroModes.GREEDY) && MinecraftClient.getInstance().currentScreen == null) {
             if (!keyWasPressed) {
                 keyWasPressed = true;
                 LoggerUtils.info("[ChatTools] Triggered the latest command.");

@@ -9,10 +9,6 @@
                     "key": "general.FAQ"
                 },
                 {
-                    "type": "boolean",
-                    "key": "general.ChatTools.Enabled"
-                },
-                {
                     "type": "sub",
                     "key": "general.Timestamp",
                     "content": [
@@ -77,6 +73,10 @@
                     "key": "general.MaxHistoryLength",
                     "min": 10,
                     "max": 10000
+                },
+                {
+                    "type": "boolean",
+                    "key": "general.CopyAndDelete.Enabled"
                 }
             ]
         },

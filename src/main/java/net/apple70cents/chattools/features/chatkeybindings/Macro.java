@@ -20,7 +20,7 @@ public class Macro {
             return;
         }
         for (SpecialUnits.MacroUnit macro : SpecialUnits.MacroUnit.fromList((List) ChatTools.CONFIG.get("chatkeybindings.Macro.List"))) {
-            if (KeyboardUtils.isKeyPressedWithModifier(macro.key, macro.modifier, macro.mode)) {
+            if (KeyboardUtils.isKeyPressingWithModifier(macro.key, macro.modifier, macro.mode)) {
                 if (!keyWasPressed.contains(macro)) {
                     keyWasPressed.add(macro);
                     LoggerUtils.info("[ChatTools] Triggered Macro: " + macro.command);

@@ -11,6 +11,7 @@
   "general.Translator.Enabled": false,
   "general.Translator.API": "",
   "general.Translator.PostInstead": false,
+  "general.CopyAndDelete.Enabled": true,
   "general.MaxHistoryLength": 500,
   "notifier.Toast.Enabled": false,
   "notifier.Toast.Mode": "ADDON",

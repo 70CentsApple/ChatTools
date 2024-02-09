@@ -10,14 +10,14 @@ import org.lwjgl.glfw.GLFW;
  */
 public class KeyboardUtils {
     /**
-     * check if is a key is pressed while the modifier key is pressed as well
+     * check if is a key is being pressed while the modifier key is pressed as well
      *
      * @param translationKey the key such as 'key.mouse.4'
      * @param modifier       the modifier
      * @param mode           the macro mode
      * @return success or not
      */
-    public static boolean isKeyPressedWithModifier(String translationKey, SpecialUnits.KeyModifiers modifier, SpecialUnits.MacroModes mode) {
+    public static boolean isKeyPressingWithModifier(String translationKey, SpecialUnits.KeyModifiers modifier, SpecialUnits.MacroModes mode) {
         if (InputUtil.UNKNOWN_KEY.getTranslationKey().equals(translationKey)) {
             return false;
         }

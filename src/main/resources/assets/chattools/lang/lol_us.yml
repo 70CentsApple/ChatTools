@@ -13,6 +13,7 @@ key:
       toast.failure: '§6Toaster failed: extra stuffz r not ready or ungood plutform.§r'
       translator.requireApi: plz configure da transl8shun api first.
       translator.await: '...'
+      copy: in ur clipboard!
       'on': Chatz Stuffz on
       'off': Now its off
       requireRestart: dont forget 2 restart Meowcraft later, yo.
@@ -81,6 +82,13 @@ key:
       MaxHistoryLength:
         .: Most Words Remembered
         '@Tooltip': "How many old meows you can peep at. (Minecraft usual is 100)"
+      CopyAndDelete:
+        Enabled:
+          .: Remeow & Dismeow
+          '@Tooltip': |
+            if this option is on, u can focus on a message in da chat hud n' do:
+            Shift + LeftClick -> to clipboard
+            Shift + RightClick -> goodbye
     notifier:
       Toast:
         .: System Toasty Stuff

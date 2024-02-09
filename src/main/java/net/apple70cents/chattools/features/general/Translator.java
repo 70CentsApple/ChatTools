@@ -24,7 +24,7 @@ public class Translator {
         if (!(MinecraftClient.getInstance().currentScreen instanceof ChatScreen)) {
             return false;
         }
-        return KeyboardUtils.isKeyPressedWithModifier("key.keyboard.tab", SpecialUnits.KeyModifiers.SHIFT, SpecialUnits.MacroModes.LAZY);
+        return KeyboardUtils.isKeyPressingWithModifier("key.keyboard.tab", SpecialUnits.KeyModifiers.SHIFT, SpecialUnits.MacroModes.LAZY);
     }
 
     public static void work(TextFieldWidget chatField) {
