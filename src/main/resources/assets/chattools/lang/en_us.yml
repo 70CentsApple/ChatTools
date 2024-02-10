@@ -13,7 +13,7 @@ key:
       toast.failure: '§6Toast failed: Files are not ready or unsupported platform.§r'
       translator.requireApi: Please configure the translation API first.
       translator.await: '[awaiting...]'
-      copy: 'Copied To Clipboard!'
+      copy: Click here to copy to Chat Bar
       'on': Enable Chat Tools
       'off': Disable Chat Tools
       requireRestart: After editing, you'll need to restart Minecraft to apply changes.
@@ -47,6 +47,10 @@ key:
             {hour} -> Hour
             {minute} -> Minute
             {second} -> Second
+        CopyToChatBar:
+          Enabled:
+            .: Enable Copy To Chat Bar
+            '@Tooltip': If it is enabled, you can copy the text to your chat bar by clicking its timestamp.
       RestoreMessages:
         .: Restore Messages
         '@Tooltip': It restores former sessions even after switching to another.
@@ -55,7 +59,7 @@ key:
           '@Tooltip': Toggles whether messages should be restored.
         SplitLineEnabled:
           .: Enable Split-line
-          '@Tooltip': If it is on, a split-line will be added to chat when switching sessions.
+          '@Tooltip': If it is enabled, a split-line will be added to chat when switching sessions.
       NickHider:
         .: Nickname Hider
         '@Tooltip': It replaces your name client-sidely.
@@ -92,13 +96,6 @@ key:
         '@Tooltip': |
           It changes your maximum history size.
           (Minecraft Default: 100)
-      CopyAndDelete:
-        Enabled:
-          .: Enable Copy & Delete
-          '@Tooltip': |
-            After enabling this option, you can focus on a message in the Chat HUD and do:
-            Shift + LeftClick -> Copy to clipboard
-            Shift + RightClick -> Delete
     notifier:
       Toast:
         .: System Toast

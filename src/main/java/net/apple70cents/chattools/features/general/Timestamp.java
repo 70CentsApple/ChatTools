@@ -2,10 +2,7 @@ package net.apple70cents.chattools.features.general;
 
 import net.apple70cents.chattools.ChatTools;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -20,10 +17,17 @@ public class Timestamp {
         Text longTimeDisplay = TextUtils.of(String.format("%4d/%d/%d %d:%02d:%02d\nUTC%s", currentTime.getYear(), currentTime
                 .getMonth()
                 .getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
-        // add hover texts
-        return ((MutableText) shortTimeDisplay)
-                .setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, longTimeDisplay)))
-                .append(message);
+        if ((boolean) ChatTools.CONFIG.get("general.Timestamp.CopyToChatBar.Enabled")) {
+            return ((MutableText) shortTimeDisplay).setStyle(Style.EMPTY
+               .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ((MutableText) longTimeDisplay).append("\n\n" + TextUtils
+               .trans("texts.copy").getString())))
+               .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, TextUtils.backEscapeColorCodes(message.getString()))))
+               .append(message);
+        } else {
+            return ((MutableText) shortTimeDisplay)
+                    .setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, longTimeDisplay)))
+                    .append(message);
+        }
     }
 
     private static String timeInFormat(String formatter) {

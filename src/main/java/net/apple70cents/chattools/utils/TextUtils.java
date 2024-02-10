@@ -67,6 +67,9 @@ public class TextUtils {
     public static String escapeColorCodes(String str) {
         return str.replace('&', '§').replace("\\§", "&");
     }
+    public static String backEscapeColorCodes(String str) {
+        return str.replace('§', '&');
+    }
 
     /**
      * replace a {@link MutableText}

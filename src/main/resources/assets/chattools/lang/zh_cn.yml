@@ -13,7 +13,7 @@ key:
       toast.failure: §6Toast 失败：附件未完整下载 或 模式不支持该平台§r
       translator.requireApi: 请先配置翻译API
       translator.await: '[正在响应……]'
-      copy: 已复制到剪切板！
+      copy: 点击拷贝到聊天栏
       'on': 启用 Chat Tools [聊天工具箱]
       'off': 禁用 Chat Tools [聊天工具箱]
       requireRestart: 请在更改后重启 Minecraft 以应用更改
@@ -47,6 +47,10 @@ key:
             {hour} -> 小时
             {minute} -> 分钟
             {second} -> 秒
+        CopyToChatBar:
+          Enabled:
+            .: 启用复制
+            '@Tooltip': 启用复制之后，点击时间戳，可以把文字内容复制到聊天栏。
       RestoreMessages:
         .: 储存聊天记录
         '@Tooltip': 即使在切换到其他会话后也能恢复之前的会话。
@@ -91,13 +95,6 @@ key:
         '@Tooltip': |
           更改您的最大历史记录大小。
           （Minecraft 默认：100）
-      CopyAndDelete:
-        Enabled:
-          .: 启用复制与删除
-          '@Tooltip': |
-            启用复制与删除之后，在聊天栏中对准一条消息。
-            Shift + 左键 -> 复制到剪切板
-            Shift + 右键 -> 删除
     notifier:
       Toast:
         .: 后台通知
