@@ -44,9 +44,10 @@ tasks.register('buildAndGather') {
 					include '*.jar'
 					exclude '*-dev.jar', '*-sources.jar'
 				}
-				into buildLibs(rootProject)
+				into buildLibs(rootProject).resolve('v' + project.mod_version)
 				duplicatesStrategy DuplicatesStrategy.INCLUDE
 			}
+			delete(buildLibs(project))
 		}
 	}
 }
