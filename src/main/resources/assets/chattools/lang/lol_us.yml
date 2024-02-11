@@ -13,7 +13,15 @@ key:
       toast.failure: '§6Toaster failed: extra stuffz r not ready or ungood plutform.§r'
       translator.requireApi: plz configure da transl8shun api first.
       translator.await: '...'
-      copy: click me & u'll see it in chatz baaah
+      copy:
+        launch: click 2 start da menu o' copy
+        title: menu o' copy
+        copyRaw: copy uncooked
+        copyWithColorCodeEscaped: color codes r turned into '&'
+        copyWithNoColorCode: No color code
+        copyUnixTimestamp: unix time
+        copyTimestamp: timezstampz
+        cancel: take me back
       'on': Chatz Stuffz on
       'off': Now its off
       requireRestart: dont forget 2 restart Meowcraft later, yo.
@@ -43,8 +51,8 @@ key:
           '@Tooltip': "Da wayz da time lookz, yo.\n& -> Colorz Thingy\n\\& -> Just &\n{hour} -> What Hourz\n{minute} -> Da Minutez\n{second} -> Da Secondz"
         CopyToChatBar:
           Enabled:
-            .: Copy 2 Chatz Baah
-            '@Tooltip': If it's on, u may copy the text 2 ur chatz baah by clicking its Timezstamp.
+            .: Copy menu
+            '@Tooltip': If it's on, a menu 4 copying may pop up by clicking its timez stampz.
       RestoreMessages:
         .: Get Back Old Meows
         '@Tooltip': Brings back old chatz even if ya switchin' places.

@@ -13,7 +13,15 @@ key:
       toast.failure: §6Toast 失败：附件未完整下载 或 模式不支持该平台§r
       translator.requireApi: 请先配置翻译API
       translator.await: '[正在响应……]'
-      copy: 点击拷贝到聊天栏
+      copy:
+        launch: 点击打开复制菜单。
+        title: 复制菜单
+        copyRaw: 复制源文本
+        copyWithColorCodeEscaped: 复制颜色代码转义后文本
+        copyWithNoColorCode: 复制无颜色代码文本
+        copyUnixTimestamp: 复制 Unix 时间戳
+        copyTimestamp: 复制时间戳文本
+        cancel: 取消
       'on': 启用 Chat Tools [聊天工具箱]
       'off': 禁用 Chat Tools [聊天工具箱]
       requireRestart: 请在更改后重启 Minecraft 以应用更改
@@ -49,8 +57,8 @@ key:
             {second} -> 秒
         CopyToChatBar:
           Enabled:
-            .: 启用复制
-            '@Tooltip': 启用复制之后，点击时间戳，可以把文字内容复制到聊天栏。
+            .: 启用复制菜单
+            '@Tooltip': 启用复制之后，点击时间戳，可以打开复制菜单。
       RestoreMessages:
         .: 储存聊天记录
         '@Tooltip': 即使在切换到其他会话后也能恢复之前的会话。

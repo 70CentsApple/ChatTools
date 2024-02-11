@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.text.*;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -13,10 +15,38 @@ import java.util.regex.Pattern;
  */
 public class TextUtils {
     public static final Style WEBSITE_URL_STYLE = Style.EMPTY.withUnderline(true)
-                                                             .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https" +
-                                                                     "://70centsapple.top/blogs/#/chat-tools-faq"))
+                                                             .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq"))
                                                              .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, trans("faq")));
     public static final String PREFIX = "key.chattools.";
+
+    public static class MessageUnit {
+        public Text message;
+        public long unixTimestamp;
+
+        public MessageUnit(Text message, long unixTimestamp) {
+            this.message = message;
+            this.unixTimestamp = unixTimestamp;
+        }
+    }
+
+    public static int index = -1;
+    // For a newly received message, the key is its index and the value is its information
+    public static List<MessageUnit> messageMap = new LinkedList<>();
+
+    public static int putMessageMap(Text text, long unixTimestamp) {
+        messageMap.add(new MessageUnit(text, unixTimestamp));
+        index++;
+        return index;
+    }
+
+    public static MessageUnit getMessageMap(int idx){
+        try {
+            return messageMap.get(idx);
+        } catch (Exception e){
+            return null;
+        }
+    }
+
 
     public static Text literal(String str) {
         //#if MC>=11900
@@ -67,6 +97,7 @@ public class TextUtils {
     public static String escapeColorCodes(String str) {
         return str.replace('&', '§').replace("\\§", "&");
     }
+
     public static String backEscapeColorCodes(String str) {
         return str.replace('§', '&');
     }

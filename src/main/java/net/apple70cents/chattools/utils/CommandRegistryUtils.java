@@ -1,6 +1,7 @@
 package net.apple70cents.chattools.utils;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.apple70cents.chattools.ChatTools;
@@ -8,6 +9,7 @@ import net.apple70cents.chattools.config.ConfigScreenGenerator;
 import net.apple70cents.chattools.config.ConfigStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 import net.minecraft.util.Util;
@@ -77,6 +79,21 @@ public class CommandRegistryUtils {
                 MessageUtils.sendToActionbar(TextUtils.trans("texts.off"));
                 return Command.SINGLE_SUCCESS;
             }))
+            // chattools get_message
+            .then(literal("get_message").then(argument("index",IntegerArgumentType.integer(0)).executes(t -> {
+                int index = IntegerArgumentType.getInteger(t,"index");
+                LoggerUtils.info("[ChatTools] Getting message index:" + index);
+                TextUtils.MessageUnit messageUnit = TextUtils.getMessageMap(index);
+                if (messageUnit != null) {
+                    LoggerUtils.info(String.format("Time:%d Text:%s", messageUnit.unixTimestamp, messageUnit.message));
+                    MinecraftClient.getInstance().setScreen(new CopyFeatureScreen(messageUnit));
+                } else {
+                    Text errorText = ((MutableText) TextUtils.literal(String.format("[ChatTools] Failed to get message index: %d", index))).formatted(Formatting.RED);
+                    LoggerUtils.error(errorText.getString());
+                    MessageUtils.sendToNonPublicChat(errorText);
+                }
+                return Command.SINGLE_SUCCESS;
+            })))
             // chattools config
             .then(literal("config")
                 // chattools config openfile
@@ -93,19 +110,17 @@ public class CommandRegistryUtils {
                     })
                     // two args
                     .then(argument("test_context", StringArgumentType.string()).executes(t -> {
-
-                        Pair<Boolean, String> result = checkRegex(StringArgumentType.getString(t, "regex"));
+                        String regex = StringArgumentType.getString(t, "regex");
+                        String testContext = StringArgumentType.getString(t, "test_context");
+                        Pair<Boolean, String> result = checkRegex(regex);
                         if (!result.getLeft()) {
                             MessageUtils.sendToNonPublicChat(((MutableText) TextUtils.literal(result.getRight())).formatted(Formatting.RED));
                             return Command.SINGLE_SUCCESS;
                         }
-                        if (Pattern
-                                .compile(StringArgumentType.getString(t, "regex"))
-                                .matcher(StringArgumentType.getString(t, "test_context"))
-                                .find()) {
-                            MessageUtils.sendToNonPublicChat(((MutableText) TextUtils.literal(String.format("Context [%s] could pass the RegEx test!", StringArgumentType.getString(t, "test_context")))).formatted(Formatting.GREEN));
+                        if (Pattern.compile(regex).matcher(testContext).find()) {
+                            MessageUtils.sendToNonPublicChat(((MutableText) TextUtils.literal(String.format("[ChatTools] Context [%s] could pass the RegEx test!", testContext))).formatted(Formatting.GREEN));
                         } else {
-                            MessageUtils.sendToNonPublicChat(((MutableText) TextUtils.literal(String.format("Context [%s] could NOT pass the RegEx test!", StringArgumentType.getString(t, "test_context")))).formatted(Formatting.RED));
+                            MessageUtils.sendToNonPublicChat(((MutableText) TextUtils.literal(String.format("[ChatTools] Context [%s] could NOT pass the RegEx test!", testContext))).formatted(Formatting.RED));
                         }
                         return Command.SINGLE_SUCCESS;
                     }))));
