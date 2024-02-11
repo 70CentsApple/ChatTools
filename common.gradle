@@ -54,7 +54,7 @@ remapJar {
 
 String FABRIC_API_MOD_ID
 String CLOTH_CONFIG_MOD_ID
-if (mcVersion >= 11800){
+if (mcVersion >= 11800) {
     FABRIC_API_MOD_ID = 'fabric-api'
     CLOTH_CONFIG_MOD_ID = 'cloth-config'
 } else {
@@ -62,7 +62,7 @@ if (mcVersion >= 11800){
     CLOTH_CONFIG_MOD_ID = 'cloth-config2'
 }
 
-    JavaVersion JAVA_COMPATIBILITY
+JavaVersion JAVA_COMPATIBILITY
 if (mcVersion >= 11800) {
     JAVA_COMPATIBILITY = JavaVersion.VERSION_17
 } else if (mcVersion >= 11700) {
@@ -129,6 +129,7 @@ jar {
 }
 
 // configure the maven publication
+/*
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -144,3 +145,4 @@ publishing {
         // mavenLocal()
     }
 }
+*/
