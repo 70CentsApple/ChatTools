@@ -7,7 +7,10 @@ key:
       welcomeMessage: New to Chat Tools? Check out FAQs here!
       toast.title: 'Message from Minecraft:'
       actionbar.title: §a§lReceived subscribed messages!
-      repeat.failure: §6§lNo previous message.
+      repeat:
+        failure:
+          empty: §6§lNo previous message.
+          unsupported: §6§lUnsupported Minecraft version for this feature,\nplease update to 1.20.2+
       download.process: '[Chat Tools] Downloading %s: %s%% - (%sKB/%sKB)'
       download.success: '§6[Chat Tools] All addon files were downloaded successfully!'
       toast.failure: '§6Toast failed: Files are not ready or unsupported platform.§r'

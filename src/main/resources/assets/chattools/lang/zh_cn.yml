@@ -7,7 +7,10 @@ key:
       welcomeMessage: 第一次使用 Chat Tools ？点击这里查看常见问题解答！
       toast.title: 来自 Minecraft 的关注信息
       actionbar.title: §a§l聊天栏中有您关注的信息
-      repeat.failure: §6§l复读失败：不存在上一条消息
+      repeat:
+        failure:
+          empty: §6§l复读失败：不存在上一条消息
+          unsupported: §6§l该 Minecraft 子版本不支持此功能，请升级到 1.20.2 或以上
       download.process: '[Chat Tools] %s 下载进度：%s%% - （%sKB/%sKB）'
       download.success: '§6[Chat Tools] 已完成下载！'
       toast.failure: §6Toast 失败：附件未完整下载 或 模式不支持该平台§r
