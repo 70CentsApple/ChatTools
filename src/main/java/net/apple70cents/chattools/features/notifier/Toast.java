@@ -96,8 +96,20 @@ public class Toast {
     public static void toastWithPowershell(String caption, String text) {
         try {
             LoggerUtils.info("[ChatTools] Toast Notified with Powershell.");
-            final String COMMAND_TEMPLATE = "powershell.exe -ExecutionPolicy Bypass -Command \"[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null;$xml = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02);$xml.GetElementsByTagName('text')[0].AppendChild($xml.CreateTextNode('%s'));$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('%s');$notifier.Show($toast);\"";
-            String command = String.format(COMMAND_TEMPLATE, (caption + "'+\\\"`r`n\\\"+'" + text.replace("\n", "'+\\\"`r`n\\\"+'")), "Minecraft Chat Tools Mod");
+            // @formatter:off
+            final String COMMAND_TEMPLATE = "powershell.exe -ExecutionPolicy Bypass -Command \"" +
+                    "[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null;" +
+                    "$template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02);" +
+                    "$xml = New-Object Windows.Data.Xml.Dom.XmlDocument;" +
+                    "$xml.LoadXml($template.GetXml());" +
+                    "$texts = $xml.GetElementsByTagName('text');" +
+                    "$texts.Item(0).AppendChild($xml.CreateTextNode('%s')) > $null;" +
+                    "$texts.Item(1).AppendChild($xml.CreateTextNode('%s')) > $null;" +
+                    "$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);" +
+                    "$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('%s');" +
+                    "$notifier.Show($toast);\"";
+            // @formatter:on
+            String command = String.format(COMMAND_TEMPLATE, caption, text.replace("\n", "'+\\\"`r`n\\\"+'"), "Chat Tools Toast");
             ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
             builder.redirectErrorStream(true);
             // start process
