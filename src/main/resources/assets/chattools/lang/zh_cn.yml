@@ -28,7 +28,11 @@ key:
       'on': 启用 Chat Tools [聊天工具箱]
       'off': 禁用 Chat Tools [聊天工具箱]
       requireRestart: 请在更改后重启 Minecraft 以应用更改
-    faq: '[常见问题解答]'
+      defaultValue: 默认：%s
+      variableType: 类型：%s
+    faq:
+      .: '[常见问题解答]'
+      '@Tooltip': 查看常见问题解答
     gui:
       title: 配置 Chat Tools [聊天工具箱]
     category:

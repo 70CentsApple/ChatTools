@@ -28,7 +28,11 @@ key:
       'on': Enable Chat Tools
       'off': Disable Chat Tools
       requireRestart: After editing, you'll need to restart Minecraft to apply changes.
-    faq: '[Frequently Asked Questions]'
+      defaultValue: 'Default: %s'
+      variableType: 'Variable Type: %s'
+    faq:
+      .: '[Frequently Asked Questions]'
+      '@Tooltip': Click to visit Frequently Asked Questions.
     gui:
       title: Chat Tools Configuration
     category:

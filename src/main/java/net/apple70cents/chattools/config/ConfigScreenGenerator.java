@@ -58,12 +58,13 @@ public class ConfigScreenGenerator {
                 if ("intSlider".equals(type)) {
                     category.addEntry(ConfigScreenUtils.getEntryBuilder(eb, type, key, ((Number) ((Map) element).get("min")).intValue(), ((Number) ((Map) element).get("max")).intValue()));
                 } else if ("sub".equals(type)) {
-                    SubCategoryBuilder sub = eb.startSubCategory(trans(key)).setTooltip(trans(key + ".@Tooltip"));
+                    SubCategoryBuilder sub = eb.startSubCategory(trans(key))
+                                               .setTooltip(ConfigScreenUtils.getTooltip(key, type, null));
                     for (Object elementInner : (List) ((Map) element).get("content")) {
                         String typeInner = (String) ((Map) elementInner).get("type");
                         String keyInner = (String) ((Map) elementInner).get("key");
-                        // assuming no sub nested in subs, therefore two layers are enough
-                        // not going to deal with sub in sub
+                        // we are assuming no sub nested in subs, therefore two layers are enough,
+                        // and we are not going to deal with sub in sub
                         if ("intSlider".equals(typeInner)) {
                             sub.add(ConfigScreenUtils.getEntryBuilder(eb, typeInner, keyInner, ((Number) ((Map) elementInner).get("min")).intValue(), ((Number) ((Map) elementInner).get("max")).intValue()));
                         } else {

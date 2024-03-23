@@ -28,7 +28,11 @@ key:
       'on': Chatz Stuffz on
       'off': Now its off
       requireRestart: dont forget 2 restart Meowcraft later, yo.
-    faq: '[Wut Peeps Asks A Lot]'
+      defaultValue: 'deefolt: %s'
+      variableType: 'var type: %s'
+    faq:
+      .: '[Wut Peeps Asks A Lot]'
+      '@Tooltip': click me & see
     gui:
       title: Chatz Stuffz Configurashunz
     category:

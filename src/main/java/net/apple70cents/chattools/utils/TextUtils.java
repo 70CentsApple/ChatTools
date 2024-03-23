@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class TextUtils {
     public static final Style WEBSITE_URL_STYLE = Style.EMPTY.withUnderline(true)
                                                              .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq"))
-                                                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, trans("faq")));
+                                                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ConfigScreenUtils.getTooltip("faq","FAQ",null)));
     public static final String PREFIX = "key.chattools.";
 
     public static class MessageUnit {
@@ -82,6 +82,13 @@ public class TextUtils {
 
     public static Text of(String str) {
         return Text.of(str);
+    }
+    public static Text empty() {
+        //#if MC>=11900
+        return Text.empty();
+        //#else
+        //$$return of("");
+        //#endif
     }
 
     /**
