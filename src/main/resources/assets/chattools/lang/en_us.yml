@@ -5,19 +5,19 @@ key:
     texts:
       RestoreMessagesSplitLine: '§7==== Restored Messages ====§r'
       welcomeMessage: New to Chat Tools? Check out FAQs here!
-      toast.title: 'Message from Minecraft:'
-      actionbar.title: §a§lReceived subscribed messages!
+      toast.title: 'From Minecraft:'
+      actionbar.title: §a§lReceived messages!
       repeat:
         failure:
-          empty: §6§lNo previous message.
-          unsupported: §6§lUnsupported Minecraft version for this feature,\nplease update to 1.20.2+
+          empty: §6§lNo messages!
+          unsupported: §6§lUnsupported Minecraft version!\nPlease update to 1.20.2+
       download.process: '[Chat Tools] Downloading %s: %s%% - (%sKB/%sKB)'
       download.success: '§6[Chat Tools] All addon files were downloaded successfully!'
       toast.failure: '§6Toast failed: Files are not ready or unsupported platform.§r'
       translator.requireApi: Please configure the translation API first.
       translator.await: '[awaiting...]'
       copy:
-        launch: Click to start Copy Menu. 
+        launch: Click to open the Copy Menu. 
         title: Copy Menu
         copyRaw: Copy Raw
         copyWithColorCodeEscaped: Copy With Color Codes Escaped
@@ -27,11 +27,11 @@ key:
         cancel: Cancel
       'on': Enable Chat Tools
       'off': Disable Chat Tools
-      requireRestart: After editing, you'll need to restart Minecraft to apply changes.
+      requireRestart: Restart Minecraft to apply changes!
       defaultValue: 'Default: %s'
       variableType: 'Variable Type: %s'
     faq:
-      .: '[Frequently Asked Questions]'
+      .: '[FAQs]'
       '@Tooltip': Click to visit Frequently Asked Questions.
     gui:
       title: Chat Tools Configuration
@@ -49,7 +49,7 @@ key:
           '@Tooltip': Toggles the entire mod.
       Timestamp:
         .: Timestamp
-        '@Tooltip': It inserts a timestamp before messages.
+        '@Tooltip': Inserts a timestamp before messages.
         Enabled:
           .: Enable Timestamp
           '@Tooltip': Toggles whether a timestamp should be inserted.
@@ -65,32 +65,32 @@ key:
         CopyToChatBar:
           Enabled:
             .: Enable Copy Menu
-            '@Tooltip': If it is enabled, you can open a copy menu of a message by clicking its timestamp.
+            '@Tooltip': If enabled, you can open a copy menu by clicking a message's timestamp.
       RestoreMessages:
         .: Restore Messages
-        '@Tooltip': It restores former sessions even after switching to another.
+        '@Tooltip': Restores messages from the previous session.
         Enabled:
           .: Enable Restore Messages
           '@Tooltip': Toggles whether messages should be restored.
         SplitLineEnabled:
           .: Enable Split-line
-          '@Tooltip': If it is enabled, a split-line will be added to chat when switching sessions.
+          '@Tooltip': If enabled, a split-line will be added to chat when switching sessions.
       NickHider:
         .: Nickname Hider
-        '@Tooltip': It replaces your name client-sidely.
+        '@Tooltip': It replaces your name, on the client-side only.
         Enabled:
           .: Enable Nickname Hider
           '@Tooltip': Toggles whether your nickname should be replaced.
         Nickname:
           .: New Nickname
           '@Tooltip': |
-            Your new nickname for replacing.
+            Your new nickname:
             & -> Color Code Prefix
             \& -> &
       Translator:
         .: Translator
         '@Tooltip': |
-          Type some text in the chat bar and press Shift + Tab to translate it!
+          Use Shift + Tab to translate a text in chat!
           You will have to configure the translation API yourself.
         Enabled:
           .: Enable Translator
@@ -103,23 +103,23 @@ key:
         PostInstead:
           .: Send request as POST
           '@Tooltip': |
-            If this is enabled, the request will be sent as POST, otherwise GET will be used.
+            If enabled, the request will be sent as POST, otherwise GET will be used.
             Please note that in the current version, even if the request is sent as a POST,
             the request parameters are still attached to the URL string, which is a bit awkward.
       MaxHistoryLength:
         .: Max History Length
         '@Tooltip': |
-          It changes your maximum history size.
+          Changes your maximum chat history length.
           (Minecraft Default: 100)
     notifier:
       Toast:
         .: System Toast
         '@Tooltip': |
-          It applies a toast notification when Minecraft is running background.
+          Sends a toast notification when Minecraft is running background.
           Only matched messages count.
         Enabled:
           .: Enable Toast
-          '@Tooltip': Toggles whether we should apply toast notifications.
+          '@Tooltip': Toggles whether toast notifications should be sent.
         Mode:
           .: Mode
           '@Tooltip': |
@@ -128,24 +128,24 @@ key:
             
             §6POWERSHELL§r: Toast by powershell commands
 
-            §6AWT§r: Toast by using Java AWT (It usually not works. Don't use it.)
+            §6AWT§r: Toast by using Java AWT (It usually not works. Not recommended!)
       Sound:
         .: Sound
         '@Tooltip': |
-          It plays a sound effect.
+          Plays a sound effect.
           Only matched messages count.
         Enabled:
           .: Enable Sound
           '@Tooltip': Toggles whether the sound effect should be played.
         Type:
           .: Type
-          '@Tooltip': The identifier of the sound effect that is going to be played.
+          '@Tooltip': The type of the sound effect that is going to be played.
         Volume:
           .: Volume
-          '@Tooltip': It changes the volume of the sound.
+          '@Tooltip': Changes the volume of the sound.
         Pitch:
           .: Pitch
-          '@Tooltip': It changes the pitch of the sound.
+          '@Tooltip': Changes the pitch of the sound.
       Actionbar:
         .: Actionbar
         '@Tooltip': |
@@ -157,7 +157,7 @@ key:
       Highlight:
         .: Highlight
         '@Tooltip': |
-          It inserts prefixes in front of the messages.
+          Inserts prefixes in front of the messages.
           Only matched messages count.
         Enabled:
           .: Enable Highlight
@@ -193,11 +193,11 @@ key:
         .: Enable Formatter
         '@Tooltip': |
           Formatter allows you to format your message according to your rules.
-          It toggles whether Formatter should work.
+          Toggles whether Formatter should work.
       List:
         .: 'Rules §6(Current Server Address: %s §6)§r'
         '@Tooltip': |
-          It defines the rules for Formatter.
+          Defines the rules for Formatter.
           The upper content has higher priority.
         '@New': New Rule
         '@Display': §e[ %s§e ]§r %s
@@ -243,7 +243,7 @@ key:
           Mode:
             .: Mode
             '@Tooltip': |
-              Take key 'D' with no modifier as an example:
+              Let's take key 'D' with no modifier as an example:
               §6LAZY§r: F3+D -> Fail to activate
                 Ctrl+D -> Fail to activate
 
@@ -258,14 +258,14 @@ key:
         '@Tooltip': Toggles whether a bubble should be rendered above the head of the speaker.
       Lifetime:
         .: Lifetime
-        '@Tooltip': It is the lifetime (in seconds) of each bubble.
+        '@Tooltip': Lifetime (in seconds) of each bubble.
       YOffset:
         .: Y Offset
-        '@Tooltip': It is the Y offset of the bubble.
+        '@Tooltip': Y offset of the bubble.
       List:
         .: 'Rules §6(Current Server Address: %s §6)§r'
         '@Tooltip': |
-          It defines the rules for bubbles.
+          Defines the rules for bubbles.
           The upper content has higher priority.
         '@New': New Rule
         '@Display': '§e[ %s§e ] [ Fallback: %s§e ]§r %s'
@@ -277,7 +277,7 @@ key:
         Pattern:
           .: Pattern
           '@Tooltip': |
-            It catches the nickname of the sender and seperated chat of the messages.
+            Catches the nickname of the sender and seperated chat of the messages.
             RegEx is recommended.
             It should include two RegEx groups:
               §6<name>§r: The Nickname
@@ -285,8 +285,8 @@ key:
         Fallback:
           .: Fallback
           '@Tooltip': |
-            If this option is on, when we found a nickname in the message,
-            we will be rendering a bubble above his head anyway,
+            If this option is on, when a nickname is found in the message,
+            a bubble will be rendered above a player's head anyway,
             even if the message does not match the rule at all.
 
             Please note that in this situation, the message shown in the
@@ -296,11 +296,11 @@ key:
         .: Enable Responser
         '@Tooltip': |
           Responser allows you to response automatically to specific messages.
-          It toggles whether Responser should work.
+          Toggles whether Responser should work.
       List:
         .: 'Rules §6(Current Server Address: %s §6)§r'
         '@Tooltip': |
-          It defines the rules for Responser.
+          Defines the rules for Responser.
           The upper content has higher priority.
           It will only respond once.
         '@New': New Rule
@@ -314,12 +314,11 @@ key:
           .: Pattern
           '@Tooltip': |
             The pattern for matching.
-            RegEx is recommended.
             Using RegEx groups is recommended.
         Message:
           .: Response Message
           '@Tooltip': |
-            This message will be your automatic response.
+            An automatic response of a message.
             {pos} -> (X,Y,Z)
             {$GROUP} -> The Content of the matched group `$GROUP`
         ForceDisableFormatter:
