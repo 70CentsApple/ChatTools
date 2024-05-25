@@ -314,6 +314,7 @@ key:
           .: Pattern
           '@Tooltip': |
             The pattern for matching.
+            RegEx is recommended.
             Using RegEx groups is recommended.
         Message:
           .: Response Message
