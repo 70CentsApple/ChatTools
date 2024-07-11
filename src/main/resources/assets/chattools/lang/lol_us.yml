@@ -140,8 +140,6 @@ key:
         Mode:
           .: How It Do
           '@Tooltip': |-
-            §6ADDON§r: Toasty with extra stuff. Need to grab extra files, yo.
-            §6POWERSHELL§r: Toasty with powershell magic
             §6AWT§r: Toasty with Java AWT (Usually no worky, don't bother, yo)
             §6TWO_SLICES§r: Toasty with two-slices. (may work on Linux and Mac OS X, bro)
       Sound:

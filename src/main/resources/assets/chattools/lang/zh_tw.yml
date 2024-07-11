@@ -151,11 +151,6 @@ key:
         Mode:
           .: 模式
           '@Tooltip': |-
-            §6ADDON§r: 透過觸發額外的程序來推送 Toast 通知。 
-                需要下載額外文件，請使用 §o/chattools download§r 手動下載。
-            
-            §6POWERSHELL§r: 透過 PowerShell 指令推送 Toast 通知
-
             §6AWT§r: 使用 Java AWT 庫 推送 Toast 通知（通常沒用，不建議使用。）
             
             §6TWO_SLICES§r: 使用 two-slices 庫 推送 Toast 通知（或許在 Linux、Mac OS X 上奏效）

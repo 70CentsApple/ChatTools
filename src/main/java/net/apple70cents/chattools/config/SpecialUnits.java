@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class SpecialUnits {
     public enum ToastModes {
-        ADDON, POWERSHELL, AWT, TWO_SLICES
+        AWT, TWO_SLICES
     }
 
     public enum KeyModifiers {

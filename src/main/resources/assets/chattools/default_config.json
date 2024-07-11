@@ -16,7 +16,7 @@
   "general.Translator.PostInstead": false,
   "general.MaxHistoryLength": 500,
   "notifier.Toast.Enabled": false,
-  "notifier.Toast.Mode": "ADDON",
+  "notifier.Toast.Mode": "AWT",
   "notifier.Sound.Enabled": true,
   "notifier.Sound.Type": "block.note_block.bit",
   "notifier.Sound.Volume": 80,

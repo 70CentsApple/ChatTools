@@ -43,13 +43,8 @@ public class CommandRegistryUtils {
         return literal("chattools")
             // chattools download
             .then(literal("download").executes(t -> {
-                LoggerUtils.info("[ChatTools] Command Executed: Trying to download Addon Toast dependencies");
-                DownloadUtils.startDownloadWithCallback((file, progress, nowKB, totalKB) -> {
-                    MessageUtils.sendToActionbar(TextUtils.trans("texts.download.process", file, progress, nowKB, totalKB));
-                });
-                if (DownloadUtils.checkIfFullyReady()){
-                    MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.download.success"));
-                }
+                LoggerUtils.info("[ChatTools] Command Executed: Trying to download Addon Toast dependencies.");
+                MessageUtils.sendToActionbar(TextUtils.literal("§6Addons are forbidden in this specific Chat Tools version."));
                 return Command.SINGLE_SUCCESS;
             }))
             // chattools opengui
