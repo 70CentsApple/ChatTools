@@ -69,7 +69,7 @@ public class MessageUtils {
         String text2 = StringUtils.normalizeSpace(text.trim());
         if (!text2.isEmpty()) {
             Minecraft.getInstance().gui.getChat().addRecentChat(text);
-            if (text2.startsWith("/")) {
+            if (text2.startsWith("/") || text2.startsWith(".")) {
                 player.connection.sendCommand(text2.substring(1));
             } else {
                 player.connection.sendChat(text2);
