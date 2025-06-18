@@ -76,6 +76,11 @@ key:
       defaultValue: 'Default: %s'
       variableType: 'Variable Type: %s'
     gui:
+      missing-config-lib:
+        title: A config library mod is required!
+        message: Please install ONE of these below.
+        cloth-config: Go to Cloth Config
+        yacl: Go to YACL
       title: Chat Tools Configuration
     category:
       general: General

@@ -10,8 +10,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import net.apple70cents.chattools.config.ConfigScreenGenerator;
 import net.apple70cents.chattools.config.ConfigStorage;
+import net.apple70cents.chattools.config.ModMenuScreenImpl;
 import net.apple70cents.chattools.config.SpecialUnits;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -113,7 +113,7 @@ public class CommandRegistryUtils {
                 MessageUtils.sendToActionbar(TextUtils.trans("gui.title"));
                 Minecraft.getInstance()
                                .setOverlay(new ScreenOverlayHelper(Minecraft.getInstance(),
-                                       ConfigScreenGenerator.getConfigBuilder().setParentScreen(null).build()) {
+                                       ModMenuScreenImpl.getConfigScreen(Minecraft.getInstance().screen)) {
                                });
                 LoggerUtils.info("[ChatTools] Command Executed: GUI opened");
                 return Command.SINGLE_SUCCESS;
@@ -257,12 +257,12 @@ public class CommandRegistryUtils {
 
     public static void updateConfig(String key, String value) {
         try {
-            if (!ConfigScreenGenerator.getKey2TypeMappings().containsKey(key)) {
+            if (!ConfigScreenUtils.getKey2TypeMappings().containsKey(key)) {
                 // if we don't have that key, we consider it as a string
                 ConfigUtils.set(key, value);
                 MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.warning", key));
             } else {
-                switch (String.valueOf(ConfigScreenGenerator.getKey2TypeMappings().get(key))) {
+                switch (String.valueOf(ConfigScreenUtils.getKey2TypeMappings().get(key))) {
                     case "boolean":
                         ConfigUtils.set(key, Boolean.parseBoolean(value));
                         break;

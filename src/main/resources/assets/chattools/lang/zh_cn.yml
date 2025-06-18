@@ -74,6 +74,11 @@ key:
       defaultValue: 默认：%s
       variableType: 类型：%s
     gui:
+      missing-config-lib:
+        title: 缺少配置库
+        message: 请安装以下任一配置库
+        cloth-config: 点击跳转 Cloth Config
+        yacl: 点击跳转 YACL
       title: 配置 Chat Tools [聊天工具箱]
     category:
       general: 通用

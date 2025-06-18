@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.apple70cents.chattools.config.ConfigScreenGenerator;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +27,7 @@ public class ConfigKeysSuggestionProvider implements SuggestionProvider<FabricCl
 
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<FabricClientCommandSource> context, SuggestionsBuilder builder) {
-        for (Map.Entry<String, String> ele : ConfigScreenGenerator.getKey2TypeMappings().entrySet()) {
+        for (Map.Entry<String, String> ele : ConfigScreenUtils.getKey2TypeMappings().entrySet()) {
             if (level == 3) {
                 switch (String.valueOf(ele.getValue())) {
                     case "FAQ":
