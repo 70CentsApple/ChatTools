@@ -34,6 +34,7 @@ key:
       respond.failure: '§6[Chat Tools] 试图自动响应失败：%s'
       translator.requireApi: 请先配置翻译API
       translator.await: '[正在响应……]'
+      translator.error: 发生错误
       copy:
         launch: 点击打开复制菜单。
         title: 复制菜单
@@ -89,6 +90,7 @@ key:
       responder: 自动响应
       filter: 聊天过滤
       customJoinMessage: 进服消息
+      translator: 翻译器
     general:
       FAQ:
         .: '[常见问题解答]'
@@ -197,24 +199,6 @@ key:
         Enabled:
           .: 启用预览点击事件
           '@Tooltip': 预览聊天栏中文字的点击事件。
-      Translator:
-        .: 翻译器
-        '@Tooltip': |-
-          在聊天栏中输入一些文字，按下 Shift + Tab 进行翻译。
-          需要自行配置翻译API。
-        Enabled:
-          .: 启用翻译器
-          '@Tooltip': 切换是否启用翻译器。
-        API:
-          .: 翻译 API
-          '@Tooltip': |-
-            在这里输入一个链接，使用{text}替换待翻译的文字。
-            如果没有{text}，将会把待翻译的文字添加到尾部。
-        PostInstead:
-          .: 以 POST 发送请求
-          '@Tooltip': |-
-            如果启用此项，将以 POST 发送请求，否则使用 GET。
-            请注意在现版本即使以 POST 发送请求，实际上仍是把请求参数附在 URL 后面的，比较鸡肋。
       MaxHistoryLength:
         .: 最大历史记录长度
         '@Tooltip': |-
@@ -252,6 +236,51 @@ key:
         Enabled:
           .: 禁用文本混淆样式
           '@Tooltip': 切换是否禁用文本混淆样式渲染
+    translator:
+      Translator:
+        .: 翻译器
+        '@Tooltip': |-
+          在聊天栏中输入一些文字，按下 Shift + Tab 进行翻译。
+        Enabled:
+          .: 启用翻译器
+          '@Tooltip': 切换是否启用翻译器。
+        Mode:
+          .: 模式
+          '@Tooltip': |-
+            §6BUILTIN§r: 使用自定义 API 请求翻译
+            §6BAIDU§r: 使用百度翻译 API 进行翻译
+        Builtin:
+          .: 自定义翻译
+          '@Tooltip': |-
+            使用提供的 API 链接请求翻译。
+            需要自行配置翻译 API。
+          API:
+            .: 翻译 API
+            '@Tooltip': |-
+              在这里输入一个链接，使用{text}替换待翻译的文字。
+              如果没有{text}，将会把待翻译的文字添加到尾部。
+          PostInstead:
+            .: 以 POST 发送请求
+            '@Tooltip': |-
+              如果启用此项，将以 POST 发送请求，否则使用 GET。
+              请注意在现版本即使以 POST 发送请求，实际上仍是把请求参数附在 URL 后面的，比较鸡肋。
+        Baidu:
+          .: 百度翻译
+          '@Tooltip': |-
+            使用百度翻译 API 进行翻译。
+            需要在自行在百度翻译开放平台注册。
+          Appid:
+            .: 应用 ID
+            '@Tooltip': 您的应用 ID
+          Appkey:
+            .: 应用密钥
+            '@Tooltip': 您的应用密钥
+          from:
+            .: 源语言
+            '@Tooltip': 源语言，建议设置为 auto 以自动识别，请参阅百度翻译语种对照表
+          to:
+            .: 目标语言
+            '@Tooltip': 目标语言，例如英文为 en ，请参阅百度翻译语种对照表
     notifier:
       Toast:
         .: 后台通知

@@ -19,6 +19,7 @@ key:
       respond.failure: '§6[Chat Tools] 嘗試自動響應失敗：%s'
       translator.requireApi: 請先配置翻譯API
       translator.await: '[正在響應……]'
+      translator.error: 發生錯誤
       copy:
         launch: 點擊打開複製菜單。
         title: 複製菜單
@@ -68,6 +69,7 @@ key:
       bubble: 聊天氣泡
       responder: 自動響應
       filter: 聊天過濾
+      translator: 翻譯器
     general:
       FAQ:
         .: '[常見問題解答]'
@@ -124,29 +126,56 @@ key:
         Enabled:
           .: 啟用預覽點擊事件
           '@Tooltip': 預覽聊天欄中文字的點擊事件。
-      Translator:
-        .: 翻譯器
-        '@Tooltip': |-
-          在聊天欄中輸入一些文字，按下 Shift + Tab 進行翻譯。
-          需要自行配置翻譯API。
-        Enabled:
-          .: 啟用翻譯器
-          '@Tooltip': 切換是否啟用翻譯器。
-        API:
-          .: 翻譯 API
-          '@Tooltip': |-
-            在這裡輸入一個連結，使用{text}替換待翻譯的文字。
-            如果沒有{text}，將會把待翻譯的文字加入到尾部。
-        PostInstead:
-          .: 以 POST 發送請求
-          '@Tooltip': |-
-            如果啟用此項，將以 POST 發送請求，否則使用 GET。
-            請注意在現版本即使以 POST 發送請求，實際上仍是把請求參數附在 URL 後面的，比較雞肋。
       MaxHistoryLength:
         .: 最大歷史記錄長度
         '@Tooltip': |-
           更改您的最大歷史記錄大小。
           （Minecraft 默認：100）
+    translator:
+      Translator:
+        .: 翻譯器
+        '@Tooltip': |-
+          在聊天欄中輸入一些文字，按下 Shift + Tab 進行翻譯。
+        Enabled:
+          .: 啟用翻譯器
+          '@Tooltip': 切換是否啟用翻譯器。
+        Mode:
+          .: 模式
+          '@Tooltip': |-
+            §6BUILTIN§r: 使用自訂 API 請求翻譯
+            §6BAIDU§r: 使用百度翻譯 API 進行翻譯
+        Builtin:
+          .: 自訂翻譯
+          '@Tooltip': |-
+            使用提供的 API 連結請求翻譯。
+            需要自行配置翻譯 API。
+          API:
+            .: 翻譯 API
+            '@Tooltip': |-
+              在這裡輸入一個連結，使用{text}替換待翻譯的文字。
+              如果沒有{text}，將會把待翻譯的文字添加到尾部。
+          PostInstead:
+            .: 以 POST 發送請求
+            '@Tooltip': |-
+              如果啟用此項，將以 POST 發送請求，否則使用 GET。
+              請注意在現版本即使以 POST 發送請求，實際上仍是把請求參數附在 URL 後面的，比較雞肋。
+        Baidu:
+          .: 百度翻譯
+          '@Tooltip': |-
+            使用百度翻譯 API 進行翻譯。
+            需要自行在百度翻譯開放平臺註冊。
+          Appid:
+            .: 應用 ID
+            '@Tooltip': 您的應用 ID
+          Appkey:
+            .: 應用密鑰
+            '@Tooltip': 您的應用密鑰
+          from:
+            .: 源語言
+            '@Tooltip': 源語言，建議設置為 auto 以自動識別，請參閱百度翻譯語種對照表
+          to:
+            .: 目標語言
+            '@Tooltip': 目標語言，例如英文為 en ，請參閱百度翻譯語種對照表
     notifier:
       Toast:
         .: 後台通知

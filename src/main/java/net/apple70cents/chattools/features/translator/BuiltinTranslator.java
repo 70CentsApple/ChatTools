@@ -1,13 +1,9 @@
-package net.apple70cents.chattools.features.general;
+package net.apple70cents.chattools.features.translator;
 
-import net.apple70cents.chattools.config.SpecialUnits;
 import net.apple70cents.chattools.utils.ConfigUtils;
-import net.apple70cents.chattools.utils.KeyboardUtils;
 import net.apple70cents.chattools.utils.LoggerUtils;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.ChatScreen;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,28 +12,18 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class Translator {
-    public static boolean shouldWork() {
-        if (!(boolean) ConfigUtils.get("general.Translator.Enabled")) {
-            return false;
-        }
-        if (!(Minecraft.getInstance().screen instanceof ChatScreen)) {
-            return false;
-        }
-        return KeyboardUtils.isKeyPressingWithModifier("key.keyboard.tab", SpecialUnits.KeyModifiers.SHIFT, SpecialUnits.MacroModes.LAZY);
-    }
-
+public class BuiltinTranslator {
     public static void work(EditBox chatField) {
         String originalText = chatField.getValue();
-        String method = (boolean) ConfigUtils.get("general.Translator.PostInstead") ? "POST" : "GET";
-        if (((String) ConfigUtils.get("general.Translator.API")).isBlank()) {
+        String method = (boolean) ConfigUtils.get("translator.Translator.Builtin.PostInstead") ? "POST" : "GET";
+        if (((String) ConfigUtils.get("translator.Translator.Builtin.API")).isBlank()) {
             chatField.setValue(TextUtils.trans("texts.translator.requireApi").getString());
             return;
         }
         chatField.setValue(TextUtils.trans("texts.translator.await").getString());
         Runnable runnable = () -> {
             try {
-                String api = (String) ConfigUtils.get("general.Translator.API");
+                String api = (String) ConfigUtils.get("translator.Translator.Builtin.API");
                 if (api.contains("{text}")) {
                     api = api.replace("{text}", URLEncoder.encode(originalText, StandardCharsets.UTF_8));
                 } else {

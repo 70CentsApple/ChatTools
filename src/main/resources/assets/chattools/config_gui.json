@@ -143,24 +143,6 @@
           "key": "general.PreviewClickEvents.Enabled"
         },
         {
-          "type": "sub",
-          "key": "general.Translator",
-          "content": [
-            {
-              "type": "boolean",
-              "key": "general.Translator.Enabled"
-            },
-            {
-              "type": "String",
-              "key": "general.Translator.API"
-            },
-            {
-              "type": "boolean",
-              "key": "general.Translator.PostInstead"
-            }
-          ]
-        },
-        {
           "type": "intSlider",
           "key": "general.MaxHistoryLength",
           "min": 10,
@@ -191,6 +173,55 @@
         {
           "type": "boolean",
           "key": "general.DisableTextObfuscation.Enabled"
+        }
+      ]
+    },
+    {
+      "key": "category.translator",
+      "content": [
+        {
+          "type": "boolean",
+          "key": "translator.Translator.Enabled"
+        },
+        {
+          "type": "EnumTranslators",
+          "key": "translator.Translator.Mode"
+        },
+        {
+          "type": "sub",
+          "key": "translator.Translator.Builtin",
+          "content": [
+            {
+              "type": "String",
+              "key": "translator.Translator.Builtin.API"
+            },
+            {
+              "type": "boolean",
+              "key": "translator.Translator.Builtin.PostInstead"
+            }
+          ]
+        },
+        {
+          "type": "sub",
+          "key": "translator.Translator.Baidu",
+          "content": [
+            {
+              "type": "String",
+              "key": "translator.Translator.Baidu.Appid"
+            },
+            {
+              "type": "String",
+              "key": "translator.Translator.Baidu.Appkey"
+            },
+            {
+              "type": "String",
+              "key": "translator.Translator.Baidu.from"
+            },
+            {
+              "type": "String",
+              "key": "translator.Translator.Baidu.to"
+            }
+          ]
         }
       ]
     },

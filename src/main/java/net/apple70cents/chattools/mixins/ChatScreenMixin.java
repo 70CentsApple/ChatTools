@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.mixins;
 
 import net.apple70cents.chattools.features.general.ChatHistoryNavigator;
-import net.apple70cents.chattools.features.general.Translator;
+import net.apple70cents.chattools.features.translator.Translator;
 import net.apple70cents.chattools.utils.ConfigUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

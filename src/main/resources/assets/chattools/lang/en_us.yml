@@ -34,6 +34,7 @@ key:
       respond.failure: '§6[Chat Tools] Responder failed: %s'
       translator.requireApi: Please configure the translation API first.
       translator.await: '[awaiting...]'
+      translator.error: Error occurred
       copy:
         launch: Click to open the Copy Menu.
         title: Copy Menu
@@ -84,6 +85,7 @@ key:
       title: Chat Tools Configuration
     category:
       general: General
+      translator: Translator
       notifier: Notifier
       formatter: Formatter
       chatkeybindings: Chat Keybindings
@@ -202,25 +204,6 @@ key:
         Enabled:
           .: Enable Click Events Preview
           '@Tooltip': Preview events of the text you're hovering.
-      Translator:
-        .: Translator
-        '@Tooltip': |-
-          Use Shift + Tab to translate a text in chat!
-          You will have to configure the translation API yourself.
-        Enabled:
-          .: Enable Translator
-          '@Tooltip': Toggles whether the translator is enabled.
-        API:
-          .: Translate API
-          '@Tooltip': |-
-            Enter a URL here and replace the text to be translated with {text}.
-            If there is no {text}, the text to be translated will be added to the end.
-        PostInstead:
-          .: Send request as POST
-          '@Tooltip': |-
-            If enabled, the request will be sent as POST, otherwise GET will be used.
-            Please note that in the current version, even if the request is sent as a POST,
-            the request parameters are still attached to the URL string, which is a bit awkward.
       MaxHistoryLength:
         .: Max History Length
         '@Tooltip': |-
@@ -262,6 +245,56 @@ key:
         Enabled:
           .: Disable Text Obfuscation
           '@Tooltip': Toggles whether we should disable text obfuscations.
+    translator:
+      Translator:
+        .: Translator
+        '@Tooltip': |-
+          Type text in the chat bar and press Shift + Tab to translate.
+        Enabled:
+          .: Enable Translator
+          '@Tooltip': Toggles whether the translator is enabled.
+        Mode:
+          .: Mode
+          '@Tooltip': |-
+            §6BUILTIN§r: Use custom API for translation
+            §6BAIDU§r: Use Baidu Translate API for translation
+        Builtin:
+          .: Custom Translation
+          '@Tooltip': |-
+            Use the provided API link to request translation.
+            Requires manual API configuration.
+          API:
+            .: Translation API
+            '@Tooltip': |-
+              Enter a link here, using {text} to replace the text to be translated.
+              If {text} is not present, the text to be translated will be added to the end.
+          PostInstead:
+            .: Send as POST Request
+            '@Tooltip': |-
+              If enabled, sends request via POST; otherwise uses GET.
+              Note: In current version, even with POST, parameters are still appended to the URL, which is somewhat limited.
+        Baidu:
+          .: Baidu Translate
+          '@Tooltip': |-
+            Use Baidu Translate API for translation.
+            Requires registration on Baidu Translate Open Platform.
+          Appid:
+            .: App ID
+            '@Tooltip': Your App ID
+          Appkey:
+            .: App Key
+            '@Tooltip': Your App Key
+          from:
+            .: Source Language
+            '@Tooltip': |-
+              Source language; recommended to set to 'auto' for auto-detection.
+              Refer to Baidu Translate language list.
+          to:
+            .: Target Language
+            '@Tooltip': |-
+              Target language (e.g., 'en' for English).
+              Refer to Baidu Translate language list.
+
     notifier:
       Toast:
         .: System Toast

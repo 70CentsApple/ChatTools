@@ -19,6 +19,7 @@ key:
       respond.failure: '§6Chat Stuffz responder failed: %s'
       translator.requireApi: plz configure da transl8shun api first.
       translator.await: '...'
+      translator.error: errororor
       copy:
         launch: click 2 start da menu o' copy
         title: menu o' copy
@@ -70,6 +71,7 @@ key:
       bubble: Bubbly Chat
       responder: Auto-Meow
       filter: Meow-meow Filter
+      translator: Meow Transl8r
     general:
       FAQ:
         .: '[Wut Peeps Asks A Lot]'
@@ -117,29 +119,54 @@ key:
         Enabled:
           .: peek click events
           '@Tooltip': see what will happen if you click on the text
-      Translator:
-        .: Transl8shun
-        '@Tooltip': |-
-          Meow somethin' in the chat bar and press Shift + Tab to translate it!
-          u'll have 2 change da API urself.
-        Enabled:
-          .: Start transl8ing!
-          '@Tooltip': Toggles whether the transl8or is at work.
-        API:
-          .: Transl8 API
-          '@Tooltip': |-
-            Enter a link here and replace the meows to be transl8d with {text}.
-            If there is no {text}, the meows to be transl8d will be added to the end.
-        PostInstead:
-          .: POST or GET?
-          '@Tooltip': |-
-            ok -> POST, no ok -> GET.
-            Note: nowadays, even if the request is sent as a POST,
-            the request parameters r still attached 2 da URL string.
-            Silly, isn't it?
       MaxHistoryLength:
         .: Most Words Remembered
         '@Tooltip': "How many old meows you can peep at. (Minecraft usual is 100)"
+    translator:
+      Translator:
+        .: Meow Transl8r
+        '@Tooltip': |-
+          Type words in chat, hit Shift + Tab to meow-transl8!
+        Enabled:
+          .: Turn On Meow Transl8r
+          '@Tooltip': Toggle if the transl8r should do its magic or nap.
+        Mode:
+          .: Meow Mode
+          '@Tooltip': |-
+            §6BUILTIN§r: Use custom API to beg for transl8shun
+            §6BAIDU§r: Use Baidu Transl8r API meow-magic
+        Builtin:
+          .: Custom Meow Transl8
+          '@Tooltip': |-
+            Use the provided API link to beg for transl8shun.
+            Gotta set up the API yourself, yo!
+          API:
+            .: Transl8 API Link
+            '@Tooltip': |-
+              Paste your API link here! Use {text} to swap the words to transl8.
+              No {text}? We'll just stick the words at the end—easy peasy!
+          PostInstead:
+            .: Use POST 4 Requestz
+            '@Tooltip': |-
+              Check 4 POST, uncheck 4 GET.
+              P.S. Right now, even POST sticks params in the URL—silly, but we'll fix later!
+        Baidu:
+          .: Baidu Meow Transl8
+          '@Tooltip': |-
+            Use Baidu Transl8r API magic.
+            Gotta sign up on Baidu Transl8 Platform yourself, bro!
+          Appid:
+            .: App ID
+            '@Tooltip': Your app's ID, yo!
+          Appkey:
+            .: App Secret Key
+            '@Tooltip': Your app's secret key—shhh!
+          from:
+            .: From Language
+            '@Tooltip': Original language! Use 'auto' 4 auto-detect—check Baidu's lang list, yo!
+          to:
+            .: To Language
+            '@Tooltip': Target language! Like 'en' 4 English—check Baidu's lang list, bro!
     notifier:
       Toast:
         .: System Toasty Stuff
