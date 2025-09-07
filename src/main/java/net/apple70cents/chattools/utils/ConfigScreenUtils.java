@@ -502,8 +502,8 @@ public class ConfigScreenUtils {
                         .setTooltip(tooltip).setSaveConsumer(v -> ConfigUtils.set(key, v.toString())).build();
             case "EnumTranslators":
                 return eb
-                        .startEnumSelector(trans(key), SpecialUnits.Translators.class, SpecialUnits.Translators.valueOf((String) ConfigUtils.get(key)))
-                        .setDefaultValue(SpecialUnits.Translators.valueOf((String) ConfigUtils.getDefault(key)))
+                        .startEnumSelector(trans(key), SpecialUnits.TranslatorModes.class, SpecialUnits.TranslatorModes.valueOf((String) ConfigUtils.get(key)))
+                        .setDefaultValue(SpecialUnits.TranslatorModes.valueOf((String) ConfigUtils.getDefault(key)))
                         .setTooltip(tooltip).setSaveConsumer(v -> ConfigUtils.set(key, v.toString())).build();
             default:
                 LoggerUtils.error("[ChatTools] Unknown config type: " + type);

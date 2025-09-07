@@ -20,7 +20,7 @@ public class SpecialUnits {
         LAZY, GREEDY
     }
 
-    public enum Translators {
+    public enum TranslatorModes {
         BUILTIN, BAIDU
     }
 

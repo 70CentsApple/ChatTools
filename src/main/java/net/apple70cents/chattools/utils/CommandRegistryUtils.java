@@ -280,7 +280,7 @@ public class CommandRegistryUtils {
                         ConfigUtils.set(key, SpecialUnits.ToastModes.valueOf(value));
                         break;
                     case "EnumTranslators":
-                        ConfigUtils.set(key, SpecialUnits.Translators.valueOf(value));
+                        ConfigUtils.set(key, SpecialUnits.TranslatorModes.valueOf(value));
                         break;
                     case "EnumKeyModifiers":
                         ConfigUtils.set(key, SpecialUnits.KeyModifiers.valueOf(value));
