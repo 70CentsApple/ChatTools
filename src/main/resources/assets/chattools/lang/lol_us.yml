@@ -17,9 +17,10 @@ key:
       download.success: '§6All addon fyles 4 Chatz Stuffz were done, yo.'
       toast.failure: '§6Toaster failed: extra stuffz r not ready or ungood plutform.§r'
       respond.failure: '§6Chat Stuffz responder failed: %s'
-      translator.requireApi: plz configure da transl8shun api first.
-      translator.await: '...'
-      translator.error: errororor
+      translator:
+        requireApi: plz configure da transl8shun api first.
+        await: '...'
+        error: 'errororor: %s'
       copy:
         launch: click 2 start da menu o' copy
         title: menu o' copy

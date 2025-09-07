@@ -1,6 +1,5 @@
 package net.apple70cents.chattools.features.translator;
 
-import net.apple70cents.chattools.utils.ConfigUtils;
 import net.apple70cents.chattools.utils.LoggerUtils;
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.client.gui.components.EditBox;
@@ -12,49 +11,44 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class BuiltinTranslator {
-    public static void work(EditBox chatField) {
-        String originalText = chatField.getValue();
-        String method = (boolean) ConfigUtils.get("translator.Translator.Builtin.PostInstead") ? "POST" : "GET";
-        if (((String) ConfigUtils.get("translator.Translator.Builtin.API")).isBlank()) {
-            chatField.setValue(TextUtils.trans("texts.translator.requireApi").getString());
-            return;
+public class BuiltinTranslator extends AbstractTranslator {
+    private final String api;
+    private final boolean usePost;
+
+    public BuiltinTranslator(EditBox editBox, String api, boolean usePost) {
+        super(editBox);
+        this.api = api;
+        this.usePost = usePost;
+    }
+
+    @Override
+    public String translate(String text) throws Exception {
+        String method = usePost ? "POST" : "GET";
+        if (api.isBlank()) {
+            throw new Exception(TextUtils.trans("texts.translator.requireApi").getString());
         }
-        chatField.setValue(TextUtils.trans("texts.translator.await").getString());
-        Runnable runnable = () -> {
-            try {
-                String api = (String) ConfigUtils.get("translator.Translator.Builtin.API");
-                if (api.contains("{text}")) {
-                    api = api.replace("{text}", URLEncoder.encode(originalText, StandardCharsets.UTF_8));
-                } else {
-                    api += URLEncoder.encode(originalText, StandardCharsets.UTF_8);
+        String url = api;
+        if (url.contains("{text}")) {
+            url = url.replace("{text}", URLEncoder.encode(text, StandardCharsets.UTF_8));
+        } else {
+            url += URLEncoder.encode(text, StandardCharsets.UTF_8);
+        }
+        URL formattedUrl = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) formattedUrl.openConnection();
+        connection.setRequestMethod(method);
+        LoggerUtils.info("[ChatTools] Visiting \"" + api + "\" with method: " + method);
+        int responseCode = connection.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new RuntimeException("Failed with HTTP Error Code " + responseCode);
+        } else {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = in.readLine()) != null) {
+                    response.append(line);
                 }
-                URL formattedUrl = new URL(api);
-                HttpURLConnection connection = (HttpURLConnection) formattedUrl.openConnection();
-                connection.setRequestMethod(method);
-                LoggerUtils.info("[ChatTools] Visiting \"" + api + "\" with method: " + method);
-                int responseCode = connection.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    throw new RuntimeException("Failed with HTTP Error Code " + responseCode);
-                } else {
-                    try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                        StringBuilder response = new StringBuilder();
-                        String line;
-                        while ((line = in.readLine()) != null) {
-                            response.append(line);
-                        }
-                        chatField.setValue(response.toString());
-                        LoggerUtils.info("[ChatTools] Response: " + response);
-                        return;
-                    }
-                }
-            } catch (Exception e) {
-                LoggerUtils.error("[ChatTools] Error occurred when visiting Translation API");
-                chatField.setValue(e.toString());
-                e.printStackTrace();
+                return response.toString();
             }
-        };
-        Thread thread = new Thread(runnable, "ChatTools-Translation-Thread");
-        thread.start();
+        }
     }
 }

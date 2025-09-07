@@ -32,9 +32,10 @@ key:
       download.success: '§6[Chat Tools] 已完成下载！'
       toast.failure: §6Toast 失败：附件未完整下载 或 模式不支持该平台§r
       respond.failure: '§6[Chat Tools] 试图自动响应失败：%s'
-      translator.requireApi: 请先配置翻译API
-      translator.await: '[正在响应……]'
-      translator.error: 发生错误
+      translator:
+        requireApi: '[请先配置翻译API]'
+        await: '[正在响应……]'
+        error: '[发生错误：%s]'
       copy:
         launch: 点击打开复制菜单。
         title: 复制菜单
@@ -250,7 +251,7 @@ key:
             §6BUILTIN§r: 使用自定义 API 请求翻译
             §6BAIDU§r: 使用百度翻译 API 进行翻译
         Builtin:
-          .: 自定义翻译
+          .: 自定义翻译（BUILTIN）
           '@Tooltip': |-
             使用提供的 API 链接请求翻译。
             需要自行配置翻译 API。
@@ -265,21 +266,21 @@ key:
               如果启用此项，将以 POST 发送请求，否则使用 GET。
               请注意在现版本即使以 POST 发送请求，实际上仍是把请求参数附在 URL 后面的，比较鸡肋。
         Baidu:
-          .: 百度翻译
+          .: 百度翻译（BAIDU）
           '@Tooltip': |-
             使用百度翻译 API 进行翻译。
             需要在自行在百度翻译开放平台注册。
           Appid:
-            .: 应用 ID
+            .: 应用 ID（appid）
             '@Tooltip': 您的应用 ID
           Appkey:
-            .: 应用密钥
+            .: 应用密钥（key）
             '@Tooltip': 您的应用密钥
           from:
-            .: 源语言
+            .: 源语言（from）
             '@Tooltip': 源语言，建议设置为 auto 以自动识别，请参阅百度翻译语种对照表
           to:
-            .: 目标语言
+            .: 目标语言（to）
             '@Tooltip': 目标语言，例如英文为 en ，请参阅百度翻译语种对照表
     notifier:
       Toast:

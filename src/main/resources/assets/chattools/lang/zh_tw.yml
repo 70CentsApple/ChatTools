@@ -17,9 +17,10 @@ key:
       download.success: '§6[Chat Tools] 已完成下載！'
       toast.failure: §6Toast 失敗：附件未完整下載 或 模式不支持該平台§r
       respond.failure: '§6[Chat Tools] 嘗試自動響應失敗：%s'
-      translator.requireApi: 請先配置翻譯API
-      translator.await: '[正在響應……]'
-      translator.error: 發生錯誤
+      translator:
+        requireApi: '[請先配置翻譯API]'
+        await: '[正在響應……]'
+        error: '[發生錯誤：%s]'
       copy:
         launch: 點擊打開複製菜單。
         title: 複製菜單

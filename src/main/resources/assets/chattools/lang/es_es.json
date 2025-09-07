@@ -12,7 +12,7 @@
   "key.chattools.texts.filterPlaceholder.@Tooltip": "Este mensaje fue filtrado por el Filtro de Herramientas de Chat.",
   "key.chattools.texts.welcomeMessage": "¿Nuevo en Herramientas de Chat? ¡Consulta las preguntas frecuentes aquí!",
   "key.chattools.texts.toast.title": "Desde Minecraft:",
-  "key.chattools.texts.translator.error": "Error ocurrió",
+  "key.chattools.texts.translator.error": "Error ocurrió: %s",
   "key.chattools.texts.actionbar.title": "§a§l¡Mensajes recibidos!",
   "key.chattools.texts.repeat.failure.empty": "§6§l¡No hay mensajes!",
   "key.chattools.texts.download.process": "[Herramientas de Chat] Descargando %s: %s%% - (%sKB/%sKB)",

@@ -20,12 +20,21 @@ public class Translator {
     }
 
     public static void work(EditBox chat) {
+        if (chat.getValue().isBlank()) {
+            return;
+        }
         switch ((String) ConfigUtils.get("translator.Translator.Mode")) {
             case "BUILTIN":
-                BuiltinTranslator.work(chat);
+                String api = (String) ConfigUtils.get("translator.Translator.Builtin.API");
+                boolean usePost = (boolean) ConfigUtils.get("translator.Translator.Builtin.PostInstead");
+                new BuiltinTranslator(chat, api, usePost).work();
                 break;
             case "BAIDU":
-                BaiduTranslator.translate(chat);
+                String appId = (String) ConfigUtils.get("translator.Translator.Baidu.Appid");
+                String key = (String) ConfigUtils.get("translator.Translator.Baidu.Appkey");
+                String from = (String) ConfigUtils.get("translator.Translator.Baidu.from");
+                String to = (String) ConfigUtils.get("translator.Translator.Baidu.to");
+                new BaiduTranslator(chat, appId, key, from, to).work();
                 break;
             default:
                 return;

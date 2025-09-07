@@ -32,9 +32,10 @@ key:
       download.success: '§6[Chat Tools] All addon files were downloaded successfully!'
       toast.failure: '§6Toast failed: Files are not ready or you are on an unsupported platform.§r'
       respond.failure: '§6[Chat Tools] Responder failed: %s'
-      translator.requireApi: Please configure the translation API first.
-      translator.await: '[awaiting...]'
-      translator.error: Error occurred
+      translator:
+        requireApi: '[Please configure the translation API first.]'
+        await: '[awaiting...]'
+        error: '[Error occurred: %s]'
       copy:
         launch: Click to open the Copy Menu.
         title: Copy Menu
@@ -259,7 +260,7 @@ key:
             §6BUILTIN§r: Use custom API for translation
             §6BAIDU§r: Use Baidu Translate API for translation
         Builtin:
-          .: Custom Translation
+          .: Custom Translation (BUILTIN)
           '@Tooltip': |-
             Use the provided API link to request translation.
             Requires manual API configuration.
@@ -274,23 +275,23 @@ key:
               If enabled, sends request via POST; otherwise uses GET.
               Note: In current version, even with POST, parameters are still appended to the URL, which is somewhat limited.
         Baidu:
-          .: Baidu Translate
+          .: Baidu Translate (BAIDU)
           '@Tooltip': |-
             Use Baidu Translate API for translation.
             Requires registration on Baidu Translate Open Platform.
           Appid:
-            .: App ID
+            .: App ID (appid)
             '@Tooltip': Your App ID
           Appkey:
-            .: App Key
+            .: App Key (key)
             '@Tooltip': Your App Key
           from:
-            .: Source Language
+            .: Source Language (from)
             '@Tooltip': |-
               Source language; recommended to set to 'auto' for auto-detection.
               Refer to Baidu Translate language list.
           to:
-            .: Target Language
+            .: Target Language (to)
             '@Tooltip': |-
               Target language (e.g., 'en' for English).
               Refer to Baidu Translate language list.
