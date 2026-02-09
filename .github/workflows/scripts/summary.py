@@ -49,7 +49,7 @@ def main():
                 print(f'- Skipping {subproject}')
                 continue
             # file_paths = glob.glob(f'/build/libs/{MOD_VERSION}/*{subproject}*.jar')
-            file_paths = glob.glob(f'gathered-artifacts/*-{subproject}-*.jar')
+            file_paths = glob.glob(f'gathered-artifacts/*+{subproject}*.jar')
             file_paths = list(filter(lambda fp: not any(fp.endswith(e) for e in ['-sources.jar','-dev.jar','-shadow.jar']), file_paths))
             if len(file_paths) == 0:
                 file_name = '*NOT FOUND*'
