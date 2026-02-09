@@ -22,6 +22,7 @@ repositories {
 	maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
 	maven { url = 'https://maven.parchmentmc.org' } // Parchment
 	maven { url = 'https://maven.neoforged.net/releases' } // NeoForge
+    maven { url = 'https://neoforged.forgecdn.net/'} // Another NeoForge Maven
 }
 
 // https://github.com/FabricMC/fabric-loader/issues/783
