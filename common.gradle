@@ -106,7 +106,6 @@ processResources {
 			"id"                  : project.mod_id,
 			"version"             : fullModVersion,
 			"minecraft_dependency": project.minecraft_dependency,
-			"cloth_config_id"     : CLOTH_CONFIG_MOD_ID
 	]
 	inputs.properties(modProperties)
 
