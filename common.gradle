@@ -1,6 +1,6 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom'
+    id 'dev.architectury.loom'
     id 'com.replaymod.preprocess'
     id 'me.fallenbreath.yamlang'
 }
