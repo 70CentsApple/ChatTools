@@ -50,7 +50,7 @@ def main():
                 continue
             # file_paths = glob.glob(f'/build/libs/{MOD_VERSION}/*{subproject}*.jar')
             file_paths = glob.glob(f'gathered-artifacts/*-{subproject}-*.jar')
-            file_paths = list(filter(lambda fp: not fp.endswith('-sources.jar') and not fp.endswith('-dev.jar') and not fp.endswith('-shadow.jar'), file_paths))
+            file_paths = list(filter(lambda fp: not any(fp.endswith(e) for e in ['-sources.jar','-dev.jar','-shadow.jar']), file_paths))
             if len(file_paths) == 0:
                 file_name = '*NOT FOUND*'
                 file_size = '*N/A*'

@@ -7,7 +7,7 @@ plugins {
 
 def mod_brand = (loom.platform.get() as String).toLowerCase()
 assert mod_brand in ['fabric', 'neoforge']
-assert project.name.endsWith('-' + mod_brand)  // optional check
+assert project.name.endsWith('-' + mod_brand)
 
 int mcVersion = project.mcVersion
 preprocess {
@@ -21,7 +21,7 @@ repositories {
 	maven { url = "https://maven.shedaniel.me/" } // Cloth Config
 	maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
 	maven { url = 'https://maven.parchmentmc.org' } // Parchment
-	maven { url = 'https://maven.neoforged.net/releases' } // Neoforge
+	maven { url = 'https://maven.neoforged.net/releases' } // NeoForge
 }
 
 // https://github.com/FabricMC/fabric-loader/issues/783
@@ -94,17 +94,14 @@ java {
 	targetCompatibility = JAVA_COMPATIBILITY
 }
 
-String versionSuffix = ''
-String fullModVersion = project.mod_version + versionSuffix
-
-version = 'v' + fullModVersion
+version = 'v' + project.mod_version + '+' + project.minecraft_version + '-' + mod_brand
 group = project.maven_group
-base.archivesName = project.archives_base_name + '-' + project.minecraft_version
+base.archivesName = project.archives_base_name
 
 processResources {
 	def modProperties = [
 			"id"                  : project.mod_id,
-			"version"             : fullModVersion,
+			"version"             : project.mod_version,
 			"minecraft_dependency": project.minecraft_dependency,
 	]
 	inputs.properties(modProperties)

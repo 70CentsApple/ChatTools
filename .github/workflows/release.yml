@@ -60,83 +60,145 @@ jobs:
     strategy:
       matrix:
         include:
-          - game_version: "1.16.5"
+          - artifact: "1.16.5-fabric"
             target_game_versions: "1.16,1.16.1,1.16.2,1.16.3,1.16.4,1.16.5"
             target_game_versions_cf_ids: "7890,7892,8010,8056,8134,8203"
             formatted_version_name: "1.16.x"
-            delay: 120
+            modloader: "fabric"
+            delay: 130
 
-          - game_version: "1.17.1"
+          - artifact: "1.17.1-fabric"
             target_game_versions: "1.17,1.17.1"
             target_game_versions_cf_ids: "8152,8516"
             formatted_version_name: "1.17.x"
-            delay: 110
+            modloader: "fabric"
+            delay: 120
 
-          - game_version: "1.18.2"
+          - artifact: "1.18.2-fabric"
             target_game_versions: "1.18,1.18.1,1.18.2"
             target_game_versions_cf_ids: "8830,8857,9008"
             formatted_version_name: "1.18.x"
-            delay: 100
+            modloader: "fabric"
+            delay: 110
 
-          - game_version: "1.19.4"
+          - artifact: "1.19.4-fabric"
             target_game_versions: "1.19,1.19.1,1.19.2,1.19.3,1.19.4"
             target_game_versions_cf_ids: "9186,9259,9366,9550,9776"
             formatted_version_name: "1.19.x"
-            delay: 90
+            modloader: "fabric"
+            delay: 100
 
-          - game_version: "1.20.1"
+          - artifact: "1.20.1-fabric"
             target_game_versions: "1.20,1.20.1"
             target_game_versions_cf_ids: "9971,9990"
             formatted_version_name: "1.20(.1)"
-            delay: 80
+            modloader: "fabric"
+            delay: 90
 
-          - game_version: "1.20.4"
+          - artifact: "1.20.4-fabric"
             target_game_versions: "1.20.2,1.20.3,1.20.4"
             target_game_versions_cf_ids: "10236,10395,10407"
             formatted_version_name: "1.20.2(3,4)"
-            delay: 70
+            modloader: "fabric"
+            delay: 80
 
-          - game_version: "1.20.6"
+          - artifact: "1.20.6-fabric"
             target_game_versions: "1.20.5,1.20.6"
             target_game_versions_cf_ids: "11163,11198"
             formatted_version_name: "1.20.5(6)"
-            delay: 60
+            modloader: "fabric"
+            delay: 70
 
-          - game_version: "1.21.1"
+          - artifact: "1.20.6-neoforge"
+            target_game_versions: "1.20.5,1.20.6"
+            target_game_versions_cf_ids: "11163,11198"
+            formatted_version_name: "1.20.5(6)"
+            modloader: "neoforge"
+            delay: 67
+
+          - artifact: "1.21.1-fabric"
             target_game_versions: "1.21,1.21.1"
             target_game_versions_cf_ids: "11457,11779"
             formatted_version_name: "1.21(.1)"
-            delay: 50
+            modloader: "fabric"
+            delay: 60
 
-          - game_version: "1.21.4"
+          - artifact: "1.21.1-neoforge"
+            target_game_versions: "1.21,1.21.1"
+            target_game_versions_cf_ids: "11457,11779"
+            formatted_version_name: "1.21(.1)"
+            modloader: "neoforge"
+            delay: 57
+
+          - artifact: "1.21.4-fabric"
             target_game_versions: "1.21.2,1.21.3,1.21.4"
             target_game_versions_cf_ids: "12079,12084,12281"
             formatted_version_name: "1.21.2(3,4)"
-            delay: 40
+            modloader: "fabric"
+            delay: 50
 
-          - game_version: "1.21.5"
+          - artifact: "1.21.4-neoforge"
+            target_game_versions: "1.21.2,1.21.3,1.21.4"
+            target_game_versions_cf_ids: "12079,12084,12281"
+            formatted_version_name: "1.21.2(3,4)"
+            modloader: "neoforge"
+            delay: 47
+
+          - artifact: "1.21.5-fabric"
             target_game_versions: "1.21.5"
             target_game_versions_cf_ids: "12934"
             formatted_version_name: "1.21.5"
-            delay: 30
+            modloader: "fabric"
+            delay: 40
 
-          - game_version: "1.21.8"
+          - artifact: "1.21.5-neoforge"
+            target_game_versions: "1.21.5"
+            target_game_versions_cf_ids: "12934"
+            formatted_version_name: "1.21.5"
+            modloader: "neoforge"
+            delay: 37
+
+          - artifact: "1.21.8-fabric"
             target_game_versions: "1.21.6,1.21.7,1.21.8"
             target_game_versions_cf_ids: "13422,13506,13620"
             formatted_version_name: "1.21.6(7,8)"
-            delay: 20
+            modloader: "fabric"
+            delay: 30
 
-          - game_version: "1.21.10"
+          - artifact: "1.21.8-neoforge"
+            target_game_versions: "1.21.6,1.21.7,1.21.8"
+            target_game_versions_cf_ids: "13422,13506,13620"
+            formatted_version_name: "1.21.6(7,8)"
+            modloader: "neoforge"
+            delay: 27
+
+          - artifact: "1.21.10-fabric"
             target_game_versions: "1.21.9,1.21.10"
             target_game_versions_cf_ids: "13927,13964"
             formatted_version_name: "1.21.9(10)"
-            delay: 10
+            modloader: "fabric"
+            delay: 20
 
-          - game_version: "1.21.11"
+          - artifact: "1.21.10-neoforge"
+            target_game_versions: "1.21.9,1.21.10"
+            target_game_versions_cf_ids: "13927,13964"
+            formatted_version_name: "1.21.9(10)"
+            modloader: "neoforge"
+            delay: 17
+
+          - artifact: "1.21.11-fabric"
             target_game_versions: "1.21.11"
             target_game_versions_cf_ids: "14406"
             formatted_version_name: "1.21.11"
-            delay: 0
+            modloader: "fabric"
+            delay: 10
+
+          - artifact: "1.21.11-neoforge"
+            target_game_versions: "1.21.11"
+            target_game_versions_cf_ids: "14406"
+            formatted_version_name: "1.21.11"
+            modloader: "neoforge"
+            delay: 10
     steps:
       - uses: actions/checkout@v4
 
@@ -153,7 +215,7 @@ jobs:
 
       - name: Resolve file path
         run: |
-          file_path=$(ls gathered-artifacts/*-${{ matrix.game_version }}-*.jar)
+          file_path=$(ls gathered-artifacts/*-${{ matrix.artifact }}-*.jar)
           echo "file_path=${file_path}" >> $GITHUB_ENV
           echo "file_path for this version is: $file_path"
 
@@ -180,14 +242,14 @@ jobs:
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           file_path: ${{ env.file_path }}
-          name: "v${{ env.tag_name }}+${{ matrix.formatted_version_name }}"
+          name: "v${{ env.tag_name }}+${{ matrix.formatted_version_name }}+${{ matrix.modloader }}"
           version: ${{ env.tag_name }}
           changelog: ${{ env.changelog }}
           # requires Cloth Config
           relations: "9s6osm5g:required"
           game_versions: ${{ matrix.target_game_versions }}
           release_type: "release"
-          loaders: "fabric"
+          loaders: "${{ matrix.modloader }}"
           featured: false
           project_id: "pbnlOdwp"
 
@@ -199,10 +261,10 @@ jobs:
           project_id: "1453568"
           game_endpoint: "minecraft"
           file_path: ${{ env.file_path }}
-          # 7499: Modloader - Fabric, 9638: Environment - Client
-          game_versions: "${{ matrix.target_game_versions_cf_ids }},7499,9638"
+          # 7499: Modloader - Fabric, 10150: Modloader - NeoForge, 9638: Environment - Client
+          game_versions: "${{ matrix.target_game_versions_cf_ids }},Modloader:${{ matrix.modloader }},9638"
           release_type: "release"
-          display_name: "v${{ env.tag_name }}+${{ matrix.formatted_version_name }}"
+          display_name: "v${{ env.tag_name }}+${{ matrix.formatted_version_name }}+${{ matrix.modloader }}"
           changelog: ${{ env.changelog }}
           changelog_type: "markdown"
           relations: "cloth-config:requiredDependency"
