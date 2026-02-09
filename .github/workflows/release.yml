@@ -55,13 +55,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           echo "Fetching release notes from GitHub..."
-          gh release view "v${{ env.tag_name }}" --repo ${{ github.repository }} --json body --jq '.body' > ./gathered-artifacts/release_notes.md
+          gh release view "v${{ env.tag_name }}" --repo ${{ github.repository }} --json body --jq '.body' > release_notes.md
 
-      - name: Upload Artifacts
+      - name: Upload Release Notes
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts
-          path: gathered-artifacts
+          name: Release Notes
+          path: release_notes.md
 
   modrinth-and-curseforge-release:
     needs:
@@ -198,10 +198,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download artifacts
+      - name: Download Artifacts (JARs)
         uses: actions/download-artifact@v4
         with:
           name: Artifacts
+          path: gathered-artifacts
+
+      - name: Download Release Notes
+        uses: actions/download-artifact@v4
+        with:
+          name: Release Notes
           path: gathered-artifacts
 
       - name: Resolve file path and Changelog
