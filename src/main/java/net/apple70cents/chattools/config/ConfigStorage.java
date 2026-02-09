@@ -54,7 +54,7 @@ public class ConfigStorage {
             Reader reader;
             if (loadDefault) {
                 reader = new InputStreamReader(this.getClass().getClassLoader()
-                                                        .getResourceAsStream("assets/chattools/default_config.json"));
+                        .getResourceAsStream("assets/chattools/default_config.json"));
             } else {
                 reader = new InputStreamReader(new FileInputStream(FILE), StandardCharsets.UTF_8);
             }
