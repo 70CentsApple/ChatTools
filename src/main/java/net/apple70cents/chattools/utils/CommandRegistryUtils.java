@@ -68,46 +68,46 @@ import net.neoforged.neoforge.common.NeoForge;
 
 public class CommandRegistryUtils {
 
-	public static void register() {
-		//#if FABRIC
-		//$$ //#if MC>=11900
-		//$$ ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-		//$$ 	dispatcher.register(CommandRegistryUtils.getBuilder(registryAccess));
-		//$$ });
-		//$$ //#else
-		//$$ //$$ ClientCommandManager.DISPATCHER.register(CommandRegistryUtils.getBuilder());
-		//$$ //#endif
-		//#elseif NEOFORGE
-		NeoForge.EVENT_BUS.addListener((RegisterClientCommandsEvent event) -> event.getDispatcher().register(
-				CommandRegistryUtils.getBuilder(event.getBuildContext())
-		));
-		//#endif
+    public static void register() {
+        //#if FABRIC
+        //$$ //#if MC>=11900
+        //$$ ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+        //$$ 	dispatcher.register(CommandRegistryUtils.getBuilder(registryAccess));
+        //$$ });
+        //$$ //#else
+        //$$ //$$ ClientCommandManager.DISPATCHER.register(CommandRegistryUtils.getBuilder());
+        //$$ //#endif
+        //#elseif NEOFORGE
+        NeoForge.EVENT_BUS.addListener((RegisterClientCommandsEvent event) -> event.getDispatcher().register(
+                CommandRegistryUtils.getBuilder(event.getBuildContext())
+        ));
+        //#endif
 
 
-	}
+    }
 
-	//#if NEOFORGE
-	public static LiteralArgumentBuilder<CommandSourceStack> literal(String name) {
-		return LiteralArgumentBuilder.literal(name);
-	}
+    //#if NEOFORGE
+    public static LiteralArgumentBuilder<CommandSourceStack> literal(String name) {
+        return LiteralArgumentBuilder.literal(name);
+    }
 
-	public static <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
-		return RequiredArgumentBuilder.argument(name, type);
-	}
-	//#endif
+    public static <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
+        return RequiredArgumentBuilder.argument(name, type);
+    }
+    //#endif
 
-	public static LiteralArgumentBuilder<
-			//#if FABRIC
-			//$$ FabricClientCommandSource
-			//#elseif NEOFORGE
-			CommandSourceStack
-			//#endif
-			> getBuilder(
-			//#if MC>=11900
-			CommandBuildContext buildContext
-			//#endif
-	) {
-		// @formatter:off
+    public static LiteralArgumentBuilder<
+            //#if FABRIC
+            //$$ FabricClientCommandSource
+            //#elseif NEOFORGE
+            CommandSourceStack
+            //#endif
+            > getBuilder(
+            //#if MC>=11900
+            CommandBuildContext buildContext
+            //#endif
+    ) {
+        // @formatter:off
         return literal("chattools")
             // chattools send_to_client
             .then(literal("send_to_client")
@@ -274,170 +274,170 @@ public class CommandRegistryUtils {
                         return Command.SINGLE_SUCCESS;
                     }))));
         // @formatter:on
-	}
+    }
 
-	public static Tuple<Boolean, String> checkRegex(String pattern) {
-		try {
-			Pattern.compile(pattern);
-		} catch (PatternSyntaxException e) {
-			return new Tuple<>(false, e.getMessage().replace("\r", ""));
-		}
-		return new Tuple<>(true, "There's nothing wrong with the RegEx pattern.");
-	}
+    public static Tuple<Boolean, String> checkRegex(String pattern) {
+        try {
+            Pattern.compile(pattern);
+        } catch (PatternSyntaxException e) {
+            return new Tuple<>(false, e.getMessage().replace("\r", ""));
+        }
+        return new Tuple<>(true, "There's nothing wrong with the RegEx pattern.");
+    }
 
-	public static void toggleBooleanConfig(String key) {
-		if (ConfigUtils.get(key) == null) {
-			MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.toggle.error", key));
-			return;
-		}
-		boolean now = (boolean) ConfigUtils.get(key);
-		updateConfig(key, String.valueOf(!now));
-	}
+    public static void toggleBooleanConfig(String key) {
+        if (ConfigUtils.get(key) == null) {
+            MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.toggle.error", key));
+            return;
+        }
+        boolean now = (boolean) ConfigUtils.get(key);
+        updateConfig(key, String.valueOf(!now));
+    }
 
-	public static void updateConfig(String key, String value) {
-		try {
-			if (!ConfigScreenGenerator.getKey2TypeMappings().containsKey(key)) {
-				// if we don't have that key, we consider it as a string
-				ConfigUtils.set(key, value);
-				MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.warning", key));
-			} else {
-				switch (String.valueOf(ConfigScreenGenerator.getKey2TypeMappings().get(key))) {
-					case "boolean":
-						ConfigUtils.set(key, Boolean.parseBoolean(value));
-						break;
-					case "String":
-						ConfigUtils.set(key, String.valueOf(value));
-						break;
-					case "intSlider":
-					case "intField":
-						ConfigUtils.set(key, Integer.parseInt(value));
-						break;
-					case "doubleField":
-						ConfigUtils.set(key, Double.parseDouble(value));
-						break;
-					case "EnumToastModes":
-						ConfigUtils.set(key, SpecialUnits.ToastModes.valueOf(value));
-						break;
-					case "EnumTranslators":
-						ConfigUtils.set(key, SpecialUnits.TranslatorModes.valueOf(value));
-						break;
-					case "EnumKeyModifiers":
-						ConfigUtils.set(key, SpecialUnits.KeyModifiers.valueOf(value));
-						break;
-					case "FAQ":
-					case "sub":
-					case "keycode":
-					case "StringList":
-					case "FormatterList":
-					case "MacroList":
-					case "BubbleList":
-					case "ResponderList":
-					case "CustomJoinMessageList":
-						MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.unsupported", key));
-						// ignore it, so return in advance
-						return;
-					case "":
-					default:
-						ConfigUtils.set(key, String.valueOf(value));
-						MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.warning", key));
-				}
-			}
-			MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set", key, ConfigUtils.get(key)));
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageUtils.sendToNonPublicChat(TextUtils.literal(e.toString()).copy()
-					.setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED)));
-		}
-	}
+    public static void updateConfig(String key, String value) {
+        try {
+            if (!ConfigScreenGenerator.getKey2TypeMappings().containsKey(key)) {
+                // if we don't have that key, we consider it as a string
+                ConfigUtils.set(key, value);
+                MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.warning", key));
+            } else {
+                switch (String.valueOf(ConfigScreenGenerator.getKey2TypeMappings().get(key))) {
+                    case "boolean":
+                        ConfigUtils.set(key, Boolean.parseBoolean(value));
+                        break;
+                    case "String":
+                        ConfigUtils.set(key, String.valueOf(value));
+                        break;
+                    case "intSlider":
+                    case "intField":
+                        ConfigUtils.set(key, Integer.parseInt(value));
+                        break;
+                    case "doubleField":
+                        ConfigUtils.set(key, Double.parseDouble(value));
+                        break;
+                    case "EnumToastModes":
+                        ConfigUtils.set(key, SpecialUnits.ToastModes.valueOf(value));
+                        break;
+                    case "EnumTranslators":
+                        ConfigUtils.set(key, SpecialUnits.TranslatorModes.valueOf(value));
+                        break;
+                    case "EnumKeyModifiers":
+                        ConfigUtils.set(key, SpecialUnits.KeyModifiers.valueOf(value));
+                        break;
+                    case "FAQ":
+                    case "sub":
+                    case "keycode":
+                    case "StringList":
+                    case "FormatterList":
+                    case "MacroList":
+                    case "BubbleList":
+                    case "ResponderList":
+                    case "CustomJoinMessageList":
+                        MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.unsupported", key));
+                        // ignore it, so return in advance
+                        return;
+                    case "":
+                    default:
+                        ConfigUtils.set(key, String.valueOf(value));
+                        MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.warning", key));
+                }
+            }
+            MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set", key, ConfigUtils.get(key)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageUtils.sendToNonPublicChat(TextUtils.literal(e.toString()).copy()
+                    .setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED)));
+        }
+    }
 
-	public static class ClientComponentArgument implements ArgumentType<Component> {
-		public static final DynamicCommandExceptionType INVALID_COMPONENT_EXCEPTION = new DynamicCommandExceptionType(text -> TextUtils.transWithPrefix("argument.component.invalid", "", text));
-		//#if MC>=12006
-		private final HolderLookup.Provider holderLookupProvider;
-		//#endif
+    public static class ClientComponentArgument implements ArgumentType<Component> {
+        public static final DynamicCommandExceptionType INVALID_COMPONENT_EXCEPTION = new DynamicCommandExceptionType(text -> TextUtils.transWithPrefix("argument.component.invalid", "", text));
+        //#if MC>=12006
+        private final HolderLookup.Provider holderLookupProvider;
+        //#endif
 
-		//#if MC>=12006
-		private ClientComponentArgument(HolderLookup.Provider holderLookupProvider) {
-			this.holderLookupProvider = holderLookupProvider;
-		}
+        //#if MC>=12006
+        private ClientComponentArgument(HolderLookup.Provider holderLookupProvider) {
+            this.holderLookupProvider = holderLookupProvider;
+        }
 
-		public static ClientComponentArgument textComponent(CommandBuildContext buildContext) {
-			return new ClientComponentArgument(buildContext);
-		}
-		//#else
-		//$$ private ClientComponentArgument() {}
-		//$$ public static ClientComponentArgument textComponent() {return new ClientComponentArgument();}
-		//#endif
+        public static ClientComponentArgument textComponent(CommandBuildContext buildContext) {
+            return new ClientComponentArgument(buildContext);
+        }
+        //#else
+        //$$ private ClientComponentArgument() {}
+        //$$ public static ClientComponentArgument textComponent() {return new ClientComponentArgument();}
+        //#endif
 
-		public static Component getComponent(final CommandContext<
-				//#if FABRIC
-				//$$ FabricClientCommandSource
-				//#elseif NEOFORGE
-				CommandSourceStack
-				//#endif
-				> context, final String name) {
-			return context.getArgument(name, Component.class);
-		}
+        public static Component getComponent(final CommandContext<
+                //#if FABRIC
+                //$$ FabricClientCommandSource
+                //#elseif NEOFORGE
+                CommandSourceStack
+                //#endif
+                > context, final String name) {
+            return context.getArgument(name, Component.class);
+        }
 
-		@Override
-		public Component parse(final StringReader stringReader) throws CommandSyntaxException {
-			try {
-				//#if MC>=12105
-				return SnbtGrammar.createParser(JavaOps.INSTANCE).withCodec(
-						this.holderLookupProvider.createSerializationContext(JavaOps.INSTANCE), SnbtGrammar.createParser(JavaOps.INSTANCE), ComponentSerialization.CODEC, INVALID_COMPONENT_EXCEPTION
-				).parseForCommands(stringReader);
-				//#elseif MC>=12006
-				//$$ return ParserUtils.parseJson(this.holderLookupProvider, stringReader, ComponentSerialization.CODEC);
-				//#elseif MC>=12004
-				//$$ return ParserUtils.parseJson(stringReader, ComponentSerialization.CODEC);
-				//#else
-				//$$ Component component = Component.Serializer.fromJson(stringReader);
-				//$$ if (component == null) { throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, "empty"); }
-				//$$ else { return component; }
-				//#endif
-			} catch (Exception var4) {
-				String string = var4.getCause() != null ? var4.getCause().getMessage() : var4.getMessage();
-				throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, string);
-			}
-		}
-	}
+        @Override
+        public Component parse(final StringReader stringReader) throws CommandSyntaxException {
+            try {
+                //#if MC>=12105
+                return SnbtGrammar.createParser(JavaOps.INSTANCE).withCodec(
+                        this.holderLookupProvider.createSerializationContext(JavaOps.INSTANCE), SnbtGrammar.createParser(JavaOps.INSTANCE), ComponentSerialization.CODEC, INVALID_COMPONENT_EXCEPTION
+                ).parseForCommands(stringReader);
+                //#elseif MC>=12006
+                //$$ return ParserUtils.parseJson(this.holderLookupProvider, stringReader, ComponentSerialization.CODEC);
+                //#elseif MC>=12004
+                //$$ return ParserUtils.parseJson(stringReader, ComponentSerialization.CODEC);
+                //#else
+                //$$ Component component = Component.Serializer.fromJson(stringReader);
+                //$$ if (component == null) { throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, "empty"); }
+                //$$ else { return component; }
+                //#endif
+            } catch (Exception var4) {
+                String string = var4.getCause() != null ? var4.getCause().getMessage() : var4.getMessage();
+                throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, string);
+            }
+        }
+    }
 
-	public static class FakeCommandSource extends CommandSourceStack {
-		public FakeCommandSource(LocalPlayer player) {
-			super(new CommandSource() {
-					  //#if MC>=11900
-					  @Override
-					  public void sendSystemMessage(Component component) {
-						  MessageUtils.sendToNonPublicChat(component);
-					  }
-					  //#elseif MC>=11700
-					  //$$ @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
-					  //$$ @Override public boolean alwaysAccepts() {return CommandSource.super.alwaysAccepts();}
-					  //#else
-					  //$$ @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
-					  //#endif
+    public static class FakeCommandSource extends CommandSourceStack {
+        public FakeCommandSource(LocalPlayer player) {
+            super(new CommandSource() {
+                      //#if MC>=11900
+                      @Override
+                      public void sendSystemMessage(Component component) {
+                          MessageUtils.sendToNonPublicChat(component);
+                      }
+                      //#elseif MC>=11700
+                      //$$ @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
+                      //$$ @Override public boolean alwaysAccepts() {return CommandSource.super.alwaysAccepts();}
+                      //#else
+                      //$$ @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
+                      //#endif
 
-					  @Override
-					  public boolean acceptsSuccess() {
-						  return true;
-					  }
+                      @Override
+                      public boolean acceptsSuccess() {
+                          return true;
+                      }
 
-					  @Override
-					  public boolean acceptsFailure() {
-						  return true;
-					  }
+                      @Override
+                      public boolean acceptsFailure() {
+                          return true;
+                      }
 
-					  @Override
-					  public boolean shouldInformAdmins() {
-						  return true;
-					  }
-				  }, player.position(), player.getRotationVector(), null,
-					//#if MC>=12111
-					PermissionSet.ALL_PERMISSIONS
-					//#else
-					//$$ 4
-					//#endif
-					, player.getScoreboardName(), player.getName(), null, player);
-		}
-	}
+                      @Override
+                      public boolean shouldInformAdmins() {
+                          return true;
+                      }
+                  }, player.position(), player.getRotationVector(), null,
+                    //#if MC>=12111
+                    PermissionSet.ALL_PERMISSIONS
+                    //#else
+                    //$$ 4
+                    //#endif
+                    , player.getScoreboardName(), player.getName(), null, player);
+        }
+    }
 }
