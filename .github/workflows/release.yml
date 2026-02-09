@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-summary-and-github-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -17,7 +19,7 @@ jobs:
       - name: Generate summary
         uses: ./.github/actions/summary/
 
-      - name: Get variables and Prepare Changelog
+      - name: Get variables
         run: |
           raw_file_paths=$(ls ./gathered-artifacts/*)
           # adds line breaks
@@ -29,21 +31,13 @@ jobs:
           tag_name=${raw_tag_name#v}
           echo "tag_name=${tag_name}" >> $GITHUB_ENV
 
-          # save changelog.md to gathered-artifacts for later jobs
-          cp changelog.md ./gathered-artifacts/changelog.md
-
           changelog=$(cat changelog.md)
           echo "changelog<<EOF" >> $GITHUB_ENV
           echo "${changelog}" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          
-          # log prints
-          echo "file_paths: $file_paths"
-          echo "tag_name: $tag_name"
-          echo "changelog: $changelog"
 
-      # https://github.com/marketplace/actions/gh-release
       - name: Create GitHub Release
+        id: create_release
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GH_TOKEN }}
@@ -55,6 +49,19 @@ jobs:
           prerelease: false
           generate_release_notes: true
           files: ${{ env.file_paths }}
+
+      - name: Fetch Release Notes
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          echo "Fetching release notes from GitHub..."
+          gh release view "v${{ env.tag_name }}" --repo ${{ github.repository }} --json body --jq '.body' > ./gathered-artifacts/release_notes.md
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artifacts
+          path: gathered-artifacts
 
   modrinth-and-curseforge-release:
     needs:
@@ -209,8 +216,7 @@ jobs:
           tag_name=${raw_tag_name#v}
           echo "tag_name=${tag_name}" >> $GITHUB_ENV
 
-          # read changelog directly from gathered-artifacts/changelog.md
-          changelog=$(cat gathered-artifacts/changelog.md)
+          changelog=$(cat gathered-artifacts/release_notes.md)
           echo "changelog<<EOF" >> $GITHUB_ENV
           echo "${changelog}" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
