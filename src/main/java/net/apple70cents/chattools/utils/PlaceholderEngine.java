@@ -71,15 +71,15 @@ public final class PlaceholderEngine {
 
         // variables
         MAPPINGS.put("pitch", args -> String.valueOf(Minecraft.getInstance().player.
-                        //#if MC>=11700
-                                getXRot()
+                //#if MC>=11700
+                getXRot()
                 //#else
                 //$$ xRot
                 //#endif
         ));
         MAPPINGS.put("yaw", args -> String.valueOf(Minecraft.getInstance().player.
-                        //#if MC>=11700
-                                getYRot()
+                //#if MC>=11700
+                getYRot()
                 //#else
                 //$$ yRot
                 //#endif
@@ -90,8 +90,8 @@ public final class PlaceholderEngine {
         MAPPINGS.put("pos", args -> String.format("(%.1f, %.1f, %.1f)", Minecraft.getInstance().player.getX(),
                 Minecraft.getInstance().player.getY(), Minecraft.getInstance().player.getZ()));
         MAPPINGS.put("dimension_reg_name", args ->
-                        //#if MC>=12111
-                        Minecraft.getInstance().level.dimension().identifier().toString()
+                //#if MC>=12111
+                Minecraft.getInstance().level.dimension().identifier().toString()
                 //#else
                 //$$ Minecraft.getInstance().level.dimension().location().toString()
                 //#endif
@@ -104,8 +104,8 @@ public final class PlaceholderEngine {
                         //$$ net.minecraft.core.Registry.BIOME_REGISTRY
                         //#endif
                 ).getKey(Minecraft.getInstance().level.getBiome(Minecraft.getInstance().player.blockPosition())
-                                //#if MC>=11800
-                                .value()
+                        //#if MC>=11800
+                        .value()
                         //#endif
                 )));
         MAPPINGS.put("biome",
@@ -129,8 +129,8 @@ public final class PlaceholderEngine {
                     currentTime.getSecond());
         });
         MAPPINGS.put("nickname", args -> Minecraft.getInstance().player.getGameProfile()
-                        //#if MC>=12109
-                        .name()
+                //#if MC>=12109
+                .name()
                 //#else
                 //$$ .getName()
                 //#endif
