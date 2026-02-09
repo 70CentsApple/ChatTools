@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "GPL-3.0"
+issueTrackerURL = "https://github.com/70CentsApple/ChatTools/issues"
+
+[[mods]]
+modId = "${id}"
+version = "${version}"
+displayName = "Chat Tools"
+displayURL = "https://github.com/70CentsApple/ChatTools"
+authors = "70CentsApple"
+description = '''
+A toolkit that provides great chat-related features.
+'''
+logoFile = "icon.png"
+
+[[dependencies."${id}"]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraft_dependency}"
+ordering = "NONE"
+side = "CLIENT"
+
+[[mixins]]
+config = "${id}.mixins.json"
