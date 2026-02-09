@@ -9,14 +9,24 @@ import net.apple70cents.chattools.config.ConfigScreenGenerator;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-//#if MC>=11900
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-//#else
-// Fabric v2 begins to work since 1.19
-//$$ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+//#if FABRIC
+//$$ //#if MC>=11900
+//$$ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+//$$ //#else
+//$$ // Fabric v2 begins to work since 1.19
+//$$ //$$ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+//$$ //#endif
+//#elseif NEOFORGE
+import net.minecraft.commands.CommandSourceStack;
 //#endif
 
-public class ConfigKeysSuggestionProvider implements SuggestionProvider<FabricClientCommandSource> {
+public class ConfigKeysSuggestionProvider implements SuggestionProvider<
+        //#if FABRIC
+        //$$ FabricClientCommandSource
+        //#elseif NEOFORGE
+        CommandSourceStack
+        //#endif
+        > {
     int level;
 
     public ConfigKeysSuggestionProvider(int level) {
@@ -27,7 +37,13 @@ public class ConfigKeysSuggestionProvider implements SuggestionProvider<FabricCl
     }
 
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<FabricClientCommandSource> context, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<
+            //#if FABRIC
+            //$$ FabricClientCommandSource
+            //#elseif NEOFORGE
+            CommandSourceStack
+            //#endif
+            > context, SuggestionsBuilder builder) {
         for (Map.Entry<String, String> ele : ConfigScreenGenerator.getKey2TypeMappings().entrySet()) {
             if (level == 3) {
                 switch (String.valueOf(ele.getValue())) {

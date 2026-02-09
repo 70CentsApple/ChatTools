@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.apple70cents.chattools.utils.ConfigUtils;
 import net.apple70cents.chattools.utils.LoggerUtils;
-import net.minecraft.client.Minecraft;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -15,8 +14,13 @@ import java.util.Map;
  * @author 70CentsApple
  */
 public class ConfigStorage {
-    public static final File FILE = new File(net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir()
-                                                                                 .toFile(), "chat_tools.json");
+    public static final File FILE = new File(
+            //#if FABRIC
+            //$$ net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir()
+            //#elseif NEOFORGE
+            net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get()
+            //#endif
+                    .toFile(), "chat_tools.json");
 
     private Map<String, Object> configMap;
 
@@ -49,7 +53,7 @@ public class ConfigStorage {
         try {
             Reader reader;
             if (loadDefault) {
-                reader = new InputStreamReader(Minecraft.getInstance().getClass().getClassLoader()
+                reader = new InputStreamReader(this.getClass().getClassLoader()
                                                         .getResourceAsStream("assets/chattools/default_config.json"));
             } else {
                 reader = new InputStreamReader(new FileInputStream(FILE), StandardCharsets.UTF_8);

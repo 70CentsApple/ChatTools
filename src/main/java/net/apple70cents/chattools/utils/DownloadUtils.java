@@ -1,7 +1,5 @@
 package net.apple70cents.chattools.utils;
 
-import net.fabricmc.loader.api.FabricLoader;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,7 +16,13 @@ import java.util.Map;
  */
 public class DownloadUtils {
     private static final String DOWNLOAD_SITE = "https://70centsapple.top/download/chat_tools/download.php?version=250805&file=";
-    public static final Path STORAGE_DIR = Path.of(FabricLoader.getInstance().getGameDir().toString(), "chattools");
+    public static final Path STORAGE_DIR = Path.of(
+            //#if FABRIC
+            //$$ net.fabricmc.loader.api.FabricLoader.getInstance().getGameDir()
+            //#elseif NEOFORGE
+            net.neoforged.fml.loading.FMLPaths.GAMEDIR.get()
+            //#endif
+                    .toString(), "chattools");
     private static final Map<String, String> WIN_7_FILENAMES = Map.of("icon", "icon.ico", "toastExe", "toast-win7.exe");
     private static final Map<String, String> WIN_10_FILENAMES = Map.of("icon", "icon.ico", "toastExe", "toast-win10.exe");
     private static final String OS = System.getProperty("os.name");
