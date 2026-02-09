@@ -21,5 +21,12 @@ versionRange = "${minecraft_dependency}"
 ordering = "NONE"
 side = "CLIENT"
 
+[[dependencies."${id}"]]
+modId = "cloth_config"
+type = "required"
+versionRange = "[0.0.1,)"
+ordering = "NONE"
+side = "CLIENT"
+
 [[mixins]]
 config = "${id}.mixins.json"
