@@ -104,12 +104,32 @@ processResources {
 			"id"                  : project.mod_id,
 			"version"             : fullModVersion,
 			"minecraft_dependency": project.minecraft_dependency,
+			"cloth_config_id"     : CLOTH_CONFIG_MOD_ID
 	]
 	inputs.properties(modProperties)
 
-	filesMatching("fabric.mod.json") {
-		expand modProperties
+	def good_files = [] as Set
+	def all_files = [] as Set
+	[
+			'fabric'  : ['fabric.mod.json'],
+			'neoforge': ['META-INF', 'META-INF/neoforge.mods.toml', 'pack.mcmeta'],
+	].forEach { brand, paths ->
+		all_files.addAll(paths)
+		if (brand == mod_brand) {
+			good_files.addAll(paths)
+		}
 	}
+	all_files.forEach { it2 ->
+		def path = it2 as String
+		if (good_files.contains(path)) {
+			filesMatching(path) {
+				expand modProperties
+			}
+		} else {
+			exclude path
+		}
+	}
+
 	filesMatching('chattools.mixins.json') {
 		filter { s -> s.replace('{{COMPATIBILITY_LEVEL}}', "JAVA_${JAVA_COMPATIBILITY.ordinal() + 1}") }
 	}

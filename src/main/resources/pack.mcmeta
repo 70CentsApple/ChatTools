@@ -1,6 +1,6 @@
 {
   "pack": {
-    "description": "${name}",
+    "description": "Chat Tools",
     "pack_format": 6
   }
 }
