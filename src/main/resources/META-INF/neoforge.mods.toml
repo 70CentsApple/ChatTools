@@ -7,8 +7,15 @@ issueTrackerURL = "https://github.com/70CentsApple/ChatTools/issues"
 modId = "${id}"
 version = "${version}"
 displayName = "Chat Tools"
-displayURL = "https://github.com/70CentsApple/ChatTools"
+displayURL = "https://modrinth.com/mod/chat-tools"
 authors = "70CentsApple"
+credits = '''\n
+    Litwak913
+    WhiteXero
+    en_us translation: UltimatChamp, 70CentsApple
+    zh_cn translation: 70CentsApple
+    zh_tw translation: yichifauzi
+    es_es translation: pilahito'''
 description = '''
 A toolkit that provides great chat-related features.
 '''
