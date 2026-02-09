@@ -212,7 +212,7 @@ jobs:
 
       - name: Resolve file path and Changelog
         run: |
-          file_path=$(ls gathered-artifacts/*-${{ matrix.artifact }}-*.jar)
+          file_path=$(ls gathered-artifacts/*${{ matrix.artifact }}*.jar)
           echo "file_path=${file_path}" >> $GITHUB_ENV
           echo "file_path for this version is: $file_path"
           
