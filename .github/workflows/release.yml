@@ -17,7 +17,7 @@ jobs:
       - name: Generate summary
         uses: ./.github/actions/summary/
 
-      - name: Get variables
+      - name: Get variables and Prepare Changelog
         run: |
           raw_file_paths=$(ls ./gathered-artifacts/*)
           # adds line breaks
@@ -28,6 +28,9 @@ jobs:
           # removes the 'v' prefix
           tag_name=${raw_tag_name#v}
           echo "tag_name=${tag_name}" >> $GITHUB_ENV
+
+          # save changelog.md to gathered-artifacts for later jobs
+          cp changelog.md ./gathered-artifacts/changelog.md
 
           changelog=$(cat changelog.md)
           echo "changelog<<EOF" >> $GITHUB_ENV
@@ -53,152 +56,138 @@ jobs:
           generate_release_notes: true
           files: ${{ env.file_paths }}
 
-  modrinth-release:
+  modrinth-and-curseforge-release:
     needs:
       - build-and-summary-and-github-release
     runs-on: ubuntu-latest
     strategy:
+      # to ensure uploads are done sequentially
+      max-parallel: 1
       matrix:
         include:
-          - artifact: "1.16.5-fabric"
-            target_game_versions: "1.16,1.16.1,1.16.2,1.16.3,1.16.4,1.16.5"
-            target_game_versions_cf_ids: "7890,7892,8010,8056,8134,8203"
-            formatted_version_name: "1.16.x"
-            modloader: "fabric"
-            delay: 130
-
-          - artifact: "1.17.1-fabric"
-            target_game_versions: "1.17,1.17.1"
-            target_game_versions_cf_ids: "8152,8516"
-            formatted_version_name: "1.17.x"
-            modloader: "fabric"
-            delay: 120
-
-          - artifact: "1.18.2-fabric"
-            target_game_versions: "1.18,1.18.1,1.18.2"
-            target_game_versions_cf_ids: "8830,8857,9008"
-            formatted_version_name: "1.18.x"
-            modloader: "fabric"
-            delay: 110
-
-          - artifact: "1.19.4-fabric"
-            target_game_versions: "1.19,1.19.1,1.19.2,1.19.3,1.19.4"
-            target_game_versions_cf_ids: "9186,9259,9366,9550,9776"
-            formatted_version_name: "1.19.x"
-            modloader: "fabric"
-            delay: 100
-
-          - artifact: "1.20.1-fabric"
-            target_game_versions: "1.20,1.20.1"
-            target_game_versions_cf_ids: "9971,9990"
-            formatted_version_name: "1.20(.1)"
-            modloader: "fabric"
-            delay: 90
-
-          - artifact: "1.20.4-fabric"
-            target_game_versions: "1.20.2,1.20.3,1.20.4"
-            target_game_versions_cf_ids: "10236,10395,10407"
-            formatted_version_name: "1.20.2(3,4)"
-            modloader: "fabric"
-            delay: 80
-
-          - artifact: "1.20.6-fabric"
-            target_game_versions: "1.20.5,1.20.6"
-            target_game_versions_cf_ids: "11163,11198"
-            formatted_version_name: "1.20.5(6)"
-            modloader: "fabric"
-            delay: 70
-
-          - artifact: "1.20.6-neoforge"
-            target_game_versions: "1.20.5,1.20.6"
-            target_game_versions_cf_ids: "11163,11198"
-            formatted_version_name: "1.20.5(6)"
-            modloader: "neoforge"
-            delay: 67
-
-          - artifact: "1.21.1-fabric"
-            target_game_versions: "1.21,1.21.1"
-            target_game_versions_cf_ids: "11457,11779"
-            formatted_version_name: "1.21(.1)"
-            modloader: "fabric"
-            delay: 60
-
-          - artifact: "1.21.1-neoforge"
-            target_game_versions: "1.21,1.21.1"
-            target_game_versions_cf_ids: "11457,11779"
-            formatted_version_name: "1.21(.1)"
-            modloader: "neoforge"
-            delay: 57
-
-          - artifact: "1.21.4-fabric"
-            target_game_versions: "1.21.2,1.21.3,1.21.4"
-            target_game_versions_cf_ids: "12079,12084,12281"
-            formatted_version_name: "1.21.2(3,4)"
-            modloader: "fabric"
-            delay: 50
-
-          - artifact: "1.21.4-neoforge"
-            target_game_versions: "1.21.2,1.21.3,1.21.4"
-            target_game_versions_cf_ids: "12079,12084,12281"
-            formatted_version_name: "1.21.2(3,4)"
-            modloader: "neoforge"
-            delay: 47
-
-          - artifact: "1.21.5-fabric"
-            target_game_versions: "1.21.5"
-            target_game_versions_cf_ids: "12934"
-            formatted_version_name: "1.21.5"
-            modloader: "fabric"
-            delay: 40
-
-          - artifact: "1.21.5-neoforge"
-            target_game_versions: "1.21.5"
-            target_game_versions_cf_ids: "12934"
-            formatted_version_name: "1.21.5"
-            modloader: "neoforge"
-            delay: 37
-
-          - artifact: "1.21.8-fabric"
-            target_game_versions: "1.21.6,1.21.7,1.21.8"
-            target_game_versions_cf_ids: "13422,13506,13620"
-            formatted_version_name: "1.21.6(7,8)"
-            modloader: "fabric"
-            delay: 30
-
-          - artifact: "1.21.8-neoforge"
-            target_game_versions: "1.21.6,1.21.7,1.21.8"
-            target_game_versions_cf_ids: "13422,13506,13620"
-            formatted_version_name: "1.21.6(7,8)"
-            modloader: "neoforge"
-            delay: 27
-
-          - artifact: "1.21.10-fabric"
-            target_game_versions: "1.21.9,1.21.10"
-            target_game_versions_cf_ids: "13927,13964"
-            formatted_version_name: "1.21.9(10)"
-            modloader: "fabric"
-            delay: 20
-
-          - artifact: "1.21.10-neoforge"
-            target_game_versions: "1.21.9,1.21.10"
-            target_game_versions_cf_ids: "13927,13964"
-            formatted_version_name: "1.21.9(10)"
-            modloader: "neoforge"
-            delay: 17
-
+          # --- 1.21.x ---
           - artifact: "1.21.11-fabric"
             target_game_versions: "1.21.11"
             target_game_versions_cf_ids: "14406"
             formatted_version_name: "1.21.11"
             modloader: "fabric"
-            delay: 10
 
           - artifact: "1.21.11-neoforge"
             target_game_versions: "1.21.11"
             target_game_versions_cf_ids: "14406"
             formatted_version_name: "1.21.11"
             modloader: "neoforge"
-            delay: 10
+
+          - artifact: "1.21.10-fabric"
+            target_game_versions: "1.21.9,1.21.10"
+            target_game_versions_cf_ids: "13927,13964"
+            formatted_version_name: "1.21.9(10)"
+            modloader: "fabric"
+
+          - artifact: "1.21.10-neoforge"
+            target_game_versions: "1.21.9,1.21.10"
+            target_game_versions_cf_ids: "13927,13964"
+            formatted_version_name: "1.21.9(10)"
+            modloader: "neoforge"
+
+          - artifact: "1.21.8-fabric"
+            target_game_versions: "1.21.6,1.21.7,1.21.8"
+            target_game_versions_cf_ids: "13422,13506,13620"
+            formatted_version_name: "1.21.6(7,8)"
+            modloader: "fabric"
+
+          - artifact: "1.21.8-neoforge"
+            target_game_versions: "1.21.6,1.21.7,1.21.8"
+            target_game_versions_cf_ids: "13422,13506,13620"
+            formatted_version_name: "1.21.6(7,8)"
+            modloader: "neoforge"
+
+          - artifact: "1.21.5-fabric"
+            target_game_versions: "1.21.5"
+            target_game_versions_cf_ids: "12934"
+            formatted_version_name: "1.21.5"
+            modloader: "fabric"
+
+          - artifact: "1.21.5-neoforge"
+            target_game_versions: "1.21.5"
+            target_game_versions_cf_ids: "12934"
+            formatted_version_name: "1.21.5"
+            modloader: "neoforge"
+
+          - artifact: "1.21.4-fabric"
+            target_game_versions: "1.21.2,1.21.3,1.21.4"
+            target_game_versions_cf_ids: "12079,12084,12281"
+            formatted_version_name: "1.21.2(3,4)"
+            modloader: "fabric"
+
+          - artifact: "1.21.4-neoforge"
+            target_game_versions: "1.21.2,1.21.3,1.21.4"
+            target_game_versions_cf_ids: "12079,12084,12281"
+            formatted_version_name: "1.21.2(3,4)"
+            modloader: "neoforge"
+
+          - artifact: "1.21.1-fabric"
+            target_game_versions: "1.21,1.21.1"
+            target_game_versions_cf_ids: "11457,11779"
+            formatted_version_name: "1.21(.1)"
+            modloader: "fabric"
+
+          - artifact: "1.21.1-neoforge"
+            target_game_versions: "1.21,1.21.1"
+            target_game_versions_cf_ids: "11457,11779"
+            formatted_version_name: "1.21(.1)"
+            modloader: "neoforge"
+
+          # --- 1.20.x ---
+          - artifact: "1.20.6-fabric"
+            target_game_versions: "1.20.5,1.20.6"
+            target_game_versions_cf_ids: "11163,11198"
+            formatted_version_name: "1.20.5(6)"
+            modloader: "fabric"
+
+          - artifact: "1.20.6-neoforge"
+            target_game_versions: "1.20.5,1.20.6"
+            target_game_versions_cf_ids: "11163,11198"
+            formatted_version_name: "1.20.5(6)"
+            modloader: "neoforge"
+
+          - artifact: "1.20.4-fabric"
+            target_game_versions: "1.20.2,1.20.3,1.20.4"
+            target_game_versions_cf_ids: "10236,10395,10407"
+            formatted_version_name: "1.20.2(3,4)"
+            modloader: "fabric"
+
+          - artifact: "1.20.1-fabric"
+            target_game_versions: "1.20,1.20.1"
+            target_game_versions_cf_ids: "9971,9990"
+            formatted_version_name: "1.20(.1)"
+            modloader: "fabric"
+
+          # --- 1.19.x, 1.18.x, 1.17.x, 1.16.x ---
+          - artifact: "1.19.4-fabric"
+            target_game_versions: "1.19,1.19.1,1.19.2,1.19.3,1.19.4"
+            target_game_versions_cf_ids: "9186,9259,9366,9550,9776"
+            formatted_version_name: "1.19.x"
+            modloader: "fabric"
+
+          - artifact: "1.18.2-fabric"
+            target_game_versions: "1.18,1.18.1,1.18.2"
+            target_game_versions_cf_ids: "8830,8857,9008"
+            formatted_version_name: "1.18.x"
+            modloader: "fabric"
+
+          - artifact: "1.17.1-fabric"
+            target_game_versions: "1.17,1.17.1"
+            target_game_versions_cf_ids: "8152,8516"
+            formatted_version_name: "1.17.x"
+            modloader: "fabric"
+
+          - artifact: "1.16.5-fabric"
+            target_game_versions: "1.16,1.16.1,1.16.2,1.16.3,1.16.4,1.16.5"
+            target_game_versions_cf_ids: "7890,7892,8010,8056,8134,8203"
+            formatted_version_name: "1.16.x"
+            modloader: "fabric"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -208,26 +197,20 @@ jobs:
           name: Artifacts
           path: gathered-artifacts
 
-      - name: Sleep for ${{ matrix.delay }} seconds
-        run: |
-          echo "Sleeping for ${{ matrix.delay }} seconds..."
-          sleep ${{ matrix.delay }}
-
-      - name: Resolve file path
+      - name: Resolve file path and Changelog
         run: |
           file_path=$(ls gathered-artifacts/*-${{ matrix.artifact }}-*.jar)
           echo "file_path=${file_path}" >> $GITHUB_ENV
           echo "file_path for this version is: $file_path"
-
-      - name: Get variables
-        run: |
+          
           raw_tag_name=${GITHUB_REF#refs/tags/}
+          
           # removes the 'v' prefix
           tag_name=${raw_tag_name#v}
           echo "tag_name=${tag_name}" >> $GITHUB_ENV
 
-          response=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" "https://api.github.com/repos/70CentsApple/ChatTools/releases/latest")
-          changelog=$(echo "${response}" | jq -r '.body')
+          # read changelog directly from gathered-artifacts/changelog.md
+          changelog=$(cat gathered-artifacts/changelog.md)
           echo "changelog<<EOF" >> $GITHUB_ENV
           echo "${changelog}" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
