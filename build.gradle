@@ -26,6 +26,13 @@ preprocess {
     def mc12108_fabric = createNode('1.21.8-fabric', 1_21_08, '')
     def mc12110_fabric = createNode('1.21.10-fabric', 1_21_10, '')
     def mc12111_fabric = createNode('1.21.11-fabric', 1_21_11, '')
+    def mc12006_neoforge = createNode('1.20.6-neoforge', 1_20_06, '')
+    def mc12101_neoforge = createNode('1.21.1-neoforge', 1_21_01, '')
+    def mc12104_neoforge = createNode('1.21.4-neoforge', 1_21_04, '')
+    def mc12105_neoforge = createNode('1.21.5-neoforge', 1_21_05, '')
+    def mc12108_neoforge = createNode('1.21.8-neoforge', 1_21_08, '')
+    def mc12110_neoforge = createNode('1.21.10-neoforge', 1_21_10, '')
+    def mc12111_neoforge = createNode('1.21.11-neoforge', 1_21_11, '')
 
     mc116_fabric.link(mc117_fabric, null)
     mc117_fabric.link(mc118_fabric, null)
@@ -39,6 +46,14 @@ preprocess {
     mc12105_fabric.link(mc12108_fabric, null)
     mc12108_fabric.link(mc12110_fabric, null)
     mc12110_fabric.link(mc12111_fabric, null)
+
+    mc12006_fabric.link(mc12006_neoforge, null)
+    mc12101_fabric.link(mc12101_neoforge, null)
+    mc12104_fabric.link(mc12104_neoforge, null)
+    mc12105_fabric.link(mc12105_neoforge, null)
+    mc12108_fabric.link(mc12108_neoforge, null)
+    mc12110_fabric.link(mc12110_neoforge, null)
+    mc12111_fabric.link(mc12111_neoforge, null)
 }
 
 tasks.register('buildAndGather') {
