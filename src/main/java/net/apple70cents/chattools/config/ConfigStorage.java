@@ -7,6 +7,7 @@ import net.apple70cents.chattools.utils.LoggerUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class ConfigStorage {
     }
 
     public Map getHashmap() {
-        return configMap;
+        return Collections.unmodifiableMap(configMap);
     }
 
     // combine two hashmaps
@@ -53,8 +54,8 @@ public class ConfigStorage {
         try {
             Reader reader;
             if (loadDefault) {
-                reader = new InputStreamReader(this.getClass().getClassLoader()
-                        .getResourceAsStream("assets/chattools/default_config.json"));
+                reader = new InputStreamReader(
+                        this.getClass().getClassLoader().getResourceAsStream("assets/chattools/default_config.json"));
             } else {
                 reader = new InputStreamReader(new FileInputStream(FILE), StandardCharsets.UTF_8);
             }
@@ -81,7 +82,7 @@ public class ConfigStorage {
     }
 
     public boolean hasKey(String key) {
-        return this.configMap.get(key) != null;
+        return this.configMap.containsKey(key);
     }
 
     public void set(String variableName, Object value) {

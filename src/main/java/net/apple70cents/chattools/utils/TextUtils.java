@@ -171,7 +171,7 @@ public class TextUtils {
      * @return string with no color codes
      */
     public static String wash(String str) {
-        return Pattern.compile("§.").matcher(str).replaceAll("");
+        return RegExUtils.getOrCompilePattern("§.").matcher(str).replaceAll("");
     }
 
     /**

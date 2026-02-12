@@ -474,9 +474,9 @@ public final class PlaceholderEngine {
         MAPPINGS.put("subtract", args -> {
             if (args.length == 0) return "";
             double result = Double.parseDouble(args[0]);
-            for (String s : args) {
+            for (int i = 1; i < args.length; i++) {
                 try {
-                    double v = Double.parseDouble(s);
+                    double v = Double.parseDouble(args[i]);
                     result -= v;
                 } catch (NumberFormatException ignored) {
                 }
@@ -498,9 +498,9 @@ public final class PlaceholderEngine {
         MAPPINGS.put("divide", args -> {
             if (args.length == 0) return "";
             double result = Double.parseDouble(args[0]);
-            for (String s : Arrays.stream(args).skip(1).toList()) {
+            for (int i = 1; i < args.length; i++) {
                 try {
-                    double v = Double.parseDouble(s);
+                    double v = Double.parseDouble(args[i]);
                     if (v != 0) result /= v;
                 } catch (NumberFormatException ignored) {
                 }
@@ -635,7 +635,7 @@ public final class PlaceholderEngine {
     }
 
     // simple outermost placeholder matcher (we assume no unmatched '}' inside)
-    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{([^}]*)\\}");
+    private static final Pattern PLACEHOLDER_PATTERN = RegExUtils.getOrCompilePattern("\\{([^}]*)\\}");
 
     public static String apply(String template) {
         if (template == null) return null;

@@ -20,7 +20,7 @@ public class NickHider {
 
     private static final CircuitBreakerExecutor executor = CircuitBreakerExecutor.of(() -> {
         try {
-            text = TextUtils.replaceComponentText(text.copy(), Pattern.compile(Pattern.quote(playerName)), nickname);
+            text = TextUtils.replaceComponentText(text.copy(), RegExUtils.getOrCompilePattern(Pattern.quote(playerName)), nickname);
         } catch (Exception e) {
             LoggerUtils.error("[ChatTools] Error occurred on nick-hiding this text: " + text + ", let's show it raw...");
             e.printStackTrace();
@@ -31,7 +31,7 @@ public class NickHider {
         int threshold = ((Number) ConfigUtils.get("general.CircuitBreaker.NickHiderThreshold")).intValue();
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
-        LoggerUtils.warn(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold).getString());
+        LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold).getString());
     }).setFailsafeJudgement(() -> (Boolean) ConfigUtils.get("general.NickHider.Enabled"));
 
     public static Component work(Component message) {
@@ -43,18 +43,11 @@ public class NickHider {
         if (player != null) {
             playerName = player.getName().getString();
             String key = nickname + "|" + playerName + "|" + message.toString();
-
-            if (cache.containsKey(key)) {
-                return cache.get(key); // get from cache
-            }
-
-            // not cached, let's deal with it!
-            if (TextUtils.wash(message.getString()).contains(playerName)) {
+            return cache.computeIfAbsent(key, k -> {
                 text = message.copy();
                 executor.run();
-                cache.put(key, text); // put it in cache
                 return text;
-            }
+            });
         }
         return message;
     }

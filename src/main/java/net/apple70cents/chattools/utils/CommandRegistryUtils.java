@@ -177,7 +177,7 @@ public class CommandRegistryUtils {
                 LoggerUtils.info("[ChatTools] Getting message by hash: " + hash);
                 TextUtils.MessageUnit messageUnit = TextUtils.getMessageUnitByHash(hash);
                 if (messageUnit != null) {
-                    LoggerUtils.info(String.format("Time:%d Text:%s", messageUnit.unixTimestamp, messageUnit.message));
+                    LoggerUtils.info(String.format("[ChatTools] Time:%d Text:%s", messageUnit.unixTimestamp, messageUnit.message));
                     Minecraft.getInstance().setScreen(new CopyFeatureScreen(messageUnit));
                 } else {
                     Component errorText = TextUtils.literal("[ChatTools] Failed to get message by hash: " + hash).copy().withStyle(ChatFormatting.RED);

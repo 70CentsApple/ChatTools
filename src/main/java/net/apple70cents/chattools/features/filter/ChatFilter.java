@@ -2,6 +2,7 @@ package net.apple70cents.chattools.features.filter;
 
 import net.apple70cents.chattools.utils.ConfigUtils;
 import net.apple70cents.chattools.utils.MessageUtils;
+import net.apple70cents.chattools.utils.RegExUtils;
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
@@ -24,7 +25,7 @@ public class ChatFilter {
         List<String> filterList = (List<String>) ConfigUtils.get("filter.List");
         String washed = TextUtils.wash(text.getString());
         for (String pattern : filterList) {
-            if (Pattern.compile(pattern, Pattern.MULTILINE).matcher(washed).find()) {
+            if (RegExUtils.getOrCompilePattern(pattern, Pattern.MULTILINE).matcher(washed).find()) {
                 return true;
             }
         }

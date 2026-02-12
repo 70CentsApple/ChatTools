@@ -87,52 +87,42 @@ public class MessageUtils {
 
         boolean oldStatus = (boolean) ConfigUtils.get("formatter.Enabled");
 
-        //#if MC>=11900
-        if ((boolean) ConfigUtils.get("general.UseSendPacketsForSendingMessages")) {
-            Minecraft mc = Minecraft.getInstance();
-            mc.execute(() -> {
-                if (forceDisableFormatter) {
-                    ConfigUtils.set("formatter.Enabled", false);
-                }
+        if (forceDisableFormatter) {
+            ConfigUtils.set("formatter.Enabled", false);
+        }
 
-                //#if MC>=12109
-                ChatScreen tempChatScreen = new ChatScreen(text, false);
-                //#else
-                //$$ ChatScreen tempChatScreen = new ChatScreen(text);
-                //#endif
+        //#if MC>=11900
+        Minecraft.getInstance().execute(() -> {
+            if ((boolean) ConfigUtils.get("general.UseSendPacketsForSendingMessages")) {
+                ChatScreen tempChatScreen = new ChatScreen(text
+                        //#if MC>=12109
+                        , false
+                        //#endif
+                );
                 ((ScreenAccessor) tempChatScreen).invokeInit(
                         //#if MC>=12111
                         //$$ // no-op
                         //#else
-                        //$$ mc,
+                        //$$ Minecraft.getInstance(),
                         //#endif
                         1, 1);
                 tempChatScreen.handleChatInput(text, false);
-
-                ConfigUtils.set("formatter.Enabled", oldStatus);
-            });
-        } else {
-            if (forceDisableFormatter) {
-                ConfigUtils.set("formatter.Enabled", false);
-            }
-
-            String text2 = StringUtils.normalizeSpace(text.trim());
-            if (!text2.isEmpty()) {
-                Minecraft.getInstance().gui.getChat().addRecentChat(text);
-                if (text2.startsWith("/")) {
-                    player.connection.sendCommand(text2.substring(1));
-                } else {
-                    player.connection.sendChat(text2);
+            } else {
+                String text2 = StringUtils.normalizeSpace(text.trim());
+                if (!text2.isEmpty()) {
+                    Minecraft.getInstance().gui.getChat().addRecentChat(text);
+                    if (text2.startsWith("/")) {
+                        player.connection.sendCommand(text2.substring(1));
+                    } else {
+                        player.connection.sendChat(text2);
+                    }
                 }
             }
-
-            ConfigUtils.set("formatter.Enabled", oldStatus);
-        }
+        });
         //#else
-        //$$ if (forceDisableFormatter) {ConfigUtils.set("formatter.Enabled", false);}
         //$$ player.chat(text);
-        //$$ ConfigUtils.set("formatter.Enabled", oldStatus);
         //#endif
+        ConfigUtils.set("formatter.Enabled", oldStatus);
     }
 
     /**

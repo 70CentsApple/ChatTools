@@ -35,8 +35,9 @@ public class Responder {
         long delayInMilliseconds = 0;
         boolean forceDisableFormatter = false;
         for (SpecialUnits.ResponderRuleUnit unit : SpecialUnits.ResponderRuleUnit.fromList((List) ConfigUtils.get("responder.List"))) {
-            if ("*".equals(unit.address) || Pattern.compile(unit.address).matcher(ContextUtils.getSessionIdentifier()).matches()) {
-                if (Pattern.compile(unit.pattern, Pattern.MULTILINE).matcher(messageReceived).find()) {
+            if ("*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
+                    .matcher(ContextUtils.getSessionIdentifier()).matches()) {
+                if (RegExUtils.getOrCompilePattern(unit.pattern, Pattern.MULTILINE).matcher(messageReceived).find()) {
                     shouldRespond = true;
                     pattern = unit.pattern;
                     message = unit.message;
@@ -84,15 +85,16 @@ public class Responder {
 
     /**
      * Extract all named groups from rawPattern matched in rawMessageReceived and submit them to PlaceholderEngine as temp mappings.
+     *
      * @param rawMessageReceived the raw message
      * @param rawPattern the raw pattern
      */
     static void submitAllGroupsToPlaceholderEngine(String rawMessageReceived, String rawPattern) {
-        Pattern pattern = Pattern.compile(rawPattern);
+        Pattern pattern = RegExUtils.getOrCompilePattern(rawPattern);
         Matcher matcher = pattern.matcher(rawMessageReceived);
         if (matcher.find()) {
             // Extract group names from pattern
-            Pattern groupNamePattern = java.util.regex.Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9_]*)>");
+            Pattern groupNamePattern = RegExUtils.getOrCompilePattern("\\(\\?<([a-zA-Z][a-zA-Z0-9_]*)>");
             Matcher groupNameMatcher = groupNamePattern.matcher(rawPattern);
             while (groupNameMatcher.find()) {
                 String groupName = groupNameMatcher.group(1);

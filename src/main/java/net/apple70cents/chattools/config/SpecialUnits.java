@@ -2,12 +2,17 @@ package net.apple70cents.chattools.config;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SpecialUnits {
+    protected static <T> List<T> map(List raw, Function<Object, T> mapper) {
+        return (List<T>) raw.stream().map(mapper).collect(Collectors.toList());
+    }
+
     public enum ToastModes {
         ADDON, POWERSHELL, AWT, TWO_SLICES
     }
@@ -55,11 +60,7 @@ public class SpecialUnits {
         }
 
         public static List<BubbleRuleUnit> fromList(List list) {
-            List<BubbleRuleUnit> arr = new ArrayList<>();
-            for (Object ele : list) {
-                arr.add(BubbleRuleUnit.of(ele));
-            }
-            return arr;
+            return SpecialUnits.map(list, BubbleRuleUnit::of);
         }
 
         @Override
@@ -107,11 +108,7 @@ public class SpecialUnits {
         }
 
         public static List<ResponderRuleUnit> fromList(List list) {
-            List<ResponderRuleUnit> arr = new ArrayList<>();
-            for (Object ele : list) {
-                arr.add(ResponderRuleUnit.of(ele));
-            }
-            return arr;
+            return SpecialUnits.map(list, ResponderRuleUnit::of);
         }
 
         @Override
@@ -155,11 +152,7 @@ public class SpecialUnits {
         }
 
         public static List<MacroUnit> fromList(List list) {
-            List<MacroUnit> arr = new ArrayList<>();
-            for (Object ele : list) {
-                arr.add(MacroUnit.of(ele));
-            }
-            return arr;
+            return SpecialUnits.map(list, MacroUnit::of);
         }
 
         @Override
@@ -212,11 +205,7 @@ public class SpecialUnits {
         }
 
         public static List<FormatterUnit> fromList(List list) {
-            List<FormatterUnit> arr = new ArrayList<>();
-            for (Object ele : list) {
-                arr.add(FormatterUnit.of(ele));
-            }
-            return arr;
+            return SpecialUnits.map(list, FormatterUnit::of);
         }
 
         @Override
@@ -260,11 +249,7 @@ public class SpecialUnits {
         }
 
         public static List<CustomJoinMessageRuleUnit> fromList(List list) {
-            List<CustomJoinMessageRuleUnit> arr = new ArrayList<>();
-            for (Object ele : list) {
-                arr.add(CustomJoinMessageRuleUnit.of(ele));
-            }
-            return arr;
+            return SpecialUnits.map(list, CustomJoinMessageRuleUnit::of);
         }
 
         @Override

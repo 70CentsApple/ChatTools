@@ -1,5 +1,7 @@
 package net.apple70cents.chattools.features.formatter;
 
+import net.apple70cents.chattools.utils.RegExUtils;
+
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,8 @@ public class GradientParser {
             int length = hex.length();
 
             if (length == 3) { // short #RGB format
-                hex = "" + hex.charAt(0) + hex.charAt(0) + hex.charAt(1) + hex.charAt(1) + hex.charAt(2) + hex.charAt(2);
+                hex = "" + hex.charAt(0) + hex.charAt(0) + hex.charAt(1) + hex.charAt(1) +
+                        hex.charAt(2) + hex.charAt(2);
             } else if (length != 6) {
                 return null;
             }
@@ -57,7 +60,9 @@ public class GradientParser {
     }
 
     public static String parse(String input) {
-        Pattern pattern = Pattern.compile("<gradient:(\\d+):\\[([^\\]]+)\\](?::(\\d+))?>(.*?)</gradient>", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+        Pattern pattern = RegExUtils.getOrCompilePattern(
+                "<gradient:(\\d+):\\[([^\\]]+)\\](?::(\\d+))?>(.*?)</gradient>",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
         Matcher matcher = pattern.matcher(input);
         StringBuilder sb = new StringBuilder();
@@ -81,16 +86,21 @@ public class GradientParser {
     private static BiFunction<Color, String, String> getFormat(String formatVersion) {
         switch (formatVersion) {
             case "2":
-                return ((color, s) -> String.format("[COLOR=#%02X%02X%02X]%s[/COLOR]", color.getRed(), color.getGreen(), color.getBlue(), s));
+                return ((color, s) -> String.format("[COLOR=#%02X%02X%02X]%s[/COLOR]", color.getRed(), color.getGreen(),
+                        color.getBlue(), s));
             case "3":
-                return ((color, s) -> String.format("{&#%02X%02X%02X}%s", color.getRed(), color.getGreen(), color.getBlue(), s));
+                return ((color, s) -> String.format("{&#%02X%02X%02X}%s", color.getRed(), color.getGreen(),
+                        color.getBlue(), s));
             case "4":
-                return ((color, s) -> String.format("<#%02X%02X%02X>%s", color.getRed(), color.getGreen(), color.getBlue(), s));
+                return ((color, s) -> String.format("<#%02X%02X%02X>%s", color.getRed(), color.getGreen(),
+                        color.getBlue(), s));
             case "5":
-                return ((color, s) -> String.format("<##%02X%02X%02X>%s", color.getRed(), color.getGreen(), color.getBlue(), s));
+                return ((color, s) -> String.format("<##%02X%02X%02X>%s", color.getRed(), color.getGreen(),
+                        color.getBlue(), s));
             case "1":
             default:
-                return ((color, s) -> String.format("&#%02X%02X%02X%s", color.getRed(), color.getGreen(), color.getBlue(), s));
+                return ((color, s) -> String.format("&#%02X%02X%02X%s", color.getRed(), color.getGreen(),
+                        color.getBlue(), s));
         }
     }
 
@@ -169,7 +179,8 @@ public class GradientParser {
         Color start = colors.get(index);
         Color end = colors.get(index + 1);
 
-        return new Color(lerp(start.getRed(), end.getRed(), localT), lerp(start.getGreen(), end.getGreen(), localT), lerp(start.getBlue(), end.getBlue(), localT));
+        return new Color(lerp(start.getRed(), end.getRed(), localT), lerp(start.getGreen(), end.getGreen(), localT),
+                lerp(start.getBlue(), end.getBlue(), localT));
     }
 
     private static int lerp(int start, int end, double t) {

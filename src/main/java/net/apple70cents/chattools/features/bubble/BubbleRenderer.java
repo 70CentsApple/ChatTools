@@ -177,9 +177,9 @@ public class BubbleRenderer {
     private static Map<String, BubbleUnit> bubbleMap = new HashMap<>();
 
     public static void render(Entity entity, PoseStack poseStack, MultiBufferSource multiBufferSource, float tickDelta
-          //#if MC>=12109
+                              //#if MC>=12109
             , SubmitNodeCollector submitNodeCollector
-          //#endif
+                              //#endif
     ) {
         Minecraft mc = Minecraft.getInstance();
         if (bubbleMap.isEmpty() || mc.level == null || entity == null) {
@@ -189,7 +189,7 @@ public class BubbleRenderer {
             Component senderDisplayName = potentialSender.getDisplayName();
             Component entityDisplayName = entity.hasCustomName() ? entity.getCustomName() : entity.getDisplayName();
             if (senderDisplayName == null || entityDisplayName == null) {
-                return;
+                continue;
             }
             String senderName = senderDisplayName.getString();
             if (!bubbleMap.containsKey(senderName)) {
@@ -197,7 +197,8 @@ public class BubbleRenderer {
             } else if (!TextUtils.wash(entityDisplayName.getString()).equals(senderName)) {
                 // not the entity being selected
                 continue;
-            } else if (bubbleMap.get(senderName).getLifetime() >= ((Number) ConfigUtils.get("bubble.Lifetime")).intValue() * 1000L) {
+            } else if (bubbleMap.get(senderName).getLifetime() >= ((Number) ConfigUtils.get("bubble.Lifetime"))
+                    .intValue() * 1000L) {
                 // the bubble's lifetime is over, let's remove it
                 bubbleMap.remove(senderName);
                 continue;
@@ -221,8 +222,10 @@ public class BubbleRenderer {
         String pattern = "";
         boolean serverAddressPass = false;
         boolean fallback = false;
-        for (SpecialUnits.BubbleRuleUnit unit : SpecialUnits.BubbleRuleUnit.fromList((List) ConfigUtils.get("bubble.List"))) {
-            if ("*".equals(unit.address) || Pattern.compile(unit.address).matcher(ContextUtils.getSessionIdentifier()).matches()) {
+        for (SpecialUnits.BubbleRuleUnit unit : SpecialUnits.BubbleRuleUnit.fromList(
+                (List) ConfigUtils.get("bubble.List"))) {
+            if ("*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
+                    .matcher(ContextUtils.getSessionIdentifier()).matches()) {
                 serverAddressPass = true;
                 pattern = unit.pattern;
                 fallback = unit.fallback;
@@ -230,7 +233,7 @@ public class BubbleRenderer {
             }
         }
         if (serverAddressPass && !pattern.isEmpty()) {
-            Matcher matcher = Pattern.compile(pattern).matcher(message);
+            Matcher matcher = RegExUtils.getOrCompilePattern(pattern).matcher(message);
             if (matcher.find()) {
                 String name = matcher.group("name");
                 String messageContext = matcher.group("message");

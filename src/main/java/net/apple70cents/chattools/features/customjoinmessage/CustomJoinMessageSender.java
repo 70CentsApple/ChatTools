@@ -4,6 +4,7 @@ import net.apple70cents.chattools.config.SpecialUnits;
 import net.apple70cents.chattools.utils.ConfigUtils;
 import net.apple70cents.chattools.utils.LoggerUtils;
 import net.apple70cents.chattools.utils.MessageUtils;
+import net.apple70cents.chattools.utils.RegExUtils;
 import net.minecraft.client.Minecraft;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class CustomJoinMessageSender {
     public static void work(String currentAddress) {
         LoggerUtils.info("[ChatTools] Trying to send join message as session identifier: " + currentAddress);
         for (SpecialUnits.CustomJoinMessageRuleUnit unit : SpecialUnits.CustomJoinMessageRuleUnit.fromList((List) ConfigUtils.get("customJoinMessage.List"))) {
-            if ("*".equals(unit.address) || Pattern.compile(unit.address).matcher(currentAddress).matches()) {
+            if ("*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address).matcher(currentAddress).matches()) {
                 makeMessageSchedule(unit.delayInMilliseconds, unit.message, unit.forceDisableFormatter);
             }
         }

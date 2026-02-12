@@ -1,9 +1,6 @@
 package net.apple70cents.chattools.features.notifier;
 
-import net.apple70cents.chattools.utils.ConfigUtils;
-import net.apple70cents.chattools.utils.LoggerUtils;
-import net.apple70cents.chattools.utils.MessageUtils;
-import net.apple70cents.chattools.utils.TextUtils;
+import net.apple70cents.chattools.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -31,20 +28,21 @@ public class BasicNotifier {
         List<String> banList = (List<String>) ConfigUtils.get("notifier.BanList");
         String washedMessage = TextUtils.wash(text.getString());
         for (String allowPattern : allowList) {
-            if (Pattern.compile(allowPattern, Pattern.MULTILINE).matcher(washedMessage).find()) {
+            if (RegExUtils.getOrCompilePattern(allowPattern, Pattern.MULTILINE).matcher(washedMessage).find()) {
                 shouldMatch = true;
                 break;
             }
         }
         // if MatchMyNameEnabled and it does have my name
         LocalPlayer player = Minecraft.getInstance().player;
-        if (((boolean) ConfigUtils.get("notifier.MatchMyNameEnabled")) && player != null && Pattern
-                .compile(player.getName().getString(), Pattern.MULTILINE).matcher(washedMessage).find()) {
+        if (((boolean) ConfigUtils.get(
+                "notifier.MatchMyNameEnabled")) && player != null && RegExUtils.getOrCompilePattern(
+                Pattern.quote(player.getName().getString()), Pattern.MULTILINE).matcher(washedMessage).find()) {
             shouldMatch = true;
         }
         // if any of the ban pattern is matched, we should NOT match it
         for (String banPattern : banList) {
-            if (Pattern.compile(banPattern, Pattern.MULTILINE).matcher(washedMessage).find()) {
+            if (RegExUtils.getOrCompilePattern(banPattern, Pattern.MULTILINE).matcher(washedMessage).find()) {
                 shouldMatch = false;
                 break;
             }

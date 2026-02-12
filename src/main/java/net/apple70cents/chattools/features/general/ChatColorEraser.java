@@ -5,7 +5,6 @@ import net.minecraft.network.chat.Component;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class ChatColorEraser {
     private static final Map<String, Component> cache = new LinkedHashMap<>();
@@ -24,7 +23,7 @@ public class ChatColorEraser {
         int threshold = ((Number) ConfigUtils.get("general.CircuitBreaker.OverrideChatColorThreshold")).intValue();
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.OverrideChatColor", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.OverrideChatColor", threshold));
-        LoggerUtils.warn(TextUtils.trans("texts.CircuitBreaker.exceed.OverrideChatColor", threshold).getString());
+        LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.OverrideChatColor", threshold).getString());
     }).setFailsafeJudgement(() -> (Boolean) ConfigUtils.get("general.OverrideChatColor.Enabled"));
 
     public static Component work(Component message) {

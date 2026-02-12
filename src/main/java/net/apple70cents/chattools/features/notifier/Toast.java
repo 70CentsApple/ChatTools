@@ -42,7 +42,7 @@ public class Toast {
         int threshold = ((Number) ConfigUtils.get("general.CircuitBreaker.ToastThreshold")).intValue();
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.Toast", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.Toast", threshold));
-        LoggerUtils.warn(TextUtils.trans("texts.CircuitBreaker.exceed.Toast", threshold).getString());
+        LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.Toast", threshold).getString());
     }).setFailsafeJudgement(() -> (Boolean) ConfigUtils.get("notifier.Toast.Enabled"));
 
     public static void work(String text1) {
@@ -72,7 +72,7 @@ public class Toast {
                                                                                          .getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    LoggerUtils.info(line);
+                    LoggerUtils.info("[ChatTools] " + line);
                 }
             } catch (Exception e) {
                 MessageUtils.sendToActionbar(TextUtils.trans("texts.toast.failure"));
@@ -121,7 +121,7 @@ public class Toast {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        LoggerUtils.info(line);
+                        LoggerUtils.info("[ChatTools] " + line);
                     }
                 }
             } catch (Exception e) {

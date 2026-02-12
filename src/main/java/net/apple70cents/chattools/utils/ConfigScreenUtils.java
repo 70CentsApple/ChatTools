@@ -164,7 +164,7 @@ public class ConfigScreenUtils {
                     if (passedUnit == null) {
                         displayText = trans(key + ".@New");
                     } else {
-                        boolean isSessionMatch = "*".equals(unit.address) || Pattern.compile(unit.address)
+                        boolean isSessionMatch = "*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
                                 .matcher(ContextUtils.getSessionIdentifier()).matches();
                         String colorPrefix = isSessionMatch ? "§a" : "§6";
 
@@ -203,7 +203,7 @@ public class ConfigScreenUtils {
                     if (passedUnit == null) {
                         displayText = trans(key + ".@New");
                     } else {
-                        boolean isSessionMatch = "*".equals(unit.address) || Pattern.compile(unit.address)
+                        boolean isSessionMatch = "*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
                                 .matcher(ContextUtils.getSessionIdentifier()).matches();
                         String colorPrefix = isSessionMatch ? "§a" : "§6";
 
@@ -309,7 +309,7 @@ public class ConfigScreenUtils {
                     if (passedUnit == null) {
                         displayText = trans(key + ".@New");
                     } else {
-                        boolean isSessionMatch = "*".equals(unit.address) || Pattern.compile(unit.address)
+                        boolean isSessionMatch = "*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
                                 .matcher(ContextUtils.getSessionIdentifier()).matches();
                         String colorPrefix = isSessionMatch ? "§a" : "§6";
 
@@ -343,7 +343,7 @@ public class ConfigScreenUtils {
                     if (passedUnit == null) {
                         displayText = trans(key + ".@New");
                     } else {
-                        boolean isSessionMatch = "*".equals(unit.address) || Pattern.compile(unit.address)
+                        boolean isSessionMatch = "*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
                                 .matcher(ContextUtils.getSessionIdentifier()).matches();
                         String colorPrefix = isSessionMatch ? "§a" : "§6";
 
@@ -432,7 +432,7 @@ public class ConfigScreenUtils {
 
             try {
                 for (String s : v) {
-                    if ("*".equals(v)) {
+                    if ("*".equals(s)) {
                         continue;
                     }
                     Pattern.compile(s);
