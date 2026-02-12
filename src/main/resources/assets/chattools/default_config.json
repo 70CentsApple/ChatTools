@@ -1,5 +1,5 @@
 {
-  "config.version": 2.31700,
+  "config.version": 2.31800,
   "general.ChatTools.Enabled": true,
   "general.ShowWelcomeMessageEnabled": true,
   "general.CircuitBreaker.ToastThreshold": 10,

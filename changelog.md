@@ -1,9 +1,9 @@
 ## Chinese (Simplified)
-### v2.3.17
-- 新增 支持 NeoForge @AsOne2020
-- 修复 英文翻译缺失
+### v2.3.18
+- 修复 subtract函数未按预期运作
+- 优化 缓存正则表达式编译结果
 
 ## English
-### v2.3.17
-- Added: Support for NeoForge. @AsOne2020
-- Fixed: Missing en_us translations.
+### v2.3.18
+- Fixed: subtract function not working as expected
+- Optimized: Caching of compiled regular expressions
