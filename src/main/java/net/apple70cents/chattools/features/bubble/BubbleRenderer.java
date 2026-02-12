@@ -177,9 +177,9 @@ public class BubbleRenderer {
     private static Map<String, BubbleUnit> bubbleMap = new HashMap<>();
 
     public static void render(Entity entity, PoseStack poseStack, MultiBufferSource multiBufferSource, float tickDelta
-                              //#if MC>=12109
+          //#if MC>=12109
             , SubmitNodeCollector submitNodeCollector
-                              //#endif
+          //#endif
     ) {
         Minecraft mc = Minecraft.getInstance();
         if (bubbleMap.isEmpty() || mc.level == null || entity == null) {
