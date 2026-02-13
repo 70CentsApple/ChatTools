@@ -21,10 +21,10 @@ public abstract class GuiGraphicsMixin {
 
     @Inject(method = "renderDeferredElements", at = @At("HEAD"))
     public void modifyHoverEvent(CallbackInfo ci) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
-        if (!(boolean) ConfigUtils.get("general.PreviewClickEvents.Enabled")) {
+        if (!ConfigUtils.PREVIEW_CLICK_EVENTS_ENABLED) {
             return;
         }
         Style style = clickableTextStyle != null ? clickableTextStyle : hoveredTextStyle;

@@ -22,7 +22,7 @@ public abstract class BookViewScreenMixin {
     //$$ @Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
     //$$ public void modifyHoverEvent(double x, double y, CallbackInfoReturnable<Style> cir) {
     //$$     Style style = cir.getReturnValue();
-    //$$     if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+    //$$     if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
     //$$         cir.setReturnValue(style);
     //$$         return;
     //$$     }

@@ -17,7 +17,7 @@ public abstract class ServerboundChatPacketMixin {
         , at = @At(value = "CONSTANT", args = "intValue=256")
     )
     private int increaseMaxLength(int endIndex) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return 256;
         }
         if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {

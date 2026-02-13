@@ -52,7 +52,7 @@ public abstract class ChatComponentMixin {
             //#endif
             , at = @At(value = "CONSTANT", args = "intValue=100"))
     public int modifyMaxHistorySize(int originalMaxSize) {
-        if ((boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (ConfigUtils.CHAT_TOOLS_ENABLED) {
             return ((Number) ConfigUtils.get("general.MaxHistoryLength")).intValue();
         } else {
             return 100;
@@ -71,7 +71,7 @@ public abstract class ChatComponentMixin {
             //$$ Component message, int messageId, int timestamp, boolean refresh
             //#endif
             , CallbackInfo ci) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         if (ChatFilter.shouldFilter(message)) {
@@ -97,7 +97,7 @@ public abstract class ChatComponentMixin {
         //#else
         //$$ final int MESSAGE_IDX = 0;
         //#endif
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         Component message = args.get(MESSAGE_IDX);
@@ -165,7 +165,7 @@ public abstract class ChatComponentMixin {
     //$$ @Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
     //$$ public void modifyHoverEvent(double x, double y, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<net.minecraft.network.chat.Style> cir) {
     //$$     net.minecraft.network.chat.Style style = cir.getReturnValue();
-    //$$     if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+    //$$     if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
     //$$         cir.setReturnValue(style);
     //$$         return;
     //$$     }

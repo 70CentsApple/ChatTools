@@ -28,7 +28,7 @@ public abstract class GuiMixinForRestoreMessages {
     //$$ @Inject(at = @At("HEAD"), method = "clearMessages", cancellable = true)
     //$$ public void restoreMessages(boolean clearHistory, CallbackInfo ci) {
     //#endif
-        if (!((boolean) ConfigUtils.get("general.ChatTools.Enabled"))) {
+        if (!(ConfigUtils.CHAT_TOOLS_ENABLED)) {
             return;
         }
         if (!((boolean) ConfigUtils.get("general.RestoreMessages.Enabled"))) {

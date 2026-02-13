@@ -66,12 +66,12 @@ public class ChatTools
         //#elseif NEOFORGE
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre event) -> {
             //#endif
-            if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+            if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
                 return;
             }
             Repeat.tick();
             ReviewLastMessageWithUpArrowOnly.tick();
-            if ((boolean) ConfigUtils.get("chatkeybindings.Macro.Enabled")) {
+            if (ConfigUtils.MACRO_ENABLED) {
                 Macro.tick();
             }
         });

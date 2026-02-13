@@ -19,7 +19,7 @@ public class Responder {
     public static long lastRequestTimestamp = -1L;
 
     public static boolean shouldWork(Component message) {
-        boolean enabled = (boolean) ConfigUtils.get("general.ChatTools.Enabled") && (boolean) ConfigUtils.get("responder.Enabled");
+        boolean enabled = ConfigUtils.CHAT_TOOLS_ENABLED && (boolean) ConfigUtils.get("responder.Enabled");
         // obviously, we should not respond to our own messages
         boolean notJustSent = !MessageUtils.hadJustSentMessage();
         boolean filterPassed = ChatFilter.shouldFilter(message) ? (boolean) ConfigUtils.get("responder.RespondToFilteredMessages") : true;

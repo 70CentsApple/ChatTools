@@ -20,9 +20,9 @@ public abstract class NameTagFeatureRendererStorageMixin {
     //$$ @ModifyVariable(method = "renderNameTag", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
     //#endif
     public Component nickHiderChangeLabel(Component text) {
-        if (!((boolean) ConfigUtils.get("general.ChatTools.Enabled"))) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return text;
-        } else if (!((boolean) ConfigUtils.get("general.NickHider.Enabled"))) {
+        } else if (!ConfigUtils.NICK_HIDER_ENABLED) {
             return text;
         }
         return NickHider.work(text);

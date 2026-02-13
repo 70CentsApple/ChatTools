@@ -36,7 +36,7 @@ public abstract class ChatScreenMixin {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void increaseChatFieldMaxLength(CallbackInfo ci) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {
@@ -48,7 +48,7 @@ public abstract class ChatScreenMixin {
     //#if MC>=11900
     @Inject(method = "normalizeChatMessage", at = @At("HEAD"), cancellable = true)
     private void doNotTruncate(String text, CallbackInfoReturnable<String> cir) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {
@@ -64,7 +64,7 @@ public abstract class ChatScreenMixin {
     //#else
     //$$ private void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
     //#endif
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         if (Translator.shouldWork()) {
@@ -80,7 +80,7 @@ public abstract class ChatScreenMixin {
     @Unique
     private boolean shouldHideChatHistory() {
         return Minecraft.getInstance().options.hideGui &&
-                (boolean) ConfigUtils.get("general.ChatTools.Enabled") &&
+                ConfigUtils.CHAT_TOOLS_ENABLED &&
                 (Minecraft.getInstance().screen instanceof ChatScreen) &&
                 (boolean) ConfigUtils.get("general.HideChatHistoryInF1Mode");
     }

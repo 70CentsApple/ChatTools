@@ -29,7 +29,7 @@ public abstract class ClientHandshakePacketListenerImplMixin {
 
     @Inject(method = "handleLoginFinished", at = @At(value = "TAIL"))
     public void onServerLoginSuccess(ClientboundLoginFinishedPacket clientboundLoginFinishedPacket, CallbackInfo ci) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         if (!(boolean) ConfigUtils.get("customJoinMessage.Enabled")) {

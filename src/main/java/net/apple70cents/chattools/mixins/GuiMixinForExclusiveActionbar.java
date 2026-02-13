@@ -37,10 +37,10 @@ public abstract class GuiMixinForExclusiveActionbar {
         if (Minecraft.getInstance().options.hideGui) {
             return;
         }
-        if (!((boolean) ConfigUtils.get("general.ChatTools.Enabled"))) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
-        if (!((boolean) ConfigUtils.get("general.ExclusiveActionbar.Enabled"))) {
+        if (!ConfigUtils.EXCLUSIVE_ACTIONBAR_ENABLED) {
             return;
         }
         ExclusiveActionbarHandler.tick();

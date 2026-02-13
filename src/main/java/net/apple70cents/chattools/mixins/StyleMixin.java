@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class StyleMixin {
     @Inject(method = "isObfuscated", at = @At("HEAD"), cancellable = true)
     public void disableTextObfuscation(CallbackInfoReturnable<Boolean> cir) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
-        if (!(boolean) ConfigUtils.get("general.DisableTextObfuscation.Enabled")) {
+        if (!ConfigUtils.DISABLE_TEXT_OBFUSCATION_ENABLED) {
             return;
         }
         cir.setReturnValue(false);

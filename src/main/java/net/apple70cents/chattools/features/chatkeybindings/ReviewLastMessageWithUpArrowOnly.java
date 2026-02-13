@@ -11,7 +11,7 @@ public class ReviewLastMessageWithUpArrowOnly {
     private static final String UP = "key.keyboard.up";
 
     public static void tick() {
-        if (!(boolean) ConfigUtils.get("chatkeybindings.ReviewLastMessageWithUpArrowOnly")) {
+        if (!ConfigUtils.REVIEW_LAST_MESSAGE_WITH_UP_ARROW_ONLY_ENABLED) {
             return;
         }
         if (KeyboardUtils.isKeyPressingWithModifier(UP, SpecialUnits.KeyModifiers.NONE,

@@ -10,10 +10,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class FriendlyByteBufMixin {
     @ModifyVariable(method = "readUtf(I)Ljava/lang/String;", at = @At(value = "HEAD"), argsOnly = true)
     public int fixChatPacket(int i) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return i;
         }
-        if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {
+        if (!ConfigUtils.INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED) {
             return i;
         }
         return Short.MAX_VALUE;
@@ -21,10 +21,10 @@ public abstract class FriendlyByteBufMixin {
 
     @ModifyVariable(method = "writeUtf(Ljava/lang/String;I)Lnet/minecraft/network/FriendlyByteBuf;", at = @At(value = "HEAD"), argsOnly = true)
     public int fixChatPacket2(int i) {
-        if (!(boolean) ConfigUtils.get("general.ChatTools.Enabled")) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return i;
         }
-        if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {
+        if (!ConfigUtils.INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED) {
             return i;
         }
         return Short.MAX_VALUE;

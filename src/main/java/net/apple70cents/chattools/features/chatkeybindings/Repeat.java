@@ -10,8 +10,8 @@ public class Repeat {
     private static boolean keyWasPressed;
 
     public static void tick() {
-        String key = (String) ConfigUtils.get("chatkeybindings.RepeatKey");
-        SpecialUnits.KeyModifiers modifier = SpecialUnits.KeyModifiers.valueOf((String) ConfigUtils.get("chatkeybindings.RepeatKeyModifier"));
+        String key = ConfigUtils.REPEAT_KEY;
+        SpecialUnits.KeyModifiers modifier = ConfigUtils.REPEAT_KEY_MODIFIER;
         if (KeyboardUtils.isKeyPressingWithModifier(key, modifier, SpecialUnits.MacroModes.GREEDY) && Minecraft.getInstance().screen == null) {
             if (!keyWasPressed) {
                 keyWasPressed = true;

@@ -52,10 +52,10 @@ public abstract class EntityRendererMixin {
     //$$ @Inject(method = "render", at = @At(value = "HEAD"))
     //$$ private void render(Entity entity, float yaw, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
     //#endif
-        if (!((boolean) ConfigUtils.get("general.ChatTools.Enabled"))) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
-        if ((boolean) ConfigUtils.get("bubble.Enabled")) {
+        if (ConfigUtils.BUBBLE_ENABLED) {
             BubbleRenderer.render(entity, poseStack, multiBufferSource, tickDelta
                     //#if MC>=12109
                     , submitNodeCollector
