@@ -32,7 +32,7 @@ public class NickHider {
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
         LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold).getString());
-    }).setFailsafeJudgement(() -> (Boolean) ConfigUtils.get("general.NickHider.Enabled"));
+    }).setFailsafeJudgement(() -> ConfigUtils.NICK_HIDER_ENABLED);
 
     public static Component work(Component message) {
         while (cache.size() > ((Number) ConfigUtils.get("general.NickHider.CacheSize")).intValue()) {

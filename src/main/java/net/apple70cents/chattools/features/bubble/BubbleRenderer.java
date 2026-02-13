@@ -83,7 +83,7 @@ public class BubbleRenderer {
             if (mc.player == null) {
                 return;
             }
-            Component renderComponent = ((boolean) ConfigUtils.get("general.NickHider.Enabled")) ? NickHider.work(text) : text;
+            Component renderComponent = ConfigUtils.NICK_HIDER_ENABLED ? NickHider.work(text) : text;
             int yOffset = ((Number) ConfigUtils.get("bubble.YOffset")).intValue();
 
             poseStack.pushPose();

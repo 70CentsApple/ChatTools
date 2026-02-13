@@ -26,7 +26,7 @@ public abstract class BookViewScreenMixin {
     //$$         cir.setReturnValue(style);
     //$$         return;
     //$$     }
-    //$$     if (!(boolean) ConfigUtils.get("general.PreviewClickEvents.Enabled")) {
+    //$$     if (!ConfigUtils.PREVIEW_CLICK_EVENTS_ENABLED) {
     //$$         cir.setReturnValue(style);
     //$$         return;
     //$$     }

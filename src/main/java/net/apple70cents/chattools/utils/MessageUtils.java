@@ -50,7 +50,7 @@ public class MessageUtils {
         if (Minecraft.getInstance().player == null) {
             return;
         }
-        if (!(boolean) ConfigUtils.get("general.ExclusiveActionbar.Enabled")) {
+        if (!ConfigUtils.EXCLUSIVE_ACTIONBAR_ENABLED) {
             sendToOriginalActionbar(text);
         } else {
             ExclusiveActionbarHandler.addToRenderQueue(text, 4000);
@@ -61,7 +61,7 @@ public class MessageUtils {
         if (Minecraft.getInstance().player == null) {
             return;
         }
-        if (!(boolean) ConfigUtils.get("general.ExclusiveActionbar.Enabled")) {
+        if (!ConfigUtils.EXCLUSIVE_ACTIONBAR_ENABLED) {
             LoggerUtils.warn(
                     "[ChatTools] Customized actionbar duration is not supported when Exclusive Actionbar is disabled.");
             sendToActionbar(text);

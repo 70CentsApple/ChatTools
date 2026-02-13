@@ -7,7 +7,7 @@ public class ConfigUtils {
     public final static ConfigStorage DEFAULT_CONFIG = new ConfigStorage(true);
     public static ConfigStorage CONFIG;
 
-    // Cached config values for hot paths
+    // Cached config values for frequently-used keys
     public static boolean CHAT_TOOLS_ENABLED = false;
     public static boolean DISABLE_TEXT_OBFUSCATION_ENABLED = false;
     public static boolean BUBBLE_ENABLED = false;

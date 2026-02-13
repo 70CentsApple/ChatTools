@@ -39,7 +39,7 @@ public abstract class ChatScreenMixin {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
-        if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {
+        if (!ConfigUtils.INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED) {
             return;
         }
         input.setMaxLength(Integer.MAX_VALUE);
@@ -51,7 +51,7 @@ public abstract class ChatScreenMixin {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
-        if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {
+        if (!ConfigUtils.INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED) {
             return;
         }
         cir.setReturnValue(StringUtils.normalizeSpace(text.trim()));

@@ -20,7 +20,7 @@ public abstract class ServerboundChatPacketMixin {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return 256;
         }
-        if (!(boolean) ConfigUtils.get("general.IncreaseChatFieldMaxLength")) {
+        if (!ConfigUtils.INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED) {
             return 256;
         }
         return Integer.MAX_VALUE;

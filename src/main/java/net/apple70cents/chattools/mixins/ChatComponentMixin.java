@@ -105,7 +105,7 @@ public abstract class ChatComponentMixin {
         if (ChatFilter.shouldFilter(message)) {
             return;
         }
-        if ((boolean) ConfigUtils.get("bubble.Enabled")) {
+        if (ConfigUtils.BUBBLE_ENABLED) {
             // it must be done before NickHider began to work
             BubbleRenderer.addChatBubble(message);
         }
@@ -117,7 +117,7 @@ public abstract class ChatComponentMixin {
         if ((boolean) ConfigUtils.get("general.OverrideChatColor.Enabled")) {
             message = ChatColorEraser.work(message);
         }
-        if ((boolean) ConfigUtils.get("general.NickHider.Enabled")) {
+        if (ConfigUtils.NICK_HIDER_ENABLED) {
             message = NickHider.work(message);
         }
         int occurrenceCount = 1;
@@ -169,7 +169,7 @@ public abstract class ChatComponentMixin {
     //$$         cir.setReturnValue(style);
     //$$         return;
     //$$     }
-    //$$     if (!(boolean) ConfigUtils.get("general.PreviewClickEvents.Enabled")) {
+    //$$     if (!ConfigUtils.PREVIEW_CLICK_EVENTS_ENABLED) {
     //$$         cir.setReturnValue(style);
     //$$         return;
     //$$     }
