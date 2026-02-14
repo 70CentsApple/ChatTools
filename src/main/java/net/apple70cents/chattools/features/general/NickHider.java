@@ -35,11 +35,11 @@ public class NickHider {
     }).setFailsafeJudgement(() -> ConfigUtils.NICK_HIDER_ENABLED);
 
     public static Component work(Component message) {
-        while (cache.size() > ((Number) ConfigUtils.get("general.NickHider.CacheSize")).intValue()) {
+        while (cache.size() > ConfigUtils.NICK_HIDER_CACHE_SIZE) {
             cache.remove(cache.keySet().iterator().next());
         }
         LocalPlayer player = Minecraft.getInstance().player;
-        nickname = TextUtils.encodeColorCodes((String) ConfigUtils.get("general.NickHider.Nickname"));
+        nickname = TextUtils.encodeColorCodes(ConfigUtils.NICK_HIDER_NICKNAME);
         if (player != null) {
             playerName = player.getName().getString();
             String key = nickname + "|" + playerName + "|" + message.toString();

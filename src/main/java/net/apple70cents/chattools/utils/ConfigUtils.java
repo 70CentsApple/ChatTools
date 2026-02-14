@@ -14,6 +14,8 @@ public class ConfigUtils {
     public static boolean DISABLE_TEXT_OBFUSCATION_ENABLED = false;
     public static boolean BUBBLE_ENABLED = false;
     public static boolean NICK_HIDER_ENABLED = false;
+    public static int NICK_HIDER_CACHE_SIZE = 0x70Ca;
+    public static String NICK_HIDER_NICKNAME = "";
     public static boolean EXCLUSIVE_ACTIONBAR_ENABLED = false;
     public static boolean PREVIEW_CLICK_EVENTS_ENABLED = false;
     public static boolean INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED = false;
@@ -28,6 +30,8 @@ public class ConfigUtils {
         DISABLE_TEXT_OBFUSCATION_ENABLED = (boolean) CONFIG.get("general.DisableTextObfuscation.Enabled");
         BUBBLE_ENABLED = (boolean) CONFIG.get("bubble.Enabled");
         NICK_HIDER_ENABLED = (boolean) CONFIG.get("general.NickHider.Enabled");
+        NICK_HIDER_CACHE_SIZE = ((Number) CONFIG.get("general.NickHider.CacheSize")).intValue();
+        NICK_HIDER_NICKNAME = (String) ConfigUtils.get("general.NickHider.Nickname");
         EXCLUSIVE_ACTIONBAR_ENABLED = (boolean) CONFIG.get("general.ExclusiveActionbar.Enabled");
         PREVIEW_CLICK_EVENTS_ENABLED = (boolean) CONFIG.get("general.PreviewClickEvents.Enabled");
         INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED = (boolean) CONFIG.get("general.IncreaseChatFieldMaxLength");
