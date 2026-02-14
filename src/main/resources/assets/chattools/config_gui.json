@@ -341,13 +341,12 @@
           "key": "notifier.MatchMyNameEnabled"
         },
         {
-          "type": "StringList",
-          "key": "notifier.AllowList",
-          "errorSupplier": "RegExNormal"
+          "type": "NotifierList",
+          "key": "notifier.AllowList"
         },
         {
           "type": "StringList",
-          "key": "notifier.BanList",
+          "key": "notifier.DenyList",
           "errorSupplier": "RegExNormal"
         }
       ]

@@ -89,9 +89,12 @@ public class ConfigStorage {
         configMap.put(variableName, value);
     }
 
+    public void remove(String key) {
+        configMap.remove(key);
+    }
+
     public void save() {
-        ((List<String>) get("notifier.AllowList")).removeIf(String::isBlank);
-        ((List<String>) get("notifier.BanList")).removeIf(String::isBlank);
+        ((List<String>) get("notifier.DenyList")).removeIf(String::isBlank);
         ((List<String>) get("formatter.DisableOnMatchList")).removeIf(String::isBlank);
         ((List<String>) get("filter.List")).removeIf(String::isBlank);
         LoggerUtils.info("[ChatTools] Saving configs.");

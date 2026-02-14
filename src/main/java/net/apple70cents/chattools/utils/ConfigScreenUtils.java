@@ -152,6 +152,56 @@ public class ConfigScreenUtils {
                 return builder.build();
             case "FAQ":
                 return eb.startTextDescription(trans(key).copy().setStyle(TextUtils.WEBSITE_URL_STYLE)).build();
+            case "NotifierList":
+                return new NestedListListEntry<SpecialUnits.NotifierRuleUnit, MultiElementListEntry<SpecialUnits.NotifierRuleUnit>>(
+                        SERVER_LABELED_KEY, SpecialUnits.NotifierRuleUnit.fromList((List) ConfigUtils.get(key)), true,
+                        () -> Optional.of(new Component[]{tooltip}), v -> ConfigUtils.set(key, v),
+                        () -> SpecialUnits.NotifierRuleUnit.fromList((List) ConfigUtils.getDefault(key)),
+                        eb.getResetButtonKey(), true, true, (passedUnit, ignored) -> {
+                    SpecialUnits.NotifierRuleUnit unit = (passedUnit == null) ? new SpecialUnits.NotifierRuleUnit() : passedUnit;
+
+                    Component displayText;
+                    if (passedUnit == null) {
+                        displayText = trans(key + ".@New");
+                    } else {
+                        boolean isSessionMatch = "*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
+                                .matcher(ContextUtils.getSessionIdentifier()).matches();
+                        String colorPrefix = isSessionMatch ? "§a" : "§6";
+
+                        displayText = trans(key + ".@Display", colorPrefix + unit.address, unit.pattern);
+                    }
+
+                    List<AbstractConfigListEntry<?>> entries = new ArrayList<>();
+                    SpecialUnits.NotifierRuleUnit defaultObj = new SpecialUnits.NotifierRuleUnit();
+
+                    entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
+                            .setTooltip(getTooltip(key + ".Address", "String", unit.address))
+                            .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
+                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+
+                    entries.add(eb.startStrField(trans(key + ".Pattern"), unit.pattern)
+                            .setTooltip(getTooltip(key + ".Pattern", "String", unit.pattern))
+                            .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
+                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
+
+                    entries.add(eb.startBooleanToggle(trans(key + ".Toast"), unit.toast)
+                            .setTooltip(getTooltip(key + ".Toast", "boolean", unit.toast))
+                            .setDefaultValue(defaultObj.toast).setSaveConsumer(v -> unit.toast = v).build());
+
+                    entries.add(eb.startBooleanToggle(trans(key + ".Sound"), unit.sound)
+                            .setTooltip(getTooltip(key + ".Sound", "boolean", unit.sound))
+                            .setDefaultValue(defaultObj.sound).setSaveConsumer(v -> unit.sound = v).build());
+
+                    entries.add(eb.startBooleanToggle(trans(key + ".Actionbar"), unit.actionbar)
+                            .setTooltip(getTooltip(key + ".Actionbar", "boolean", unit.actionbar))
+                            .setDefaultValue(defaultObj.actionbar).setSaveConsumer(v -> unit.actionbar = v).build());
+
+                    entries.add(eb.startBooleanToggle(trans(key + ".Highlight"), unit.highlight)
+                            .setTooltip(getTooltip(key + ".Highlight", "boolean", unit.highlight))
+                            .setDefaultValue(defaultObj.highlight).setSaveConsumer(v -> unit.highlight = v).build());
+
+                    return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
+                });
             case "BubbleList":
                 return new NestedListListEntry<SpecialUnits.BubbleRuleUnit, MultiElementListEntry<SpecialUnits.BubbleRuleUnit>>(
                         SERVER_LABELED_KEY, SpecialUnits.BubbleRuleUnit.fromList((List) ConfigUtils.get(key)), true,

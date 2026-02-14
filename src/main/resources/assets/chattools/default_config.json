@@ -56,7 +56,7 @@
   "notifier.IgnoreMyMessageEnabled": true,
   "notifier.MatchMyNameEnabled": true,
   "notifier.AllowList": [],
-  "notifier.BanList": [],
+  "notifier.DenyList": [],
   "formatter.Enabled": false,
   "formatter.DisableThreshold": 256,
   "formatter.PreparsePlaceholdersEnabled": false,

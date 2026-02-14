@@ -339,12 +339,36 @@ key:
           Activa/desactiva si se debe coincidir con mi nombre.
           También puedes hacerlo añadiendo tu nombre a continuación en la Lista de Permisos.
       AllowList:
-        .: "Lista de Permisos"
+        .: 'Lista de Permisos §6(Identificador de Sesión Actual: %s §6)§r'
         '@Tooltip': |-
-          Los patrones de esta lista se utilizarán para la coincidencia.
+          Las reglas de esta lista se utilizarán para la coincidencia.
           Se recomienda RegEx.
-      BanList:
-        .: "Lista de Bloqueo"
+        '@New': Nueva Regla
+        '@Display': §e[ %s§e ]§r %s
+        Address:
+          .: Identificador de Sesión
+          '@Tooltip': |-
+            El identificador de sesión para esta regla.
+            Se recomienda RegEx.
+        Pattern:
+          .: Patrón
+          '@Tooltip': |-
+            El patrón para la coincidencia.
+            Se recomienda RegEx.
+        Toast:
+          .: Notificación
+          '@Tooltip': Si se debe mostrar una notificación emergente para esta regla.
+        Sound:
+          .: Sonido
+          '@Tooltip': Si se debe reproducir un sonido para esta regla.
+        Actionbar:
+          .: Barra de Acción
+          '@Tooltip': Si se debe mostrar una notificación en la barra de acción para esta regla.
+        Highlight:
+          .: Resaltar
+          '@Tooltip': Si se debe resaltar el mensaje para esta regla.
+      DenyList:
+        .: Lista de Bloqueo
         '@Tooltip': |-
           Los patrones de esta lista se excluirán de la coincidencia.
           Se recomienda RegEx.

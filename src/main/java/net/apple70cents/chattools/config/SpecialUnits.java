@@ -257,5 +257,57 @@ public class SpecialUnits {
             return "CustomJoinMessageRuleUnit{address='" + address + "', message='" + message + "', delayInMilliseconds=" + delayInMilliseconds + ", forceDisableFormatter=" + forceDisableFormatter + '}';
         }
     }
+
+    public static class NotifierRuleUnit {
+        public String address;
+        public String pattern;
+        public boolean toast;
+        public boolean sound;
+        public boolean actionbar;
+        public boolean highlight;
+
+        public NotifierRuleUnit() {
+            this.address = "*";
+            this.pattern = "";
+            this.toast = true;
+            this.sound = true;
+            this.actionbar = true;
+            this.highlight = true;
+        }
+
+        public NotifierRuleUnit(String address, String pattern, boolean toast, boolean sound, boolean actionbar, boolean highlight) {
+            this.address = address;
+            this.pattern = pattern;
+            this.toast = toast;
+            this.sound = sound;
+            this.actionbar = actionbar;
+            this.highlight = highlight;
+        }
+
+        public static NotifierRuleUnit of(Object ele) {
+            if (ele instanceof Map) {
+                String address = (String) ((Map) ele).getOrDefault("address", "*");
+                String pattern = (String) ((Map) ele).getOrDefault("pattern", "");
+                boolean toast = (boolean) ((Map) ele).getOrDefault("toast", true);
+                boolean sound = (boolean) ((Map) ele).getOrDefault("sound", true);
+                boolean actionbar = (boolean) ((Map) ele).getOrDefault("actionbar", true);
+                boolean highlight = (boolean) ((Map) ele).getOrDefault("highlight", true);
+                return new NotifierRuleUnit(address, pattern, toast, sound, actionbar, highlight);
+            } else if (ele instanceof NotifierRuleUnit) {
+                return (NotifierRuleUnit) ele;
+            } else {
+                throw new IllegalArgumentException("Unexpected element type of Object: " + ele);
+            }
+        }
+
+        public static List<NotifierRuleUnit> fromList(List list) {
+            return SpecialUnits.map(list, NotifierRuleUnit::of);
+        }
+
+        @Override
+        public String toString() {
+            return "NotifierRuleUnit{address='" + address + "', pattern='" + pattern + "', toast=" + toast + ", sound=" + sound + ", actionbar=" + actionbar + ", highlight=" + highlight + '}';
+        }
+    }
 }
 

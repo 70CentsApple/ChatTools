@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.apple70cents.chattools.features.bubble.BubbleRenderer;
 import net.apple70cents.chattools.features.filter.ChatFilter;
 import net.apple70cents.chattools.features.general.*;
+import net.apple70cents.chattools.config.SpecialUnits;
 import net.apple70cents.chattools.features.notifier.BasicNotifier;
 import net.apple70cents.chattools.features.responder.Responder;
 import net.apple70cents.chattools.utils.ConfigUtils;
@@ -136,12 +137,14 @@ public abstract class ChatComponentMixin {
             if ((boolean) ConfigUtils.get("general.Timestamp.Enabled")) {
                 message = Timestamp.work(message, hashcode);
             }
-            if (BasicNotifier.shouldWork(message)) {
-                message = BasicNotifier.work(message);
+            SpecialUnits.NotifierRuleUnit matchedRule = BasicNotifier.shouldWork(message);
+            if (matchedRule != null) {
+                message = BasicNotifier.work(message, matchedRule);
             }
         } else {
-            if (BasicNotifier.shouldWork(message)) {
-                message = BasicNotifier.work(message);
+            SpecialUnits.NotifierRuleUnit matchedRule = BasicNotifier.shouldWork(message);
+            if (matchedRule != null) {
+                message = BasicNotifier.work(message, matchedRule);
             }
             if ((boolean) ConfigUtils.get("general.Timestamp.Enabled")) {
                 message = Timestamp.work(message, hashcode);

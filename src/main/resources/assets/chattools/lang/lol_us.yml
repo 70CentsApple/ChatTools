@@ -221,11 +221,39 @@ key:
         .: Find My Sneaky Name
         '@Tooltip': "Choosy to find when peeps say your name.\nYou can put your sneaky name in da list below, yo."
       AllowList:
-        .: Da Yes-Yes List
-        '@Tooltip': "Patterns here are like, 'Yeah, let's notice these'.\nRegEx is da way, yo."
-      BanList:
+        .: 'Da Yes-Yes List §6(Current Server: %s §6)§r'
+        '@Tooltip': |-
+          Rules here are like, 'Yeah, let's notice these'.
+          RegEx is da way, yo.
+        '@New': New Thing
+        '@Display': §e[ %s§e ]§r %s
+        Address:
+          .: Where It's At
+          '@Tooltip': |-
+            Server address for this rule, yo.
+            RegEx makes it cooler.
+        Pattern:
+          .: Catchy Thing
+          '@Tooltip': |-
+            The pattern for finding stuff.
+            RegEx is da way, yo.
+        Toast:
+          .: Toasty Stuff
+          '@Tooltip': Whether to pop up a toasty for this rule.
+        Sound:
+          .: Noise Maker
+          '@Tooltip': Whether to make noise for this rule.
+        Actionbar:
+          .: Action Thingy
+          '@Tooltip': Whether to show action thingy for this rule.
+        Highlight:
+          .: Shiny Stuff
+          '@Tooltip': Whether to make it shiny for this rule.
+      DenyList:
         .: Da No-No List
-        '@Tooltip': "Stuff here is like, 'Nah, ignore these dudes'.\nRegEx is still cool here."
+        '@Tooltip': |-
+          Stuff here is like, 'Nah, ignore these dudes'.
+          RegEx is still cool here.
     formatter:
       Enabled:
         .: Make Words Fancy

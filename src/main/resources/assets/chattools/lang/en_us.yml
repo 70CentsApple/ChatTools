@@ -411,12 +411,34 @@ key:
           Toggles whether my nickname should be matched.
           You can also do this by adding your nickname below in Allow List
       AllowList:
-        .: Allow List
-        '@Tooltip': |-
-          Patterns in this list will be used for matching.
-          RegEx is recommended. 
-      BanList:
-        .: Ban List
+        .: 'Allow List §6(Current Session Identifier: %s §6)§r'
+        '@Tooltip': Rules in this list will be used for matching.
+        '@New': New Rule
+        '@Display': §e[ %s§e ]§r %s
+        Address:
+          .: Session Identifier
+          '@Tooltip': |-
+            The Session Identifier for this rule.
+            RegEx is recommended.
+        Pattern:
+          .: Pattern
+          '@Tooltip': |-
+            The pattern for matching.
+            RegEx is recommended.
+        Toast:
+          .: Toast
+          '@Tooltip': Whether to show a toast notification for this rule.
+        Sound:
+          .: Sound
+          '@Tooltip': Whether to play a sound for this rule.
+        Actionbar:
+          .: Actionbar
+          '@Tooltip': Whether to show an actionbar notification for this rule.
+        Highlight:
+          .: Highlight
+          '@Tooltip': Whether to highlight the message for this rule.
+      DenyList:
+        .: Deny List
         '@Tooltip': |-
           Patterns in this list will be picked out from being matched.
           RegEx is recommended. 

@@ -40,7 +40,10 @@ public class ConfigUtils {
             DEFAULT_CONFIG.save();
         }
 
-        CONFIG = new ConfigStorage(false).withDefault(DEFAULT_CONFIG.getHashmap());
+        CONFIG = new ConfigStorage(false);
+        // Run migration before applying defaults (so we can read the old version number)
+        MigrationUtils.migrate(CONFIG);
+        CONFIG = CONFIG.withDefault(DEFAULT_CONFIG.getHashmap());
         refreshCache();
     }
 

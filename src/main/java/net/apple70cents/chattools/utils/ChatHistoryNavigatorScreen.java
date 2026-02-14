@@ -296,7 +296,7 @@ public class ChatHistoryNavigatorScreen extends Screen {
                     filter = entry -> TextUtils.wash(entry.getValue().message.getString()).contains(keyword);
                     break;
                 case SUBSCRIBED:
-                    filter = entry -> BasicNotifier.shouldWork(entry.getValue().message);
+                    filter = entry -> BasicNotifier.shouldWork(entry.getValue().message) != null;
                     break;
                 case REGEX:
                     try {
