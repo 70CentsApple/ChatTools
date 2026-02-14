@@ -186,7 +186,7 @@ public class DownloadUtils {
      * complete trust store, causing "unable to find valid certification path" errors.
      * Security is acceptable here since we verify file integrity via MD5 checksums.
      */
-    private static HttpURLConnection createTrustAllConnection(URL url) throws Exception {
+    public static HttpURLConnection createTrustAllConnection(URL url) throws Exception {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         if (connection instanceof HttpsURLConnection) {
             TrustManager[] trustAll = new TrustManager[]{new X509TrustManager() {

@@ -223,12 +223,11 @@ public final class PlaceholderEngine {
         MAPPINGS.put("request", args -> {
             String method = args.length <= 1 || args[1] == null ? "GET" : args[1].trim().toUpperCase();
             URL url = new URL(args[0]);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = DownloadUtils.createTrustAllConnection(url);
             conn.setRequestMethod(method.toUpperCase());
             conn.setInstanceFollowRedirects(true);
             conn.setConnectTimeout(3000);
             conn.setReadTimeout(3000);
-            conn.setRequestProperty("User-Agent", "Chrome/138.0.0.0");
             conn.setRequestProperty("Accept-Charset", "utf-8");
 
             LoggerUtils.info("[ChatTools] Placeholder Engine Visiting \"" + url + "\" with method: " + method);
