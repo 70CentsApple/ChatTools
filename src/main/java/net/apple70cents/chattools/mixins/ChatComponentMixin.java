@@ -118,9 +118,7 @@ public abstract class ChatComponentMixin {
         if ((boolean) ConfigUtils.get("general.OverrideChatColor.Enabled")) {
             message = ChatColorEraser.work(message);
         }
-        if (ConfigUtils.NICK_HIDER_ENABLED) {
-            message = NickHider.work(message);
-        }
+
         int occurrenceCount = 1;
         if ((boolean) ConfigUtils.get("general.ChatCompactor.Enabled")) {
             occurrenceCount = ChatCompactor.calculateOccurrenceCount(message);
@@ -153,6 +151,10 @@ public abstract class ChatComponentMixin {
 
         if ((boolean) ConfigUtils.get("general.ChatCompactor.Enabled")) {
             message = ChatCompactor.appendTrailing(message, occurrenceCount);
+        }
+
+        if (ConfigUtils.NICK_HIDER_ENABLED) {
+            message = NickHider.work(message);
         }
 
         TextUtils.MessageUnit messageUnit = new TextUtils.MessageUnit(msgWithoutAdditionalAffixes, message, Instant
