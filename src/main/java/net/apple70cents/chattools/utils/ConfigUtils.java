@@ -3,6 +3,8 @@ package net.apple70cents.chattools.utils;
 import net.apple70cents.chattools.config.ConfigStorage;
 import net.apple70cents.chattools.config.SpecialUnits;
 
+import java.util.List;
+
 public class ConfigUtils {
     public final static ConfigStorage DEFAULT_CONFIG = new ConfigStorage(true);
     public static ConfigStorage CONFIG;
@@ -16,6 +18,7 @@ public class ConfigUtils {
     public static boolean PREVIEW_CLICK_EVENTS_ENABLED = false;
     public static boolean INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED = false;
     public static boolean MACRO_ENABLED = false;
+    public static List<SpecialUnits.MacroUnit> MACRO_LIST = List.of();
     public static boolean REVIEW_LAST_MESSAGE_WITH_UP_ARROW_ONLY_ENABLED = false;
     public static String REPEAT_KEY = "key.keyboard.unknown";
     public static SpecialUnits.KeyModifiers REPEAT_KEY_MODIFIER = SpecialUnits.KeyModifiers.NONE;
@@ -29,6 +32,7 @@ public class ConfigUtils {
         PREVIEW_CLICK_EVENTS_ENABLED = (boolean) CONFIG.get("general.PreviewClickEvents.Enabled");
         INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED = (boolean) CONFIG.get("general.IncreaseChatFieldMaxLength");
         MACRO_ENABLED = (boolean) CONFIG.get("chatkeybindings.Macro.Enabled");
+        MACRO_LIST = SpecialUnits.MacroUnit.fromList((List) ConfigUtils.get("chatkeybindings.Macro.List"));
         REVIEW_LAST_MESSAGE_WITH_UP_ARROW_ONLY_ENABLED = (boolean) CONFIG.get("chatkeybindings.ReviewLastMessageWithUpArrowOnly");
         REPEAT_KEY = (String) CONFIG.get("chatkeybindings.RepeatKey");
         REPEAT_KEY_MODIFIER = SpecialUnits.KeyModifiers.valueOf((String) CONFIG.get("chatkeybindings.RepeatKeyModifier"));

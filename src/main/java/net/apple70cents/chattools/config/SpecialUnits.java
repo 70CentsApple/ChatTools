@@ -2,6 +2,7 @@ package net.apple70cents.chattools.config;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -84,7 +85,8 @@ public class SpecialUnits {
             this.forceDisableFormatter = false;
         }
 
-        public ResponderRuleUnit(String address, String pattern, String message, long delayInMilliseconds, boolean forceDisableFormatter) {
+        public ResponderRuleUnit(String address, String pattern, String message, long delayInMilliseconds,
+                boolean forceDisableFormatter) {
             this.address = address;
             this.pattern = pattern;
             this.message = message;
@@ -113,7 +115,66 @@ public class SpecialUnits {
 
         @Override
         public String toString() {
-            return "ResponderRuleUnit{address='" + address + "', pattern='" + pattern + "', message='" + message + "', delayInMilliseconds=" + delayInMilliseconds + ", forceDisableFormatter=" + forceDisableFormatter + '}';
+            return "ResponderRuleUnit{address='" + address + "', pattern='" + pattern + "', message='" + message
+                    + "', delayInMilliseconds=" + delayInMilliseconds + ", forceDisableFormatter="
+                    + forceDisableFormatter + '}';
+        }
+    }
+
+    public static class MacroCommandEntry {
+        public String command;
+        public long delayInMilliseconds;
+        public boolean forceDisableFormatter;
+
+        public MacroCommandEntry() {
+            this.command = "";
+            this.delayInMilliseconds = 0;
+            this.forceDisableFormatter = false;
+        }
+
+        public MacroCommandEntry(String command, long delayInMilliseconds, boolean forceDisableFormatter) {
+            this.command = command;
+            this.delayInMilliseconds = delayInMilliseconds;
+            this.forceDisableFormatter = forceDisableFormatter;
+        }
+
+        public static MacroCommandEntry of(Object ele) {
+            if (ele instanceof Map) {
+                String command = (String) ((Map) ele).getOrDefault("command", "");
+                long delayInMilliseconds = ((Number) ((Map) ele).getOrDefault("delayInMilliseconds", 0)).longValue();
+                boolean forceDisableFormatter = (boolean) ((Map) ele).getOrDefault("forceDisableFormatter", false);
+                return new MacroCommandEntry(command, delayInMilliseconds, forceDisableFormatter);
+            } else if (ele instanceof MacroCommandEntry) {
+                return (MacroCommandEntry) ele;
+            } else {
+                throw new IllegalArgumentException("Unexpected element type of Object: " + ele);
+            }
+        }
+
+        public static List<MacroCommandEntry> fromList(List list) {
+            return SpecialUnits.map(list, MacroCommandEntry::of);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            MacroCommandEntry that = (MacroCommandEntry) o;
+            return delayInMilliseconds == that.delayInMilliseconds && command.equals(that.command)
+                    && forceDisableFormatter == that.forceDisableFormatter;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(command, delayInMilliseconds, forceDisableFormatter);
+        }
+
+        @Override
+        public String toString() {
+            return "MacroCommandEntry{command='" + command + "', delayInMilliseconds=" + delayInMilliseconds
+                    + ", forceDisableFormatter=" + forceDisableFormatter + '}';
         }
     }
 
@@ -121,29 +182,32 @@ public class SpecialUnits {
         public String key;
         public KeyModifiers modifier;
         public MacroModes mode;
-        public String command;
+        public List<MacroCommandEntry> commands;
 
         public MacroUnit() {
             this.key = InputConstants.UNKNOWN.getName();
             this.modifier = KeyModifiers.NONE;
             this.mode = MacroModes.LAZY;
-            this.command = "";
+            this.commands = new ArrayList<>();
+            this.commands.add(new MacroCommandEntry());
         }
 
-        public MacroUnit(String key, KeyModifiers modifier, MacroModes mode, String command) {
+        public MacroUnit(String key, KeyModifiers modifier, MacroModes mode, List<MacroCommandEntry> commands) {
             this.key = key;
             this.modifier = modifier;
             this.mode = mode;
-            this.command = command;
+            this.commands = commands;
         }
 
         public static MacroUnit of(Object ele) {
             if (ele instanceof Map) {
                 String key = (String) ((Map) ele).getOrDefault("key", InputConstants.UNKNOWN.getName());
-                KeyModifiers modifier = KeyModifiers.valueOf((String) ((Map) ele).getOrDefault("modifier", KeyModifiers.NONE));
+                KeyModifiers modifier = KeyModifiers
+                        .valueOf((String) ((Map) ele).getOrDefault("modifier", KeyModifiers.NONE));
                 MacroModes mode = MacroModes.valueOf((String) ((Map) ele).getOrDefault("mode", MacroModes.LAZY));
-                String command = (String) ((Map) ele).getOrDefault("command", "");
-                return new MacroUnit(key, modifier, mode, command);
+                List<MacroCommandEntry> commands = MacroCommandEntry
+                        .fromList((List) ((Map) ele).getOrDefault("commands", new ArrayList<>()));
+                return new MacroUnit(key, modifier, mode, commands);
             } else if (ele instanceof MacroUnit) {
                 return (MacroUnit) ele;
             } else {
@@ -164,17 +228,19 @@ public class SpecialUnits {
                 return false;
             }
             MacroUnit macroUnit = (MacroUnit) o;
-            return key.equals(macroUnit.key) && modifier == macroUnit.modifier && mode == macroUnit.mode && command.equals(macroUnit.command);
+            return key.equals(macroUnit.key) && modifier == macroUnit.modifier && mode == macroUnit.mode
+                    && commands.equals(macroUnit.commands);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(key, modifier, mode, command);
+            return Objects.hash(key, modifier, mode, commands);
         }
 
         @Override
         public String toString() {
-            return "MacroUnit{key='" + key + "', modifier=" + modifier + ", mode=" + mode + ", command='" + command + "'}";
+            return "MacroUnit{key='" + key + "', modifier=" + modifier + ", mode=" + mode + ", commands=" + commands
+                    + '}';
         }
     }
 
@@ -227,7 +293,8 @@ public class SpecialUnits {
             this.forceDisableFormatter = false;
         }
 
-        public CustomJoinMessageRuleUnit(String address, String message, long delayInMilliseconds, boolean forceDisableFormatter) {
+        public CustomJoinMessageRuleUnit(String address, String message, long delayInMilliseconds,
+                boolean forceDisableFormatter) {
             this.address = address;
             this.message = message;
             this.delayInMilliseconds = delayInMilliseconds;
@@ -254,7 +321,9 @@ public class SpecialUnits {
 
         @Override
         public String toString() {
-            return "CustomJoinMessageRuleUnit{address='" + address + "', message='" + message + "', delayInMilliseconds=" + delayInMilliseconds + ", forceDisableFormatter=" + forceDisableFormatter + '}';
+            return "CustomJoinMessageRuleUnit{address='" + address + "', message='" + message
+                    + "', delayInMilliseconds=" + delayInMilliseconds + ", forceDisableFormatter="
+                    + forceDisableFormatter + '}';
         }
     }
 
@@ -275,7 +344,8 @@ public class SpecialUnits {
             this.highlight = true;
         }
 
-        public NotifierRuleUnit(String address, String pattern, boolean toast, boolean sound, boolean actionbar, boolean highlight) {
+        public NotifierRuleUnit(String address, String pattern, boolean toast, boolean sound, boolean actionbar,
+                boolean highlight) {
             this.address = address;
             this.pattern = pattern;
             this.toast = toast;
@@ -306,8 +376,8 @@ public class SpecialUnits {
 
         @Override
         public String toString() {
-            return "NotifierRuleUnit{address='" + address + "', pattern='" + pattern + "', toast=" + toast + ", sound=" + sound + ", actionbar=" + actionbar + ", highlight=" + highlight + '}';
+            return "NotifierRuleUnit{address='" + address + "', pattern='" + pattern + "', toast=" + toast + ", sound="
+                    + sound + ", actionbar=" + actionbar + ", highlight=" + highlight + '}';
         }
     }
 }
-

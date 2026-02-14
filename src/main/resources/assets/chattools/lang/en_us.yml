@@ -517,9 +517,20 @@ key:
 
               §6GREEDY§r: F3+D -> Activate
                 Ctrl+D -> Activate
-          Command:
-            .: Command
-            '@Tooltip': The command will be sent when this macro is activated.
+          Commands:
+            .: Commands
+            '@Tooltip': Define the commands to send when this macro is activated.
+            '@New': New Command
+            '@Display': '%s'
+            Command:
+              .: Command
+              '@Tooltip': The command to send.
+            DelayInMilliseconds:
+              .: Delay (in milliseconds)
+              '@Tooltip': The delay in milliseconds before sending this command, after activating the macro.
+            ForceDisableFormatter:
+              .: Disable Formatter (Override)
+              '@Tooltip': Toggles whether Formatter should be off when sending this command.
     bubble:
       Enabled:
         .: Enable Bubbles

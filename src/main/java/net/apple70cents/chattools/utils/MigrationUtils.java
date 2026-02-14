@@ -28,7 +28,7 @@ public class MigrationUtils {
     }
 
     /**
-     * Migration from v2.31800 to v2.31900:
+     * Migration from v2.3.18 to v2.3.19:
      * 1) notifier.AllowList: convert List<String> (regex patterns) to List<NotifierRuleUnit> (maps)
      * 2) notifier.BanList -> notifier.DenyList: rename the key
      */
@@ -74,6 +74,30 @@ public class MigrationUtils {
             config.remove("notifier.BanList");
         }
 
-        LoggerUtils.info("[ChatTools] Migration from v2.31800 to v2.31900 completed.");
+        // 3. Migrate chatkeybindings.Macro.List: command (String) -> commands (List<Map>)
+        if (config.hasKey("chatkeybindings.Macro.List")) {
+            Object macroListObj = config.get("chatkeybindings.Macro.List");
+            if (macroListObj instanceof List) {
+                List<?> macroList = (List<?>) macroListObj;
+                for (Object item : macroList) {
+                    if (item instanceof Map) {
+                        Map<String, Object> macroMap = (Map<String, Object>) item;
+                        if (macroMap.containsKey("command") && !macroMap.containsKey("commands")) {
+                            String oldCommand = (String) macroMap.get("command");
+                            Map<String, Object> commandEntry = new LinkedHashMap<>();
+                            commandEntry.put("command", oldCommand);
+                            commandEntry.put("delayInMilliseconds", 0);
+                            commandEntry.put("forceDisableFormatter", false);
+                            List<Map<String, Object>> commandsList = new ArrayList<>();
+                            commandsList.add(commandEntry);
+                            macroMap.put("commands", commandsList);
+                            macroMap.remove("command");
+                        }
+                    }
+                }
+            }
+        }
+
+        LoggerUtils.info("[ChatTools] Migration from v2.3.18 to v2.3.19 completed.");
     }
 }

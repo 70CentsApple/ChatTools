@@ -175,29 +175,29 @@ public class ConfigScreenUtils {
                     SpecialUnits.NotifierRuleUnit defaultObj = new SpecialUnits.NotifierRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", unit.address))
+                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Pattern"), unit.pattern)
-                            .setTooltip(getTooltip(key + ".Pattern", "String", unit.pattern))
+                            .setTooltip(getTooltip(key + ".Pattern", "String", defaultObj.pattern))
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Toast"), unit.toast)
-                            .setTooltip(getTooltip(key + ".Toast", "boolean", unit.toast))
+                            .setTooltip(getTooltip(key + ".Toast", "boolean", defaultObj.toast))
                             .setDefaultValue(defaultObj.toast).setSaveConsumer(v -> unit.toast = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Sound"), unit.sound)
-                            .setTooltip(getTooltip(key + ".Sound", "boolean", unit.sound))
+                            .setTooltip(getTooltip(key + ".Sound", "boolean", defaultObj.sound))
                             .setDefaultValue(defaultObj.sound).setSaveConsumer(v -> unit.sound = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Actionbar"), unit.actionbar)
-                            .setTooltip(getTooltip(key + ".Actionbar", "boolean", unit.actionbar))
+                            .setTooltip(getTooltip(key + ".Actionbar", "boolean", defaultObj.actionbar))
                             .setDefaultValue(defaultObj.actionbar).setSaveConsumer(v -> unit.actionbar = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Highlight"), unit.highlight)
-                            .setTooltip(getTooltip(key + ".Highlight", "boolean", unit.highlight))
+                            .setTooltip(getTooltip(key + ".Highlight", "boolean", defaultObj.highlight))
                             .setDefaultValue(defaultObj.highlight).setSaveConsumer(v -> unit.highlight = v).build());
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
@@ -226,17 +226,17 @@ public class ConfigScreenUtils {
                     SpecialUnits.BubbleRuleUnit defaultObj = new SpecialUnits.BubbleRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", unit.address))
+                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Pattern"), unit.pattern)
-                            .setTooltip(getTooltip(key + ".Pattern", "String", unit.pattern))
+                            .setTooltip(getTooltip(key + ".Pattern", "String", defaultObj.pattern))
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Fallback"), unit.fallback)
-                            .setTooltip(getTooltip(key + ".Fallback", "boolean", unit.fallback))
+                            .setTooltip(getTooltip(key + ".Fallback", "boolean", defaultObj.fallback))
                             .setDefaultValue(defaultObj.fallback).setSaveConsumer(v -> unit.fallback = v).build());
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
@@ -266,27 +266,27 @@ public class ConfigScreenUtils {
                     SpecialUnits.ResponderRuleUnit defaultObj = new SpecialUnits.ResponderRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", unit.address))
+                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Pattern"), unit.pattern)
-                            .setTooltip(getTooltip(key + ".Pattern", "String", unit.pattern))
+                            .setTooltip(getTooltip(key + ".Pattern", "String", defaultObj.pattern))
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
 
                     entries.add(eb.startStrField(trans(key + ".Message"), unit.message)
-                            .setTooltip(getTooltip(key + ".Message", "String", unit.message))
+                            .setTooltip(getTooltip(key + ".Message", "String", defaultObj.message))
                             .setDefaultValue(defaultObj.message).setSaveConsumer(v -> unit.message = v).build());
 
                     entries.add(eb.startLongField(trans(key + ".DelayInMilliseconds"), unit.delayInMilliseconds)
-                            .setTooltip(getTooltip(key + ".DelayInMilliseconds", "longField", unit.delayInMilliseconds))
+                            .setTooltip(getTooltip(key + ".DelayInMilliseconds", "longField", defaultObj.delayInMilliseconds))
                             .setDefaultValue(defaultObj.delayInMilliseconds)
                             .setSaveConsumer(v -> unit.delayInMilliseconds = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".ForceDisableFormatter"), unit.forceDisableFormatter)
                             .setTooltip(
-                                    getTooltip(key + ".ForceDisableFormatter", "boolean", unit.forceDisableFormatter))
+                                    getTooltip(key + ".ForceDisableFormatter", "boolean", defaultObj.forceDisableFormatter))
                             .setDefaultValue(defaultObj.forceDisableFormatter)
                             .setSaveConsumer(v -> unit.forceDisableFormatter = v).build());
 
@@ -304,15 +304,16 @@ public class ConfigScreenUtils {
                     if (passedUnit == null || unit.key.equals(InputConstants.UNKNOWN.getName())) {
                         displayText = trans(key + ".@New");
                     } else {
+                        String firstCommand = unit.commands.isEmpty() ? "" : unit.commands.get(0).command;
                         if (unit.modifier == SpecialUnits.KeyModifiers.NONE) {
                             // such as "[ H ] /home"
                             displayText = trans(key + ".@Display",
-                                    "§6" + InputConstants.getKey(unit.key).getDisplayName().getString(), unit.command);
+                                    "§6" + InputConstants.getKey(unit.key).getDisplayName().getString(), firstCommand);
                         } else {
                             // such as "[ Shift + B ] /back"
                             displayText = trans(key + ".@Display",
                                     "§6" + unit.modifier + " + " + InputConstants.getKey(unit.key).getDisplayName()
-                                            .getString(), unit.command);
+                                            .getString(), firstCommand);
                         }
                     }
 
@@ -320,7 +321,7 @@ public class ConfigScreenUtils {
                     SpecialUnits.MacroUnit defaultObj = new SpecialUnits.MacroUnit();
 
                     entries.add(eb.startKeyCodeField(trans(key + ".Key"), InputConstants.getKey(unit.key))
-                            .setTooltip(getTooltip(key + ".Key", "keycode", InputConstants.getKey(unit.key)))
+                            .setTooltip(getTooltip(key + ".Key", "keycode", InputConstants.getKey(defaultObj.key)))
                             .setDefaultValue(InputConstants.getKey(defaultObj.key))
                             //#if MC>=11800
                             .setKeySaveConsumer
@@ -334,16 +335,48 @@ public class ConfigScreenUtils {
                                     (k -> unit.key = k.getName()).build());
 
                     entries.add(eb.startEnumSelector(trans(key + ".Modifier"), SpecialUnits.KeyModifiers.class,
-                                    unit.modifier).setTooltip(getTooltip(key + ".Modifier", "EnumKeyModifiers", unit.modifier))
+                                    unit.modifier).setTooltip(getTooltip(key + ".Modifier", "EnumKeyModifiers", defaultObj.modifier))
                             .setDefaultValue(defaultObj.modifier).setSaveConsumer(v -> unit.modifier = v).build());
 
                     entries.add(eb.startEnumSelector(trans(key + ".Mode"), SpecialUnits.MacroModes.class, unit.mode)
-                            .setTooltip(getTooltip(key + ".Mode", "EnumMacroModes", unit.mode))
+                            .setTooltip(getTooltip(key + ".Mode", "EnumMacroModes", defaultObj.mode))
                             .setDefaultValue(defaultObj.mode).setSaveConsumer(v -> unit.mode = v).build());
 
-                    entries.add(eb.startStrField(trans(key + ".Command"), unit.command)
-                            .setTooltip(getTooltip(key + ".Command", "String", unit.command))
-                            .setDefaultValue(defaultObj.command).setSaveConsumer(v -> unit.command = v).build());
+                    String commandsKey = key + ".Commands";
+                    entries.add(new NestedListListEntry<SpecialUnits.MacroCommandEntry, MultiElementListEntry<SpecialUnits.MacroCommandEntry>>(
+                            trans(commandsKey), unit.commands, false,
+                            () -> Optional.of(new Component[]{trans(commandsKey + ".@Tooltip")}),
+                            v -> { unit.commands.clear(); unit.commands.addAll(v); },
+                            () -> defaultObj.commands,
+                            eb.getResetButtonKey(), true, false, (passedCmd, ignored2) -> {
+                        SpecialUnits.MacroCommandEntry cmd = (passedCmd == null) ? new SpecialUnits.MacroCommandEntry() : passedCmd;
+
+                        Component cmdDisplayText;
+                        if (passedCmd == null || cmd.command.isEmpty()) {
+                            cmdDisplayText = trans(commandsKey + ".@New");
+                        } else {
+                            cmdDisplayText = trans(commandsKey + ".@Display", cmd.command);
+                        }
+
+                        List<AbstractConfigListEntry<?>> cmdEntries = new ArrayList<>();
+                        SpecialUnits.MacroCommandEntry cmdDefault = new SpecialUnits.MacroCommandEntry();
+
+                        cmdEntries.add(eb.startStrField(trans(commandsKey + ".Command"), cmd.command)
+                                .setTooltip(getTooltip(commandsKey + ".Command", "String", cmdDefault.command))
+                                .setDefaultValue(cmdDefault.command).setSaveConsumer(v -> cmd.command = v).build());
+
+                        cmdEntries.add(eb.startLongField(trans(commandsKey + ".DelayInMilliseconds"), cmd.delayInMilliseconds)
+                                .setTooltip(getTooltip(commandsKey + ".DelayInMilliseconds", "longField", cmdDefault.delayInMilliseconds))
+                                .setDefaultValue(cmdDefault.delayInMilliseconds)
+                                .setSaveConsumer(v -> cmd.delayInMilliseconds = v).build());
+
+                        cmdEntries.add(eb.startBooleanToggle(trans(commandsKey + ".ForceDisableFormatter"), cmd.forceDisableFormatter)
+                                .setTooltip(getTooltip(commandsKey + ".ForceDisableFormatter", "boolean", cmdDefault.forceDisableFormatter))
+                                .setDefaultValue(cmdDefault.forceDisableFormatter)
+                                .setSaveConsumer(v -> cmd.forceDisableFormatter = v).build());
+
+                        return new MultiElementListEntry<>(cmdDisplayText, cmd, cmdEntries, SHOULD_EXPAND_ALL_RULES);
+                    }));
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
                 });
@@ -370,12 +403,12 @@ public class ConfigScreenUtils {
                     SpecialUnits.FormatterUnit defaultObj = new SpecialUnits.FormatterUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", unit.address))
+                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Formatter"), unit.formatter)
-                            .setTooltip(getTooltip(key + ".Formatter", "String", unit.formatter))
+                            .setTooltip(getTooltip(key + ".Formatter", "String", defaultObj.formatter))
                             .setDefaultValue(defaultObj.formatter).setSaveConsumer(v -> unit.formatter = v).build());
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
@@ -405,22 +438,22 @@ public class ConfigScreenUtils {
                     SpecialUnits.CustomJoinMessageRuleUnit defaultObj = new SpecialUnits.CustomJoinMessageRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", unit.address))
+                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
                             .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Message"), unit.message)
-                            .setTooltip(getTooltip(key + ".Message", "String", unit.message))
+                            .setTooltip(getTooltip(key + ".Message", "String", defaultObj.message))
                             .setDefaultValue(defaultObj.message).setSaveConsumer(v -> unit.message = v).build());
 
                     entries.add(eb.startLongField(trans(key + ".DelayInMilliseconds"), unit.delayInMilliseconds)
-                            .setTooltip(getTooltip(key + ".DelayInMilliseconds", "longField", unit.delayInMilliseconds))
+                            .setTooltip(getTooltip(key + ".DelayInMilliseconds", "longField", defaultObj.delayInMilliseconds))
                             .setDefaultValue(defaultObj.delayInMilliseconds)
                             .setSaveConsumer(v -> unit.delayInMilliseconds = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".ForceDisableFormatter"), unit.forceDisableFormatter)
                             .setTooltip(
-                                    getTooltip(key + ".ForceDisableFormatter", "boolean", unit.forceDisableFormatter))
+                                    getTooltip(key + ".ForceDisableFormatter", "boolean", defaultObj.forceDisableFormatter))
                             .setDefaultValue(defaultObj.forceDisableFormatter)
                             .setSaveConsumer(v -> unit.forceDisableFormatter = v).build());
 

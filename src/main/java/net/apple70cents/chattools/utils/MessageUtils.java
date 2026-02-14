@@ -7,6 +7,9 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+
+import java.util.concurrent.CompletableFuture;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -123,6 +126,24 @@ public class MessageUtils {
         //$$ player.chat(text);
         //#endif
         ConfigUtils.set("formatter.Enabled", oldStatus);
+    }
+
+    public static void sendToPublicChatScheduled(String text, long delayInMilliseconds) {
+        sendToPublicChatScheduled(text, false, delayInMilliseconds);
+    }
+    
+    public static void sendToPublicChatScheduled(String text, boolean forceDisableFormatter, long delayInMilliseconds) {
+        CompletableFuture.runAsync(() -> {
+            if (delayInMilliseconds > 0) {
+                try {
+                    Thread.sleep(delayInMilliseconds);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+            Minecraft.getInstance().execute(() -> MessageUtils.sendToPublicChat(text, forceDisableFormatter));
+        });
     }
 
     /**

@@ -434,9 +434,20 @@ key:
               
               §6GREEDY§r: F3+D -> Se activa
                 Ctrl+D -> Se activa
-          Command:
-            .: "Comando"
-            '@Tooltip': "El comando se enviará cuando se active esta macro."
+          Commands:
+            .: "Comandos"
+            '@Tooltip': "Define los comandos a enviar cuando se active esta macro."
+            '@New': "Nuevo Comando"
+            '@Display': "'%s'"
+            Command:
+              .: "Comando"
+              '@Tooltip': "El comando a enviar."
+            DelayInMilliseconds:
+              .: "Retraso (ms)"
+              '@Tooltip': "El retraso en milisegundos antes de enviar este comando."
+            ForceDisableFormatter:
+              .: "Desactivar Formateador (Sobrescribir)"
+              '@Tooltip': "Activa/desactiva si el formateador debe estar desactivado al enviar este comando."
     bubble:
       Enabled:
         .: "Activar Burbujas"

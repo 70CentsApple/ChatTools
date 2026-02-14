@@ -8,7 +8,6 @@ import net.apple70cents.chattools.utils.MessageUtils;
 import net.minecraft.client.Minecraft;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -19,12 +18,15 @@ public class Macro {
         if (Minecraft.getInstance().screen != null) {
             return;
         }
-        for (SpecialUnits.MacroUnit macro : SpecialUnits.MacroUnit.fromList((List) ConfigUtils.get("chatkeybindings.Macro.List"))) {
+        for (SpecialUnits.MacroUnit macro : ConfigUtils.MACRO_LIST) {
             if (KeyboardUtils.isKeyPressingWithModifier(macro.key, macro.modifier, macro.mode)) {
                 if (!keyWasPressed.contains(macro)) {
                     keyWasPressed.add(macro);
-                    LoggerUtils.info("[ChatTools] Triggered Macro: " + macro.command);
-                    MessageUtils.sendToPublicChat(macro.command);
+                    LoggerUtils.info("[ChatTools] Triggered Macro: " + macro.commands);
+                    for (SpecialUnits.MacroCommandEntry entry : macro.commands) {
+                        MessageUtils.sendToPublicChatScheduled(entry.command, entry.forceDisableFormatter,
+                                entry.delayInMilliseconds);
+                    }
                 }
             } else {
                 keyWasPressed.remove(macro);

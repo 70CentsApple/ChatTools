@@ -496,9 +496,20 @@ key:
 
               §6GREEDY§r: F3+D -> 激活
                 Ctrl+D -> 激活
-          Command:
-            .: 内容
-            '@Tooltip': 激活此宏时将发送的内容。
+          Commands:
+            .: 命令列表
+            '@Tooltip': 定义激活此宏时要发送的命令。
+            '@New': 新命令
+            '@Display': '%s'
+            Command:
+              .: 命令
+              '@Tooltip': 要发送的命令。
+            DelayInMilliseconds:
+              .: 延迟（毫秒）
+              '@Tooltip': 发送此命令前的延迟时间，从宏被触发时刻开始计算，单位为毫秒。
+            ForceDisableFormatter:
+              .: 禁用聊天注入
+              '@Tooltip': 切换是否在发送此命令时临时关闭聊天注入的尝试。
     bubble:
       Enabled:
         .: 启用聊天气泡

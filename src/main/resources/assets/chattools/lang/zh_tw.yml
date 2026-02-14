@@ -340,9 +340,20 @@ key:
 
               §6GREEDY§r: F3+D -> 啟動
                 Ctrl+D -> 啟動
-          Command:
-            .: 內容
-            '@Tooltip': 啟動此宏時將發送的內容。
+          Commands:
+            .: 命令列表
+            '@Tooltip': 定義啟動此宏時要發送的命令。
+            '@New': 新命令
+            '@Display': '%s'
+            Command:
+              .: 命令
+              '@Tooltip': 要發送的命令。
+            DelayInMilliseconds:
+              .: 延遲（毫秒）
+              '@Tooltip': 發送此命令前的延遲時間（毫秒）。
+            ForceDisableFormatter:
+              .: 停用聊天注入
+              '@Tooltip': 切換是否在發送此命令時臨時關閉聊天注入的嘗試。
     bubble:
       Enabled:
         .: 啟用聊天氣泡

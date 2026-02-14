@@ -222,9 +222,7 @@ key:
         '@Tooltip': "Choosy to find when peeps say your name.\nYou can put your sneaky name in da list below, yo."
       AllowList:
         .: 'Da Yes-Yes List §6(Current Server: %s §6)§r'
-        '@Tooltip': |-
-          Rules here are like, 'Yeah, let's notice these'.
-          RegEx is da way, yo.
+        '@Tooltip': Rules here are like, 'Yeah, let's notice these'.
         '@New': New Thing
         '@Display': §e[ %s§e ]§r %s
         Address:
@@ -291,9 +289,20 @@ key:
           Mode:
             .: How It Works
             '@Tooltip': "Like, take 'D' with no fancy stuff:\n§6LAZY§r: F3+D -> Nah\nCtrl+D -> Nah\n\n§6GREEDY§r: F3+D -> Yup\nCtrl+D -> Yup"
-          Command:
-            .: What It Do
-            '@Tooltip': The magic that happens when you press it.
+          Commands:
+            .: Magik Thingz
+            '@Tooltip': All da stuff that happens when you press it.
+            '@New': New Magik
+            '@Display': '%s'
+            Command:
+              .: What It Do
+              '@Tooltip': The magic that happens.
+            DelayInMilliseconds:
+              .: Wait Time (ms)
+              '@Tooltip': How long to wait before doing the magic.
+            ForceDisableFormatter:
+              .: Turn Off Fancy Talk
+              '@Tooltip': Choosy to not fancy talk when doing the magic.
     bubble:
       Enabled:
         .: Bubbles Everywhere
