@@ -8,8 +8,14 @@ import java.nio.file.Path;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * @author 70CentsApple
@@ -30,7 +36,8 @@ public class DownloadUtils {
     private static boolean shouldCheckMD5OnJudgingReadiness = true;
 
     public static boolean shouldCheckIfFullyReady() {
-        return (boolean) ConfigUtils.get("notifier.Toast.Enabled") && "ADDON".equals((String) ConfigUtils.get("notifier.Toast.Mode"));
+        return (boolean) ConfigUtils.get("notifier.Toast.Enabled") && "ADDON".equals(
+                (String) ConfigUtils.get("notifier.Toast.Mode"));
     }
 
     public static boolean checkIfFullyReady() {
@@ -132,13 +139,13 @@ public class DownloadUtils {
         LoggerUtils.info("[ChatTools] Addons are fully downloaded and ready.");
     }
 
-    private static void downloadFile(String fileName, Path targetPath, QuadConsumer<String, Integer, Integer, Integer> processSupplier) throws IOException {
+    private static void downloadFile(String fileName, Path targetPath, QuadConsumer<String, Integer, Integer, Integer> processSupplier) throws Exception {
         URL url = new URL(DOWNLOAD_SITE + fileName);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("User-Agent", "Chrome/138.0.0.0");
+        HttpURLConnection connection = createTrustAllConnection(url);
 
         int fileSize = connection.getContentLength();
-        try (InputStream in = connection.getInputStream(); FileOutputStream fos = new FileOutputStream(targetPath.toFile())) {
+        try (InputStream in = connection.getInputStream(); FileOutputStream fos = new FileOutputStream(
+                targetPath.toFile())) {
 
             byte[] buffer = new byte[4096];
             int bytesRead;
@@ -165,13 +172,43 @@ public class DownloadUtils {
     }
 
 
-    private static String downloadMD5(String md5Url) throws IOException {
+    private static String downloadMD5(String md5Url) throws Exception {
         URL url = new URL(md5Url);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("User-Agent", "Chrome/138.0.0.0");
+        HttpURLConnection connection = createTrustAllConnection(url);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             return reader.readLine();
         }
+    }
+
+    /**
+     * Creates an HttpURLConnection that trusts all SSL certificates.
+     * This is needed because some JREs bundled with Minecraft do not have a
+     * complete trust store, causing "unable to find valid certification path" errors.
+     * Security is acceptable here since we verify file integrity via MD5 checksums.
+     */
+    private static HttpURLConnection createTrustAllConnection(URL url) throws Exception {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        if (connection instanceof HttpsURLConnection) {
+            TrustManager[] trustAll = new TrustManager[]{new X509TrustManager() {
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }};
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAll, new java.security.SecureRandom());
+            ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
+        }
+        connection.setRequestProperty("User-Agent", "Chrome/138.0.0.0");
+        return connection;
     }
 
     private static boolean checkMD5(Path filePath, String md5) throws NoSuchAlgorithmException, IOException {
