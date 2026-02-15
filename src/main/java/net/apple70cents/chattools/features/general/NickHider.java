@@ -19,11 +19,20 @@ public class NickHider {
     private static String nickname;
 
     private static final CircuitBreakerExecutor executor = CircuitBreakerExecutor.of(() -> {
+        Component original = text.copy();
         try {
-            text = TextUtils.replaceComponentText(text.copy(), RegExUtils.getOrCompilePattern(Pattern.quote(playerName)), nickname);
+            Component result = TextUtils.replaceComponentText(text.copy(),
+                    RegExUtils.getOrCompilePattern(Pattern.quote(playerName)), nickname);
+            if (result != null && !"ERROR".equals(result.getString())) {
+                text = result;
+            } else {
+                LoggerUtils.error("[ChatTools] ERROR was returned on nick-hiding this text: " + text + ", let's show it raw...");
+                text = original;
+            }
         } catch (Exception e) {
             LoggerUtils.error("[ChatTools] Error occurred on nick-hiding this text: " + text + ", let's show it raw...");
             e.printStackTrace();
+            text = original;
         }
     }).setMaxLimitPerSecond(() -> ((Number) ConfigUtils.get("general.CircuitBreaker.NickHiderThreshold")).intValue())
     .setFailsafeFunction(() -> {
