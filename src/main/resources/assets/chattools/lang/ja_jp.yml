@@ -1,0 +1,544 @@
+modmenu.nameTranslation.chattools: "チャットツール"
+modmenu.descriptionTranslation.chattools: "チャットに関する優れた機能を提供するツールセットです。"
+key:
+  chattools:
+    texts:
+      config:
+        get: "§6[チャットツール] \"%s§6\" の値は %s です"
+        set:
+          .: "§a[チャットツール] \"%s§a\" の値を %s に設定しました"
+          warning: "§6[チャットツール] 警告: キー \"%s§6\" はチャットツールで定義されていません。"
+          unsupported: "§c[チャットツール] エラー: キー \"%s§c\" の変更はサポートされていません。"
+          saved: "§a[チャットツール] 設定を保存しました。"
+        toggle:
+          error: "§c[チャットツール] エラー: キー \"%s§c\" はチャットツールで定義されていません。"
+      RestoreMessagesSplitLine: "§7==== 復元されたメッセージ ====§r"
+      filterPlaceholder:
+        .: "§7==== [フィルタ済み] ====§r"
+        '@Tooltip': "このメッセージはチャットツールのフィルターで除外されました。"
+      welcomeMessage: "チャットツールが初めてですか？よくある質問はこちら！"
+      toast.title: "Minecraftから:"
+      actionbar.title: "§a§lメッセージを受信しました！"
+      repeat:
+        failure:
+          empty: "§6§lメッセージがありません！"
+      download.process: "[チャットツール] %s をダウンロード中: %s%% - (%sKB/%sKB)"
+      download.success: "§6[チャットツール] すべてのアドオンファイルが正常にダウンロードされました！"
+      toast.failure: "§6通知の表示に失敗しました: ファイルが準備できていないか、非対応プラットフォームです。§r"
+      respond.failure: "§6[チャットツール] レスポンダーエラー: %s"
+      translator:
+        requireApi: "[まず翻訳APIを設定してください。]"
+        await: "[待機中...]"
+        error: "[エラーが発生しました: %s]"
+      copy:
+        launch: "クリックしてコピー メニューを開く"
+        title: "コピー メニュー"
+        copyObjectData: "オブジェクトデータをコピー"
+        copyRaw: "書式なしでコピー"
+        copyWithColorCodeEscaped: "カラーコードをエスケープしてコピー"
+        copyWithNoColorCode: "カラーコードなしでコピー"
+        copyUnixTimestamp: "UNIXタイムスタンプをコピー"
+        copyTimestamp: "タイムスタンプをコピー"
+        cancel: "キャンセル"
+      ChatHistoryNavigator:
+        title: "チャット履歴ナビゲーター"
+        placeholder: "検索..."
+        modes:
+          CASE_INSENSITIVE:
+            .: "大文字小文字を区別しない"
+            '@Tooltip': "例: 'A' は 'A' または 'a' に一致します"
+          CASE_SENSITIVE:
+            .: "大文字小文字を区別する"
+            '@Tooltip': "例: 'A' は 'A' のみ一致します"
+          REGEX:
+            .: "正規表現"
+            '@Tooltip': |-
+              正規表現で検索します。
+              例: '\\d' は任意の数字(0-9)に一致します
+      PreviewClickEvents:
+        overall: "§6イベント:"
+        insertion: "§c- §rShift+クリックで挿入: %s"
+        clickEvent:
+          .: "§c- §rクリックイベント:"
+          openUrl: "§c - §rURLを開く: %s"
+          openFile: "§c - §rファイルを開く: %s"
+          runCommand: "§c - §rコマンドを実行: %s"
+          suggestCommand: "§c - §rコマンドを提案: %s"
+          changePage: "§c - §rページを変更: %s"
+          copyToClipboard: "§c - §rクリップボードにコピー: %s"
+      'on': "チャットツールを有効化"
+      'off': "チャットツールを無効化"
+      requireReload: "変更を適用するにはMinecraftを再起動してください！"
+      defaultValue: "デフォルト: %s"
+      variableType: "変数タイプ: %s"
+    gui:
+      title: "チャットツール設定"
+    category:
+      general: "全般"
+      notifier: "通知"
+      formatter: "フォーマッター"
+      chatkeybindings: "チャットキーバインド"
+      bubble: "吹き出し"
+      responder: "自動応答"
+      filter: "チャットフィルター"
+      customJoinMessage: "カスタム参加メッセージ"
+      translator: "翻訳"
+    general:
+      FAQ:
+        .: "[よくある質問]"
+        '@Tooltip': "クリックしてFAQを表示"
+      ChatTools:
+        Enabled:
+          .: "チャットツールを有効化"
+          '@Tooltip': "MOD全体の有効/無効を切り替えます。"
+      Timestamp:
+        .: "タイムスタンプ"
+        '@Tooltip': "メッセージの前にタイムスタンプを挿入します。"
+        Enabled:
+          .: "タイムスタンプを有効化"
+          '@Tooltip': "タイムスタンプを挿入するかどうかを切り替えます。"
+        Pattern:
+          .: "パターン"
+          '@Tooltip': |-
+            タイムスタンプのパターン。
+            & → カラーコードのプレフィックス
+            \& → &
+            {hour} → 時
+            {minute} → 分
+            {second} → 秒
+        CopyToChatBar:
+          Enabled:
+            .: "コピー メニューを有効化"
+            '@Tooltip': "有効時、メッセージのタイムスタンプをクリックでコピー メニューを開けます。"
+      RestoreMessages:
+        .: "メッセージ復元"
+        '@Tooltip': "前回セッションのメッセージを復元します。"
+        Enabled:
+          .: "メッセージ復元を有効化"
+          '@Tooltip': "メッセージ復元の有効/無効を切り替えます。"
+        SplitLineEnabled:
+          .: "区切り線を有効化"
+          '@Tooltip': "有効時、セッション切替時に区切り線をチャットに追加します。"
+      ExclusiveActionbar:
+        .: "専用アクションバー"
+        '@Tooltip': "チャットツールの情報テキストを専用で表示します。"
+        Enabled:
+          .: "専用アクションバーを有効化"
+          '@Tooltip': "チャットツールの情報テキストを専用で表示するかどうか。"
+        XOffset:
+          .: "Xオフセット"
+          '@Tooltip': "専用アクションバーのX方向の位置調整。"
+        YOffset:
+          .: "Yオフセット"
+          '@Tooltip': "専用アクションバーのY方向の位置調整。"
+        Size:
+          .: "サイズ"
+          '@Tooltip': "テキストサイズ。"
+      NickHider:
+        .: "名前隠し §6(実験的)"
+        '@Tooltip': |-
+          あなたの名前を置き換えます（クライアント側のみ）。
+          §6実験的: 正しく処理できない場合は元のテキストが表示されます。
+        Enabled:
+          .: "名前隠しを有効化"
+          '@Tooltip': "あなたの名前を置き換えるかどうか。"
+        Nickname:
+          .: "新しい名前"
+          '@Tooltip': |-
+            新しい名前:
+            & → カラーコードのプレフィックス
+            \& → &
+        CacheSize:
+          .: "キャッシュサイズ"
+          '@Tooltip': "結果キャッシュの最大サイズ。"
+      ChatCompactor:
+        .: "チャット圧縮"
+        '@Tooltip': "チャットを圧縮して見やすくします。"
+        Enabled:
+          .: "チャット圧縮を有効化"
+          '@Tooltip': "チャット圧縮の有効/無効を切り替えます。"
+        UseStrict:
+          .: "厳密モードを使用"
+          '@Tooltip': |-
+            2つのチャットが厳密に同じオブジェクトデータの場合のみ圧縮します。
+        MaxOccurrence:
+          .: "最大出現回数"
+          '@Tooltip': |-
+            圧縮時にカウンターが1増えます。
+            このカウンターの最大値を設定します。
+      ChatHistoryNavigator:
+        Enabled:
+          .: "チャット履歴ナビゲーターを有効化"
+          '@Tooltip': "Ctrl+Fでチャット履歴検索を開始！"
+      PreviewClickEvents:
+        Enabled:
+          .: "クリックイベントプレビューを有効化"
+          '@Tooltip': "テキスト上でマウスオーバー時にイベントをプレビューします。"
+      MaxHistoryLength:
+        .: "履歴の最大長"
+        '@Tooltip': |-
+          チャット履歴の最大長を変更します。
+          （Minecraftデフォルト: 100）
+      IncreaseChatFieldMaxLength:
+        .: "チャット欄の最大長を増加"
+        '@Tooltip': |-
+          チャット欄の最大長を変更します。
+          （Minecraftデフォルト: 256）
+          長すぎると予期しない動作になる場合があります。自己責任でご利用ください。
+      HideChatHistoryInF1Mode:
+        .: "F1モードで履歴を隠す"
+        '@Tooltip': |-
+          MC-130244を修正。
+          §6(Minecraft 1.20.5以降が必要)§r
+      OverrideChatColor:
+        .: "チャット色上書き §6(実験的)"
+        '@Tooltip': |-
+          チャットメッセージの色を白に変更します。
+          §6実験的: 正しく処理できない場合は元のテキストが表示されます。
+          メッセージが多いと処理が重くなりラグの原因になります！
+        Enabled:
+          .: "チャット色上書きを有効化"
+          '@Tooltip': "チャット色上書きの有効/無効を切り替えます。"
+    translator:
+      .: "翻訳"
+      Enabled:
+        .: "翻訳機能を有効化"
+        '@Tooltip': |-
+          Shift+Tabでチャット内のテキストを翻訳！
+          翻訳機能の有効/無効を切り替えます。
+      Mode:
+        .: "モード"
+        '@Tooltip': |-
+          §6BUILTIN§r: カスタムAPIで翻訳
+          §6BAIDU§r: Baidu翻訳APIで翻訳
+      Builtin:
+        .: "カスタム翻訳"
+        '@Tooltip': |-
+          指定したAPIエンドポイントで翻訳リクエストを送信します。
+          翻訳APIの手動設定が必要です。
+        API:
+          .: "翻訳API"
+          '@Tooltip': |-
+            URLを入力し、翻訳対象テキストを{text}で置換します。
+            {text}がなければ末尾にテキストが追加されます。
+        PostInstead:
+          .: "POSTリクエストで送信"
+          '@Tooltip': |-
+            有効時はPOST、無効時はGETでリクエストします。
+            現状POSTでもパラメータはURLに付与されます。
+      Baidu:
+        .: "Baidu翻訳"
+        '@Tooltip': |-
+          Baidu翻訳APIを利用します。
+          事前にBaidu翻訳オープンプラットフォームで登録が必要です。
+        Appid:
+          .: "アプリID"
+          '@Tooltip': "あなたのアプリID"
+        Appkey:
+          .: "アプリキー"
+          '@Tooltip': "あなたのアプリキー"
+        from:
+          .: "翻訳元言語"
+          '@Tooltip': |-
+            翻訳元言語。'auto'推奨（自動判定）。
+            Baidu翻訳の言語リスト参照。
+        to:
+          .: "翻訳先言語"
+          '@Tooltip': |-
+            翻訳先言語（例: 'ja'は日本語）。
+            Baidu翻訳の言語リスト参照。
+    notifier:
+      Toast:
+        .: "システム通知"
+        '@Tooltip': |-
+          Minecraftがバックグラウンド時にポップアップ通知を送信します。
+          一致したメッセージのみ通知されます。
+        Enabled:
+          .: "通知を有効化"
+          '@Tooltip': "ポップアップ通知の有効/無効を切り替えます。"
+        Mode:
+          .: "モード"
+          '@Tooltip': |-
+            §6ADDON§r: アドオンによる通知。追加ファイルが必要です。/chattools downloadで手動DL。
+            §6POWERSHELL§r: PowerShellコマンドで通知。
+            §6AWT§r: Java AWTで通知（通常は動作しません。非推奨）
+            §6TWO_SLICES§r: two-slicesで通知（Linux/Mac向け）
+      Sound:
+        .: "サウンド"
+        '@Tooltip': |-
+          効果音を再生します。
+          効果音は「プレイヤー」カテゴリで再生されます。
+          一致したメッセージのみ対象です。
+        Enabled:
+          .: "サウンドを有効化"
+          '@Tooltip': "効果音の有効/無効を切り替えます。"
+        Type:
+          .: "タイプ"
+          '@Tooltip': "再生する効果音の種類。"
+        Volume:
+          .: "音量"
+          '@Tooltip': "サウンドの音量を変更します。"
+        Pitch:
+          .: "ピッチ"
+          '@Tooltip': "サウンドのピッチを変更します。"
+        PlaySoundFromCameraPositionEnabled:
+          .: "カメラ位置から再生"
+          '@Tooltip': |-
+            無効時はプレイヤー位置で再生され、カメラが離れていると音量が減衰します。
+            有効時はカメラ位置で再生されます。
+      Actionbar:
+        .: "アクションバー"
+        '@Tooltip': |-
+          アクションバーにメッセージを表示します。
+          一致したメッセージのみ対象です。
+        Enabled:
+          .: "アクションバーを有効化"
+          '@Tooltip': "アクションバー通知の有効/無効を切り替えます。"
+      Highlight:
+        .: "ハイライト"
+        '@Tooltip': |-
+          メッセージの前にプレフィックスを挿入します。
+          一致したメッセージのみ対象です。
+        Enabled:
+          .: "ハイライトを有効化"
+          '@Tooltip': "メッセージの前にプレフィックスを挿入するかどうか。"
+        Prefix:
+          .: "プレフィックス"
+          '@Tooltip': "挿入するプレフィックス。"
+        OverwriteEnabled:
+          .: "上書きを有効化"
+          '@Tooltip': |-
+            有効時はメッセージを上書きします。
+            テキスト属性は消去され上書きされます。
+        InsertBeforeTimestamps:
+          .: "タイムスタンプの前に挿入"
+          '@Tooltip': "プレフィックスをタイムスタンプの前に挿入するかどうか。"
+      IgnoreMyMessageEnabled:
+        .: "自分のメッセージを無視"
+        '@Tooltip': "自分のメッセージを一致対象から除外するかどうか。"
+      MatchMyNameEnabled:
+        .: "自分の名前も一致"
+        '@Tooltip': |-
+          自分の名前も一致対象に含めるかどうか。
+          下の許可リストに自分の名前を追加しても可。
+      AllowList:
+        .: '許可リスト §6(現在のセッションID: %s §6)§r'
+        '@Tooltip': |-
+          このリストのルールで一致判定します。
+          正規表現推奨。
+        '@New': 新規ルール
+        '@Display': §e[ %s§e ]§r %s
+        Address:
+          .: セッションID
+          '@Tooltip': |-
+            このルールのセッションID。
+            正規表現推奨。
+        Pattern:
+          .: パターン
+          '@Tooltip': |-
+            一致判定用パターン。
+            正規表現推奨。
+        Toast:
+          .: 通知
+          '@Tooltip': このルールでポップアップ通知するか。
+        Sound:
+          .: サウンド
+          '@Tooltip': このルールでサウンドを再生するか。
+        Actionbar:
+          .: アクションバー
+          '@Tooltip': このルールでアクションバー通知するか。
+        Highlight:
+          .: ハイライト
+          '@Tooltip': このルールでメッセージをハイライトするか。
+      DenyList:
+        .: ブロックリスト
+        '@Tooltip': |-
+          このリストのパターンは一致判定から除外します。
+          正規表現推奨。
+    formatter:
+      Enabled:
+        .: "フォーマッターを有効化"
+        '@Tooltip': |-
+          フォーマッターは独自ルールでメッセージを整形できます。
+          有効/無効を切り替えます。
+      List:
+        .: "ルール §6(現在のセッションID: %s §6)§r"
+        '@Tooltip': |-
+          フォーマッター用ルールを定義します。
+          上にあるものほど優先度が高いです。
+        '@New': "新規ルール"
+        '@Display': "§e[ %s§e ]§r %s"
+        Address:
+          .: "セッションID"
+          '@Tooltip': |-
+            このルールのセッションID。
+            正規表現推奨。
+        Formatter:
+          .: "フォーマッター"
+          '@Tooltip': |-
+            整形パターン。
+            {text} → 元のテキスト
+            {pos} → (X,Y,Z)
+            <gradient> → グラデーション。FAQ参照。
+      DisableOnMatchList:
+        .: "一致時に無効化リスト"
+        '@Tooltip': |-
+          このリストのパターンに一致した場合、
+          そのテキストのフォーマッターを自動で無効化します。
+          正規表現推奨。
+    chatkeybindings:
+      RepeatKey:
+        .: "リピートキー"
+        '@Tooltip': "このキーを押すと最後のメッセージを繰り返します。"
+      RepeatKeyModifier:
+        .: "リピートキー修飾キー"
+        '@Tooltip': "この修飾キーも押す必要があります。"
+      Macro:
+        Enabled:
+          .: "コマンドキーバインドを有効化"
+          '@Tooltip': "以下のマクロを有効/無効にします。"
+        List:
+          .: "コマンドキーバインド"
+          '@Tooltip': "各コマンドのキーバインドを定義します。"
+          '@New': "新規ルール"
+          '@Display': "§e[ %s§e ]§r %s"
+          Key:
+            .: "キー"
+            '@Tooltip': "このマクロを発動するキー。"
+          Modifier:
+            .: "修飾キー"
+            '@Tooltip': "この修飾キーも押す必要があります。"
+          Mode:
+            .: "モード"
+            '@Tooltip': |-
+              例: Dキー単体の場合
+              §6LAZY§r: F3+D→発動しない、Ctrl+D→発動しない
+              §6GREEDY§r: F3+D→発動、Ctrl+D→発動
+          Commands:
+            .: "コマンド"
+            '@Tooltip': "このマクロで送信するコマンドを定義します。"
+            '@New': "新規コマンド"
+            '@Display': "'%s'"
+            Command:
+              .: "コマンド"
+              '@Tooltip': "送信するコマンド。"
+            DelayInMilliseconds:
+              .: "遅延(ms)"
+              '@Tooltip': "このコマンド送信前の遅延(ミリ秒)。"
+            ForceDisableFormatter:
+              .: "フォーマッター無効化(上書き)"
+              '@Tooltip': "このコマンド送信時にフォーマッターを無効化するか。"
+    bubble:
+      Enabled:
+        .: "吹き出しを有効化"
+        '@Tooltip': "発言者の頭上に吹き出しを表示するかどうか。"
+      Lifetime:
+        .: "持続時間"
+        '@Tooltip': "吹き出しの持続時間(秒)。"
+      YOffset:
+        .: "Yオフセット"
+        '@Tooltip': "吹き出しのY方向オフセット。"
+      MaxLineWidth:
+        .: "最大行幅"
+        '@Tooltip': |-
+          1行の最大幅。
+          単位は2px(たぶん)。
+      List:
+        .: "ルール §6(現在のセッションID: %s §6)§r"
+        '@Tooltip': |-
+          吹き出し用ルールを定義します。
+          上にあるものほど優先度が高いです。
+        '@New': "新規ルール"
+        '@Display': "§e[ %s§e ] [ フォールバック: %s§e ]§r %s"
+        Address:
+          .: "セッションID"
+          '@Tooltip': |-
+            このルールのセッションID。
+            正規表現推奨。
+        Pattern:
+          .: "パターン"
+          '@Tooltip': |-
+            送信者名とチャット本文を分離して抽出するパターン。
+            正規表現推奨。
+            <name>: 名前, <message>: 本文 の2つのグループ必須。
+        Fallback:
+          .: "フォールバック"
+          '@Tooltip': |-
+            有効時、名前が見つかればルールに一致しなくても頭上に吹き出しを表示します。
+            この場合、吹き出しの内容は変更されません。
+    responder:
+      Enabled:
+        .: "自動応答を有効化"
+        '@Tooltip': |-
+          特定メッセージに自動応答する機能です。
+          有効/無効を切り替えます。
+      RespondToFilteredMessages:
+        .: "フィルタ済みメッセージにも応答"
+        '@Tooltip': "フィルタ対象でも常に応答を試みます。"
+      List:
+        .: "ルール §6(現在のセッションID: %s §6)§r"
+        '@Tooltip': |-
+          自動応答用ルールを定義します。
+          上にあるものほど優先度が高いです。
+          1度だけ応答します。
+        '@New': "新規ルール"
+        '@Display': "§e[ %s§e ] [ 上書き: %s§e ] [%s§rms§e]§r %s §e→§r %s"
+        Address:
+          .: "セッションID"
+          '@Tooltip': |-
+            このルールのセッションID。
+            正規表現推奨。
+        Pattern:
+          .: "パターン"
+          '@Tooltip': |-
+            一致判定用パターン。
+            正規表現推奨。
+            グループ化推奨。
+        Message:
+          .: "応答メッセージ"
+          '@Tooltip': |-
+            自動応答で送信するメッセージ。
+            {pos} → (X,Y,Z)
+            <gradient> → グラデーション。FAQ参照。
+            {$GROUP} → 一致グループの内容
+        DelayInMilliseconds:
+          .: "遅延(ミリ秒)"
+          '@Tooltip': "応答前の待機時間(ミリ秒)。"
+        ForceDisableFormatter:
+          .: "フォーマッター無効化(上書き)"
+          '@Tooltip': "応答時にフォーマッターを無効化するか。"
+    filter:
+      Enabled:
+        .: "チャットフィルターを有効化"
+        '@Tooltip': "特定ルールでチャットメッセージをフィルタします。"
+      FilteredPlaceholderEnabled:
+        .: "プレースホルダーを有効化"
+        '@Tooltip': "フィルタ済みメッセージをプレースホルダーで置換します。"
+      List:
+        .: "ルール"
+        '@Tooltip': |-
+          このリストのパターンに一致した受信メッセージはフィルタされます。
+          正規表現推奨。
+    customJoinMessage:
+      Enabled:
+        .: "カスタム参加メッセージを有効化"
+        '@Tooltip': "指定ルールでカスタム参加メッセージを送信します。"
+      List:
+        .: "ルール §6(現在のセッションID: %s §6)§r"
+        '@Tooltip': "カスタム参加メッセージ送信用ルール。"
+        '@New': "新規ルール"
+        '@Display': "§e[ %s§e ] [ 上書き: %s§e ] [%s§rms§e]§r %s"
+        Address:
+          .: "セッションID"
+          '@Tooltip': |-
+            このルールのセッションID。
+            正規表現推奨。
+        Message:
+          .: "メッセージ"
+          '@Tooltip': "このルール成立時に送信するメッセージ。"
+        DelayInMilliseconds:
+          .: "遅延(ミリ秒)"
+          '@Tooltip': "実際に送信するまでの待機時間(ミリ秒)。"
+        ForceDisableFormatter:
+          .: "フォーマッター無効化(上書き)"
+          '@Tooltip': "このメッセージ送信時にフォーマッターを無効化するか。"
