@@ -17,6 +17,7 @@ en_us translation: UltimatChamp, 70CentsApple
 zh_cn translation: 70CentsApple
 zh_tw translation: yichifauzi
 es_es translation: pilahito
+ja_jp translation: wancor1
 '''
 description = '''
 A toolkit that provides great chat-related features.
