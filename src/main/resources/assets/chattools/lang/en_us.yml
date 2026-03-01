@@ -622,9 +622,12 @@ key:
             {original_text_string} -> Received text string (without color codes)
             {object_data} -> Object data of the received text
             For other available functions or variables, please refer to Function Reference Table in FAQ.
-        DelayInMilliseconds:
-          .: Delay (in milliseconds)
-          '@Tooltip': Awaiting time (in milliseconds) before responding.
+        MinDelayInMilliseconds:
+          .: Minimum Delay (in milliseconds)
+          '@Tooltip': Minimum awaiting time (in milliseconds) before responding.
+        MaxDelayInMilliseconds:
+          .: Maximum Delay (in milliseconds)
+          '@Tooltip': Maximum awaiting time (in milliseconds) before responding.
         ForceDisableFormatter:
           .: Disable Formatter (Override)
           '@Tooltip': Toggles whether Formatter should be off when responding.

@@ -25,12 +25,46 @@ public class MigrationUtils {
         if (version <= 2.318) {
             migrateFrom2_31800(config);
         }
+        if (version <= 2.319) {
+            migrateFrom2_31900(config);
+        }
+    }
+
+    /**
+     * Migration from v2.3.19 to v2.3.20:
+     * responder.List: delayInMilliseconds -> minDelayInMilliseconds and maxDelayInMilliseconds
+     */
+    @SuppressWarnings("unchecked")
+    private static void migrateFrom2_31900(ConfigStorage config) {
+        LoggerUtils.info("[ChatTools] Migrating config from v2.3.19 to v2.3.20...");
+
+        if (config.hasKey("responder.List")) {
+            Object listObj = config.get("responder.List");
+            if (listObj instanceof List) {
+                List<?> list = (List<?>) listObj;
+                for (Object item : list) {
+                    if (item instanceof Map) {
+                        Map<String, Object> map = (Map<String, Object>) item;
+                        if (map.containsKey("delayInMilliseconds")) {
+                            Object delayObj = map.get("delayInMilliseconds");
+                            long delay = delayObj instanceof Number ? ((Number) delayObj).longValue() : 50;
+                            map.put("minDelayInMilliseconds", delay);
+                            map.put("maxDelayInMilliseconds", delay);
+                            map.remove("delayInMilliseconds");
+                        }
+                    }
+                }
+            }
+        }
+
+        LoggerUtils.info("[ChatTools] Migration from v2.3.19 to v2.3.20 completed.");
     }
 
     /**
      * Migration from v2.3.18 to v2.3.19:
      * 1) notifier.AllowList: convert List<String> (regex patterns) to List<NotifierRuleUnit> (maps)
      * 2) notifier.BanList -> notifier.DenyList: rename the key
+     * 3) chatkeybindings.Macro.List: command (String) -> commands (List<Map>)
      */
     @SuppressWarnings("unchecked")
     private static void migrateFrom2_31800(ConfigStorage config) {

@@ -257,8 +257,12 @@ public class ConfigScreenUtils {
                                 .matcher(ContextUtils.getSessionIdentifier()).matches();
                         String colorPrefix = isSessionMatch ? "§a" : "§6";
 
+                        String delayInMillisecondsText = unit.maxDelayInMilliseconds > unit.minDelayInMilliseconds ?
+                                unit.minDelayInMilliseconds + "~" + unit.maxDelayInMilliseconds :
+                                String.valueOf(unit.minDelayInMilliseconds);
+
                         displayText = trans(key + ".@Display", colorPrefix + unit.address,
-                                unit.forceDisableFormatter ? "§a✔" : "§c✘", unit.delayInMilliseconds, unit.pattern,
+                                unit.forceDisableFormatter ? "§a✔" : "§c✘", delayInMillisecondsText, unit.pattern,
                                 unit.message);
                     }
 
@@ -279,10 +283,15 @@ public class ConfigScreenUtils {
                             .setTooltip(getTooltip(key + ".Message", "String", defaultObj.message))
                             .setDefaultValue(defaultObj.message).setSaveConsumer(v -> unit.message = v).build());
 
-                    entries.add(eb.startLongField(trans(key + ".DelayInMilliseconds"), unit.delayInMilliseconds)
-                            .setTooltip(getTooltip(key + ".DelayInMilliseconds", "longField", defaultObj.delayInMilliseconds))
-                            .setDefaultValue(defaultObj.delayInMilliseconds)
-                            .setSaveConsumer(v -> unit.delayInMilliseconds = v).build());
+                    entries.add(eb.startLongField(trans(key + ".MinDelayInMilliseconds"), unit.minDelayInMilliseconds)
+                            .setTooltip(getTooltip(key + ".MinDelayInMilliseconds", "longField", defaultObj.minDelayInMilliseconds))
+                            .setDefaultValue(defaultObj.minDelayInMilliseconds)
+                            .setSaveConsumer(v -> unit.minDelayInMilliseconds = v).build());
+
+                    entries.add(eb.startLongField(trans(key + ".MaxDelayInMilliseconds"), unit.maxDelayInMilliseconds)
+                            .setTooltip(getTooltip(key + ".MaxDelayInMilliseconds", "longField", defaultObj.maxDelayInMilliseconds))
+                            .setDefaultValue(defaultObj.maxDelayInMilliseconds)
+                            .setSaveConsumer(v -> unit.maxDelayInMilliseconds = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".ForceDisableFormatter"), unit.forceDisableFormatter)
                             .setTooltip(

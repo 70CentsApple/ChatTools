@@ -562,7 +562,7 @@ key:
       MinAwaitTimeInMilliseconds:
         .: 最小等待时间（毫秒）
         '@Tooltip': |-
-          两次请求自动响应之间的最小等待时间，单位为毫秒。
+          两次请求自动响应之间的至少需要间隔多久，单位为毫秒。
           这可以防止在短时间内多次响应。
       RespondToFilteredMessages:
         .: 响应被过滤的消息
@@ -598,9 +598,12 @@ key:
             {original_text_string} -> 接收到的文本字符串（去除颜色代码）
             {object_data} -> 接收到的文本的对象数据
             其余支持变量或函数参见常见问题解答-函数对照表。
-        DelayInMilliseconds:
-          .: 延迟（毫秒）
-          '@Tooltip': 发送此消息前的等待时间，单位为毫秒
+        MinDelayInMilliseconds:
+          .: 最小延迟（毫秒）
+          '@Tooltip': 发送此消息前的最小等待时间，单位为毫秒
+        MaxDelayInMilliseconds:
+          .: 最大延迟（毫秒）
+          '@Tooltip': 发送此消息前的最大等待时间，单位为毫秒
         ForceDisableFormatter:
           .: 禁用聊天注入
           '@Tooltip': 切换是否在响应时临时关闭聊天注入的尝试。

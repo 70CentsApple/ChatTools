@@ -527,9 +527,12 @@ key:
             {pos} -> (X,Y,Z)
             <gradient> -> Degradados, consulta las preguntas frecuentes.
             {$GROUP} -> El contenido del grupo coincidente `$GROUP`
-        DelayInMilliseconds:
-          .: "Retraso (en milisegundos)"
-          '@Tooltip': "Tiempo de espera (en milisegundos) antes de responder."
+        MinDelayInMilliseconds:
+          .: "Retraso Mínimo (ms)"
+          '@Tooltip': "Tiempo de espera mínimo (en milisegundos) antes de responder."
+        MaxDelayInMilliseconds:
+          .: "Retraso Máximo (ms)"
+          '@Tooltip': "Tiempo de espera máximo (en milisegundos) antes de responder."
         ForceDisableFormatter:
           .: "Desactivar Formateador (Sobrescribir)"
           '@Tooltip': "Activa/desactiva si el formateador debe estar desactivado al responder."

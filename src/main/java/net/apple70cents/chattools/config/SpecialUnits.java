@@ -74,23 +74,26 @@ public class SpecialUnits {
         public String address;
         public String pattern;
         public String message;
-        public long delayInMilliseconds;
+        public long minDelayInMilliseconds;
+        public long maxDelayInMilliseconds;
         public boolean forceDisableFormatter;
 
         public ResponderRuleUnit() {
             this.address = "*";
             this.pattern = "Repeat my words:(?<word>.*)";
             this.message = "You said {word}.";
-            this.delayInMilliseconds = 50;
+            this.minDelayInMilliseconds = 50;
+            this.maxDelayInMilliseconds = 50;
             this.forceDisableFormatter = false;
         }
 
-        public ResponderRuleUnit(String address, String pattern, String message, long delayInMilliseconds,
-                boolean forceDisableFormatter) {
+        public ResponderRuleUnit(String address, String pattern, String message, long minDelayInMilliseconds,
+                 long maxDelayInMilliseconds, boolean forceDisableFormatter) {
             this.address = address;
             this.pattern = pattern;
             this.message = message;
-            this.delayInMilliseconds = delayInMilliseconds;
+            this.minDelayInMilliseconds = minDelayInMilliseconds;
+            this.maxDelayInMilliseconds = maxDelayInMilliseconds;
             this.forceDisableFormatter = forceDisableFormatter;
         }
 
@@ -99,9 +102,10 @@ public class SpecialUnits {
                 String address = (String) ((Map) ele).getOrDefault("address", "*");
                 String pattern = (String) ((Map) ele).getOrDefault("pattern", "Repeat my words:(?<word>.*)");
                 String message = (String) ((Map) ele).getOrDefault("message", "You said {word}.");
-                long delayInMilliseconds = ((Number) ((Map) ele).getOrDefault("delayInMilliseconds", 50)).longValue();
+                long minDelayInMilliseconds = ((Number) ((Map) ele).getOrDefault("minDelayInMilliseconds", 50)).longValue();
+                long maxDelayInMilliseconds = ((Number) ((Map) ele).getOrDefault("maxDelayInMilliseconds", minDelayInMilliseconds)).longValue();
                 boolean forceDisableFormatter = (boolean) ((Map) ele).getOrDefault("forceDisableFormatter", false);
-                return new ResponderRuleUnit(address, pattern, message, delayInMilliseconds, forceDisableFormatter);
+                return new ResponderRuleUnit(address, pattern, message, minDelayInMilliseconds, maxDelayInMilliseconds, forceDisableFormatter);
             } else if (ele instanceof ResponderRuleUnit) {
                 return (ResponderRuleUnit) ele;
             } else {
@@ -116,8 +120,8 @@ public class SpecialUnits {
         @Override
         public String toString() {
             return "ResponderRuleUnit{address='" + address + "', pattern='" + pattern + "', message='" + message
-                    + "', delayInMilliseconds=" + delayInMilliseconds + ", forceDisableFormatter="
-                    + forceDisableFormatter + '}';
+                    + "', minDelayInMilliseconds=" + minDelayInMilliseconds + ", maxDelayInMilliseconds=" + maxDelayInMilliseconds
+                    + ", forceDisableFormatter=" + forceDisableFormatter + '}';
         }
     }
 

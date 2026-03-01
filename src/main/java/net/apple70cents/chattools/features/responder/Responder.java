@@ -32,7 +32,8 @@ public class Responder {
         boolean shouldRespond = false;
         String pattern = "";
         String message = "";
-        long delayInMilliseconds = 0;
+        long minDelayInMilliseconds = 0;
+        long maxDelayInMilliseconds = 0;
         boolean forceDisableFormatter = false;
         for (SpecialUnits.ResponderRuleUnit unit : SpecialUnits.ResponderRuleUnit.fromList((List) ConfigUtils.get("responder.List"))) {
             if ("*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
@@ -41,13 +42,18 @@ public class Responder {
                     shouldRespond = true;
                     pattern = unit.pattern;
                     message = unit.message;
-                    delayInMilliseconds = unit.delayInMilliseconds;
+                    minDelayInMilliseconds = unit.minDelayInMilliseconds;
+                    maxDelayInMilliseconds = unit.maxDelayInMilliseconds;
                     forceDisableFormatter = unit.forceDisableFormatter;
                     break;
                 }
             }
         }
         if (shouldRespond) {
+            long delayInMilliseconds = minDelayInMilliseconds;
+            if (maxDelayInMilliseconds > minDelayInMilliseconds) {
+                delayInMilliseconds = java.util.concurrent.ThreadLocalRandom.current().nextLong(minDelayInMilliseconds, maxDelayInMilliseconds + 1);
+            }
             makeMessageSchedule(text, pattern, message, delayInMilliseconds, forceDisableFormatter);
         }
     }

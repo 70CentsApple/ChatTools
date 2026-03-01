@@ -345,6 +345,12 @@ key:
         Message:
           .: What To Say Back
           '@Tooltip': "This is what you meow back.\n{pos} -> (X, Y, Z)\n{$GROUP} -> What matched in da '$GROUP'"
+        MinDelayInMilliseconds:
+          .: Min Wait Time (ms)
+          '@Tooltip': How long to wait at least before doing the magic.
+        MaxDelayInMilliseconds:
+          .: Max Wait Time (ms)
+          '@Tooltip': How long to wait at most before doing the magic.
         ForceDisableFormatter:
           .: Turn Off Fancy Talk (Override)
           '@Tooltip': Choosy to not fancy talk when meowing back.
