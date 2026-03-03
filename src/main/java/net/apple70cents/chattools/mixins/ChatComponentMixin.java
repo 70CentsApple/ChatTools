@@ -123,8 +123,12 @@ public abstract class ChatComponentMixin {
         if ((boolean) ConfigUtils.get("general.ChatCompactor.Enabled")) {
             occurrenceCount = ChatCompactor.calculateOccurrenceCount(message);
             if (occurrenceCount > 1 && !this.allMessages.isEmpty()) {
-                this.allMessages.remove(0);
-                this.rescaleChat();
+                try {
+                    this.allMessages.remove(0);
+                    this.rescaleChat();
+                } catch (Exception e) {
+                    // if any error (e.g. UnsupportedOperationException), catch it to avoid crashing
+                }
             }
         }
 
