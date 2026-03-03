@@ -128,6 +128,8 @@ public abstract class ChatComponentMixin {
                     this.rescaleChat();
                 } catch (Exception e) {
                     // if any error (e.g. UnsupportedOperationException), catch it to avoid crashing
+                    LoggerUtils.info("[ChatTools] Failed to remove duplicate message for compaction.");
+                    e.printStackTrace();
                 }
             }
         }
