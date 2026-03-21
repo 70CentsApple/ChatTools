@@ -16,21 +16,21 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(BookViewScreen.class)
 public abstract class BookViewScreenMixin {
-    //#if MC>=12111
-    //$$ // no-op
-    //#else
-    //$$ @Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
-    //$$ public void modifyHoverEvent(double x, double y, CallbackInfoReturnable<Style> cir) {
-    //$$     Style style = cir.getReturnValue();
-    //$$     if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
-    //$$         cir.setReturnValue(style);
-    //$$         return;
-    //$$     }
-    //$$     if (!ConfigUtils.PREVIEW_CLICK_EVENTS_ENABLED) {
-    //$$         cir.setReturnValue(style);
-    //$$         return;
-    //$$     }
-    //$$     cir.setReturnValue(ClickEventsPreviewer.work(style));
-    //$$ }
-    //#endif
+//#if MC>=12111
+//$$ // no-op
+//#else
+//$$ @Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
+//$$ public void modifyHoverEvent(double x, double y, CallbackInfoReturnable<Style> cir) {
+//$$     Style style = cir.getReturnValue();
+//$$     if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
+//$$         cir.setReturnValue(style);
+//$$         return;
+//$$     }
+//$$     if (!ConfigUtils.PREVIEW_CLICK_EVENTS_ENABLED) {
+//$$         cir.setReturnValue(style);
+//$$         return;
+//$$     }
+//$$     cir.setReturnValue(ClickEventsPreviewer.work(style));
+//$$ }
+//#endif
 }

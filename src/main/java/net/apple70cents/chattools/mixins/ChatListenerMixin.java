@@ -28,27 +28,27 @@ import net.minecraft.network.chat.MessageSignature;
 //$$ @Mixin(StandardChatListener.class)
 //#endif
 public abstract class ChatListenerMixin {
-    //#if MC>=11900
+//#if MC>=11900
     @Inject(method = "handleMessage", at = @At("HEAD"))
     private void beforeHandleChat(MessageSignature messageSignature, BooleanSupplier booleanSupplier, CallbackInfo ci) {
-    //#else
-    //$$ @Inject(method = "handle", at = @At("HEAD"))
-    //$$ private void beforeHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
-    //#endif
+//#else
+//$$ @Inject(method = "handle", at = @At("HEAD"))
+//$$ private void beforeHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
+//#endif
         MessageUtils.setProcessingServerMessageState();
     }
 
-    //#if MC>=11900
+//#if MC>=11900
     @Inject(method = "handleMessage", at = @At("RETURN"))
     private void afterHandleChat(MessageSignature messageSignature, BooleanSupplier booleanSupplier, CallbackInfo ci) {
-    //#else
-    //$$ @Inject(method = "handle", at = @At("RETURN"))
-    //$$ private void afterHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
-    //#endif
+//#else
+//$$ @Inject(method = "handle", at = @At("RETURN"))
+//$$ private void afterHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
+//#endif
         MessageUtils.resetProcessingServerMessageState();
     }
 
-    //#if MC>=11900
+//#if MC>=11900
     @Inject(method = "handleSystemMessage", at = @At("HEAD"))
     private void beforeHandleSystemChat(Component component, boolean bl, CallbackInfo ci) {
         MessageUtils.setProcessingServerMessageState();
@@ -58,5 +58,5 @@ public abstract class ChatListenerMixin {
     private void afterHandleSystemChat(Component component, boolean bl, CallbackInfo ci) {
         MessageUtils.resetProcessingServerMessageState();
     }
-    //#endif
+//#endif
 }

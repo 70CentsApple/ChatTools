@@ -43,11 +43,11 @@ public class ExclusiveActionbarHandler {
         messageUnitList.removeIf(unit -> (currentTime - unit.startTime) >= unit.lifeTimeInMillis);
     }
 
-    //#if MC>=12000
+//#if MC>=12000
     public static void render(GuiGraphics context) {
-        //#else
-        //$$ public static void render(PoseStack pose) {
-        //#endif
+//#else
+//$$    public static void render(PoseStack pose) {
+//#endif
         Font font = Minecraft.getInstance().font;
 
         float baseSize = ((Number) ConfigUtils.get("general.ExclusiveActionbar.Size")).floatValue();
@@ -72,7 +72,7 @@ public class ExclusiveActionbarHandler {
             final float scale = baseSize * (0.7F + 0.3F * easeOutQuart(entryProgress));
             final int color = opacity << 24 | 0xFFFFFF;
 
-            //#if MC>=12106
+//#if MC>=12106
             context.pose().pushMatrix();
             context.pose().translate(context.guiWidth() / 2.0F, context.guiHeight() - 68.0F - 4.0F);
             // we translate the whole stack instead of drawing at specific position, so we can use floats for better precision.
@@ -80,23 +80,23 @@ public class ExclusiveActionbarHandler {
             context.pose().scale(scale, scale);
             context.drawCenteredString(font, ele.text, 0, 0, color);
             context.pose().popMatrix();
-            //#elseif MC>=12000
-            //$$ context.pose().pushPose();
-            //$$ context.pose().translate(context.guiWidth() / 2.0F, context.guiHeight() - 68.0F - 4.0F, 0.0F);
-            //$$ context.pose().translate(finalX, finalY, 0.0F);
-            //$$ context.pose().scale(scale, scale, 1);
-            //$$ context.drawCenteredString(font, ele.text, 0, 0, color);
-            //$$ context.pose().popPose();
-            //#else
-            //$$ pose.pushPose();
-            //$$ pose.translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2.0F, Minecraft
-            //$$         .getInstance().getWindow().getGuiScaledHeight() - 68.0F - 4.0F, 0.0F);
-            //$$ pose.translate(finalX, finalY, 0.0F);
-            //$$ pose.scale(scale, scale, 1);
-            //$$ int textWidth = font.width(ele.text);
-            //$$ font.drawShadow(pose, ele.text, (-textWidth / 2.0F), 0, color);
-            //$$ pose.popPose();
-            //#endif
+//#elseif MC>=12000
+//$$        context.pose().pushPose();
+//$$        context.pose().translate(context.guiWidth() / 2.0F, context.guiHeight() - 68.0F - 4.0F, 0.0F);
+//$$        context.pose().translate(finalX, finalY, 0.0F);
+//$$        context.pose().scale(scale, scale, 1);
+//$$        context.drawCenteredString(font, ele.text, 0, 0, color);
+//$$        context.pose().popPose();
+//#else
+//$$        pose.pushPose();
+//$$        pose.translate(Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2.0F, Minecraft
+//$$                .getInstance().getWindow().getGuiScaledHeight() - 68.0F - 4.0F, 0.0F);
+//$$        pose.translate(finalX, finalY, 0.0F);
+//$$        pose.scale(scale, scale, 1);
+//$$        int textWidth = font.width(ele.text);
+//$$        font.drawShadow(pose, ele.text, (-textWidth / 2.0F), 0, color);
+//$$        pose.popPose();
+//#endif
             index++;
         }
     }

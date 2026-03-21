@@ -27,7 +27,7 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
  */
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
-    //#if MC>=12102
+//#if MC>=12102
     Entity entity;
     float tickDelta;
 
@@ -36,30 +36,30 @@ public abstract class EntityRendererMixin {
         this.entity = entity;
         this.tickDelta = tickDelta;
     }
-    //#endif
+//#endif
 
-    //#if MC>=12109
+//#if MC>=12109
     @Inject(method = "submit", at = @At(value = "HEAD"))
     private void submit(EntityRenderState entityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
         MultiBufferSource multiBufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         if (entityRenderState instanceof AvatarRenderState && Minecraft.getInstance().level != null) {
             entity = Minecraft.getInstance().level.getEntity(((AvatarRenderState) entityRenderState).id);
         }
-    //#elseif MC>=12102
-    //$$ @Inject(method = "render", at = @At(value = "HEAD"))
-    //$$ private void render(EntityRenderState entityRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-    //#else
-    //$$ @Inject(method = "render", at = @At(value = "HEAD"))
-    //$$ private void render(Entity entity, float yaw, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
-    //#endif
+//#elseif MC>=12102
+//$$ @Inject(method = "render", at = @At(value = "HEAD"))
+//$$ private void render(EntityRenderState entityRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
+//#else
+//$$ @Inject(method = "render", at = @At(value = "HEAD"))
+//$$ private void render(Entity entity, float yaw, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
+//#endif
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         if (ConfigUtils.BUBBLE_ENABLED) {
             BubbleRenderer.render(entity, poseStack, multiBufferSource, tickDelta
-                    //#if MC>=12109
+//#if MC>=12109
                     , submitNodeCollector
-                    //#endif
+//#endif
             );
         }
     }

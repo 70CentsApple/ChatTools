@@ -21,11 +21,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(ClientHandshakePacketListenerImpl.class)
 public abstract class ClientHandshakePacketListenerImplMixin {
-    //#if MC>=11900
+//#if MC>=11900
     @Shadow
     @Final
     private ServerData serverData;
-    //#endif
+//#endif
 
     @Inject(method = "handleLoginFinished", at = @At(value = "TAIL"))
     public void onServerLoginSuccess(ClientboundLoginFinishedPacket clientboundLoginFinishedPacket, CallbackInfo ci) {
@@ -35,15 +35,15 @@ public abstract class ClientHandshakePacketListenerImplMixin {
         if (!(boolean) ConfigUtils.get("customJoinMessage.Enabled")) {
             return;
         }
-        //#if MC>=11900
+//#if MC>=11900
         if (this.serverData != null) {
             CustomJoinMessageSender.work(this.serverData.ip);
         } else {
             CustomJoinMessageSender.work(ContextUtils.getSessionIdentifier());
         }
-        //#else
-        //$$ if (Minecraft.getInstance().getCurrentServer() != null) {CustomJoinMessageSender.work(ContextUtils.getSessionIdentifier());}
-        //#endif
+//#else
+//$$    if (Minecraft.getInstance().getCurrentServer() != null) {CustomJoinMessageSender.work(ContextUtils.getSessionIdentifier());}
+//#endif
     }
 
 }

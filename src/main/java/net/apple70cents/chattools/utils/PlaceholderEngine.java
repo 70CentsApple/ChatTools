@@ -73,18 +73,18 @@ public final class PlaceholderEngine {
 
         // variables
         MAPPINGS.put("pitch", args -> String.valueOf(Minecraft.getInstance().player.
-                //#if MC>=11700
+//#if MC>=11700
                 getXRot()
-                //#else
-                //$$ xRot
-                //#endif
+//#else
+//$$            xRot
+//#endif
         ));
         MAPPINGS.put("yaw", args -> String.valueOf(Minecraft.getInstance().player.
-                //#if MC>=11700
+//#if MC>=11700
                 getYRot()
-                //#else
-                //$$ yRot
-                //#endif
+//#else
+//$$            yRot
+//#endif
         ));
         MAPPINGS.put("x", args -> String.valueOf(Minecraft.getInstance().player.getX()));
         MAPPINGS.put("y", args -> String.valueOf(Minecraft.getInstance().player.getY()));
@@ -92,23 +92,23 @@ public final class PlaceholderEngine {
         MAPPINGS.put("pos", args -> String.format("(%.1f, %.1f, %.1f)", Minecraft.getInstance().player.getX(),
                 Minecraft.getInstance().player.getY(), Minecraft.getInstance().player.getZ()));
         MAPPINGS.put("dimension_reg_name", args ->
-                //#if MC>=12111
+//#if MC>=12111
                 Minecraft.getInstance().level.dimension().identifier().toString()
-                //#else
-                //$$ Minecraft.getInstance().level.dimension().location().toString()
-                //#endif
+//#else
+//$$            Minecraft.getInstance().level.dimension().location().toString()
+//#endif
         );
         MAPPINGS.put("biome_reg_name",
                 args -> String.valueOf(Minecraft.getInstance().level.registryAccess().lookupOrThrow(
-                        //#if MC>=11903
+//#if MC>=11903
                         Registries.BIOME
-                        //#else
-                        //$$ net.minecraft.core.Registry.BIOME_REGISTRY
-                        //#endif
+//#else
+//$$                    net.minecraft.core.Registry.BIOME_REGISTRY
+//#endif
                 ).getKey(Minecraft.getInstance().level.getBiome(Minecraft.getInstance().player.blockPosition())
-                        //#if MC>=11800
+//#if MC>=11800
                         .value()
-                        //#endif
+//#endif
                 )));
         MAPPINGS.put("biome",
                 args -> TextUtils.transWithPrefix(MAPPINGS.get("biome_reg_name").resolve().replace(":", "."), "biome.")
@@ -131,18 +131,18 @@ public final class PlaceholderEngine {
                     currentTime.getSecond());
         });
         MAPPINGS.put("nickname", args -> Minecraft.getInstance().player.getGameProfile()
-                        //#if MC>=12109
-                        .name()
-                //#else
-                //$$ .getName()
-                //#endif
+//#if MC>=12109
+                .name()
+//#else
+//$$            .getName()
+//#endif
         );
         MAPPINGS.put("uuid", args -> Minecraft.getInstance().player.getGameProfile()
-                //#if MC>=12109
+//#if MC>=12109
                 .id()
-                //#else
-                //$$ .getId()
-                //#endif
+//#else
+//$$            .getId()
+//#endif
                 .toString());
         MAPPINGS.put("session_identifier", args -> ContextUtils.getSessionIdentifier());
         MAPPINGS.put("health", args -> String.valueOf(Minecraft.getInstance().player.getHealth()));
@@ -150,11 +150,11 @@ public final class PlaceholderEngine {
         MAPPINGS.put("item_in_hand",
                 args -> Minecraft.getInstance().player.getMainHandItem().getHoverName().getString());
         MAPPINGS.put("item_in_hand_reg_name", args -> Minecraft.getInstance().level.registryAccess().lookupOrThrow(
-                //#if MC>=11903
+//#if MC>=11903
                 Registries.ITEM
-                //#else
-                //$$ net.minecraft.core.Registry.ITEM_REGISTRY
-                //#endif
+//#else
+//$$            net.minecraft.core.Registry.ITEM_REGISTRY
+//#endif
         ).getKey(Minecraft.getInstance().player.getMainHandItem().getItem()).toString());
 
         // utility functions
@@ -602,15 +602,15 @@ public final class PlaceholderEngine {
 
     // debug prints
     private static final boolean DEBUG =
-            //#if FABRIC
-            //$$ net.fabricmc.loader.api.FabricLoader.getInstance().isDevelopmentEnvironment();
-            //#elseif NEOFORGE
+//#if FABRIC
+//$$        net.fabricmc.loader.api.FabricLoader.getInstance().isDevelopmentEnvironment();
+//#elseif NEOFORGE
             !net.neoforged.fml.loading.FMLLoader
-                    //#if MC>=12110
+//#if MC>=12110
                     .getCurrent()
-                    //#endif
+//#endif
                     .isProduction();
-    //#endif
+//#endif
 
     private static final ThreadLocal<Deque<String>> DEBUG_STACK = ThreadLocal.withInitial(ArrayDeque::new);
 

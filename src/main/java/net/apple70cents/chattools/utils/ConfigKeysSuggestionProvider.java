@@ -21,11 +21,11 @@ import net.minecraft.commands.CommandSourceStack;
 //#endif
 
 public class ConfigKeysSuggestionProvider implements SuggestionProvider<
-        //#if FABRIC
-        //$$ FabricClientCommandSource
-        //#elseif NEOFORGE
+//#if FABRIC
+//$$    FabricClientCommandSource
+//#elseif NEOFORGE
         CommandSourceStack
-        //#endif
+//#endif
         > {
     int level;
 
@@ -38,11 +38,11 @@ public class ConfigKeysSuggestionProvider implements SuggestionProvider<
 
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<
-            //#if FABRIC
-            //$$ FabricClientCommandSource
-            //#elseif NEOFORGE
+//#if FABRIC
+//$$        FabricClientCommandSource
+//#elseif NEOFORGE
             CommandSourceStack
-            //#endif
+//#endif
             > context, SuggestionsBuilder builder) {
         for (Map.Entry<String, String> ele : ConfigScreenGenerator.getKey2TypeMappings().entrySet()) {
             if (level == 3) {

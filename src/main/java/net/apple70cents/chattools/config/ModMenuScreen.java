@@ -15,16 +15,16 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 //$$ @Environment(EnvType.CLIENT)
 //#endif
 public class ModMenuScreen
-        //#if FABRIC
-        //$$ implements ModMenuApi
-        //#endif
+//#if FABRIC
+//$$ implements ModMenuApi
+//#endif
 {
-    //#if FABRIC
-    //$$ @Override
-    //$$ public ConfigScreenFactory<?> getModConfigScreenFactory() {
-    //$$     return parent -> ConfigScreenGenerator.getConfigBuilder().setParentScreen(parent).build();
-    //$$ }
-    //#elseif NEOFORGE
+//#if FABRIC
+//$$ @Override
+//$$ public ConfigScreenFactory<?> getModConfigScreenFactory() {
+//$$     return parent -> ConfigScreenGenerator.getConfigBuilder().setParentScreen(parent).build();
+//$$ }
+//#elseif NEOFORGE
     public static void registerConfigScreen() {
         ModLoadingContext.get()
                 .registerExtensionPoint(
@@ -32,5 +32,5 @@ public class ModMenuScreen
                         () -> (container, parent) -> ConfigScreenGenerator.getConfigBuilder().setParentScreen(parent).build()
                 );
     }
-    //#endif
+//#endif
 }

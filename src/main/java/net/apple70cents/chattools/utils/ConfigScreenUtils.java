@@ -27,11 +27,11 @@ import static net.apple70cents.chattools.utils.TextUtils.trans;
  */
 public class ConfigScreenUtils {
     final static boolean SHOULD_EXPAND_ALL_RULES =
-            //#if MC>=12104
+//#if MC>=12104
             true
-            //#else
-            //$$ false
-            //#endif
+//#else
+//$$        false
+//#endif
             ;
 
     public static Component getTooltip(String key, String variableType) {
@@ -122,14 +122,14 @@ public class ConfigScreenUtils {
                 return eb.startKeyCodeField(trans(key), InputConstants.getKey((String) ConfigUtils.get(key)))
                         .setDefaultValue(InputConstants.getKey((String) ConfigUtils.getDefault(key)))
                         .setTooltip(tooltip)
-                        //#if MC>=11800
+//#if MC>=11800
                         .setKeySaveConsumer
-                        //#elseif MC>=11700
+//#elseif MC>=11700
                         // In MC 1.17.X, we use ClothConfig v5, where the discontinued version uses `setSaveConsumer()` method.
-                        //$$ .setSaveConsumer
-                        //#else
-                        //$$ .setKeySaveConsumer
-                        //#endif
+//$$                    .setSaveConsumer
+//#else
+//$$                    .setKeySaveConsumer
+//#endif
                                 (keybind -> ConfigUtils.set(key, keybind.getName())).build();
             case "StringList":
                 StringListBuilder builder = eb.startStrList(trans(key), (List<String>) ConfigUtils.get(key))
@@ -332,15 +332,15 @@ public class ConfigScreenUtils {
                     entries.add(eb.startKeyCodeField(trans(key + ".Key"), InputConstants.getKey(unit.key))
                             .setTooltip(getTooltip(key + ".Key", "keycode", InputConstants.getKey(defaultObj.key)))
                             .setDefaultValue(InputConstants.getKey(defaultObj.key))
-                            //#if MC>=11800
+//#if MC>=11800
                             .setKeySaveConsumer
-                            //#elseif MC>=11700
+//#elseif MC>=11700
                             // In MC 1.17.X, we use ClothConfig v5.
                             // In ClothConfig v5 (discontinued) we use the `setSaveConsumer()` method.
-                            //$$ .setSaveConsumer
-                            //#else
-                            //$$ .setKeySaveConsumer
-                            //#endif
+//$$                        .setSaveConsumer
+//#else
+//$$                        .setKeySaveConsumer
+//#endif
                                     (k -> unit.key = k.getName()).build());
 
                     entries.add(eb.startEnumSelector(trans(key + ".Modifier"), SpecialUnits.KeyModifiers.class,

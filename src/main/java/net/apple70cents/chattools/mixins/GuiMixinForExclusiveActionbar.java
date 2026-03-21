@@ -24,16 +24,16 @@ import net.minecraft.client.DeltaTracker;
 
 @Mixin(Gui.class)
 public abstract class GuiMixinForExclusiveActionbar {
-    //#if MC>=12100
+//#if MC>=12100
     @Inject(method = "renderOverlayMessage", at = @At(value = "HEAD"))
     public void renderExclusiveActionbar(GuiGraphics context, DeltaTracker deltaTracker, CallbackInfo ci) {
-    //#elseif MC>=12000
-    //$$ @Inject(method = "render", at = @At(value = "HEAD"))
-    //$$ public void renderExclusiveActionbar(GuiGraphics context, float tickDelta, CallbackInfo ci) {
-    //#else
-    //$$ @Inject(method = "render", at = @At(value = "HEAD"))
-    //$$ public void renderExclusiveActionbar(PoseStack context, float tickDelta, CallbackInfo ci) {
-    //#endif
+//#elseif MC>=12000
+//$$ @Inject(method = "render", at = @At(value = "HEAD"))
+//$$ public void renderExclusiveActionbar(GuiGraphics context, float tickDelta, CallbackInfo ci) {
+//#else
+//$$ @Inject(method = "render", at = @At(value = "HEAD"))
+//$$ public void renderExclusiveActionbar(PoseStack context, float tickDelta, CallbackInfo ci) {
+//#endif
         if (Minecraft.getInstance().options.hideGui) {
             return;
         }

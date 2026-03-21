@@ -24,32 +24,32 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 @Mod("chattools")
 //#endif
 public class ChatTools
-        //#if FABRIC
-        //$$ implements ModInitializer
-        //#endif
+//#if FABRIC
+//$$ implements ModInitializer
+//#endif
 {
 
-    //#if FABRIC
-    //$$ @Override
-    //$$ public void onInitialize() {
-    //$$ 	this.init();
-    //$$ }
-    //#elseif NEOFORGE
+//#if FABRIC
+//$$ @Override
+//$$ public void onInitialize() {
+//$$ 	this.init();
+//$$ }
+//#elseif NEOFORGE
     public ChatTools() {
         this.init();
     }
-    //#endif
+//#endif
 
 
     public void init() {
         LoggerUtils.init();
         ConfigUtils.init();
         // show welcome message if needed
-        //#if FABRIC
-        //$$ ClientTickEvents.START_WORLD_TICK.register(client -> {
-        //#elseif NEOFORGE
+//#if FABRIC
+//$$    ClientTickEvents.START_WORLD_TICK.register(client -> {
+//#elseif NEOFORGE
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre event) -> {
-            //#endif
+//#endif
             if ((boolean) ConfigUtils.get("general.ShowWelcomeMessageEnabled")) {
                 if (Minecraft.getInstance().player != null) {
                     MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.welcomeMessage").copy().setStyle(TextUtils.WEBSITE_URL_STYLE));
@@ -61,11 +61,11 @@ public class ChatTools
         });
 
         // register features
-        //#if FABRIC
-        //$$ ClientTickEvents.START_WORLD_TICK.register(client -> {
-        //#elseif NEOFORGE
+//#if FABRIC
+//$$    ClientTickEvents.START_WORLD_TICK.register(client -> {
+//#elseif NEOFORGE
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre event) -> {
-            //#endif
+//#endif
             if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
                 return;
             }
@@ -79,9 +79,9 @@ public class ChatTools
         // register commands
         CommandRegistryUtils.register();
 
-        //#if NEOFORGE
+//#if NEOFORGE
         ModMenuScreen.registerConfigScreen();
-        //#endif
+//#endif
 
         Runnable runnable = () -> {
             if (DownloadUtils.shouldCheckIfFullyReady()) {

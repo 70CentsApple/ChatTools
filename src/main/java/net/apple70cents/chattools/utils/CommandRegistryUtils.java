@@ -69,24 +69,24 @@ import net.neoforged.neoforge.common.NeoForge;
 public class CommandRegistryUtils {
 
     public static void register() {
-        //#if FABRIC
-        //$$ //#if MC>=11900
-        //$$ ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-        //$$ 	dispatcher.register(CommandRegistryUtils.getBuilder(registryAccess));
-        //$$ });
-        //$$ //#else
-        //$$ //$$ ClientCommandManager.DISPATCHER.register(CommandRegistryUtils.getBuilder());
-        //$$ //#endif
-        //#elseif NEOFORGE
+//#if FABRIC
+//$$    //#if MC>=11900
+//$$    ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+//$$    	dispatcher.register(CommandRegistryUtils.getBuilder(registryAccess));
+//$$    });
+//$$    //#else
+//$$    //$$ ClientCommandManager.DISPATCHER.register(CommandRegistryUtils.getBuilder());
+//$$    //#endif
+//#elseif NEOFORGE
         NeoForge.EVENT_BUS.addListener((RegisterClientCommandsEvent event) -> event.getDispatcher().register(
                 CommandRegistryUtils.getBuilder(event.getBuildContext())
         ));
-        //#endif
+//#endif
 
 
     }
 
-    //#if NEOFORGE
+//#if NEOFORGE
     public static LiteralArgumentBuilder<CommandSourceStack> literal(String name) {
         return LiteralArgumentBuilder.literal(name);
     }
@@ -94,18 +94,18 @@ public class CommandRegistryUtils {
     public static <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
-    //#endif
+//#endif
 
     public static LiteralArgumentBuilder<
-            //#if FABRIC
-            //$$ FabricClientCommandSource
-            //#elseif NEOFORGE
+//#if FABRIC
+//$$        FabricClientCommandSource
+//#elseif NEOFORGE
             CommandSourceStack
-            //#endif
+//#endif
             > getBuilder(
-            //#if MC>=11900
+//#if MC>=11900
             CommandBuildContext buildContext
-            //#endif
+//#endif
     ) {
         // @formatter:off
         return literal("chattools")
@@ -113,9 +113,9 @@ public class CommandRegistryUtils {
             .then(literal("send_to_client")
                 // chattools send_to_client text
                 .then(literal("text").then(argument("message", ClientComponentArgument.textComponent(
-                        //#if MC>=12006
+//#if MC>=12006
                         buildContext
-                        //#endif
+//#endif
                     )).executes(t -> {
                     Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
                     MessageUtils.sendToNonPublicChat(text);
@@ -123,9 +123,9 @@ public class CommandRegistryUtils {
                 })))
                 // chattools send_to_client actionbar
                 .then(literal("actionbar").then(argument("message", ClientComponentArgument.textComponent(
-                        //#if MC>=12006
+//#if MC>=12006
                         buildContext
-                        //#endif
+//#endif
                     )).executes(t -> {
                     Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
                     MessageUtils.sendToActionbar(text);
@@ -352,11 +352,11 @@ public class CommandRegistryUtils {
 
     public static class ClientComponentArgument implements ArgumentType<Component> {
         public static final DynamicCommandExceptionType INVALID_COMPONENT_EXCEPTION = new DynamicCommandExceptionType(text -> TextUtils.transWithPrefix("argument.component.invalid", "", text));
-        //#if MC>=12006
+//#if MC>=12006
         private final HolderLookup.Provider holderLookupProvider;
-        //#endif
+//#endif
 
-        //#if MC>=12006
+//#if MC>=12006
         private ClientComponentArgument(HolderLookup.Provider holderLookupProvider) {
             this.holderLookupProvider = holderLookupProvider;
         }
@@ -364,17 +364,17 @@ public class CommandRegistryUtils {
         public static ClientComponentArgument textComponent(CommandBuildContext buildContext) {
             return new ClientComponentArgument(buildContext);
         }
-        //#else
-        //$$ private ClientComponentArgument() {}
-        //$$ public static ClientComponentArgument textComponent() {return new ClientComponentArgument();}
-        //#endif
+//#else
+//$$    private ClientComponentArgument() {}
+//$$    public static ClientComponentArgument textComponent() {return new ClientComponentArgument();}
+//#endif
 
         public static Component getComponent(final CommandContext<
-                //#if FABRIC
-                //$$ FabricClientCommandSource
-                //#elseif NEOFORGE
+//#if FABRIC
+//$$            FabricClientCommandSource
+//#elseif NEOFORGE
                 CommandSourceStack
-                //#endif
+//#endif
                 > context, final String name) {
             return context.getArgument(name, Component.class);
         }
@@ -382,19 +382,19 @@ public class CommandRegistryUtils {
         @Override
         public Component parse(final StringReader stringReader) throws CommandSyntaxException {
             try {
-                //#if MC>=12105
+//#if MC>=12105
                 return SnbtGrammar.createParser(JavaOps.INSTANCE).withCodec(
                         this.holderLookupProvider.createSerializationContext(JavaOps.INSTANCE), SnbtGrammar.createParser(JavaOps.INSTANCE), ComponentSerialization.CODEC, INVALID_COMPONENT_EXCEPTION
                 ).parseForCommands(stringReader);
-                //#elseif MC>=12006
-                //$$ return ParserUtils.parseJson(this.holderLookupProvider, stringReader, ComponentSerialization.CODEC);
-                //#elseif MC>=12004
-                //$$ return ParserUtils.parseJson(stringReader, ComponentSerialization.CODEC);
-                //#else
-                //$$ Component component = Component.Serializer.fromJson(stringReader);
-                //$$ if (component == null) { throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, "empty"); }
-                //$$ else { return component; }
-                //#endif
+//#elseif MC>=12006
+//$$            return ParserUtils.parseJson(this.holderLookupProvider, stringReader, ComponentSerialization.CODEC);
+//#elseif MC>=12004
+//$$            return ParserUtils.parseJson(stringReader, ComponentSerialization.CODEC);
+//#else
+//$$            Component component = Component.Serializer.fromJson(stringReader);
+//$$            if (component == null) { throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, "empty"); }
+//$$            else { return component; }
+//#endif
             } catch (Exception var4) {
                 String string = var4.getCause() != null ? var4.getCause().getMessage() : var4.getMessage();
                 throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, string);
@@ -405,17 +405,17 @@ public class CommandRegistryUtils {
     public static class FakeCommandSource extends CommandSourceStack {
         public FakeCommandSource(LocalPlayer player) {
             super(new CommandSource() {
-                      //#if MC>=11900
+//#if MC>=11900
                       @Override
                       public void sendSystemMessage(Component component) {
                           MessageUtils.sendToNonPublicChat(component);
                       }
-                      //#elseif MC>=11700
-                      //$$ @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
-                      //$$ @Override public boolean alwaysAccepts() {return CommandSource.super.alwaysAccepts();}
-                      //#else
-                      //$$ @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
-                      //#endif
+//#elseif MC>=11700
+//$$                  @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
+//$$                  @Override public boolean alwaysAccepts() {return CommandSource.super.alwaysAccepts();}
+//#else
+//$$                  @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
+//#endif
 
                       @Override
                       public boolean acceptsSuccess() {
@@ -432,11 +432,11 @@ public class CommandRegistryUtils {
                           return true;
                       }
                   }, player.position(), player.getRotationVector(), null,
-                    //#if MC>=12111
+//#if MC>=12111
                     PermissionSet.ALL_PERMISSIONS
-                    //#else
-                    //$$ 4
-                    //#endif
+//#else
+//$$                4
+//#endif
                     , player.getScoreboardName(), player.getName(), null, player);
         }
     }

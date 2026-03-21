@@ -90,24 +90,24 @@ public class BasicNotifier {
                 int pitch = ((Number) ConfigUtils.get("notifier.Sound.Pitch")).intValue();
 
                 boolean sendFromCameraPos = (boolean) ConfigUtils.get("notifier.Sound.PlaySoundFromCameraPositionEnabled");
-                //#if MC>=12109
+//#if MC>=12109
                 Entity camera = Minecraft.getInstance().getCameraEntity();
-                //#else
-                //$$ Entity camera = Minecraft.getInstance().cameraEntity;
-                //#endif
+//#else
+//$$            Entity camera = Minecraft.getInstance().cameraEntity;
+//#endif
                 double x = (sendFromCameraPos && camera != null) ? camera.position().x : player.getX();
                 double y = (sendFromCameraPos && camera != null) ? camera.position().y : player.getY();
                 double z = (sendFromCameraPos && camera != null) ? camera.position().z : player.getZ();
                 world.playLocalSound(x, y, z,
-                        //#if MC>=12111
+//#if MC>=12111
                         SoundEvent.createVariableRangeEvent(Identifier.parse(identifier))
-                        //#elseif MC>=12100
-                        //$$ SoundEvent.createVariableRangeEvent(ResourceLocation.parse(identifier))
-                        //#elseif MC>=11900
-                        //$$ SoundEvent.createVariableRangeEvent(new ResourceLocation(identifier))
-                        //#else
-                        //$$ new SoundEvent(new ResourceLocation(identifier))
-                        //#endif
+//#elseif MC>=12100
+//$$                    SoundEvent.createVariableRangeEvent(ResourceLocation.parse(identifier))
+//#elseif MC>=11900
+//$$                    SoundEvent.createVariableRangeEvent(new ResourceLocation(identifier))
+//#else
+//$$                    new SoundEvent(new ResourceLocation(identifier))
+//#endif
                         , SoundSource.PLAYERS, volume * 0.01F, pitch * 0.1F, true);
             });
         }

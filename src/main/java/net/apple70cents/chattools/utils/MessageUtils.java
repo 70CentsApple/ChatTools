@@ -94,20 +94,20 @@ public class MessageUtils {
             ConfigUtils.set("formatter.Enabled", false);
         }
 
-        //#if MC>=11900
+//#if MC>=11900
         Minecraft.getInstance().execute(() -> {
             if ((boolean) ConfigUtils.get("general.UseSendPacketsForSendingMessages")) {
                 ChatScreen tempChatScreen = new ChatScreen(text
-                        //#if MC>=12109
+//#if MC>=12109
                         , false
-                        //#endif
+//#endif
                 );
                 ((ScreenAccessor) tempChatScreen).invokeInit(
-                        //#if MC>=12111
-                        //$$ // no-op
-                        //#else
-                        //$$ Minecraft.getInstance(),
-                        //#endif
+//#if MC>=12111
+//$$                    // no-op
+//#else
+//$$                    Minecraft.getInstance(),
+//#endif
                         1, 1);
                 tempChatScreen.handleChatInput(text, false);
             } else {
@@ -122,9 +122,9 @@ public class MessageUtils {
                 }
             }
         });
-        //#else
-        //$$ player.chat(text);
-        //#endif
+//#else
+//$$    player.chat(text);
+//#endif
         ConfigUtils.set("formatter.Enabled", oldStatus);
     }
 

@@ -21,17 +21,17 @@ public class ReviewLastMessageWithUpArrowOnly {
             if (mc.screen != null) {
                 return;
             }
-            //#if MC>=12109
+//#if MC>=12109
             ChatScreen chatScreen = new ChatScreen("", false);
-            //#else
-            //$$ ChatScreen chatScreen = new ChatScreen("");
-            //#endif
+//#else
+//$$        ChatScreen chatScreen = new ChatScreen("");
+//#endif
             ((ScreenAccessor) chatScreen).invokeInit(
-                    //#if MC>=12111
-                    //$$ // no-op
-                    //#else
-                    //$$ mc,
-                    //#endif
+//#if MC>=12111
+//$$                // no-op
+//#else
+//$$                mc,
+//#endif
                     1, 1);
             mc.setScreen(chatScreen);
             chatScreen.moveInHistory(-1);

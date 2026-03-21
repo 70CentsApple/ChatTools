@@ -44,13 +44,13 @@ public abstract class ChatComponentMixin {
     private List<GuiMessage> allMessages;
 
     @ModifyExpressionValue(method =
-            //#if MC>=12005
+//#if MC>=12005
             {"addMessageToQueue", "addMessageToDisplayQueue", "addMessage*", "addRecentChat"}
-            //#elseif MC>=11900
-            //$$ {"addRecentChat", "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"}
-            //#else
-            //$$ "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"
-            //#endif
+//#elseif MC>=11900
+//$$        {"addRecentChat", "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"}
+//#else
+//$$        "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"
+//#endif
             , at = @At(value = "CONSTANT", args = "intValue=100"))
     public int modifyMaxHistorySize(int originalMaxSize) {
         if (ConfigUtils.CHAT_TOOLS_ENABLED) {
@@ -60,17 +60,17 @@ public abstract class ChatComponentMixin {
         }
     }
 
-    //#if MC>=11900
+//#if MC>=11900
     @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At(value = "HEAD"), cancellable = true)
-    //#else
-    //$$ @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V", at = @At(value = "HEAD"), cancellable = true)
-    //#endif
+//#else
+//$$ @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V", at = @At(value = "HEAD"), cancellable = true)
+//#endif
     public void onReceivingMessages(
-            //#if MC>=11900
+//#if MC>=11900
             Component message, MessageSignature signature, GuiMessageTag indicator
-            //#else
-            //$$ Component message, int messageId, int timestamp, boolean refresh
-            //#endif
+//#else
+//$$        Component message, int messageId, int timestamp, boolean refresh
+//#endif
             , CallbackInfo ci) {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
@@ -85,19 +85,19 @@ public abstract class ChatComponentMixin {
         }
     }
 
-    //#if MC>=12005
+//#if MC>=12005
     @ModifyArgs(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/GuiMessage;<init>(ILnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V"))
-    //#elseif MC>=11900
-    //$$ @ModifyArgs(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"))
-    //#else
-    //$$ @ModifyArgs(method = "addMessage(Lnet/minecraft/network/chat/Component;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"))
-    //#endif
+//#elseif MC>=11900
+//$$ @ModifyArgs(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V"))
+//#else
+//$$ @ModifyArgs(method = "addMessage(Lnet/minecraft/network/chat/Component;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;addMessage(Lnet/minecraft/network/chat/Component;IIZ)V"))
+//#endif
     public void onReceivingMessages(Args args) {
-        //#if MC>=12005
+//#if MC>=12005
         final int MESSAGE_IDX = 1;
-        //#else
-        //$$ final int MESSAGE_IDX = 0;
-        //#endif
+//#else
+//$$    final int MESSAGE_IDX = 0;
+//#endif
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
@@ -170,22 +170,22 @@ public abstract class ChatComponentMixin {
         args.set(MESSAGE_IDX, message);
     }
 
-    //#if MC>=12111
-    //$$ // no-op
-    //#else
-    //$$ @Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
-    //$$ public void modifyHoverEvent(double x, double y, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<net.minecraft.network.chat.Style> cir) {
-    //$$     net.minecraft.network.chat.Style style = cir.getReturnValue();
-    //$$     if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
-    //$$         cir.setReturnValue(style);
-    //$$         return;
-    //$$     }
-    //$$     if (!ConfigUtils.PREVIEW_CLICK_EVENTS_ENABLED) {
-    //$$         cir.setReturnValue(style);
-    //$$         return;
-    //$$     }
-    //$$     cir.setReturnValue(ClickEventsPreviewer.work(style));
-    //$$ }
-    //#endif
+//#if MC>=12111
+//$$// no-op
+//#else
+//$$ @Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
+//$$ public void modifyHoverEvent(double x, double y, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<net.minecraft.network.chat.Style> cir) {
+//$$     net.minecraft.network.chat.Style style = cir.getReturnValue();
+//$$     if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
+//$$         cir.setReturnValue(style);
+//$$         return;
+//$$     }
+//$$     if (!ConfigUtils.PREVIEW_CLICK_EVENTS_ENABLED) {
+//$$         cir.setReturnValue(style);
+//$$         return;
+//$$     }
+//$$     cir.setReturnValue(ClickEventsPreviewer.work(style));
+//$$ }
+//#endif
 
 }

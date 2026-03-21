@@ -16,11 +16,11 @@ import java.util.Map;
  */
 public class ConfigStorage {
     public static final File FILE = new File(
-            //#if FABRIC
-            //$$ net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir()
-            //#elseif NEOFORGE
+//#if FABRIC
+//$$        net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir()
+//#elseif NEOFORGE
             net.neoforged.fml.loading.FMLPaths.CONFIGDIR.get()
-            //#endif
+//#endif
                     .toFile(), "chat_tools.json");
 
     private Map<String, Object> configMap;

@@ -66,13 +66,13 @@ public class ConfigScreenGenerator {
     public static ConfigBuilder getConfigBuilder() {
         initializeConfigGuiMapIfNecessary();
 
-        //#if MC>=12111
+//#if MC>=12111
         Identifier backgroundTexture = Identifier.parse("minecraft:textures/block/oak_planks.png");
-        //#elseif MC>=12100
-        //$$ ResourceLocation backgroundTexture = ResourceLocation.parse("minecraft:textures/block/oak_planks.png");
-        //#else
-        //$$ ResourceLocation backgroundTexture = new ResourceLocation("minecraft:textures/block/oak_planks.png");
-        //#endif
+//#elseif MC>=12100
+//$$    ResourceLocation backgroundTexture = ResourceLocation.parse("minecraft:textures/block/oak_planks.png");
+//#else
+//$$    ResourceLocation backgroundTexture = new ResourceLocation("minecraft:textures/block/oak_planks.png");
+//#endif
         ConfigBuilder builder = ConfigBuilder.create().setTitle(trans("gui.title"))
                                              .setDefaultBackgroundTexture(backgroundTexture)
                                              .setTransparentBackground(true).setSavingRunnable(ConfigUtils::save);

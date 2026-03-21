@@ -14,11 +14,11 @@ import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
 //$$ @Mixin(net.minecraft.client.renderer.entity.EntityRenderer.class)
 //#endif
 public abstract class NameTagFeatureRendererStorageMixin {
-    //#if MC>=12109
+//#if MC>=12109
     @ModifyVariable(method = "add", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
-    //#else
-    //$$ @ModifyVariable(method = "renderNameTag", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
-    //#endif
+//#else
+//$$ @ModifyVariable(method = "renderNameTag", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
+//#endif
     public Component nickHiderChangeLabel(Component text) {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return text;

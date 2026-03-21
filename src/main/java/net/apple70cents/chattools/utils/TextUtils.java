@@ -29,17 +29,17 @@ import java.net.URI;
  */
 public class TextUtils {
     public static final Style WEBSITE_URL_STYLE = Style.EMPTY.withUnderlined(true).withClickEvent(
-            //#if MC>=12105
+//#if MC>=12105
             new ClickEvent.OpenUrl(URI.create("https://70centsapple.top/blogs/#/chat-tools-faq"))
-            //#else
-            //$$ new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq")
-            //#endif
+//#else
+//$$ new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq")
+//#endif
     ).withHoverEvent(
-            //#if MC>=12105
+//#if MC>=12105
             new HoverEvent.ShowText(
-            //#else
-            //$$ new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-            //#endif
+//#else
+//$$ new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+//#endif
                     ConfigScreenUtils.getTooltip("general.FAQ", "FAQ", null)));
     public static final String PREFIX = "key.chattools.";
     public static final Component SPACER = literal("").copy().setStyle(Style.EMPTY);
@@ -121,27 +121,27 @@ public class TextUtils {
 
 
     public static Component literal(String str) {
-        //#if MC>=11900
+//#if MC>=11900
         return Component.literal(str);
-        //#else
-        //$$return new TextComponent(str);
-        //#endif
+//#else
+//$$   return new TextComponent(str);
+//#endif
     }
 
     public static Component transWithPrefix(String str, String prefix) {
-        //#if MC>=11900
+//#if MC>=11900
         return Component.translatable(prefix + str);
-        //#else
-        //$$return new TranslatableComponent(prefix + str);
-        //#endif
+//#else
+//$$   return new TranslatableComponent(prefix + str);
+//#endif
     }
 
     public static Component transWithPrefix(String str, String prefix, Object... args) {
-        //#if MC>=11900
+//#if MC>=11900
         return Component.translatable(prefix + str, args);
-        //#else
-        //$$return new TranslatableComponent(prefix + str, args);
-        //#endif
+//#else
+//$$   return new TranslatableComponent(prefix + str, args);
+//#endif
     }
 
     public static Component trans(String str, Object... args) {
@@ -157,11 +157,11 @@ public class TextUtils {
     }
 
     public static Component empty() {
-        //#if MC>=11900
+//#if MC>=11900
         return Component.empty();
-        //#else
-        //$$return of("");
-        //#endif
+//#else
+//$$   return of("");
+//#endif
     }
 
     /**
@@ -208,14 +208,14 @@ public class TextUtils {
 
     public static JsonElement component2JsonElement(MutableComponent text) {
         try {
-            //#if MC>=12106
+//#if MC>=12106
             JsonElement jsonElement = ComponentSerialization.CODEC.encode(text,
                     RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE), null).result().orElse(null);
-            //#elseif MC>=12005
-            //$$ JsonElement jsonElement = new Component.SerializerAdapter(VanillaRegistries.createLookup()).serialize(text, null, null);
-            //#else
-            //$$ JsonElement jsonElement = Component.Serializer.toJsonTree(text);
-            //#endif
+//#elseif MC>=12005
+//$$        JsonElement jsonElement = new Component.SerializerAdapter(VanillaRegistries.createLookup()).serialize(text, null, null);
+//#else
+//$$        JsonElement jsonElement = Component.Serializer.toJsonTree(text);
+//#endif
             return jsonElement;
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,14 +225,14 @@ public class TextUtils {
 
     public static MutableComponent jsonElement2Component(JsonElement jsonElement) {
         try {
-            //#if MC>=12106
+//#if MC>=12106
             return ComponentSerialization.CODEC.parse(RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE),
                     jsonElement).result().orElse(null).copy();
-            //#elseif MC>=12005
-            //$$ return new Component.SerializerAdapter(VanillaRegistries.createLookup()).deserialize(jsonElement, null, null);
-            //#else
-            //$$ return Component.Serializer.fromJson(jsonElement);
-            //#endif
+//#elseif MC>=12005
+//$$        return new Component.SerializerAdapter(VanillaRegistries.createLookup()).deserialize(jsonElement, null, null);
+//#else
+//$$        return Component.Serializer.fromJson(jsonElement);
+//#endif
         } catch (Exception e) {
             e.printStackTrace();
             return TextUtils.literal("ERROR").copy();

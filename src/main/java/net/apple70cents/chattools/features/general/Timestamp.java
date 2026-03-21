@@ -24,29 +24,29 @@ public class Timestamp {
                 .getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
         if ((boolean) ConfigUtils.get("general.Timestamp.CopyToChatBar.Enabled")) {
             HoverEvent hoverEvent =
-                    //#if MC>=12105
+//#if MC>=12105
                     new HoverEvent.ShowText(
-                    //#else
-                    //$$ new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    //#endif
+//#else
+//$$                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+//#endif
                     longTimeDisplay.copy().append("\n\n").append(TextUtils.trans("texts.copy.launch")));
             ClickEvent clickEvent =
-                    //#if MC>=12105
+//#if MC>=12105
                     new ClickEvent.RunCommand(
-                    //#else
-                    //$$ new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                    //#endif
+//#else
+//$$                new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+//#endif
                     "/chattools get_message " + hashcode);
             MutableComponent timestampText = shortTimeDisplay.copy().setStyle(Style.EMPTY.withHoverEvent(hoverEvent)
                                                                                               .withClickEvent(clickEvent));
             return (TextUtils.SPACER.copy().append(timestampText)).append(message);
         } else {
             HoverEvent hoverEvent =
-                    //#if MC>=12105
+//#if MC>=12105
                     new HoverEvent.ShowText(
-                    //#else
-                    //$$ new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    //#endif
+//#else
+//$$                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+//#endif
                     longTimeDisplay);
             MutableComponent timestampText = shortTimeDisplay.copy().setStyle(Style.EMPTY.withHoverEvent(hoverEvent));
             return (TextUtils.SPACER.copy().append(timestampText)).append(message);
