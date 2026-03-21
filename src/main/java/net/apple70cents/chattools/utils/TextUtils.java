@@ -325,7 +325,7 @@ public class TextUtils {
     }
 
     private static boolean isTextField(String key) {
-        return key.contains("text") || key.contains("value");
+        return key.contains("text") || key.contains("value") || key.contains("extra");
     }
 
     private static boolean isColorField(String key) {
