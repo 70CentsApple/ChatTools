@@ -249,11 +249,11 @@ public class TextUtils {
      */
     public static MutableComponent replaceComponentText(MutableComponent text, Pattern oldStringPattern, String newString) {
         JsonElement jsonElement = component2JsonElement(text);
-        replaceTextFieldValue(jsonElement, oldStringPattern, newString);
+        replaceTextFieldValue(jsonElement, oldStringPattern, newString, null);
         return jsonElement2Component(jsonElement);
     }
 
-    private static void replaceTextFieldValue(JsonElement jsonElement, Pattern oldValuePattern, String newValue) {
+    private static void replaceTextFieldValue(JsonElement jsonElement, Pattern oldValuePattern, String newValue, String parentKey) {
         if (jsonElement.isJsonObject()) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             for (Map.Entry<String, JsonElement> ele : jsonObject.entrySet()) {
@@ -270,13 +270,24 @@ public class TextUtils {
                         jsonObject.addProperty(key, matcher.replaceAll(newValue));
                     }
                 } else {
-                    replaceTextFieldValue(value, oldValuePattern, newValue);
+                    replaceTextFieldValue(value, oldValuePattern, newValue, key);
                 }
             }
         } else if (jsonElement.isJsonArray()) {
             JsonArray jsonArray = jsonElement.getAsJsonArray();
-            for (JsonElement element : jsonArray) {
-                replaceTextFieldValue(element, oldValuePattern, newValue);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonElement element = jsonArray.get(i);
+
+                if (element.isJsonPrimitive()) {
+                    if (parentKey != null && isTextField(parentKey)) {
+                        Matcher matcher = oldValuePattern.matcher(element.getAsString());
+                        if (matcher.find()) {
+                            jsonArray.set(i, new com.google.gson.JsonPrimitive(matcher.replaceAll(newValue)));
+                        }
+                    }
+                } else {
+                    replaceTextFieldValue(element, oldValuePattern, newValue, parentKey);
+                }
             }
         }
     }
@@ -305,7 +316,7 @@ public class TextUtils {
                 }
 
                 if (isTextField(key) && value.isJsonPrimitive()) {
-                    jsonObject.addProperty(key, value.getAsString().replaceAll("§.", ""));
+                    jsonObject.addProperty(key, wash(value.getAsString()));
                 } else if (isColorField(key) && value.isJsonPrimitive()) {
                     jsonObject.addProperty(key, "white");
                 } else {
