@@ -36,6 +36,8 @@ public final class PlaceholderEngine {
     // internal markers to protect escaped braces during processing
     private static final String ESC_L = "\u0000LBR\u0000";
     private static final String ESC_R = "\u0000RBR\u0000";
+    private static final ThreadLocal<Integer> RECURSION_DEPTH = ThreadLocal.withInitial(() -> 0);
+    private static final int MAX_DEPTH = 70;
 
     private PlaceholderEngine() {
     }
@@ -129,8 +131,8 @@ public final class PlaceholderEngine {
                     currentTime.getSecond());
         });
         MAPPINGS.put("nickname", args -> Minecraft.getInstance().player.getGameProfile()
-                //#if MC>=12109
-                .name()
+                        //#if MC>=12109
+                        .name()
                 //#else
                 //$$ .getName()
                 //#endif
@@ -615,14 +617,16 @@ public final class PlaceholderEngine {
     private static void debugPush(String info) {
         if (DEBUG) {
             DEBUG_STACK.get().push(info);
-            System.out.println("[PlaceholderEngine][STACK PUSH] " + info + " | Stack: " + DEBUG_STACK.get());
+            System.out.println("[PlaceholderEngine][STACK PUSH][" + RECURSION_DEPTH.get() + "] " + info
+                    + " | Stack: " + DEBUG_STACK.get());
         }
     }
 
     private static void debugPop() {
         if (DEBUG) {
             String info = DEBUG_STACK.get().isEmpty() ? "<empty>" : DEBUG_STACK.get().peek();
-            System.out.println("[PlaceholderEngine][STACK POP] " + info + " | Stack: " + DEBUG_STACK.get());
+            System.out.println("[PlaceholderEngine][STACK POP][" + RECURSION_DEPTH.get() + "] " + info
+                    + " | Stack: " + DEBUG_STACK.get());
             if (!DEBUG_STACK.get().isEmpty()) DEBUG_STACK.get().pop();
         }
     }
@@ -637,30 +641,41 @@ public final class PlaceholderEngine {
     private static final Pattern PLACEHOLDER_PATTERN = RegExUtils.getOrCompilePattern("\\{([^}]*)\\}");
 
     public static String apply(String template) {
-        if (template == null) return null;
-        // Preprocess escaped braces so they won't be treated as placeholders.
-        String processed = preprocessEscapedBraces(template);
-
-        Matcher m = PLACEHOLDER_PATTERN.matcher(processed);
-        StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            String body = m.group(1).trim().replace(ESC_L, "{").replace(ESC_R, "}");
-            String replacement;
-            try {
-                debugPrint("Evaluating placeholder: {" + body + "}");
-                replacement = evaluateBody(body);
-                if (replacement == null) replacement = "";
-                replacement = Matcher.quoteReplacement(replacement);
-            } catch (Exception e) {
-                debugPrint("Exception in evaluating {" + body + "}: " + e);
-                replacement = Matcher.quoteReplacement(m.group(0));
-            }
-            m.appendReplacement(sb, replacement);
+        if (template == null) {
+            return null;
         }
-        m.appendTail(sb);
+        if (RECURSION_DEPTH.get() > MAX_DEPTH) {
+            return template;
+        }
+        RECURSION_DEPTH.set(RECURSION_DEPTH.get() + 1);
 
-        // Restore escaped braces markers back to literal braces
-        return sb.toString().replace(ESC_L, "{").replace(ESC_R, "}");
+        try {
+            // Preprocess escaped braces so they won't be treated as placeholders.
+            String processed = preprocessEscapedBraces(template);
+
+            Matcher m = PLACEHOLDER_PATTERN.matcher(processed);
+            StringBuffer sb = new StringBuffer();
+            while (m.find()) {
+                String body = m.group(1).trim().replace(ESC_L, "{").replace(ESC_R, "}");
+                String replacement;
+                try {
+                    debugPrint("Evaluating placeholder: {" + body + "}");
+                    replacement = evaluateBody(body);
+                    if (replacement == null) replacement = "";
+                    replacement = Matcher.quoteReplacement(replacement);
+                } catch (Exception e) {
+                    debugPrint("Exception in evaluating {" + body + "}: " + e);
+                    replacement = Matcher.quoteReplacement(m.group(0));
+                }
+                m.appendReplacement(sb, replacement);
+            }
+            m.appendTail(sb);
+
+            // Restore escaped braces markers back to literal braces
+            return sb.toString().replace(ESC_L, "{").replace(ESC_R, "}");
+        } finally {
+            RECURSION_DEPTH.set(RECURSION_DEPTH.get() - 1);
+        }
     }
 
     /**
