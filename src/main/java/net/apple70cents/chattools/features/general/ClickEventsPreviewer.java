@@ -14,13 +14,13 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.ArrayList;
 import java.util.List;
 
-//#if MC>=12105
+//? if >=1.21.5 {
 import net.minecraft.world.item.ItemStack;
-//#endif
+//?}
 
-//#if MC<12000
-//$$ import net.minecraft.world.item.TooltipFlag;
-//#endif
+//? if <1.20 {
+/*import net.minecraft.world.item.TooltipFlag;
+*///?}
 
 /**
  * @author 70CentsApple
@@ -41,70 +41,73 @@ public class ClickEventsPreviewer {
         Component textToAppendWithTwoEmptyLinesInFront = TextUtils.literal("\n\n").copy().append(textToAppend);
         if (hoverEvent == null) {
             style = style.withHoverEvent(
-//#if MC>=12105
+//? if >=1.21.5 {
                     new HoverEvent.ShowText(
-//#else
-//$$                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-//#endif
+//?} else {
+                    /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+*///?}
                     textToAppend));
         } else {
             Component oldHoverComponent =
-//#if MC>=12105
+//? if >=1.21.5 {
                     "show_text".equals(hoverEvent.action().getSerializedName()) ? ((HoverEvent.ShowText) hoverEvent).value() : null;
-//#else
-//$$                hoverEvent.getValue(HoverEvent.Action.SHOW_TEXT);
-//#endif
+//?} else {
+                    /*hoverEvent.getValue(HoverEvent.Action.SHOW_TEXT);
+*///?}
             // Has Actions.SHOW_TEXT
             if (oldHoverComponent != null && !oldHoverComponent.getString().isBlank()) {
                 Component newHoverComponent = (TextUtils.SPACER.copy().append(oldHoverComponent)).append(textToAppendWithTwoEmptyLinesInFront);
                 style = style.withHoverEvent(
-//#if MC>=12105
+//? if >=1.21.5 {
                         new HoverEvent.ShowText(
-//#else
-//$$                    new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-//#endif
+//?} else {
+                        /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+*///?}
                         newHoverComponent));
             } else {
-//#if MC>=12105
+//? if >=26.1 {
                 HoverEvent.EntityTooltipInfo entityContent = "show_entity".equals(hoverEvent.action().getSerializedName()) ? ((HoverEvent.ShowEntity) hoverEvent).entity() : null;
+                ItemStack itemContent = "show_item".equals(hoverEvent.action().getSerializedName()) ? ((HoverEvent.ShowItem) hoverEvent).item().create() : null;
+//?} elif >=1.21.5 {
+                /*HoverEvent.EntityTooltipInfo entityContent = "show_entity".equals(hoverEvent.action().getSerializedName()) ? ((HoverEvent.ShowEntity) hoverEvent).entity() : null;
                 ItemStack itemContent = "show_item".equals(hoverEvent.action().getSerializedName()) ? ((HoverEvent.ShowItem) hoverEvent).item() : null;
-//#else
-//$$            HoverEvent.EntityTooltipInfo entityContent = hoverEvent.getValue(HoverEvent.Action.SHOW_ENTITY);
-//$$            HoverEvent.ItemStackInfo itemContent = hoverEvent.getValue(HoverEvent.Action.SHOW_ITEM);
-//#endif
+*///?} else {
+                /*HoverEvent.EntityTooltipInfo entityContent = hoverEvent.getValue(HoverEvent.Action.SHOW_ENTITY);
+                HoverEvent.ItemStackInfo itemContent = hoverEvent.getValue(HoverEvent.Action.SHOW_ITEM);
+*///?}
                 if (entityContent != null) {
                     // Has Actions.SHOW_ENTITY
                     oldHoverComponent = TextUtils.textArray2text(entityContent.getTooltipLines());
                 } else if (itemContent != null) {
                     // Has Actions.SHOW_ITEM
                     oldHoverComponent = TextUtils.textArray2text(
-//#if MC>=12105
+//? if >=1.21.5 {
                             Screen.getTooltipFromItem(Minecraft.getInstance(), itemContent)
-//#elseif MC>=12000
-//$$                        Screen.getTooltipFromItem(Minecraft.getInstance(), itemContent.getItemStack())
-//#elseif MC>=11900
-//$$                        itemContent.getItemStack().getTooltipLines(Minecraft.getInstance().player, TooltipFlag.ADVANCED)
-//#else
-//$$                        itemContent.getItemStack().getTooltipLines(Minecraft.getInstance().player, TooltipFlag.Default.ADVANCED)
-//#endif
+//?} elif >=1.20 {
+                            /*Screen.getTooltipFromItem(Minecraft.getInstance(), itemContent.getItemStack())
+*///?} elif >=1.19 {
+                            /*itemContent.getItemStack().getTooltipLines(Minecraft.getInstance().player, TooltipFlag.ADVANCED)
+*///?} else {
+                            /*itemContent.getItemStack().getTooltipLines(Minecraft.getInstance().player, TooltipFlag.Default.ADVANCED)
+*///?}
                     );
                 }
                 if (oldHoverComponent != null) {
                     Component newHoverComponent = (TextUtils.SPACER.copy().append(oldHoverComponent)).append(textToAppendWithTwoEmptyLinesInFront);
                     style = style.withHoverEvent(
-//#if MC>=12105
+//? if >=1.21.5 {
                             new HoverEvent.ShowText(
-//#else
-//$$                        new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-//#endif
+//?} else {
+                            /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+*///?}
                                     newHoverComponent));
                 } else {
                     style = style.withHoverEvent(
-//#if MC>=12105
+//? if >=1.21.5 {
                             new HoverEvent.ShowText(
-//#else
-//$$                        new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-//#endif
+//?} else {
+                            /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+*///?}
                              textToAppendWithTwoEmptyLinesInFront));
                 }
             }
@@ -127,7 +130,7 @@ public class ClickEventsPreviewer {
         if (hasClickEvent) {
             texts.add(TextUtils.trans("texts.PreviewClickEvents.clickEvent"));
             ClickEvent clickEvent = style.getClickEvent();
-//#if MC>=12105
+//? if >=1.21.5 {
             String value = "";
             switch (clickEvent.action()) {
                 case OPEN_URL:
@@ -142,34 +145,34 @@ public class ClickEventsPreviewer {
                 case SUGGEST_COMMAND:
                     value = ((ClickEvent.SuggestCommand) clickEvent).command();
                     break;
-//#if MC>=12106
+//? if >=1.21.6 {
                 case SHOW_DIALOG:
                     value = ((ClickEvent.ShowDialog) clickEvent).dialog().getRegisteredName();
                     break;
-//#endif
+//?}
                 case CHANGE_PAGE:
                     value = String.valueOf(((ClickEvent.ChangePage) clickEvent).page());
                     break;
                 case COPY_TO_CLIPBOARD:
                     value = ((ClickEvent.CopyToClipboard) clickEvent).value();
                     break;
-//#if MC>=12106
+//? if >=1.21.6 {
                 case CUSTOM:
                     value = ((ClickEvent.Custom) clickEvent).id() + " → " + ((ClickEvent.Custom) clickEvent).payload();
                     break;
-//#endif
+//?}
                 default:
                     value = "[ERROR]";
             }
             Component valueComponent = TextUtils.of(value).copy().withStyle(ChatFormatting.GREEN);
             String action = clickEvent.action().getSerializedName();
-//#elseif MC>=12002
-//$$        Component valueComponent = TextUtils.of(clickEvent.getValue()).copy().withStyle(ChatFormatting.GREEN);
-//$$        String action = clickEvent.getAction().getSerializedName();
-//#else
-//$$        Component valueComponent = TextUtils.of(clickEvent.getValue()).copy().withStyle(ChatFormatting.GREEN);
-//$$        String action = clickEvent.getAction().getName();
-//#endif
+//?} elif >=1.20.2 {
+            /*Component valueComponent = TextUtils.of(clickEvent.getValue()).copy().withStyle(ChatFormatting.GREEN);
+            String action = clickEvent.getAction().getSerializedName();
+*///?} else {
+            /*Component valueComponent = TextUtils.of(clickEvent.getValue()).copy().withStyle(ChatFormatting.GREEN);
+            String action = clickEvent.getAction().getName();
+*///?}
             switch (action) {
                 case "open_url":
                     texts.add(TextUtils.trans("texts.PreviewClickEvents.clickEvent.openUrl", valueComponent));
@@ -192,22 +195,22 @@ public class ClickEventsPreviewer {
                 case "suggest_command":
                     texts.add(TextUtils.trans("texts.PreviewClickEvents.clickEvent.suggestCommand", valueComponent));
                     break;
-//#if MC>=12106
+//? if >=1.21.6 {
                 case "show_dialog":
                     texts.add(TextUtils.trans("texts.PreviewClickEvents.clickEvent.showDialog", valueComponent));
                     break;
-//#endif
+//?}
                 case "change_page":
                     texts.add(TextUtils.trans("texts.PreviewClickEvents.clickEvent.changePage", valueComponent));
                     break;
                 case "copy_to_clipboard":
                     texts.add(TextUtils.trans("texts.PreviewClickEvents.clickEvent.copyToClipboard", valueComponent));
                     break;
-//#if MC>=12106
+//? if >=1.21.6 {
                 case "custom":
                     texts.add(TextUtils.trans("texts.PreviewClickEvents.clickEvent.custom", valueComponent));
                     break;
-//#endif
+//?}
                 default:
                     LoggerUtils.warn("[ChatTools] Unknown clickEvent action type: " + action);
             }
@@ -221,11 +224,11 @@ public class ClickEventsPreviewer {
         if (hoverEvent == null) {
             return false;
         }
-//#if MC>=12105
+//? if >=1.21.5 {
         Component tooltip = "show_text".equals(hoverEvent.action().getSerializedName()) ? ((HoverEvent.ShowText) hoverEvent).value() : null;
-//#else
-//$$    Component tooltip = hoverEvent.getValue(HoverEvent.Action.SHOW_TEXT);
-//#endif
+//?} else {
+        /*Component tooltip = hoverEvent.getValue(HoverEvent.Action.SHOW_TEXT);
+*///?}
         if (tooltip == null || tooltip.getString().isBlank()) {
             return false;
         }

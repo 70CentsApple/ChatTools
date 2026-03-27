@@ -23,11 +23,11 @@ import javax.net.ssl.X509TrustManager;
 public class DownloadUtils {
     private static final String DOWNLOAD_SITE = "https://70centsapple.top/download/chat_tools/download.php?version=250805&file=";
     public static final Path STORAGE_DIR = Path.of(
-//#if FABRIC
-//$$        net.fabricmc.loader.api.FabricLoader.getInstance().getGameDir()
-//#elseif NEOFORGE
+//? if FABRIC {
+            /*net.fabricmc.loader.api.FabricLoader.getInstance().getGameDir()
+*///?} elif NEOFORGE {
             net.neoforged.fml.loading.FMLPaths.GAMEDIR.get()
-//#endif
+//?}
                     .toString(), "chattools");
     private static final Map<String, String> WIN_7_FILENAMES = Map.of("icon", "icon.ico", "toastExe", "toast-win7.exe");
     private static final Map<String, String> WIN_10_FILENAMES = Map.of("icon", "icon.ico", "toastExe", "toast-win10.exe");

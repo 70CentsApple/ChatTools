@@ -11,23 +11,28 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-//#if MC>=12109
+//? if >=26.1 {
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-//#endif
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+//?} elif >=1.21.9 {
+/*import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
+*///?}
 
-//#if MC>=12102
+//? if >=1.21.2 {
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-//#endif
+//?}
 
 /**
  * @author 70CentsApple
  */
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
-//#if MC>=12102
+//? if >=1.21.2 {
     Entity entity;
     float tickDelta;
 
@@ -36,30 +41,30 @@ public abstract class EntityRendererMixin {
         this.entity = entity;
         this.tickDelta = tickDelta;
     }
-//#endif
+//?}
 
-//#if MC>=12109
+//? if >=1.21.9 {
     @Inject(method = "submit", at = @At(value = "HEAD"))
     private void submit(EntityRenderState entityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
         MultiBufferSource multiBufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         if (entityRenderState instanceof AvatarRenderState && Minecraft.getInstance().level != null) {
             entity = Minecraft.getInstance().level.getEntity(((AvatarRenderState) entityRenderState).id);
         }
-//#elseif MC>=12102
-//$$ @Inject(method = "render", at = @At(value = "HEAD"))
-//$$ private void render(EntityRenderState entityRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-//#else
-//$$ @Inject(method = "render", at = @At(value = "HEAD"))
-//$$ private void render(Entity entity, float yaw, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
-//#endif
+//?} elif >=1.21.2 {
+/*@Inject(method = "render", at = @At(value = "HEAD"))
+private void render(EntityRenderState entityRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
+*///?} else {
+/*@Inject(method = "render", at = @At(value = "HEAD"))
+private void render(Entity entity, float yaw, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
+*///?}
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
         if (ConfigUtils.BUBBLE_ENABLED) {
             BubbleRenderer.render(entity, poseStack, multiBufferSource, tickDelta
-//#if MC>=12109
+//? if >=1.21.9 {
                     , submitNodeCollector
-//#endif
+//?}
             );
         }
     }

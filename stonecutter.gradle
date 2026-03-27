@@ -1,0 +1,44 @@
+plugins {
+	id 'dev.kikugie.stonecutter'
+}
+
+stonecutter.active '26.1-neoforge'
+
+stonecutter.parameters {
+	def projName = node.project.name
+	def loader = projName.substring(projName.lastIndexOf('-') + 1)
+	constants.put 'FABRIC', loader == 'fabric'
+	constants.put 'NEOFORGE', loader == 'neoforge'
+}
+
+tasks.register('buildAndGather') {
+	def buildTasks = stonecutter.tasks.named('build', Task)
+	dependsOn buildTasks
+	doFirst {
+        println 'Gathering builds based on settings.json...'
+		def buildLibs = {
+			p -> p.layout.buildDirectory.get().asFile.toPath().resolve('libs')
+		}
+		delete fileTree(buildLibs(rootProject).toFile()) {
+			include '*'
+		}
+        def settingsFile = rootProject.file('settings.json')
+        if (!settingsFile.exists()) {
+            throw new GradleException("found no settings.json in project root, cannot gather builds")
+        }
+        def jsonSettings = new groovy.json.JsonSlurper().parse(settingsFile)
+        jsonSettings.versions.each { versionName ->
+            def nodeProject = rootProject.project(":${versionName}")
+			copy {
+				from(buildLibs(nodeProject).toFile()) {
+					include '*.jar'
+					exclude '*-dev.jar', '*-sources.jar', '*-shadow.jar'
+				}
+				into buildLibs(rootProject).resolve('v' + nodeProject.mod_version).toFile()
+				duplicatesStrategy DuplicatesStrategy.INCLUDE
+			}
+			delete(buildLibs(nodeProject).toFile())
+		}
+        println 'Builds gathered successfully!'
+	}
+}

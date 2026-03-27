@@ -9,11 +9,11 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ServerboundChatPacket.class)
 public abstract class ServerboundChatPacketMixin {
     @ModifyExpressionValue(
-//#if MC>=11900
+//? if >=1.19 {
         method = "write"
-//#else
-//$$    method = "<init>(Ljava/lang/String;)V"
-//#endif
+//?} else {
+        /*method = "<init>(Ljava/lang/String;)V"
+*///?}
         , at = @At(value = "CONSTANT", args = "intValue=256")
     )
     private int increaseMaxLength(int endIndex) {

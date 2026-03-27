@@ -1,83 +1,185 @@
 plugins {
     id 'maven-publish'
-    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
-
-    // https://github.com/ReplayMod/preprocessor
-    // https://github.com/Fallen-Breath/preprocessor
-    id 'com.replaymod.preprocess' version 'd452ef7612'
+    id 'dev.architectury.loom' version '1.14-SNAPSHOT' apply false
+    id 'dev.architectury.loom-no-remap' version '1.14-SNAPSHOT' apply false
 
     // https://github.com/Fallen-Breath/yamlang
     id 'me.fallenbreath.yamlang' version '1.5.0'
 }
 
-preprocess {
-    strictExtraMappings = false
-
-    def mc116_fabric = createNode('1.16.5-fabric', 1_16_05, '')
-    def mc117_fabric = createNode('1.17.1-fabric', 1_17_01, '')
-    def mc118_fabric = createNode('1.18.2-fabric', 1_18_02, '')
-    def mc119_fabric = createNode('1.19.4-fabric', 1_19_04, '')
-    def mc12001_fabric = createNode('1.20.1-fabric', 1_20_01, '')
-    def mc12004_fabric = createNode('1.20.4-fabric', 1_20_04, '')
-    def mc12006_fabric = createNode('1.20.6-fabric', 1_20_06, '')
-    def mc12101_fabric = createNode('1.21.1-fabric', 1_21_01, '')
-    def mc12104_fabric = createNode('1.21.4-fabric', 1_21_04, '')
-    def mc12105_fabric = createNode('1.21.5-fabric', 1_21_05, '')
-    def mc12108_fabric = createNode('1.21.8-fabric', 1_21_08, '')
-    def mc12110_fabric = createNode('1.21.10-fabric', 1_21_10, '')
-    def mc12111_fabric = createNode('1.21.11-fabric', 1_21_11, '')
-    def mc12006_neoforge = createNode('1.20.6-neoforge', 1_20_06, '')
-    def mc12101_neoforge = createNode('1.21.1-neoforge', 1_21_01, '')
-    def mc12104_neoforge = createNode('1.21.4-neoforge', 1_21_04, '')
-    def mc12105_neoforge = createNode('1.21.5-neoforge', 1_21_05, '')
-    def mc12108_neoforge = createNode('1.21.8-neoforge', 1_21_08, '')
-    def mc12110_neoforge = createNode('1.21.10-neoforge', 1_21_10, '')
-    def mc12111_neoforge = createNode('1.21.11-neoforge', 1_21_11, '')
-
-    mc116_fabric.link(mc117_fabric, null)
-    mc117_fabric.link(mc118_fabric, null)
-    mc118_fabric.link(mc119_fabric, null)
-    mc119_fabric.link(mc12001_fabric, null)
-    mc12001_fabric.link(mc12004_fabric, null)
-    mc12004_fabric.link(mc12006_fabric, null)
-    mc12006_fabric.link(mc12101_fabric, null)
-    mc12101_fabric.link(mc12104_fabric, null)
-    mc12104_fabric.link(mc12105_fabric, null)
-    mc12105_fabric.link(mc12108_fabric, null)
-    mc12108_fabric.link(mc12110_fabric, null)
-    mc12110_fabric.link(mc12111_fabric, null)
-
-    mc12006_fabric.link(mc12006_neoforge, null)
-    mc12101_fabric.link(mc12101_neoforge, null)
-    mc12104_fabric.link(mc12104_neoforge, null)
-    mc12105_fabric.link(mc12105_neoforge, null)
-    mc12108_fabric.link(mc12108_neoforge, null)
-    mc12110_fabric.link(mc12110_neoforge, null)
-    mc12111_fabric.link(mc12111_neoforge, null)
+// No remap on 26.1+
+def noRemap = sc.current.parsed.matches('>=26.1')
+if (noRemap) {
+    apply plugin: 'dev.architectury.loom-no-remap'
+} else {
+    apply plugin: 'dev.architectury.loom'
 }
 
-tasks.register('buildAndGather') {
-    subprojects {
-        dependsOn project.tasks.named('build').get()
+def mod_brand = (loom.platform.get() as String).toLowerCase()
+assert mod_brand in ['fabric', 'neoforge']
+assert sc.current.project.endsWith('-' + mod_brand)
+
+repositories {
+    maven { url = 'https://jitpack.io' }
+    maven { url = "https://maven.shedaniel.me/" } // Cloth Config
+    maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
+    maven { url = 'https://maven.parchmentmc.org' } // Parchment
+    maven { url = 'https://maven.neoforged.net/releases' } // NeoForge
+    maven { url = 'https://neoforged.forgecdn.net/' } // Another NeoForge Maven
+}
+
+// https://github.com/FabricMC/fabric-loader/issues/783
+if (!noRemap) {
+    configurations {
+        modApi {
+            exclude group: 'net.fabricmc', module: 'fabric-loader'
+        }
     }
-    doFirst {
-        println 'Gathering builds'
-        def buildLibs = {
-            p -> p.buildDir.toPath().resolve('libs')
-        }
-        delete fileTree(buildLibs(rootProject)) {
-            include '*'
-        }
-        subprojects {
-            copy {
-                from(buildLibs(project)) {
-                    include '*.jar'
-                    exclude '*-dev.jar', '*-sources.jar', '*-shadow.jar'
-                }
-                into buildLibs(rootProject).resolve('v' + project.mod_version)
-                duplicatesStrategy   DuplicatesStrategy.INCLUDE
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    // 无混淆环境下不需要 mappings
+    if (!noRemap) {
+        mappings loom.layered() {
+            officialMojangMappings()
+            if (project.parchment_version.size() > 0) {
+                parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
             }
-            delete(buildLibs(project))
         }
+    }
+
+    if (mod_brand == 'fabric') {
+        if (noRemap) {
+            implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+            implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+        } else {
+            modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+            modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+        }
+
+        if (project.findProperty('mod_menu_version')?.toString()?.size() > 0) {
+            if (noRemap) {
+                api "com.terraformersmc:modmenu:${project.mod_menu_version}"
+            } else {
+                modApi "com.terraformersmc:modmenu:${project.mod_menu_version}"
+            }
+        }
+    } else if (mod_brand == 'neoforge') {
+        neoForge "net.neoforged:neoforge:${project.neoforge_version}"
+    }
+
+    if (project.findProperty('cloth_config_version')?.toString()?.size() > 0) {
+        if (noRemap) {
+            api("me.shedaniel.cloth:cloth-config-${mod_brand}:${project.cloth_config_version}") {
+                if (mod_brand == 'fabric') {
+                    exclude group: "net.fabricmc.fabric-api"
+                }
+            }
+        } else {
+            modApi("me.shedaniel.cloth:cloth-config-${mod_brand}:${project.cloth_config_version}") {
+                if (mod_brand == 'fabric') {
+                    exclude group: "net.fabricmc.fabric-api"
+                }
+            }
+        }
+    }
+
+
+    // https://github.com/sshtools/two-slices
+    if (noRemap) {
+        implementation 'com.sshtools:two-slices:0.9.4'
+    } else {
+        modImplementation 'com.sshtools:two-slices:0.9.4'
+    }
+    include 'com.sshtools:two-slices:0.9.4'
+
+    include(annotationProcessor(implementation("io.github.llamalad7:mixinextras-${mod_brand}:0.4.0")))
+}
+
+loom {
+    runs {
+        client {
+            // to make sure it generates all "Minecraft Client (:subproject_name)" applications
+            ideConfigGenerated = true
+            runDir '../../run'
+            vmArgs '-Dmixin.debug.export=true'
+        }
+    }
+}
+
+String FABRIC_API_MOD_ID = sc.current.parsed.matches('>=1.18') ? 'fabric-api' : 'fabric'
+String CLOTH_CONFIG_MOD_ID = sc.current.parsed.matches('>=1.18') ? 'cloth-config' : 'cloth-config2'
+
+JavaVersion JAVA_COMPATIBILITY =
+        sc.current.parsed.matches('>=26.1') ? JavaVersion.VERSION_25 :
+                sc.current.parsed.matches('>=1.20.5') ? JavaVersion.VERSION_21 :
+                        sc.current.parsed.matches('>=1.18') ? JavaVersion.VERSION_17 :
+                                sc.current.parsed.matches('>=1.17') ? JavaVersion.VERSION_16 :
+                                        JavaVersion.VERSION_1_8
+
+java {
+    // These define the java compatibility of the artifacts
+    sourceCompatibility = JAVA_COMPATIBILITY
+    targetCompatibility = JAVA_COMPATIBILITY
+}
+
+version = 'v' + project.mod_version + '+' + project.minecraft_version + '-' + mod_brand
+group = project.maven_group
+base.archivesName = project.archives_base_name
+
+processResources {
+    def modProperties = [
+            "id"                  : project.mod_id,
+            "version"             : project.mod_version,
+            "minecraft_dependency": project.minecraft_dependency,
+    ]
+    inputs.properties(modProperties)
+
+    def good_files = [] as Set
+    def all_files = [] as Set
+    [
+            'fabric'  : ['fabric.mod.json'],
+            'neoforge': ['META-INF', 'META-INF/neoforge.mods.toml', 'pack.mcmeta'],
+    ].forEach { brand, paths ->
+        all_files.addAll(paths)
+        if (brand == mod_brand) {
+            good_files.addAll(paths)
+        }
+    }
+    all_files.forEach { it2 ->
+        def path = it2 as String
+        if (good_files.contains(path)) {
+            filesMatching(path) {
+                expand modProperties
+            }
+        } else {
+            exclude path
+        }
+    }
+
+    filesMatching('chattools.mixins.json') {
+        filter { s -> s.replace('{{COMPATIBILITY_LEVEL}}', "JAVA_${JAVA_COMPATIBILITY.ordinal() + 1}") }
+    }
+    filesMatching('fabric.mod.json') {
+        filter { s -> s.replace('{{FABRIC_API}}', FABRIC_API_MOD_ID) }
+        filter { s -> s.replace('{{CLOTH_CONFIG}}', CLOTH_CONFIG_MOD_ID) }
+    }
+}
+
+yamlang {
+    targetSourceSets = [sourceSets.main]
+    inputDir = 'assets/chattools/lang'
+}
+
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+jar {
+    from(rootProject.file('LICENSE')) {
+        rename { "${it}_${project.archives_base_name}" }
     }
 }

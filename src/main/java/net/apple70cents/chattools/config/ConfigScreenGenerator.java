@@ -10,11 +10,11 @@ import net.apple70cents.chattools.utils.ConfigScreenUtils;
 import net.apple70cents.chattools.utils.ConfigUtils;
 import net.minecraft.client.Minecraft;
 
-//#if MC>=12111
+//? if >=1.21.11 {
 import net.minecraft.resources.Identifier;
-//#else
-//$$ import net.minecraft.resources.ResourceLocation;
-//#endif
+//?} else {
+/*import net.minecraft.resources.ResourceLocation;
+*///?}
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -66,13 +66,13 @@ public class ConfigScreenGenerator {
     public static ConfigBuilder getConfigBuilder() {
         initializeConfigGuiMapIfNecessary();
 
-//#if MC>=12111
+//? if >=1.21.11 {
         Identifier backgroundTexture = Identifier.parse("minecraft:textures/block/oak_planks.png");
-//#elseif MC>=12100
-//$$    ResourceLocation backgroundTexture = ResourceLocation.parse("minecraft:textures/block/oak_planks.png");
-//#else
-//$$    ResourceLocation backgroundTexture = new ResourceLocation("minecraft:textures/block/oak_planks.png");
-//#endif
+//?} elif >=1.21 {
+        /*ResourceLocation backgroundTexture = ResourceLocation.parse("minecraft:textures/block/oak_planks.png");
+*///?} else {
+        /*ResourceLocation backgroundTexture = new ResourceLocation("minecraft:textures/block/oak_planks.png");
+*///?}
         ConfigBuilder builder = ConfigBuilder.create().setTitle(trans("gui.title"))
                                              .setDefaultBackgroundTexture(backgroundTexture)
                                              .setTransparentBackground(true).setSavingRunnable(ConfigUtils::save);

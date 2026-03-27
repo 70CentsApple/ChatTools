@@ -11,44 +11,44 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
 
-//#if MC>=11900
+//? if >=1.19 {
 import net.minecraft.client.multiplayer.chat.ChatListener;
 import net.minecraft.network.chat.MessageSignature;
-//#else
-//$$ import net.minecraft.client.gui.chat.StandardChatListener;
-//$$ import net.minecraft.network.chat.ChatType;
-//#endif
+//?} else {
+/*import net.minecraft.client.gui.chat.StandardChatListener;
+import net.minecraft.network.chat.ChatType;
+*///?}
 
 /**
  * @author 70CentsApple
  */
-//#if MC>=11900
+//? if >=1.19 {
 @Mixin(ChatListener.class)
-//#else
-//$$ @Mixin(StandardChatListener.class)
-//#endif
+//?} else {
+/*@Mixin(StandardChatListener.class)
+*///?}
 public abstract class ChatListenerMixin {
-//#if MC>=11900
+//? if >=1.19 {
     @Inject(method = "handleMessage", at = @At("HEAD"))
     private void beforeHandleChat(MessageSignature messageSignature, BooleanSupplier booleanSupplier, CallbackInfo ci) {
-//#else
-//$$ @Inject(method = "handle", at = @At("HEAD"))
-//$$ private void beforeHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
-//#endif
+//?} else {
+/*@Inject(method = "handle", at = @At("HEAD"))
+private void beforeHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
+*///?}
         MessageUtils.setProcessingServerMessageState();
     }
 
-//#if MC>=11900
+//? if >=1.19 {
     @Inject(method = "handleMessage", at = @At("RETURN"))
     private void afterHandleChat(MessageSignature messageSignature, BooleanSupplier booleanSupplier, CallbackInfo ci) {
-//#else
-//$$ @Inject(method = "handle", at = @At("RETURN"))
-//$$ private void afterHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
-//#endif
+//?} else {
+/*@Inject(method = "handle", at = @At("RETURN"))
+private void afterHandleChat(ChatType chatType, Component message, UUID sender, CallbackInfo ci) {
+*///?}
         MessageUtils.resetProcessingServerMessageState();
     }
 
-//#if MC>=11900
+//? if >=1.19 {
     @Inject(method = "handleSystemMessage", at = @At("HEAD"))
     private void beforeHandleSystemChat(Component component, boolean bl, CallbackInfo ci) {
         MessageUtils.setProcessingServerMessageState();
@@ -58,5 +58,5 @@ public abstract class ChatListenerMixin {
     private void afterHandleSystemChat(Component component, boolean bl, CallbackInfo ci) {
         MessageUtils.resetProcessingServerMessageState();
     }
-//#endif
+//?}
 }

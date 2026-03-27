@@ -22,11 +22,11 @@ public class KeyboardUtils {
         if (InputConstants.UNKNOWN.getName().equals(translationKey)) {
             return false;
         }
-//#if MC>=12109
+//? if >=1.21.9 {
         Window window = Minecraft.getInstance().getWindow();
-//#else
-//$$    long window = Minecraft.getInstance().getWindow().getWindow();
-//#endif
+//?} else {
+        /*long window = Minecraft.getInstance().getWindow().getWindow();
+*///?}
         InputConstants.Key key = InputConstants.getKey(translationKey);
         int keyCode = key.getValue();
 
@@ -92,11 +92,11 @@ public class KeyboardUtils {
             return InputConstants.isKeyDown(window, keyCode);
         } else if (key.getType().equals(InputConstants.Type.MOUSE)) {
             return GLFW.glfwGetMouseButton(
-//#if MC>=12109
+//? if >=1.21.9 {
                     window.handle()
-//#else
-//$$                window
-//#endif
+//?} else {
+                    /*window
+*///?}
                     , keyCode) == GLFW.GLFW_PRESS;
         }
         return false;

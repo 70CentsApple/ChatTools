@@ -16,30 +16,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-//#if MC>=12111
+//? if >=1.21.11 {
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-//#elseif MC>=12109
-//$$ import net.minecraft.client.renderer.SubmitNodeCollector;
-//$$ import net.minecraft.world.entity.EntityAttachment;
-//$$ import net.minecraft.world.phys.Vec3;
-//$$ import net.minecraft.client.renderer.RenderType;
-//#elseif MC>=12100
-//$$ import net.minecraft.world.entity.EntityAttachment;
-//$$ import net.minecraft.world.phys.Vec3;
-//$$ import net.minecraft.client.renderer.RenderType;
-//$$ import com.mojang.blaze3d.vertex.VertexConsumer;
-//#endif
+//?} elif >=1.21.9 {
+/*import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.renderer.RenderType;
+*///?} elif >=1.21 {
+/*import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.renderer.RenderType;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+*///?}
 
-//#if MC>=11900
+//? if >=1.19 {
 import org.joml.Matrix4f;
-//#else
-//$$ import com.mojang.math.Matrix4f;
-//#endif
+//?} else {
+/*import com.mojang.math.Matrix4f;
+*///?}
 
 /**
  * @author 70CentsApple
@@ -74,9 +73,9 @@ public class BubbleRenderer {
         }
 
         public void render(Entity entity, PoseStack poseStack, MultiBufferSource multiBufferSource, float tickDelta
-//#if MC>=12109
+//? if >=1.21.9 {
                 , SubmitNodeCollector renderQueue
-//#endif
+//?}
         ) {
             Minecraft mc = Minecraft.getInstance();
             Font font = mc.font;
@@ -88,34 +87,36 @@ public class BubbleRenderer {
 
             poseStack.pushPose();
 
-//#if MC>=12100
+//? if >=1.21 {
             Vec3 vec3d = entity.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, entity.getYRot());
             if (vec3d != null) {
                 poseStack.translate(vec3d.x, vec3d.y + 0.5F + yOffset / 10.0F, vec3d.z);
             }
-//#else
-//$$        poseStack.translate(0.0F, entity.getBbHeight() + 0.5F + yOffset / 10.0F, 0.0F);
-//#endif
+//?} else {
+            /*poseStack.translate(0.0F, entity.getBbHeight() + 0.5F + yOffset / 10.0F, 0.0F);
+*///?}
             poseStack.mulPose(
-//#if MC>=12109
-                    mc.gameRenderer.getLevelRenderState().cameraRenderState.orientation
-//#else
-//$$                mc.getEntityRenderDispatcher().cameraOrientation()
-//#endif
+//? if >=26.1 {
+                    mc.gameRenderer.getGameRenderState().levelRenderState.cameraRenderState.orientation
+//?} elif >=1.21.9 {
+                    /*mc.gameRenderer.getLevelRenderState().cameraRenderState.orientation
+*///?} else {
+                    /*mc.getEntityRenderDispatcher().cameraOrientation()
+*///?}
             );
             poseStack.scale(
-//#if MC>=12100
+//? if >=1.21 {
                     0.025F
-//#else
-//$$                -0.025F
-//#endif
+//?} else {
+                    /*-0.025F
+*///?}
                     , -0.025F, 0.025F);
             Matrix4f pose = poseStack.last().pose();
             int maxLineWidth = ((Number) ConfigUtils.get("bubble.MaxLineWidth")).intValue();
             List<FormattedCharSequence> lines = font.split(renderComponent, maxLineWidth);
             int linesAmount = lines.size();
 
-//#if MC>=12100
+//? if >=1.21 {
             // draw background
             int maxWidth = 0;
             for (FormattedCharSequence line : lines) {
@@ -126,23 +127,23 @@ public class BubbleRenderer {
             float x2 = maxWidth / 2.0F + 3;
             float y2 = 1;
 
-//#if MC>=12111
+//? if >=1.21.11 {
             renderQueue.order(0).submitCustomGeometry(poseStack, RenderTypes.textBackgroundSeeThrough(), (pose1, buffer) -> {
-//#elseif MC>=12109
-//$$        renderQueue.order(0).submitCustomGeometry(poseStack, RenderType.textBackgroundSeeThrough(), (pose1, buffer) -> {
-//#else
-//$$        VertexConsumer buffer = multiBufferSource.getBuffer(RenderType.textBackgroundSeeThrough());
-//$$        Matrix4f pose1 = pose;
-//#endif
+//?} elif >=1.21.9 {
+            /*renderQueue.order(0).submitCustomGeometry(poseStack, RenderType.textBackgroundSeeThrough(), (pose1, buffer) -> {
+*///?} else {
+            /*VertexConsumer buffer = multiBufferSource.getBuffer(RenderType.textBackgroundSeeThrough());
+            Matrix4f pose1 = pose;
+*///?}
                 buffer.addVertex(pose1, x1, y1, -0.1F).setColor(0F, 0F, 0F, 0.18F).setUv2(15, 15);
                 buffer.addVertex(pose1, x1, y2, -0.1F).setColor(0F, 0F, 0F, 0.18F).setUv2(15, 15);
                 buffer.addVertex(pose1, x2, y2, -0.1F).setColor(0F, 0F, 0F, 0.18F).setUv2(15, 15);
                 buffer.addVertex(pose1, x2, y1, -0.1F).setColor(0F, 0F, 0F, 0.18F).setUv2(15, 15);
-//#if MC>=12109
+//? if >=1.21.9 {
             });
-//#endif
+//?}
 
-//#endif
+//?}
 
             // draw text
             for (int i = 0; i < linesAmount; i++) {
@@ -151,21 +152,20 @@ public class BubbleRenderer {
                 float xOffset = -font.width(line) / 2.0F;
 
                 // draw text background for versions 1.16 ~ 1.20.6
-//#if MC>=12100
-//$$            // no-op
-//#elseif MC>=11900
-//$$            font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, Font.DisplayMode.SEE_THROUGH, 0x3F000000, 0xF000F0);
-//#else
-//$$            font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, true, 0x3F000000, 0xF000F0);
-//#endif
+//? if >=1.21 {
+//?} elif >=1.19 {
+                /*font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, Font.DisplayMode.SEE_THROUGH, 0x3F000000, 0xF000F0);
+*///?} else {
+                /*font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, true, 0x3F000000, 0xF000F0);
+*///?}
 
-//#if MC>=12109
+//? if >=1.21.9 {
                 renderQueue.order(1).submitText(poseStack, xOffset, y, line, false, Font.DisplayMode.NORMAL, 0xF000F0, 0xFFFFFFFF, 0, 0);
-//#elseif MC>=11900
-//$$            font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
-//#else
-//$$            font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, false, 0, 0xF000F0);
-//#endif
+//?} elif >=1.19 {
+                /*font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, Font.DisplayMode.NORMAL, 0, 0xF000F0);
+*///?} else {
+                /*font.drawInBatch(line, xOffset, y, 0xFFFFFFFF, false, pose, multiBufferSource, false, 0, 0xF000F0);
+*///?}
 
 
             }
@@ -177,9 +177,9 @@ public class BubbleRenderer {
     private static Map<String, BubbleUnit> bubbleMap = new HashMap<>();
 
     public static void render(Entity entity, PoseStack poseStack, MultiBufferSource multiBufferSource, float tickDelta
-//#if MC>=12109
+//? if >=1.21.9 {
             , SubmitNodeCollector submitNodeCollector
-//#endif
+//?}
     ) {
         Minecraft mc = Minecraft.getInstance();
         if (bubbleMap.isEmpty() || mc.level == null || entity == null) {
@@ -206,9 +206,9 @@ public class BubbleRenderer {
             double d = mc.getEntityRenderDispatcher().distanceToSqr(potentialSender);
             if (d <= 4096.0) {
                 bubbleMap.get(senderName).render(entity, poseStack, multiBufferSource, tickDelta
-//#if MC>=12109
+//? if >=1.21.9 {
                         , submitNodeCollector
-//#endif
+//?}
                 );
             }
         }

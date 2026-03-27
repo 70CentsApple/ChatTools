@@ -10,11 +10,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.network.chat.Component;
 
-//#if MC>=12111
+//? if >=1.21.11 {
 import net.minecraft.resources.Identifier;
-//#else
-//$$ import net.minecraft.resources.ResourceLocation;
-//#endif
+//?} else {
+/*import net.minecraft.resources.ResourceLocation;
+*///?}
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -90,24 +90,24 @@ public class BasicNotifier {
                 int pitch = ((Number) ConfigUtils.get("notifier.Sound.Pitch")).intValue();
 
                 boolean sendFromCameraPos = (boolean) ConfigUtils.get("notifier.Sound.PlaySoundFromCameraPositionEnabled");
-//#if MC>=12109
+//? if >=1.21.9 {
                 Entity camera = Minecraft.getInstance().getCameraEntity();
-//#else
-//$$            Entity camera = Minecraft.getInstance().cameraEntity;
-//#endif
+//?} else {
+                /*Entity camera = Minecraft.getInstance().cameraEntity;
+*///?}
                 double x = (sendFromCameraPos && camera != null) ? camera.position().x : player.getX();
                 double y = (sendFromCameraPos && camera != null) ? camera.position().y : player.getY();
                 double z = (sendFromCameraPos && camera != null) ? camera.position().z : player.getZ();
                 world.playLocalSound(x, y, z,
-//#if MC>=12111
+//? if >=1.21.11 {
                         SoundEvent.createVariableRangeEvent(Identifier.parse(identifier))
-//#elseif MC>=12100
-//$$                    SoundEvent.createVariableRangeEvent(ResourceLocation.parse(identifier))
-//#elseif MC>=11900
-//$$                    SoundEvent.createVariableRangeEvent(new ResourceLocation(identifier))
-//#else
-//$$                    new SoundEvent(new ResourceLocation(identifier))
-//#endif
+//?} elif >=1.21 {
+                        /*SoundEvent.createVariableRangeEvent(ResourceLocation.parse(identifier))
+*///?} elif >=1.19 {
+                        /*SoundEvent.createVariableRangeEvent(new ResourceLocation(identifier))
+*///?} else {
+                        /*new SoundEvent(new ResourceLocation(identifier))
+*///?}
                         , SoundSource.PLAYERS, volume * 0.01F, pitch * 0.1F, true);
             });
         }

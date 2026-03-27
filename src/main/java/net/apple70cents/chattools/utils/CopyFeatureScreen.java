@@ -19,11 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//#if MC>=12000
-import net.minecraft.client.gui.GuiGraphics;
-//#else
-//$$ import com.mojang.blaze3d.vertex.PoseStack;
-//#endif
+//? if >=26.1 {
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+//?} elif >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+*///?} else {
+/*import com.mojang.blaze3d.vertex.PoseStack;
+*///?}
 
 public class CopyFeatureScreen extends Screen {
     private MultiLineLabel messageSplit;
@@ -92,22 +94,22 @@ public class CopyFeatureScreen extends Screen {
         }
         addCenterButton("jumpTo", this.height - 50, 0, 20, 200, (button) -> {
             Minecraft mc = Minecraft.getInstance();
-//#if MC>=12109
+//? if >=1.21.9 {
             ChatScreen chatScreen = new ChatScreen("", false);
-//#else
-//$$        ChatScreen chatScreen = new ChatScreen("");
-//#endif
+//?} else {
+            /*ChatScreen chatScreen = new ChatScreen("");
+*///?}
             mc.setScreen(chatScreen);
 
             List<TextUtils.MessageUnit> messages = new ArrayList<>(TextUtils.messageMap.values());
             List<TextUtils.MessageUnit> messagesAfter = messages.stream().skip(messages.indexOf(unit) + 1L).toList();
             int lines = 0;
-//#if MC>=11904
+//? if >=1.19.4 {
             int maxLineLength = Mth.floor(
                     (double) ChatComponent.getWidth(mc.options.chatWidth().get()) / mc.options.chatScale().get());
-//#else
-//$$        int maxLineLength = Mth.floor((double) ChatComponent.getWidth(mc.options.chatWidth) / mc.options.chatScale);
-//#endif
+//?} else {
+            /*int maxLineLength = Mth.floor((double) ChatComponent.getWidth(mc.options.chatWidth) / mc.options.chatScale);
+*///?}
             for (TextUtils.MessageUnit msg : messagesAfter) {
                 if (msg.occurrenceCount > 1) {
                     continue; // skip compacted messages
@@ -130,43 +132,48 @@ public class CopyFeatureScreen extends Screen {
     }
 
     protected Button addCenterButton(String translationKey, int y, int xOffset, int buttonH, int buttonW, Button.OnPress func) {
-//#if MC>=11900
+//? if >=1.19 {
         Button buttonWidget = Button.builder(TextUtils.trans("texts.copy." + translationKey), func)
                 .pos(this.width / 2 - buttonW / 2 + xOffset, y - buttonH / 2).size(buttonW, buttonH).build();
-//#else
-//$$    Button buttonWidget = new Button(this.width/2 - buttonW/2 + xOffset,y - buttonH/2, buttonW, buttonH, TextUtils.trans("texts.copy." + translationKey), func);
-//#endif
+//?} else {
+        /*Button buttonWidget = new Button(this.width/2 - buttonW/2 + xOffset,y - buttonH/2, buttonW, buttonH, TextUtils.trans("texts.copy." + translationKey), func);
+*///?}
 
-//#if MC>=11700
+//? if >=1.17 {
         this.addRenderableWidget(buttonWidget);
-//#else
-//$$    addButton(buttonWidget);
-//#endif
+//?} else {
+        /*addButton(buttonWidget);
+*///?}
 
         return buttonWidget;
     }
 
     @Override
-    public void render(
-//#if MC>=12000
-            GuiGraphics context
-//#else
-//$$        PoseStack context
-//#endif
+//? if >=26.1 {
+    public void extractRenderState(GuiGraphicsExtractor context
+//?} elif >=1.20 {
+    /*public void render(GuiGraphics context
+*///?} else {
+    /*public void render(PoseStack context
+*///?}
             , int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+//? if >=26.1 {
+        super.extractRenderState(context, mouseX, mouseY, delta);
+//?} else {
+        /*super.render(context, mouseX, mouseY, delta);
+*///?}
         // this draws the title
         // context.drawCenteredString(this.font, this.title, this.width / 2, this.getTitleY(), 0xffffff);
 
         // this draws the message
-//#if MC>=12111
+//? if >=1.21.11 {
         this.messageSplit.visitLines(net.minecraft.client.gui.TextAlignment.CENTER, this.width / 2, this.getMessageY(),
                 9, context.textRenderer());
-//#elseif MC>=12109
-//$$    this.messageSplit.render(context, MultiLineLabel.Align.CENTER, this.width / 2, this.getMessageY(), 9, true, 0xffffffff);
-//#else
-//$$    this.messageSplit.renderCentered(context, this.width / 2, this.getMessageY());
-//#endif
+//?} elif >=1.21.9 {
+        /*this.messageSplit.render(context, MultiLineLabel.Align.CENTER, this.width / 2, this.getMessageY(), 9, true, 0xffffffff);
+*///?} else {
+        /*this.messageSplit.renderCentered(context, this.width / 2, this.getMessageY());
+*///?}
 
         // this draws the content preview
         Component previewText = TextUtils.SPACER;
@@ -176,23 +183,23 @@ public class CopyFeatureScreen extends Screen {
             }
         }
         this.previewTextSplit = MultiLineLabel.create(this.font, previewText, this.width - 50);
-//#if MC>=12111
+//? if >=1.21.11 {
         this.previewTextSplit.visitLines(net.minecraft.client.gui.TextAlignment.CENTER, this.width / 2,
                 this.height / 2 + 50, 9, context.textRenderer());
-//#elseif MC>=12109
-//$$    this.previewTextSplit.render(context, MultiLineLabel.Align.CENTER, this.width / 2, this.height / 2 + 50, 9, true, 0xffffffff);
-//#else
-//$$    this.previewTextSplit.renderCentered(context, this.width / 2, this.height / 2 + 50);
-//#endif
+//?} elif >=1.21.9 {
+        /*this.previewTextSplit.render(context, MultiLineLabel.Align.CENTER, this.width / 2, this.height / 2 + 50, 9, true, 0xffffffff);
+*///?} else {
+        /*this.previewTextSplit.renderCentered(context, this.width / 2, this.height / 2 + 50);
+*///?}
 
-//#if MC>=12111
+//? if >=1.21.11 {
         this.additionalInfoSplit.visitLines(net.minecraft.client.gui.TextAlignment.CENTER, this.width / 2,
                 this.height - 75, 9, context.textRenderer());
-//#elseif MC>=12109
-//$$    this.additionalInfoSplit.render(context, MultiLineLabel.Align.CENTER, this.width / 2, this.height - 75, 9, true, 0xffffffff);
-//#else
-//$$    this.additionalInfoSplit.renderCentered(context, this.width / 2, this.height - 75);
-//#endif
+//?} elif >=1.21.9 {
+        /*this.additionalInfoSplit.render(context, MultiLineLabel.Align.CENTER, this.width / 2, this.height - 75, 9, true, 0xffffffff);
+*///?} else {
+        /*this.additionalInfoSplit.renderCentered(context, this.width / 2, this.height - 75);
+*///?}
     }
 
     private int getTitleY() {

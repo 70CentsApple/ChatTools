@@ -12,34 +12,34 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//#if MC>=12106
+//? if >=1.21.6 {
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.RegistryAccess;
 
 import java.net.URI;
-//#elseif MC>=12105
-//$$ import net.minecraft.data.registries.VanillaRegistries;
-//$$ import java.net.URI;
-//#elseif MC>=12005
-//$$ import net.minecraft.data.registries.VanillaRegistries;
-//#endif
+//?} elif >=1.21.5 {
+/*import net.minecraft.data.registries.VanillaRegistries;
+import java.net.URI;
+*///?} elif >=1.20.5 {
+/*import net.minecraft.data.registries.VanillaRegistries;
+*///?}
 
 /**
  * @author 70CentsApple
  */
 public class TextUtils {
     public static final Style WEBSITE_URL_STYLE = Style.EMPTY.withUnderlined(true).withClickEvent(
-//#if MC>=12105
+//? if >=1.21.5 {
             new ClickEvent.OpenUrl(URI.create("https://70centsapple.top/blogs/#/chat-tools-faq"))
-//#else
-//$$ new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq")
-//#endif
+//?} else {
+/*new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq")
+*///?}
     ).withHoverEvent(
-//#if MC>=12105
+//? if >=1.21.5 {
             new HoverEvent.ShowText(
-//#else
-//$$ new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-//#endif
+//?} else {
+/*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+*///?}
                     ConfigScreenUtils.getTooltip("general.FAQ", "FAQ", null)));
     public static final String PREFIX = "key.chattools.";
     public static final Component SPACER = literal("").copy().setStyle(Style.EMPTY);
@@ -121,27 +121,27 @@ public class TextUtils {
 
 
     public static Component literal(String str) {
-//#if MC>=11900
+//? if >=1.19 {
         return Component.literal(str);
-//#else
-//$$   return new TextComponent(str);
-//#endif
+//?} else {
+       /*return new TextComponent(str);
+*///?}
     }
 
     public static Component transWithPrefix(String str, String prefix) {
-//#if MC>=11900
+//? if >=1.19 {
         return Component.translatable(prefix + str);
-//#else
-//$$   return new TranslatableComponent(prefix + str);
-//#endif
+//?} else {
+       /*return new TranslatableComponent(prefix + str);
+*///?}
     }
 
     public static Component transWithPrefix(String str, String prefix, Object... args) {
-//#if MC>=11900
+//? if >=1.19 {
         return Component.translatable(prefix + str, args);
-//#else
-//$$   return new TranslatableComponent(prefix + str, args);
-//#endif
+//?} else {
+       /*return new TranslatableComponent(prefix + str, args);
+*///?}
     }
 
     public static Component trans(String str, Object... args) {
@@ -157,11 +157,11 @@ public class TextUtils {
     }
 
     public static Component empty() {
-//#if MC>=11900
+//? if >=1.19 {
         return Component.empty();
-//#else
-//$$   return of("");
-//#endif
+//?} else {
+       /*return of("");
+*///?}
     }
 
     /**
@@ -208,14 +208,14 @@ public class TextUtils {
 
     public static JsonElement component2JsonElement(MutableComponent text) {
         try {
-//#if MC>=12106
+//? if >=1.21.6 {
             JsonElement jsonElement = ComponentSerialization.CODEC.encode(text,
                     RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE), null).result().orElse(null);
-//#elseif MC>=12005
-//$$        JsonElement jsonElement = new Component.SerializerAdapter(VanillaRegistries.createLookup()).serialize(text, null, null);
-//#else
-//$$        JsonElement jsonElement = Component.Serializer.toJsonTree(text);
-//#endif
+//?} elif >=1.20.5 {
+            /*JsonElement jsonElement = new Component.SerializerAdapter(VanillaRegistries.createLookup()).serialize(text, null, null);
+*///?} else {
+            /*JsonElement jsonElement = Component.Serializer.toJsonTree(text);
+*///?}
             return jsonElement;
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,14 +225,14 @@ public class TextUtils {
 
     public static MutableComponent jsonElement2Component(JsonElement jsonElement) {
         try {
-//#if MC>=12106
+//? if >=1.21.6 {
             return ComponentSerialization.CODEC.parse(RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE),
                     jsonElement).result().orElse(null).copy();
-//#elseif MC>=12005
-//$$        return new Component.SerializerAdapter(VanillaRegistries.createLookup()).deserialize(jsonElement, null, null);
-//#else
-//$$        return Component.Serializer.fromJson(jsonElement);
-//#endif
+//?} elif >=1.20.5 {
+            /*return new Component.SerializerAdapter(VanillaRegistries.createLookup()).deserialize(jsonElement, null, null);
+*///?} else {
+            /*return Component.Serializer.fromJson(jsonElement);
+*///?}
         } catch (Exception e) {
             e.printStackTrace();
             return TextUtils.literal("ERROR").copy();

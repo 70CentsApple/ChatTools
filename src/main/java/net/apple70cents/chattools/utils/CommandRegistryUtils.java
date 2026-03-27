@@ -23,70 +23,79 @@ import net.minecraft.util.Tuple;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-//#if MC>=12111
+//? if >=1.21.11 {
 import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.util.Util;
-//#else
-//$$ import net.minecraft.Util;
-//#endif
+//?} else {
+/*import net.minecraft.Util;
+*///?}
+//? if >=26.1 {
+import net.minecraft.commands.arguments.ComponentArgument;
+//?}
 
-//#if MC>=12105
+//? if >=1.21.5 {
 import com.mojang.serialization.JavaOps;
 import net.minecraft.nbt.SnbtGrammar;
 import net.minecraft.core.HolderLookup;
-//#elseif MC>=12004
-//$$ import net.minecraft.commands.ParserUtils;
-//$$ import net.minecraft.core.HolderLookup;
-//#endif
+//?} elif >=1.20.4 {
+/*import net.minecraft.commands.ParserUtils;
+import net.minecraft.core.HolderLookup;
+*///?}
 
-//#if MC>=11900
+//? if >=1.19 {
 import net.minecraft.commands.CommandBuildContext;
-//#else
-//$$ import java.util.UUID;
-//#endif
+//?} else {
+/*import java.util.UUID;
+*///?}
 
-//#if FABRIC
-//$$ //#if MC>=11900
-//$$ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-//$$ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+//? if FABRIC {
 
-//$$ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-//$$ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
-//$$ //#else
-//$$ // Fabric v2 begins to work since 1.19
-//$$ //$$ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-//$$ //$$ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+/*//? if >=26.1 {
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
+//?} elif >=1.19 {
+/^import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+^///?} else {
+/^// Fabric v2 begins to work since 1.19
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 
-//$$ //$$ import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.argument;
-//$$ //$$ import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
-//$$ //#endif
-//#elseif NEOFORGE
+import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.argument;
+import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
+^///?}
+
+*///?} elif NEOFORGE {
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.common.NeoForge;
-//#endif
+//?}
 
 public class CommandRegistryUtils {
 
     public static void register() {
-//#if FABRIC
-//$$    //#if MC>=11900
-//$$    ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-//$$    	dispatcher.register(CommandRegistryUtils.getBuilder(registryAccess));
-//$$    });
-//$$    //#else
-//$$    //$$ ClientCommandManager.DISPATCHER.register(CommandRegistryUtils.getBuilder());
-//$$    //#endif
-//#elseif NEOFORGE
+//? if FABRIC {
+        /*//? if >=1.19 {
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+        	dispatcher.register(CommandRegistryUtils.getBuilder(registryAccess));
+        });
+        //?} else {
+        /^ClientCommandManager.DISPATCHER.register(CommandRegistryUtils.getBuilder());
+        ^///?}
+*///?} elif NEOFORGE {
         NeoForge.EVENT_BUS.addListener((RegisterClientCommandsEvent event) -> event.getDispatcher().register(
                 CommandRegistryUtils.getBuilder(event.getBuildContext())
         ));
-//#endif
+//?}
 
 
     }
 
-//#if NEOFORGE
+//? if NEOFORGE {
     public static LiteralArgumentBuilder<CommandSourceStack> literal(String name) {
         return LiteralArgumentBuilder.literal(name);
     }
@@ -94,18 +103,18 @@ public class CommandRegistryUtils {
     public static <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
-//#endif
+//?}
 
     public static LiteralArgumentBuilder<
-//#if FABRIC
-//$$        FabricClientCommandSource
-//#elseif NEOFORGE
+//? if FABRIC {
+            /*FabricClientCommandSource
+*///?} elif NEOFORGE {
             CommandSourceStack
-//#endif
+//?}
             > getBuilder(
-//#if MC>=11900
+//? if >=1.19 {
             CommandBuildContext buildContext
-//#endif
+//?}
     ) {
         // @formatter:off
         return literal("chattools")
@@ -113,25 +122,46 @@ public class CommandRegistryUtils {
             .then(literal("send_to_client")
                 // chattools send_to_client text
                 .then(literal("text").then(argument("message", ClientComponentArgument.textComponent(
-//#if MC>=12006
+//? if >=1.20.6 {
                         buildContext
-//#endif
+//?}
                     )).executes(t -> {
-                    Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
+//? if >=26.1 {
+                    Component text = ComponentUtils.resolve(ResolutionContext.builder()
+                                    .withSource(new FakeCommandSource(Minecraft.getInstance().player))
+                                    .withEntityOverride(Minecraft.getInstance().player).build(),
+                            ClientComponentArgument.getComponent(t, "message"));
+//?} else {
+                    /*Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
+*///?}
                     MessageUtils.sendToNonPublicChat(text);
                     return Command.SINGLE_SUCCESS;
                 })))
                 // chattools send_to_client actionbar
                 .then(literal("actionbar").then(argument("message", ClientComponentArgument.textComponent(
-//#if MC>=12006
+//? if >=1.20.6 {
                         buildContext
-//#endif
+//?}
                     )).executes(t -> {
-                    Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
+//? if >=26.1 {
+                    Component text = ComponentUtils.resolve(ResolutionContext.builder()
+                                .withSource(new FakeCommandSource(Minecraft.getInstance().player))
+                                .withEntityOverride(Minecraft.getInstance().player).build(),
+                            ClientComponentArgument.getComponent(t, "message"));
+//?} else {
+                    /*Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
+*///?}
                     MessageUtils.sendToActionbar(text);
                     return Command.SINGLE_SUCCESS;
                 }).then(argument("duration_in_milliseconds", IntegerArgumentType.integer()).executes(t -> {
-                        Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
+//? if >=26.1 {
+                        Component text = ComponentUtils.resolve(ResolutionContext.builder()
+                                    .withSource(new FakeCommandSource(Minecraft.getInstance().player))
+                                    .withEntityOverride(Minecraft.getInstance().player).build(),
+                                ClientComponentArgument.getComponent(t, "message"));
+//?} else {
+                        /*Component text = ComponentUtils.updateForEntity(new FakeCommandSource(Minecraft.getInstance().player), ClientComponentArgument.getComponent(t, "message"), Minecraft.getInstance().player, 0);
+*///?}
                         int duration = IntegerArgumentType.getInteger(t, "duration_in_milliseconds");
                         MessageUtils.sendToActionbar(text, duration);
                         return Command.SINGLE_SUCCESS;
@@ -352,11 +382,11 @@ public class CommandRegistryUtils {
 
     public static class ClientComponentArgument implements ArgumentType<Component> {
         public static final DynamicCommandExceptionType INVALID_COMPONENT_EXCEPTION = new DynamicCommandExceptionType(text -> TextUtils.transWithPrefix("argument.component.invalid", "", text));
-//#if MC>=12006
+//? if >=1.20.6 {
         private final HolderLookup.Provider holderLookupProvider;
-//#endif
+//?}
 
-//#if MC>=12006
+//? if >=1.20.6 {
         private ClientComponentArgument(HolderLookup.Provider holderLookupProvider) {
             this.holderLookupProvider = holderLookupProvider;
         }
@@ -364,17 +394,17 @@ public class CommandRegistryUtils {
         public static ClientComponentArgument textComponent(CommandBuildContext buildContext) {
             return new ClientComponentArgument(buildContext);
         }
-//#else
-//$$    private ClientComponentArgument() {}
-//$$    public static ClientComponentArgument textComponent() {return new ClientComponentArgument();}
-//#endif
+//?} else {
+        /*private ClientComponentArgument() {}
+        public static ClientComponentArgument textComponent() {return new ClientComponentArgument();}
+*///?}
 
         public static Component getComponent(final CommandContext<
-//#if FABRIC
-//$$            FabricClientCommandSource
-//#elseif NEOFORGE
+//? if FABRIC {
+                /*FabricClientCommandSource
+*///?} elif NEOFORGE {
                 CommandSourceStack
-//#endif
+//?}
                 > context, final String name) {
             return context.getArgument(name, Component.class);
         }
@@ -382,19 +412,19 @@ public class CommandRegistryUtils {
         @Override
         public Component parse(final StringReader stringReader) throws CommandSyntaxException {
             try {
-//#if MC>=12105
+//? if >=1.21.5 {
                 return SnbtGrammar.createParser(JavaOps.INSTANCE).withCodec(
                         this.holderLookupProvider.createSerializationContext(JavaOps.INSTANCE), SnbtGrammar.createParser(JavaOps.INSTANCE), ComponentSerialization.CODEC, INVALID_COMPONENT_EXCEPTION
                 ).parseForCommands(stringReader);
-//#elseif MC>=12006
-//$$            return ParserUtils.parseJson(this.holderLookupProvider, stringReader, ComponentSerialization.CODEC);
-//#elseif MC>=12004
-//$$            return ParserUtils.parseJson(stringReader, ComponentSerialization.CODEC);
-//#else
-//$$            Component component = Component.Serializer.fromJson(stringReader);
-//$$            if (component == null) { throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, "empty"); }
-//$$            else { return component; }
-//#endif
+//?} elif >=1.20.6 {
+                /*return ParserUtils.parseJson(this.holderLookupProvider, stringReader, ComponentSerialization.CODEC);
+*///?} elif >=1.20.4 {
+                /*return ParserUtils.parseJson(stringReader, ComponentSerialization.CODEC);
+*///?} else {
+                /*Component component = Component.Serializer.fromJson(stringReader);
+                if (component == null) { throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, "empty"); }
+                else { return component; }
+*///?}
             } catch (Exception var4) {
                 String string = var4.getCause() != null ? var4.getCause().getMessage() : var4.getMessage();
                 throw INVALID_COMPONENT_EXCEPTION.createWithContext(stringReader, string);
@@ -405,17 +435,17 @@ public class CommandRegistryUtils {
     public static class FakeCommandSource extends CommandSourceStack {
         public FakeCommandSource(LocalPlayer player) {
             super(new CommandSource() {
-//#if MC>=11900
+//? if >=1.19 {
                       @Override
                       public void sendSystemMessage(Component component) {
                           MessageUtils.sendToNonPublicChat(component);
                       }
-//#elseif MC>=11700
-//$$                  @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
-//$$                  @Override public boolean alwaysAccepts() {return CommandSource.super.alwaysAccepts();}
-//#else
-//$$                  @Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
-//#endif
+//?} elif >=1.17 {
+                      /*@Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
+                      @Override public boolean alwaysAccepts() {return CommandSource.super.alwaysAccepts();}
+*///?} else {
+                      /*@Override public void sendMessage(Component component, UUID uuid) {MessageUtils.sendToNonPublicChat(component);}
+*///?}
 
                       @Override
                       public boolean acceptsSuccess() {
@@ -432,11 +462,11 @@ public class CommandRegistryUtils {
                           return true;
                       }
                   }, player.position(), player.getRotationVector(), null,
-//#if MC>=12111
+//? if >=1.21.11 {
                     PermissionSet.ALL_PERMISSIONS
-//#else
-//$$                4
-//#endif
+//?} else {
+                    /*4
+*///?}
                     , player.getScoreboardName(), player.getName(), null, player);
         }
     }

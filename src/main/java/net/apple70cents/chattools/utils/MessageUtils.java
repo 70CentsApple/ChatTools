@@ -46,7 +46,11 @@ public class MessageUtils {
         if (Minecraft.getInstance().player == null) {
             return;
         }
-        Minecraft.getInstance().player.displayClientMessage(text, true);
+//? if >=26.1 {
+        Minecraft.getInstance().player.sendOverlayMessage(text);
+//?} else {
+        /*Minecraft.getInstance().player.displayClientMessage(text, true);
+*///?}
     }
 
     public static void sendToActionbar(Component text) {
@@ -74,7 +78,11 @@ public class MessageUtils {
     }
 
     public static void sendToNonPublicChat(Component text) {
-        Minecraft.getInstance().gui.getChat().addMessage(text);
+//? if >=26.1 {
+        Minecraft.getInstance().gui.getChat().addClientSystemMessage(text);
+//?} else {
+        /*Minecraft.getInstance().gui.getChat().addMessage(text);
+*///?}
     }
 
     public static void sendToPublicChat(String text) {
@@ -94,20 +102,19 @@ public class MessageUtils {
             ConfigUtils.set("formatter.Enabled", false);
         }
 
-//#if MC>=11900
+//? if >=1.19 {
         Minecraft.getInstance().execute(() -> {
             if ((boolean) ConfigUtils.get("general.UseSendPacketsForSendingMessages")) {
                 ChatScreen tempChatScreen = new ChatScreen(text
-//#if MC>=12109
+//? if >=1.21.9 {
                         , false
-//#endif
+//?}
                 );
                 ((ScreenAccessor) tempChatScreen).invokeInit(
-//#if MC>=12111
-//$$                    // no-op
-//#else
-//$$                    Minecraft.getInstance(),
-//#endif
+//? if >=1.21.11 {
+//?} else {
+                        /*Minecraft.getInstance(),
+*///?}
                         1, 1);
                 tempChatScreen.handleChatInput(text, false);
             } else {
@@ -122,9 +129,9 @@ public class MessageUtils {
                 }
             }
         });
-//#else
-//$$    player.chat(text);
-//#endif
+//?} else {
+        /*player.chat(text);
+*///?}
         ConfigUtils.set("formatter.Enabled", oldStatus);
     }
 

@@ -10,19 +10,19 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 /**
  * @author 70CentsApple
  */
-//#if MC>=11900
+//? if >=1.19 {
 @Mixin(net.minecraft.client.multiplayer.ClientPacketListener.class)
-//#else
-//$$ @Mixin(net.minecraft.client.player.LocalPlayer.class)
-//#endif
+//?} else {
+/*@Mixin(net.minecraft.client.player.LocalPlayer.class)
+*///?}
 public abstract class ClientPacketListenerMixin {
     // it catches the messages that are about to send, to apply Formatter to them
     @ModifyVariable(method =
-//#if MC>=11900
+//? if >=1.19 {
          "sendChat"
-//#else
-//$$    "chat"
-//#endif
+//?} else {
+        /*"chat"
+*///?}
          , at = @At("HEAD"), argsOnly = true)
     public String sendPublicMessage(String message) {
         MessageUtils.updateLastSentMessageTimestamp();

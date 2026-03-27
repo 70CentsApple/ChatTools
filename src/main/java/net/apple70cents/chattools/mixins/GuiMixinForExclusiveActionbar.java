@@ -9,14 +9,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-//#if MC>=12100
-import net.minecraft.client.gui.GuiGraphics;
+//? if >=26.1 {
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.DeltaTracker;
-//#elseif MC>=12000
-//$$ import net.minecraft.client.gui.GuiGraphics;
-//#else
-//$$ import com.mojang.blaze3d.vertex.PoseStack;
-//#endif
+//?} elif >=1.21 {
+//import net.minecraft.client.gui.GuiGraphics;
+//import net.minecraft.client.DeltaTracker;
+//?} elif >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+*///?} else {
+/*import com.mojang.blaze3d.vertex.PoseStack;
+*///?}
 
 /**
  * @author 70CentsApple
@@ -24,16 +27,19 @@ import net.minecraft.client.DeltaTracker;
 
 @Mixin(Gui.class)
 public abstract class GuiMixinForExclusiveActionbar {
-//#if MC>=12100
-    @Inject(method = "renderOverlayMessage", at = @At(value = "HEAD"))
+//? if >=26.1 {
+    @Inject(method = "extractOverlayMessage", at = @At(value = "HEAD"))
+    public void renderExclusiveActionbar(GuiGraphicsExtractor context, DeltaTracker deltaTracker, CallbackInfo ci) {
+//?} elif >=1.21 {
+    /*@Inject(method = "renderOverlayMessage", at = @At(value = "HEAD"))
     public void renderExclusiveActionbar(GuiGraphics context, DeltaTracker deltaTracker, CallbackInfo ci) {
-//#elseif MC>=12000
-//$$ @Inject(method = "render", at = @At(value = "HEAD"))
-//$$ public void renderExclusiveActionbar(GuiGraphics context, float tickDelta, CallbackInfo ci) {
-//#else
-//$$ @Inject(method = "render", at = @At(value = "HEAD"))
-//$$ public void renderExclusiveActionbar(PoseStack context, float tickDelta, CallbackInfo ci) {
-//#endif
+*///?} elif >=1.20 {
+    /*@Inject(method = "render", at = @At(value = "HEAD"))
+    public void renderExclusiveActionbar(GuiGraphics context, float tickDelta, CallbackInfo ci) {
+*///?} else {
+    /*@Inject(method = "render", at = @At(value = "HEAD"))
+    public void renderExclusiveActionbar(PoseStack context, float tickDelta, CallbackInfo ci) {
+*///?}
         if (Minecraft.getInstance().options.hideGui) {
             return;
         }

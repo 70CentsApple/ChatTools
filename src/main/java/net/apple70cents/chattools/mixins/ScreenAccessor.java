@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(Screen.class)
 public interface ScreenAccessor {
     @Invoker("init")
-//#if MC>=12111
+//? if >=1.21.11 {
     void invokeInit(int w, int h);
-//#else
-//$$ void invokeInit(net.minecraft.client.Minecraft minecraft, int w, int h);
-//#endif
+//?} else {
+/*void invokeInit(net.minecraft.client.Minecraft minecraft, int w, int h);
+*///?}
 }

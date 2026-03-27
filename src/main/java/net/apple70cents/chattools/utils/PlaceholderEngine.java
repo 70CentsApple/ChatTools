@@ -3,9 +3,9 @@ package net.apple70cents.chattools.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
-//#if MC>=11903
+//? if >=1.19.3 {
 import net.minecraft.core.registries.Registries;
-//#endif
+//?}
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -73,18 +73,18 @@ public final class PlaceholderEngine {
 
         // variables
         MAPPINGS.put("pitch", args -> String.valueOf(Minecraft.getInstance().player.
-//#if MC>=11700
+//? if >=1.17 {
                 getXRot()
-//#else
-//$$            xRot
-//#endif
+//?} else {
+                /*xRot
+*///?}
         ));
         MAPPINGS.put("yaw", args -> String.valueOf(Minecraft.getInstance().player.
-//#if MC>=11700
+//? if >=1.17 {
                 getYRot()
-//#else
-//$$            yRot
-//#endif
+//?} else {
+                /*yRot
+*///?}
         ));
         MAPPINGS.put("x", args -> String.valueOf(Minecraft.getInstance().player.getX()));
         MAPPINGS.put("y", args -> String.valueOf(Minecraft.getInstance().player.getY()));
@@ -92,28 +92,39 @@ public final class PlaceholderEngine {
         MAPPINGS.put("pos", args -> String.format("(%.1f, %.1f, %.1f)", Minecraft.getInstance().player.getX(),
                 Minecraft.getInstance().player.getY(), Minecraft.getInstance().player.getZ()));
         MAPPINGS.put("dimension_reg_name", args ->
-//#if MC>=12111
+//? if >=1.21.11 {
                 Minecraft.getInstance().level.dimension().identifier().toString()
-//#else
-//$$            Minecraft.getInstance().level.dimension().location().toString()
-//#endif
+//?} else {
+                /*Minecraft.getInstance().level.dimension().location().toString()
+*///?}
         );
         MAPPINGS.put("biome_reg_name",
-                args -> String.valueOf(Minecraft.getInstance().level.registryAccess().lookupOrThrow(
-//#if MC>=11903
+                args -> String.valueOf(Minecraft.getInstance().level.registryAccess()
+//? if >=1.21.2{
+                        .lookupOrThrow(
+//?} else {
+                        /*.registryOrThrow(
+*///?}
+//? if >=1.19.3 {
                         Registries.BIOME
-//#else
-//$$                    net.minecraft.core.Registry.BIOME_REGISTRY
-//#endif
+//?} else {
+                        /*net.minecraft.core.Registry.BIOME_REGISTRY
+*///?}
                 ).getKey(Minecraft.getInstance().level.getBiome(Minecraft.getInstance().player.blockPosition())
-//#if MC>=11800
+//? if >=1.18 {
                         .value()
-//#endif
+//?}
                 )));
         MAPPINGS.put("biome",
                 args -> TextUtils.transWithPrefix(MAPPINGS.get("biome_reg_name").resolve().replace(":", "."), "biome.")
                         .getString());
-        MAPPINGS.put("world_time", args -> String.valueOf(Minecraft.getInstance().level.getDayTime() % 24000));
+        MAPPINGS.put("world_time", args ->
+//? if >=26.1 {
+                String.valueOf(Minecraft.getInstance().level.getDefaultClockTime() % 24000)
+//? } else {
+                /*String.valueOf(Minecraft.getInstance().level.getDayTime() % 24000)
+*///? }
+        );
         MAPPINGS.put("game_time", args -> String.valueOf(Minecraft.getInstance().level.getGameTime()));
         MAPPINGS.put("real_time_unix", args -> String.valueOf(java.time.Instant.now().getEpochSecond()));
         MAPPINGS.put("real_time_long", args -> {
@@ -131,30 +142,35 @@ public final class PlaceholderEngine {
                     currentTime.getSecond());
         });
         MAPPINGS.put("nickname", args -> Minecraft.getInstance().player.getGameProfile()
-//#if MC>=12109
+//? if >=1.21.9 {
                 .name()
-//#else
-//$$            .getName()
-//#endif
+//?} else {
+                /*.getName()
+*///?}
         );
         MAPPINGS.put("uuid", args -> Minecraft.getInstance().player.getGameProfile()
-//#if MC>=12109
+//? if >=1.21.9 {
                 .id()
-//#else
-//$$            .getId()
-//#endif
+//?} else {
+                /*.getId()
+*///?}
                 .toString());
         MAPPINGS.put("session_identifier", args -> ContextUtils.getSessionIdentifier());
         MAPPINGS.put("health", args -> String.valueOf(Minecraft.getInstance().player.getHealth()));
         MAPPINGS.put("player_count", args -> String.valueOf(Minecraft.getInstance().level.players().size()));
         MAPPINGS.put("item_in_hand",
                 args -> Minecraft.getInstance().player.getMainHandItem().getHoverName().getString());
-        MAPPINGS.put("item_in_hand_reg_name", args -> Minecraft.getInstance().level.registryAccess().lookupOrThrow(
-//#if MC>=11903
+        MAPPINGS.put("item_in_hand_reg_name", args -> Minecraft.getInstance().level.registryAccess()
+//? if >=1.21.2{
+                .lookupOrThrow(
+//?} else {
+                /*.registryOrThrow(
+*///?}
+//? if >=1.19.3 {
                 Registries.ITEM
-//#else
-//$$            net.minecraft.core.Registry.ITEM_REGISTRY
-//#endif
+//?} else {
+                /*net.minecraft.core.Registry.ITEM_REGISTRY
+*///?}
         ).getKey(Minecraft.getInstance().player.getMainHandItem().getItem()).toString());
 
         // utility functions
@@ -602,15 +618,15 @@ public final class PlaceholderEngine {
 
     // debug prints
     private static final boolean DEBUG =
-//#if FABRIC
-//$$        net.fabricmc.loader.api.FabricLoader.getInstance().isDevelopmentEnvironment();
-//#elseif NEOFORGE
+//? if FABRIC {
+            /*net.fabricmc.loader.api.FabricLoader.getInstance().isDevelopmentEnvironment();
+*///?} elif NEOFORGE {
             !net.neoforged.fml.loading.FMLLoader
-//#if MC>=12110
+//? if >=1.21.10 {
                     .getCurrent()
-//#endif
+//?}
                     .isProduction();
-//#endif
+//?}
 
     private static final ThreadLocal<Deque<String>> DEBUG_STACK = ThreadLocal.withInitial(ArrayDeque::new);
 
