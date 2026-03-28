@@ -47,10 +47,13 @@ public class MissingConfigLibScreen extends Screen {
         int centerY = this.height / 2;
 
 //? if >=1.19 {
+
+//? if HAS_YACL {
         this.addRenderableWidget(Button.builder(
                 TextUtils.literal("§a⬇ YetAnotherConfigLib (YACL)"),
                 button -> Util.getPlatform().openUri(YACL_URL)
         ).bounds(centerX - 120, centerY - 10, 240, 20).build());
+//?}
 
         this.addRenderableWidget(Button.builder(
                 TextUtils.literal("§e⬇ Cloth Config"),
@@ -62,9 +65,12 @@ public class MissingConfigLibScreen extends Screen {
                 button -> this.onClose()
         ).bounds(centerX - 80, centerY + 50, 160, 20).build());
 //?} elif >=1.17 {
-        /*this.addRenderableWidget(new Button(centerX - 120, centerY - 10, 240, 20,
+
+/*//? if HAS_YACL {
+        this.addRenderableWidget(new Button(centerX - 120, centerY - 10, 240, 20,
                 TextUtils.literal("§a⬇ YetAnotherConfigLib (YACL)"),
                 button -> Util.getPlatform().openUri(YACL_URL)));
+//?}
 
         this.addRenderableWidget(new Button(centerX - 120, centerY + 15, 240, 20,
                 TextUtils.literal("§e⬇ Cloth Config"),
@@ -74,9 +80,12 @@ public class MissingConfigLibScreen extends Screen {
                 CommonComponents.GUI_DONE,
                 button -> this.onClose()));
 *///?} else {
-        /*this.addButton(new Button(centerX - 120, centerY - 10, 240, 20,
+
+/*//? if HAS_YACL {
+        this.addButton(new Button(centerX - 120, centerY - 10, 240, 20,
                 TextUtils.literal("§a⬇ YetAnotherConfigLib (YACL)"),
                 button -> Util.getPlatform().openUri(YACL_URL)));
+//?}
 
         this.addButton(new Button(centerX - 120, centerY + 15, 240, 20,
                 TextUtils.literal("§e⬇ Cloth Config"),

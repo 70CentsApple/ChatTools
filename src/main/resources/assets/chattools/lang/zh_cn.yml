@@ -86,7 +86,7 @@ key:
       variableType: 类型：%s
     gui:
       title: 配置 Chat Tools [聊天工具箱]
-      missingConfigLib: 请安装 YetAnotherConfigLib (YACL) 或 Cloth Config 模组才能进行配置。
+      missingConfigLib: 请安装以下任意模组才能进行配置。
       pressAnyKey: 请按下任意按键或鼠标键...
       currentKey: 当前按键
       pressEscToCancel: 按 ESC 键取消
