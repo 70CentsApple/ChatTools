@@ -1,6 +1,7 @@
 package net.apple70cents.chattools.features.notifier;
 
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

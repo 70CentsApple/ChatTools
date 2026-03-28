@@ -1,7 +1,8 @@
 package net.apple70cents.chattools.features.responder;
 
 import com.google.gson.JsonElement;
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.features.filter.ChatFilter;
 import net.apple70cents.chattools.utils.*;
 import net.minecraft.client.Minecraft;

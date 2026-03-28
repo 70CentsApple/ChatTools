@@ -1,5 +1,6 @@
 package net.apple70cents.chattools.utils;
 
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.features.general.Timestamp;
 import net.apple70cents.chattools.features.notifier.BasicNotifier;
 import net.minecraft.ChatFormatting;

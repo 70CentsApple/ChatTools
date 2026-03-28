@@ -1,7 +1,8 @@
 package net.apple70cents.chattools.features.bubble;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.features.general.NickHider;
 import net.apple70cents.chattools.utils.*;
 import net.minecraft.client.Minecraft;

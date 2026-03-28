@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 //? if >=1.21.11 {
 //?} else {
 /*import net.apple70cents.chattools.features.general.ClickEventsPreviewer;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.network.chat.Style;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

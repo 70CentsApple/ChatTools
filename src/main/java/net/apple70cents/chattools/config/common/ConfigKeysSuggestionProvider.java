@@ -1,10 +1,9 @@
-package net.apple70cents.chattools.utils;
+package net.apple70cents.chattools.config.common;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.apple70cents.chattools.config.ConfigScreenGenerator;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -46,7 +45,7 @@ public class ConfigKeysSuggestionProvider implements SuggestionProvider<
             CommandSourceStack
 //?}
             > context, SuggestionsBuilder builder) {
-        for (Map.Entry<String, String> ele : ConfigScreenGenerator.getKey2TypeMappings().entrySet()) {
+        for (Map.Entry<String, String> ele : ConfigGuiLoader.getKey2TypeMappings().entrySet()) {
             if (level == 3) {
                 switch (String.valueOf(ele.getValue())) {
                     case "FAQ":

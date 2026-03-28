@@ -1,6 +1,6 @@
 package net.apple70cents.chattools.utils;
 
-import net.apple70cents.chattools.config.ConfigStorage;
+import net.apple70cents.chattools.config.common.ConfigStorage;
 
 import java.util.*;
 

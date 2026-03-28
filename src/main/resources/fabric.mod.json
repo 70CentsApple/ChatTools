@@ -40,7 +40,7 @@
       "net.apple70cents.chattools.ChatTools"
     ],
     "modmenu": [
-      "net.apple70cents.chattools.config.ModMenuScreen"
+      "net.apple70cents.chattools.config.common.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -49,11 +49,12 @@
 
   "depends": {
     "fabricloader": ">=0.11.4",
-    "{{FABRIC_API}}": "*",
-    "{{CLOTH_CONFIG}}": "*"
+    "{{FABRIC_API}}": "*"
   },
   "suggests": {
-    "modmenu": "*"
+    "modmenu": "*",
+    "{{CLOTH_CONFIG}}": "*",
+    "yet_another_config_lib_v3": "*"
   },
   "custom": {
     "modmenu": {

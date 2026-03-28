@@ -1,5 +1,6 @@
 package net.apple70cents.chattools.utils;
 
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.features.general.ExclusiveActionbarHandler;
 import net.apple70cents.chattools.mixins.ScreenAccessor;
 import net.minecraft.client.Minecraft;

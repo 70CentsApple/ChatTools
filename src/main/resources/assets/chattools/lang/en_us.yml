@@ -88,6 +88,14 @@ key:
       variableType: 'Variable Type: %s'
     gui:
       title: Chat Tools Configuration
+      missingConfigLib: Please install any of these mods to configure Chat Tools.
+      pressAnyKey: Press any key or mouse button...
+      currentKey: Current Key
+      pressEscToCancel: Press ESC to cancel
+      editRules: Edit Rules
+      addNew: Add New
+      items: '%s item(s)'
+      editCommands: Edit Commands
     category:
       general: General
       translator: Translator

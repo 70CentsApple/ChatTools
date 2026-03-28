@@ -10,9 +10,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import net.apple70cents.chattools.config.ConfigScreenGenerator;
-import net.apple70cents.chattools.config.ConfigStorage;
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -30,7 +28,6 @@ import net.minecraft.util.Util;
 /*import net.minecraft.Util;
 *///?}
 //? if >=26.1 {
-import net.minecraft.commands.arguments.ComponentArgument;
 //?}
 
 //? if >=1.21.5 {
@@ -182,7 +179,7 @@ public class CommandRegistryUtils {
                 MessageUtils.sendToActionbar(TextUtils.trans("gui.title"));
                 Minecraft.getInstance()
                                .setOverlay(new ScreenOverlayHelper(Minecraft.getInstance(),
-                                       ConfigScreenGenerator.getConfigBuilder().setParentScreen(null).build()) {
+                                       ConfigScreenFactory.createScreen(null)) {
                                });
                 LoggerUtils.info("[ChatTools] Command Executed: GUI opened");
                 return Command.SINGLE_SUCCESS;
@@ -326,12 +323,12 @@ public class CommandRegistryUtils {
 
     public static void updateConfig(String key, String value) {
         try {
-            if (!ConfigScreenGenerator.getKey2TypeMappings().containsKey(key)) {
+            if (!ConfigGuiLoader.getKey2TypeMappings().containsKey(key)) {
                 // if we don't have that key, we consider it as a string
                 ConfigUtils.set(key, value);
                 MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set.warning", key));
             } else {
-                switch (String.valueOf(ConfigScreenGenerator.getKey2TypeMappings().get(key))) {
+                switch (String.valueOf(ConfigGuiLoader.getKey2TypeMappings().get(key))) {
                     case "boolean":
                         ConfigUtils.set(key, Boolean.parseBoolean(value));
                         break;

@@ -3,6 +3,8 @@ package net.apple70cents.chattools.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.apple70cents.chattools.config.common.ConfigScreenTooltipUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.network.chat.*;
 
 import java.util.LinkedHashMap;
@@ -40,7 +42,7 @@ public class TextUtils {
 //?} else {
 /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 *///?}
-                    ConfigScreenUtils.getTooltip("general.FAQ", "FAQ", null)));
+                    ConfigScreenTooltipUtils.getTooltip("general.FAQ", "FAQ", null)));
     public static final String PREFIX = "key.chattools.";
     public static final Component SPACER = literal("").copy().setStyle(Style.EMPTY);
 

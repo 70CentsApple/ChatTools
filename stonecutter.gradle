@@ -9,6 +9,7 @@ stonecutter.parameters {
 	def loader = projName.substring(projName.lastIndexOf('-') + 1)
 	constants.put 'FABRIC', loader == 'fabric'
 	constants.put 'NEOFORGE', loader == 'neoforge'
+	constants.put 'HAS_YACL', node.project.findProperty('yacl_version')?.toString()?.length() > 0
 }
 
 tasks.register('buildAndGather') {

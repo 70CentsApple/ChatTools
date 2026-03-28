@@ -1,7 +1,6 @@
-package net.apple70cents.chattools.utils;
+package net.apple70cents.chattools.config.common;
 
-import net.apple70cents.chattools.config.ConfigStorage;
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.utils.MigrationUtils;
 
 import java.util.List;
 

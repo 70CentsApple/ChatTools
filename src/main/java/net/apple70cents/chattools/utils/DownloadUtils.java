@@ -1,5 +1,7 @@
 package net.apple70cents.chattools.utils;
 
+import net.apple70cents.chattools.config.common.ConfigUtils;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;

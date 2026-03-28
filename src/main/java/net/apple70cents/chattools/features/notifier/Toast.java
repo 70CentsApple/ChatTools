@@ -1,6 +1,7 @@
 package net.apple70cents.chattools.features.notifier;
 
 import com.sshtools.twoslices.ToastType;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.*;
 
 import javax.swing.*;

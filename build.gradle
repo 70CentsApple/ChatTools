@@ -20,12 +20,13 @@ assert mod_brand in ['fabric', 'neoforge']
 assert sc.current.project.endsWith('-' + mod_brand)
 
 repositories {
-    maven { url = 'https://jitpack.io' }
     maven { url = "https://maven.shedaniel.me/" } // Cloth Config
     maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
     maven { url = 'https://maven.parchmentmc.org' } // Parchment
     maven { url = 'https://maven.neoforged.net/releases' } // NeoForge
     maven { url = 'https://neoforged.forgecdn.net/' } // Another NeoForge Maven
+    maven { url = 'https://jitpack.io' } // GitHub Repo (for Two Slices)
+    maven { url = "https://api.modrinth.com/maven" } // Modrinth (for YACL)
 }
 
 // https://github.com/FabricMC/fabric-loader/issues/783
@@ -40,7 +41,6 @@ if (!noRemap) {
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
-    // 无混淆环境下不需要 mappings
     if (!noRemap) {
         mappings loom.layered() {
             officialMojangMappings()
@@ -83,6 +83,14 @@ dependencies {
                     exclude group: "net.fabricmc.fabric-api"
                 }
             }
+        }
+    }
+
+    if (project.findProperty('yacl_version')?.toString()?.size() > 0) {
+        if (noRemap) {
+            api "maven.modrinth:yacl:${project.yacl_version}-${mod_brand}"
+        } else {
+            modApi "maven.modrinth:yacl:${project.yacl_version}-${mod_brand}"
         }
     }
 
