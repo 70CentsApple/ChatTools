@@ -3,6 +3,8 @@ package net.apple70cents.chattools.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.apple70cents.chattools.config.common.ConfigScreenTooltipUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.network.chat.*;
 
 import java.util.LinkedHashMap;

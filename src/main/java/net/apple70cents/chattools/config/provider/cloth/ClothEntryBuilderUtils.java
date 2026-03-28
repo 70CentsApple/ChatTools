@@ -1,4 +1,4 @@
-package net.apple70cents.chattools.utils;
+package net.apple70cents.chattools.config.provider.cloth;
 
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -6,8 +6,11 @@ import me.shedaniel.clothconfig2.gui.entries.MultiElementListEntry;
 import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import me.shedaniel.clothconfig2.gui.entries.TooltipListEntry;
 import me.shedaniel.clothconfig2.impl.builders.StringListBuilder;
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigScreenTooltipUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import com.mojang.blaze3d.platform.InputConstants;
+import net.apple70cents.chattools.utils.*;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -19,7 +22,7 @@ import static net.apple70cents.chattools.utils.TextUtils.trans;
 /**
  * @author 70CentsApple
  */
-public class ConfigScreenUtils {
+public class ClothEntryBuilderUtils {
     final static boolean SHOULD_EXPAND_ALL_RULES =
 //? if >=1.21.4 {
             true

@@ -1,4 +1,4 @@
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.common;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

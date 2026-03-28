@@ -1,6 +1,6 @@
 package net.apple70cents.chattools.features.general;
 
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;

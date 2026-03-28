@@ -3,7 +3,7 @@ package net.apple70cents.chattools.mixins;
 //? if >=1.21.11 {
 
 import net.apple70cents.chattools.features.general.ClickEventsPreviewer;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.network.chat.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

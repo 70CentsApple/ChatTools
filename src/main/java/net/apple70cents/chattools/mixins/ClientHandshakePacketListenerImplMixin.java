@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.mixins;
 
 import net.apple70cents.chattools.features.customjoinmessage.CustomJoinMessageSender;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.ContextUtils;
 import net.minecraft.client.multiplayer.ClientHandshakePacketListenerImpl;
 import net.minecraft.client.multiplayer.ServerData;

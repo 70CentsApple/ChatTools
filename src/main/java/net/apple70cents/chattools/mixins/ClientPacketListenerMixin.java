@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.mixins;
 
 import net.apple70cents.chattools.features.formatter.Formatter;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.MessageUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

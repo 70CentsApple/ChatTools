@@ -1,6 +1,7 @@
 package net.apple70cents.chattools.features.formatter;
 
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.utils.*;
 
 import java.util.List;

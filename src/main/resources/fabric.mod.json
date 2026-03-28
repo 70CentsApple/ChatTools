@@ -40,7 +40,7 @@
       "net.apple70cents.chattools.ChatTools"
     ],
     "modmenu": [
-      "net.apple70cents.chattools.config.ModMenuScreen"
+      "net.apple70cents.chattools.config.common.ModMenuIntegration"
     ]
   },
   "mixins": [

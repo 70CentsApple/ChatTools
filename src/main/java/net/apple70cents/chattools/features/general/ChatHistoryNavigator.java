@@ -1,8 +1,8 @@
 package net.apple70cents.chattools.features.general;
 
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.utils.ChatHistoryNavigatorScreen;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.KeyboardUtils;
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.client.Minecraft;

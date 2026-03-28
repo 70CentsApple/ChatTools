@@ -1,7 +1,7 @@
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.provider.yacl;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -14,29 +14,43 @@ import net.minecraft.client.input.MouseButtonEvent;
 
 //? if >=26.1 {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.network.chat.MutableComponent;
 //?} elif >=1.20 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 import static net.apple70cents.chattools.utils.TextUtils.trans;
 
 /**
  * A simple screen that captures a key press and saves it to the config.
- * Shown when editing a keycode option in the YACL config screen.
+ * Shown when editing a keycode option in the YACL config screen or rule edit screen.
  *
  * @author 70CentsApple
  */
 public class KeyCaptureScreen extends Screen {
     private final Screen parent;
-    private final String configKey;
+    private final Consumer<String> onCapture;
+    private final Supplier<String> currentGetter;
 
-    public KeyCaptureScreen(Screen parent, String configKey) {
+    public KeyCaptureScreen(Screen parent, Consumer<String> onCapture, Supplier<String> currentGetter) {
         super(trans("gui.pressAnyKey"));
         this.parent = parent;
-        this.configKey = configKey;
+        this.onCapture = onCapture;
+        this.currentGetter = currentGetter;
+    }
+
+    public KeyCaptureScreen(Screen parent, String configKey) {
+        this(parent,
+                val -> {
+                    ConfigUtils.set(configKey, val);
+                    ConfigUtils.save();
+                },
+                () -> (String) ConfigUtils.get(configKey)
+        );
     }
 
     @Override
@@ -53,8 +67,7 @@ public class KeyCaptureScreen extends Screen {
             Minecraft.getInstance().setScreen(parent);
             return true;
         }
-        ConfigUtils.set(configKey, key2.getName());
-        ConfigUtils.save();
+        onCapture.accept(key2.getName());
         Minecraft.getInstance().setScreen(parent);
         return true;
     }
@@ -67,8 +80,7 @@ public class KeyCaptureScreen extends Screen {
     /*public boolean mouseClicked(double mouseX, double mouseY, int button) {
  *///?}
         InputConstants.Key key = InputConstants.Type.MOUSE.getOrCreate(button);
-        ConfigUtils.set(configKey, key.getName());
-        ConfigUtils.save();
+        onCapture.accept(key.getName());
         Minecraft.getInstance().setScreen(parent);
         return true;
     }
@@ -97,7 +109,7 @@ public class KeyCaptureScreen extends Screen {
 
         Component titleText = trans("gui.pressAnyKey");
         Component currentText = TextUtils.literal("§7" + trans("gui.currentKey").getString() + ": §e"
-                + InputConstants.getKey((String) ConfigUtils.get(configKey)).getDisplayName().getString());
+                + InputConstants.getKey(currentGetter.get()).getDisplayName().getString());
         Component escText = trans("gui.pressEscToCancel");
 
 //? if >=26.1 {

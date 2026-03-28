@@ -1,11 +1,13 @@
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.common;
 
+import net.apple70cents.chattools.config.provider.cloth.ClothConfigScreenGenerator;
+import net.apple70cents.chattools.config.provider.yacl.YACLConfigScreenGenerator;
+import net.apple70cents.chattools.config.screen.MissingConfigLibScreen;
 import net.apple70cents.chattools.utils.KeyboardUtils;
 import net.minecraft.client.gui.screens.Screen;
 
 /**
  * Factory that determines which config library to use at runtime.
- * Priority: Cloth Config > YACL > MissingConfigLibScreen
  *
  * @author 70CentsApple
  */
@@ -66,7 +68,7 @@ public class ConfigScreenFactory {
 //? if HAS_YACL {
     private static class YACLProvider {
         static Screen getScreen(Screen parent) {
-            return YACLConfigScreenGenerator.createScreen(parent);
+            return YACLConfigScreenGenerator.getConfigBuilder().build().generateScreen(parent);
         }
     }
 //?}

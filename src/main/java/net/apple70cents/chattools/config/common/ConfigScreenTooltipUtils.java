@@ -1,5 +1,6 @@
-package net.apple70cents.chattools.utils;
+package net.apple70cents.chattools.config.common;
 
+import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -15,7 +16,6 @@ import static net.apple70cents.chattools.utils.TextUtils.trans;
 
 /**
  * Utility class for generating tooltips and error suppliers.
- * Extracted to prevent ClassLoading issues when Cloth Config is missing.
  *
  * @author 70CentsApple
  */

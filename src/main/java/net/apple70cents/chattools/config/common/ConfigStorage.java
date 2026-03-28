@@ -1,8 +1,7 @@
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.common;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.apple70cents.chattools.utils.ConfigUtils;
 import net.apple70cents.chattools.utils.LoggerUtils;
 
 import java.io.*;

@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.mixins;
 
 import net.apple70cents.chattools.features.general.ExclusiveActionbarHandler;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;

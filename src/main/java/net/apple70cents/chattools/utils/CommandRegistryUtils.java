@@ -10,10 +10,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import net.apple70cents.chattools.config.ConfigScreenFactory;
-import net.apple70cents.chattools.config.ConfigGuiLoader;
-import net.apple70cents.chattools.config.ConfigStorage;
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -31,7 +28,6 @@ import net.minecraft.util.Util;
 /*import net.minecraft.Util;
 *///?}
 //? if >=26.1 {
-import net.minecraft.commands.arguments.ComponentArgument;
 //?}
 
 //? if >=1.21.5 {

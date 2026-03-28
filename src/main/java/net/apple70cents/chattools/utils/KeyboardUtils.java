@@ -2,7 +2,7 @@ package net.apple70cents.chattools.utils;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
-import net.apple70cents.chattools.config.SpecialUnits;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
 

@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.features.chatkeybindings;
 
-import net.apple70cents.chattools.config.SpecialUnits;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.KeyboardUtils;
 import net.apple70cents.chattools.utils.LoggerUtils;
 import net.apple70cents.chattools.utils.MessageUtils;

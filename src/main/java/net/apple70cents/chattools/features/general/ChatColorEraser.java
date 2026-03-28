@@ -1,5 +1,6 @@
 package net.apple70cents.chattools.features.general;
 
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.*;
 import net.minecraft.network.chat.Component;
 

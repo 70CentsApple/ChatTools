@@ -1,12 +1,15 @@
 //? if HAS_YACL {
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.provider.yacl;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
+import net.apple70cents.chattools.config.common.ConfigGuiLoader;
+import net.apple70cents.chattools.config.common.ConfigScreenTooltipUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.utils.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.net.URI;
@@ -23,8 +26,7 @@ import static net.apple70cents.chattools.utils.TextUtils.trans;
  */
 public class YACLConfigScreenGenerator {
 
-    @SuppressWarnings("unchecked")
-    public static Screen createScreen(Screen parent) {
+    public static YetAnotherConfigLib.Builder getConfigBuilder() {
         ConfigGuiLoader.initializeConfigGuiMapIfNecessary();
         Map<String, Object> guiMap = ConfigGuiLoader.configGuiMap;
 
@@ -65,7 +67,7 @@ public class YACLConfigScreenGenerator {
             yaclBuilder.category(catBuilder.build());
         }
 
-        return yaclBuilder.build().generateScreen(parent);
+        return yaclBuilder;
     }
 
     @SuppressWarnings("unchecked")

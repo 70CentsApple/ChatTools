@@ -1,7 +1,8 @@
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.provider.yacl;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.ContextUtils;
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.client.Minecraft;
@@ -145,36 +146,9 @@ public class RuleEditScreen extends Screen {
 //? if >=1.19 {
                 Button keyBtn = Button.builder(
                         TextUtils.literal("§e" + keyName),
-                        button -> Minecraft.getInstance().setScreen(new Screen(trans("gui.pressAnyKey")) {
-                            @Override
-//? if >=1.21.9 {
-                            public boolean keyPressed(KeyEvent keyEvent) {
-                                int key = keyEvent.key();
-                                InputConstants.Key key2 = InputConstants.getKey(keyEvent);
-//?} else {
-                            /*public boolean keyPressed(int key, int scanCode, int modifiers) {
-                                InputConstants.Key key2 = InputConstants.getKey(key, scanCode);
- *///?}
-                                if ("key.keyboard.escape".equals(key2.getName())) {
-                                    Minecraft.getInstance().setScreen(RuleEditScreen.this);
-                                    return true;
-                                }
-                                item.put(fieldName, key2.getName());
-                                Minecraft.getInstance().setScreen(RuleEditScreen.this);
-                                return true;
-                            }
-                            @Override
-//? if >=1.21.9 {
-                            public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-                                int button = event.button();
-//?} else {
-                            /*public boolean mouseClicked(double mouseX, double mouseY, int button) {
-*///?}
-                                item.put(fieldName, InputConstants.Type.MOUSE.getOrCreate(button).getName());
-                                Minecraft.getInstance().setScreen(RuleEditScreen.this);
-                                return true;
-                            }
-                        })
+                        button -> Minecraft.getInstance().setScreen(new KeyCaptureScreen(this,
+                                newVal -> item.put(fieldName, newVal),
+                                () -> item.get(fieldName).toString()))
                 ).bounds(fieldX, y, fieldWidth, 20).build();
                 this.addRenderableWidget(keyBtn);
 //?} elif >=1.17 {

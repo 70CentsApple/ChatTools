@@ -1,6 +1,7 @@
 package net.apple70cents.chattools;
 
-import net.apple70cents.chattools.config.ModMenuScreen;
+import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.config.common.ModMenuIntegration;
 import net.apple70cents.chattools.features.chatkeybindings.Macro;
 import net.apple70cents.chattools.features.chatkeybindings.Repeat;
 import net.apple70cents.chattools.features.chatkeybindings.ReviewLastMessageWithUpArrowOnly;
@@ -92,7 +93,7 @@ public void onInitialize() {
         CommandRegistryUtils.register();
 
 //? if NEOFORGE {
-        ModMenuScreen.registerConfigScreen();
+        ModMenuIntegration.registerConfigScreen();
 //?}
 
         Runnable runnable = () -> {

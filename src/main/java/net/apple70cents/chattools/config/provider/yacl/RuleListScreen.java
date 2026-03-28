@@ -1,7 +1,7 @@
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.provider.yacl;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.ContextUtils;
 import net.apple70cents.chattools.utils.RegExUtils;
 import net.apple70cents.chattools.utils.TextUtils;
@@ -47,9 +47,12 @@ public class RuleListScreen extends Screen {
         this.currentList = new ArrayList<>((List<Object>) ConfigUtils.get(configKey));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void init() {
         super.init();
+        // Reload from config to ensure consistency after returning from RuleEditScreen
+        this.currentList = new ArrayList<>((List<Object>) ConfigUtils.get(configKey));
         rebuildWidgets();
     }
 

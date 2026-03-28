@@ -1,4 +1,4 @@
-package net.apple70cents.chattools.config;
+package net.apple70cents.chattools.config.screen;
 
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.client.Minecraft;

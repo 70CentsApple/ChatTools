@@ -1,6 +1,6 @@
 package net.apple70cents.chattools.features.filter;
 
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.MessageUtils;
 import net.apple70cents.chattools.utils.RegExUtils;
 import net.apple70cents.chattools.utils.TextUtils;

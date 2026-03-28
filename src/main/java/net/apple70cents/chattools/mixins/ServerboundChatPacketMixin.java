@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

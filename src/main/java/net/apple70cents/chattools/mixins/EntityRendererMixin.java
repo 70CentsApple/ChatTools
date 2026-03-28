@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.mixins;
 
 import net.apple70cents.chattools.features.bubble.BubbleRenderer;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;

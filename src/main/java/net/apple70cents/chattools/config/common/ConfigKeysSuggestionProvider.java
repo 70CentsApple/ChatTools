@@ -1,10 +1,9 @@
-package net.apple70cents.chattools.utils;
+package net.apple70cents.chattools.config.common;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.apple70cents.chattools.config.ConfigGuiLoader;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;

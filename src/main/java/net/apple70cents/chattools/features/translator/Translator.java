@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.features.translator;
 
-import net.apple70cents.chattools.config.SpecialUnits;
-import net.apple70cents.chattools.utils.ConfigUtils;
+import net.apple70cents.chattools.config.common.SpecialUnits;
+import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.KeyboardUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
