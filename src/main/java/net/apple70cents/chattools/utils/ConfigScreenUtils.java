@@ -7,18 +7,12 @@ import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
 import me.shedaniel.clothconfig2.gui.entries.TooltipListEntry;
 import me.shedaniel.clothconfig2.impl.builders.StringListBuilder;
 import net.apple70cents.chattools.config.SpecialUnits;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import static net.apple70cents.chattools.utils.TextUtils.trans;
 
@@ -34,67 +28,11 @@ public class ConfigScreenUtils {
 *///?}
             ;
 
-    public static Component getTooltip(String key, String variableType) {
-        return getTooltip(key, variableType, ConfigUtils.getDefault(key));
-    }
-
-    public static Component getTooltip(String key, String variableType, Object defaultVal) {
-        boolean isNull = (defaultVal == null || defaultVal.toString().isBlank());
-        String defaultValue = isNull ? "NULL" : defaultVal.toString();
-        // check if F3+H is on
-        if (Minecraft.getInstance().options.advancedItemTooltips) {
-            try {
-                if (variableType.endsWith("List")) {
-                    if (!((List<?>) ConfigUtils.getDefault(key)).isEmpty()) {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("[");
-                        for (int i = 0; i < ((List<?>) ConfigUtils.getDefault(key)).size(); i++) {
-                            String ele = ((List<?>) ConfigUtils.getDefault(key)).get(i).toString();
-                            // if this is not the first element, we add a comma to the front
-                            if (i != 0) sb.append(",");
-                            // check if the list's type is raw string
-                            if ("StringList".equals(variableType)) {
-                                sb.append("\n  §r§f" + ele + "§r§7");
-                            } else {
-                                // we need to do pretty-printing further
-                                sb.append("\n  {");
-                                String[] keyAndValuePairs = ele.substring(1, ele.length() - 1).split(", ");
-                                for (int j = 0; j < keyAndValuePairs.length; j++) {
-                                    // if (j != 0) sb.append(",");
-                                    String ele2 = keyAndValuePairs[j];
-                                    int idx = ele2.indexOf("=");
-                                    sb.append("\n    §e" + ele2.substring(0, idx) + "§r§7 = §f" + ele2.substring(
-                                            idx + 1) + "§r§7");
-                                }
-                                sb.append("\n  }");
-                            }
-                        }
-                        sb.append("\n]");
-                        defaultValue = sb.toString();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Component defaults = TextUtils.trans("texts.defaultValue", defaultValue).copy()
-                    .withStyle(ChatFormatting.GRAY);
-
-            Component keyName = TextUtils.of(key).copy().withStyle(ChatFormatting.GOLD);
-            Component main = trans(key + ".@Tooltip").copy().withStyle(ChatFormatting.WHITE);
-            Component type = TextUtils.trans("texts.variableType", variableType).copy().withStyle(ChatFormatting.GRAY);
-            MutableComponent tooltip = TextUtils.empty().copy();
-            tooltip.append(keyName).append("§r\n").append(main).append("§r\n").append(type).append("§r\n")
-                    .append(defaults);
-            return tooltip;
-        } else {
-            return trans(key + ".@Tooltip");
-        }
-    }
-
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static TooltipListEntry getEntryBuilder(ConfigEntryBuilder eb, String type, String key, String errorSupplier, int... args) {
         // the `args` are only for `min` and `max` value for int sliders (recently)
         // `errorSuppliers` will only apply to `StringList`s
-        Component tooltip = "FAQ".equals(type) ? getTooltip(key, type, null) : getTooltip(key, type);
+        Component tooltip = "FAQ".equals(type) ? ConfigScreenTooltipUtils.getTooltip(key, type, null) : ConfigScreenTooltipUtils.getTooltip(key, type);
         // display current server (if it can be used)
         final Component SERVER_LABELED_KEY = trans(key, "§f" + ContextUtils.getSessionIdentifier());
         switch (type) {
@@ -129,7 +67,7 @@ public class ConfigScreenUtils {
                         .setSaveConsumer
 *///?} else {
                         /*.setKeySaveConsumer
-*///?}
+                         *///?}
                                 (keybind -> ConfigUtils.set(key, keybind.getName())).build();
             case "StringList":
                 StringListBuilder builder = eb.startStrList(trans(key), (List<String>) ConfigUtils.get(key))
@@ -137,13 +75,13 @@ public class ConfigScreenUtils {
                         .setSaveConsumer(v -> ConfigUtils.set(key, v));
                 switch (errorSupplier) {
                     case "RegExNormal":
-                        builder.setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_FOR_LIST);
+                        builder.setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_FOR_LIST);
                         break;
                     case "RegExRequireGroups":
-                        builder.setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS_FOR_LIST);
+                        builder.setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS_FOR_LIST);
                         break;
                     case "RegExAllowStar":
-                        builder.setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR_FOR_LIST);
+                        builder.setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR_FOR_LIST);
                         break;
                     case "null":
                     default:
@@ -175,29 +113,29 @@ public class ConfigScreenUtils {
                     SpecialUnits.NotifierRuleUnit defaultObj = new SpecialUnits.NotifierRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Pattern"), unit.pattern)
-                            .setTooltip(getTooltip(key + ".Pattern", "String", defaultObj.pattern))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Pattern", "String", defaultObj.pattern))
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Toast"), unit.toast)
-                            .setTooltip(getTooltip(key + ".Toast", "boolean", defaultObj.toast))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Toast", "boolean", defaultObj.toast))
                             .setDefaultValue(defaultObj.toast).setSaveConsumer(v -> unit.toast = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Sound"), unit.sound)
-                            .setTooltip(getTooltip(key + ".Sound", "boolean", defaultObj.sound))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Sound", "boolean", defaultObj.sound))
                             .setDefaultValue(defaultObj.sound).setSaveConsumer(v -> unit.sound = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Actionbar"), unit.actionbar)
-                            .setTooltip(getTooltip(key + ".Actionbar", "boolean", defaultObj.actionbar))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Actionbar", "boolean", defaultObj.actionbar))
                             .setDefaultValue(defaultObj.actionbar).setSaveConsumer(v -> unit.actionbar = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Highlight"), unit.highlight)
-                            .setTooltip(getTooltip(key + ".Highlight", "boolean", defaultObj.highlight))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Highlight", "boolean", defaultObj.highlight))
                             .setDefaultValue(defaultObj.highlight).setSaveConsumer(v -> unit.highlight = v).build());
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
@@ -226,17 +164,17 @@ public class ConfigScreenUtils {
                     SpecialUnits.BubbleRuleUnit defaultObj = new SpecialUnits.BubbleRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Pattern"), unit.pattern)
-                            .setTooltip(getTooltip(key + ".Pattern", "String", defaultObj.pattern))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Pattern", "String", defaultObj.pattern))
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".Fallback"), unit.fallback)
-                            .setTooltip(getTooltip(key + ".Fallback", "boolean", defaultObj.fallback))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Fallback", "boolean", defaultObj.fallback))
                             .setDefaultValue(defaultObj.fallback).setSaveConsumer(v -> unit.fallback = v).build());
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
@@ -270,32 +208,32 @@ public class ConfigScreenUtils {
                     SpecialUnits.ResponderRuleUnit defaultObj = new SpecialUnits.ResponderRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Pattern"), unit.pattern)
-                            .setTooltip(getTooltip(key + ".Pattern", "String", defaultObj.pattern))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Pattern", "String", defaultObj.pattern))
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
 
                     entries.add(eb.startStrField(trans(key + ".Message"), unit.message)
-                            .setTooltip(getTooltip(key + ".Message", "String", defaultObj.message))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Message", "String", defaultObj.message))
                             .setDefaultValue(defaultObj.message).setSaveConsumer(v -> unit.message = v).build());
 
                     entries.add(eb.startLongField(trans(key + ".MinDelayInMilliseconds"), unit.minDelayInMilliseconds)
-                            .setTooltip(getTooltip(key + ".MinDelayInMilliseconds", "longField", defaultObj.minDelayInMilliseconds))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".MinDelayInMilliseconds", "longField", defaultObj.minDelayInMilliseconds))
                             .setDefaultValue(defaultObj.minDelayInMilliseconds)
                             .setSaveConsumer(v -> unit.minDelayInMilliseconds = v).build());
 
                     entries.add(eb.startLongField(trans(key + ".MaxDelayInMilliseconds"), unit.maxDelayInMilliseconds)
-                            .setTooltip(getTooltip(key + ".MaxDelayInMilliseconds", "longField", defaultObj.maxDelayInMilliseconds))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".MaxDelayInMilliseconds", "longField", defaultObj.maxDelayInMilliseconds))
                             .setDefaultValue(defaultObj.maxDelayInMilliseconds)
                             .setSaveConsumer(v -> unit.maxDelayInMilliseconds = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".ForceDisableFormatter"), unit.forceDisableFormatter)
                             .setTooltip(
-                                    getTooltip(key + ".ForceDisableFormatter", "boolean", defaultObj.forceDisableFormatter))
+                                    ConfigScreenTooltipUtils.getTooltip(key + ".ForceDisableFormatter", "boolean", defaultObj.forceDisableFormatter))
                             .setDefaultValue(defaultObj.forceDisableFormatter)
                             .setSaveConsumer(v -> unit.forceDisableFormatter = v).build());
 
@@ -315,11 +253,9 @@ public class ConfigScreenUtils {
                     } else {
                         String firstCommand = unit.commands.isEmpty() ? "" : unit.commands.get(0).command;
                         if (unit.modifier == SpecialUnits.KeyModifiers.NONE) {
-                            // such as "[ H ] /home"
                             displayText = trans(key + ".@Display",
                                     "§6" + InputConstants.getKey(unit.key).getDisplayName().getString(), firstCommand);
                         } else {
-                            // such as "[ Shift + B ] /back"
                             displayText = trans(key + ".@Display",
                                     "§6" + unit.modifier + " + " + InputConstants.getKey(unit.key).getDisplayName()
                                             .getString(), firstCommand);
@@ -330,7 +266,7 @@ public class ConfigScreenUtils {
                     SpecialUnits.MacroUnit defaultObj = new SpecialUnits.MacroUnit();
 
                     entries.add(eb.startKeyCodeField(trans(key + ".Key"), InputConstants.getKey(unit.key))
-                            .setTooltip(getTooltip(key + ".Key", "keycode", InputConstants.getKey(defaultObj.key)))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Key", "keycode", InputConstants.getKey(defaultObj.key)))
                             .setDefaultValue(InputConstants.getKey(defaultObj.key))
 //? if >=1.18 {
                             .setKeySaveConsumer
@@ -340,15 +276,15 @@ public class ConfigScreenUtils {
                             .setSaveConsumer
 *///?} else {
                             /*.setKeySaveConsumer
-*///?}
+                             *///?}
                                     (k -> unit.key = k.getName()).build());
 
                     entries.add(eb.startEnumSelector(trans(key + ".Modifier"), SpecialUnits.KeyModifiers.class,
-                                    unit.modifier).setTooltip(getTooltip(key + ".Modifier", "EnumKeyModifiers", defaultObj.modifier))
+                                    unit.modifier).setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Modifier", "EnumKeyModifiers", defaultObj.modifier))
                             .setDefaultValue(defaultObj.modifier).setSaveConsumer(v -> unit.modifier = v).build());
 
                     entries.add(eb.startEnumSelector(trans(key + ".Mode"), SpecialUnits.MacroModes.class, unit.mode)
-                            .setTooltip(getTooltip(key + ".Mode", "EnumMacroModes", defaultObj.mode))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Mode", "EnumMacroModes", defaultObj.mode))
                             .setDefaultValue(defaultObj.mode).setSaveConsumer(v -> unit.mode = v).build());
 
                     String commandsKey = key + ".Commands";
@@ -371,16 +307,16 @@ public class ConfigScreenUtils {
                         SpecialUnits.MacroCommandEntry cmdDefault = new SpecialUnits.MacroCommandEntry();
 
                         cmdEntries.add(eb.startStrField(trans(commandsKey + ".Command"), cmd.command)
-                                .setTooltip(getTooltip(commandsKey + ".Command", "String", cmdDefault.command))
+                                .setTooltip(ConfigScreenTooltipUtils.getTooltip(commandsKey + ".Command", "String", cmdDefault.command))
                                 .setDefaultValue(cmdDefault.command).setSaveConsumer(v -> cmd.command = v).build());
 
                         cmdEntries.add(eb.startLongField(trans(commandsKey + ".DelayInMilliseconds"), cmd.delayInMilliseconds)
-                                .setTooltip(getTooltip(commandsKey + ".DelayInMilliseconds", "longField", cmdDefault.delayInMilliseconds))
+                                .setTooltip(ConfigScreenTooltipUtils.getTooltip(commandsKey + ".DelayInMilliseconds", "longField", cmdDefault.delayInMilliseconds))
                                 .setDefaultValue(cmdDefault.delayInMilliseconds)
                                 .setSaveConsumer(v -> cmd.delayInMilliseconds = v).build());
 
                         cmdEntries.add(eb.startBooleanToggle(trans(commandsKey + ".ForceDisableFormatter"), cmd.forceDisableFormatter)
-                                .setTooltip(getTooltip(commandsKey + ".ForceDisableFormatter", "boolean", cmdDefault.forceDisableFormatter))
+                                .setTooltip(ConfigScreenTooltipUtils.getTooltip(commandsKey + ".ForceDisableFormatter", "boolean", cmdDefault.forceDisableFormatter))
                                 .setDefaultValue(cmdDefault.forceDisableFormatter)
                                 .setSaveConsumer(v -> cmd.forceDisableFormatter = v).build());
 
@@ -412,12 +348,12 @@ public class ConfigScreenUtils {
                     SpecialUnits.FormatterUnit defaultObj = new SpecialUnits.FormatterUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Formatter"), unit.formatter)
-                            .setTooltip(getTooltip(key + ".Formatter", "String", defaultObj.formatter))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Formatter", "String", defaultObj.formatter))
                             .setDefaultValue(defaultObj.formatter).setSaveConsumer(v -> unit.formatter = v).build());
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
@@ -447,22 +383,22 @@ public class ConfigScreenUtils {
                     SpecialUnits.CustomJoinMessageRuleUnit defaultObj = new SpecialUnits.CustomJoinMessageRuleUnit();
 
                     entries.add(eb.startStrField(trans(key + ".Address"), unit.address)
-                            .setTooltip(getTooltip(key + ".Address", "String", defaultObj.address))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Address", "String", defaultObj.address))
                             .setDefaultValue(defaultObj.address).setSaveConsumer(v -> unit.address = v)
-                            .setErrorSupplier(ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
+                            .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR).build());
 
                     entries.add(eb.startStrField(trans(key + ".Message"), unit.message)
-                            .setTooltip(getTooltip(key + ".Message", "String", defaultObj.message))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Message", "String", defaultObj.message))
                             .setDefaultValue(defaultObj.message).setSaveConsumer(v -> unit.message = v).build());
 
                     entries.add(eb.startLongField(trans(key + ".DelayInMilliseconds"), unit.delayInMilliseconds)
-                            .setTooltip(getTooltip(key + ".DelayInMilliseconds", "longField", defaultObj.delayInMilliseconds))
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".DelayInMilliseconds", "longField", defaultObj.delayInMilliseconds))
                             .setDefaultValue(defaultObj.delayInMilliseconds)
                             .setSaveConsumer(v -> unit.delayInMilliseconds = v).build());
 
                     entries.add(eb.startBooleanToggle(trans(key + ".ForceDisableFormatter"), unit.forceDisableFormatter)
                             .setTooltip(
-                                    getTooltip(key + ".ForceDisableFormatter", "boolean", defaultObj.forceDisableFormatter))
+                                    ConfigScreenTooltipUtils.getTooltip(key + ".ForceDisableFormatter", "boolean", defaultObj.forceDisableFormatter))
                             .setDefaultValue(defaultObj.forceDisableFormatter)
                             .setSaveConsumer(v -> unit.forceDisableFormatter = v).build());
 
@@ -487,80 +423,5 @@ public class ConfigScreenUtils {
                 LoggerUtils.error("[ChatTools] Unknown config type: " + type);
                 return null;
         }
-    }
-
-    public static class ErrorSuppliers {
-        public static final Function<String, Optional<Component>> REGEX_COMPILE_ERROR_SUPPLIER = (v) -> {
-            try {
-                Pattern.compile(v);
-                return Optional.empty();
-            } catch (PatternSyntaxException e) {
-                return Optional.of(TextUtils.of(e.getDescription()));
-            }
-        };
-        public static final Function<List<String>, Optional<Component>> REGEX_COMPILE_ERROR_SUPPLIER_FOR_LIST = (v) -> {
-            try {
-                for (String s : v) {
-                    Pattern.compile(s);
-                }
-                return Optional.empty();
-            } catch (PatternSyntaxException e) {
-                return Optional.of(TextUtils.of(e.getDescription()));
-            }
-        };
-
-        public static final Function<String, Optional<Component>> REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR = (v) -> {
-            if ("*".equals(v)) {
-                return Optional.empty();
-            }
-            try {
-                Pattern.compile(v);
-                return Optional.empty();
-            } catch (PatternSyntaxException e) {
-                return Optional.of(TextUtils.of(e.getDescription()));
-            }
-        };
-        public static final Function<List<String>, Optional<Component>> REGEX_COMPILE_ERROR_SUPPLIER_ALLOW_STAR_FOR_LIST = (v) -> {
-
-            try {
-                for (String s : v) {
-                    if ("*".equals(s)) {
-                        continue;
-                    }
-                    Pattern.compile(s);
-                }
-                return Optional.empty();
-            } catch (PatternSyntaxException e) {
-                return Optional.of(TextUtils.of(e.getDescription()));
-            }
-        };
-
-        public static final Function<String, Optional<Component>> REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS = (v) -> {
-            try {
-                Pattern.compile(v);
-                if (v.contains("<name>") && v.contains("<message>")) {
-                    return Optional.empty();
-                } else {
-                    return Optional.of(TextUtils.literal("Should include both <name> and <message> groups."));
-                }
-            } catch (PatternSyntaxException e) {
-                return Optional.of(TextUtils.of(e.getDescription()));
-            }
-        };
-        public static final Function<List<String>, Optional<Component>> REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS_FOR_LIST = (v) -> {
-            try {
-                for (String s : v) {
-                    Pattern.compile(s);
-                    if (s.contains("<name>") && s.contains("<message>")) {
-                        continue;
-                    } else {
-                        return Optional.of(TextUtils.literal("Should include both <name> and <message> groups."));
-                    }
-                }
-                return Optional.empty();
-            } catch (PatternSyntaxException e) {
-                return Optional.of(TextUtils.of(e.getDescription()));
-            }
-        };
     }
 }

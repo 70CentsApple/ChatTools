@@ -4,10 +4,7 @@ package net.apple70cents.chattools.config;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import net.apple70cents.chattools.utils.ConfigScreenUtils;
-import net.apple70cents.chattools.utils.ConfigUtils;
-import net.apple70cents.chattools.utils.ContextUtils;
-import net.apple70cents.chattools.utils.TextUtils;
+import net.apple70cents.chattools.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -46,7 +43,7 @@ public class YACLConfigScreenGenerator {
 
                 if ("sub".equals(type)) {
                     OptionGroup.Builder groupBuilder = OptionGroup.createBuilder().name(trans(key))
-                            .description(OptionDescription.of(ConfigScreenUtils.getTooltip(key, type, null)));
+                            .description(OptionDescription.of(ConfigScreenTooltipUtils.getTooltip(key, type, null)));
                     for (Object inner : (List) eleMap.get("content")) {
                         Map innerMap = (Map) inner;
                         String innerType = (String) innerMap.get("type");
@@ -74,7 +71,7 @@ public class YACLConfigScreenGenerator {
     @SuppressWarnings("unchecked")
     private static Option<?> buildOption(String type, String key, Map eleMap) {
         OptionDescription desc = OptionDescription.of(
-                "FAQ".equals(type) ? ConfigScreenUtils.getTooltip(key, type, null) : ConfigScreenUtils.getTooltip(key,
+                "FAQ".equals(type) ? ConfigScreenTooltipUtils.getTooltip(key, type, null) : ConfigScreenTooltipUtils.getTooltip(key,
                         type));
         switch (type) {
             case "boolean":
@@ -150,7 +147,7 @@ public class YACLConfigScreenGenerator {
     @SuppressWarnings("unchecked")
     private static ListOption<String> buildStringListOption(String key) {
         return ListOption.<String>createBuilder().name(trans(key))
-                .description(OptionDescription.of(ConfigScreenUtils.getTooltip(key, "StringList")))
+                .description(OptionDescription.of(ConfigScreenTooltipUtils.getTooltip(key, "StringList")))
                 .binding((List<String>) ConfigUtils.getDefault(key), () -> (List<String>) ConfigUtils.get(key),
                         v -> ConfigUtils.set(key, v)).controller(StringControllerBuilder::create).initial("").build();
     }
@@ -159,7 +156,7 @@ public class YACLConfigScreenGenerator {
     private static ButtonOption buildComplexListButton(String key, String type) {
         final Component SERVER_LABELED_KEY = trans(key, "§f" + ContextUtils.getSessionIdentifier());
         return ButtonOption.createBuilder().name(SERVER_LABELED_KEY)
-                .description(OptionDescription.of(ConfigScreenUtils.getTooltip(key, type)))
+                .description(OptionDescription.of(ConfigScreenTooltipUtils.getTooltip(key, type)))
                 .text(TextUtils.literal("§e✎ " + ((List) ConfigUtils.get(key)).size() + " ▸"))
                 .action((screen, opt) -> Minecraft.getInstance().setScreen(new RuleListScreen(screen, key, type)))
                 .build();

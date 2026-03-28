@@ -40,7 +40,7 @@ public class TextUtils {
 //?} else {
 /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 *///?}
-                    ConfigScreenUtils.getTooltip("general.FAQ", "FAQ", null)));
+                    ConfigScreenTooltipUtils.getTooltip("general.FAQ", "FAQ", null)));
     public static final String PREFIX = "key.chattools.";
     public static final Component SPACER = literal("").copy().setStyle(Style.EMPTY);
 

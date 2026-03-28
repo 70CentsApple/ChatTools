@@ -4,6 +4,7 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
+import net.apple70cents.chattools.utils.ConfigScreenTooltipUtils;
 import net.apple70cents.chattools.utils.ConfigScreenUtils;
 import net.apple70cents.chattools.utils.ConfigUtils;
 
@@ -52,7 +53,7 @@ public class ClothConfigScreenGenerator {
                     category.addEntry(ConfigScreenUtils.getEntryBuilder(eb, type, key, errorSupplier, ((Number) ((Map<?, ?>) element).get("min")).intValue(), ((Number) ((Map<?, ?>) element).get("max")).intValue()));
                 } else if ("sub".equals(type)) {
                     SubCategoryBuilder sub = eb.startSubCategory(trans(key))
-                                               .setTooltip(ConfigScreenUtils.getTooltip(key, type, null));
+                                               .setTooltip(ConfigScreenTooltipUtils.getTooltip(key, type, null));
                     for (Object elementInner : (List<?>) ((Map<?, ?>) element).get("content")) {
                         String typeInner = (String) ((Map<?, ?>) elementInner).get("type");
                         String keyInner = (String) ((Map<?, ?>) elementInner).get("key");

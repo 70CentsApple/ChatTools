@@ -5,7 +5,7 @@ import net.minecraft.client.gui.screens.Screen;
 
 /**
  * Factory that determines which config library to use at runtime.
- * Priority: YACL > Cloth Config > MissingConfigLibScreen
+ * Priority: Cloth Config > YACL > MissingConfigLibScreen
  *
  * @author 70CentsApple
  */
@@ -40,16 +40,34 @@ public class ConfigScreenFactory {
     public static Screen createScreen(Screen parent) {
         boolean shiftPressed = KeyboardUtils.isKeyPressingWithModifier("key.keyboard.left.shift",
                 SpecialUnits.KeyModifiers.NONE, SpecialUnits.MacroModes.GREEDY);
-        // has cloth, and not holding shift
-        if (isClothConfigLoaded() && !(shiftPressed && isYACLLoaded())) {
-            return ClothConfigScreenGenerator.getConfigBuilder().setParentScreen(parent).build();
-        }
+        try {
+            // has cloth, and not holding shift
+            if (isClothConfigLoaded() && !(shiftPressed && isYACLLoaded())) {
+                return ClothProvider.getScreen(parent);
+            }
 //? if HAS_YACL {
-        // has yacl
-        if (isYACLLoaded()) {
-            return YACLConfigScreenGenerator.createScreen(parent);
-        }
+            // has yacl
+            if (isYACLLoaded()) {
+                return YACLProvider.getScreen(parent);
+            }
 //?}
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
         return new MissingConfigLibScreen(parent);
     }
+
+    private static class ClothProvider {
+        static Screen getScreen(Screen parent) {
+            return ClothConfigScreenGenerator.getConfigBuilder().setParentScreen(parent).build();
+        }
+    }
+
+//? if HAS_YACL {
+    private static class YACLProvider {
+        static Screen getScreen(Screen parent) {
+            return YACLConfigScreenGenerator.createScreen(parent);
+        }
+    }
+//?}
 }
