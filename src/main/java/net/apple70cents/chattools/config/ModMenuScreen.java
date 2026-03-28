@@ -22,14 +22,14 @@ public class ModMenuScreen
 //? if FABRIC {
 /*@Override
 public ConfigScreenFactory<?> getModConfigScreenFactory() {
-         return parent -> ConfigScreenGenerator.getConfigBuilder().setParentScreen(parent).build();
+         return parent -> net.apple70cents.chattools.config.ConfigScreenFactory.createScreen(parent);
 }
 *///?} elif NEOFORGE {
     public static void registerConfigScreen() {
         ModLoadingContext.get()
                 .registerExtensionPoint(
                         IConfigScreenFactory.class,
-                        () -> (container, parent) -> ConfigScreenGenerator.getConfigBuilder().setParentScreen(parent).build()
+                        () -> (container, parent) -> net.apple70cents.chattools.config.ConfigScreenFactory.createScreen(parent)
                 );
     }
 //?}

@@ -62,6 +62,14 @@ key:
       variableType: 類型：%s
     gui:
       title: 配置 Chat Tools [聊天工具箱]
+      missingConfigLib: 請安裝 YetAnotherConfigLib (YACL) 或 Cloth Config 模組才能進行設定。
+      pressAnyKey: 請按下任意按鍵或滑鼠鍵...
+      currentKey: 目前按鍵
+      pressEscToCancel: 按 ESC 鍵取消
+      editRules: 編輯規則
+      addNew: 新增
+      items: '%s 項'
+      editCommands: 編輯指令
     category:
       general: 通用
       notifier: 聊天提醒

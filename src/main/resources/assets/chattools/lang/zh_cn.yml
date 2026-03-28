@@ -86,6 +86,14 @@ key:
       variableType: 类型：%s
     gui:
       title: 配置 Chat Tools [聊天工具箱]
+      missingConfigLib: 请安装 YetAnotherConfigLib (YACL) 或 Cloth Config 模组才能进行配置。
+      pressAnyKey: 请按下任意按键或鼠标键...
+      currentKey: 当前按键
+      pressEscToCancel: 按 ESC 键取消
+      editRules: 编辑规则
+      addNew: 添加
+      items: '%s 项'
+      editCommands: 编辑命令
     category:
       general: 通用
       notifier: 聊天提醒
@@ -390,14 +398,14 @@ key:
           切换是否应匹配我的昵称。
           你也可以通过在下面的匹配白名单中添加你的昵称来实现。
       AllowList:
-        .: '匹配白名单 §6(当前服务器地址：%s§6)§r'
+        .: '匹配白名单 §6(当前会话标识符：%s§6)§r'
         '@Tooltip': 此列表中的规则将用于匹配。
         '@New': 新规则
         '@Display': §e[ %s§e ]§r %s
         Address:
           .: 地址
           '@Tooltip': |-
-            此规则的服务器地址。
+            此规则的会话标识符。
             建议使用正则表达式。
         Pattern:
           .: 模式
