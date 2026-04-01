@@ -323,6 +323,16 @@ public class CommandRegistryUtils {
 
     public static void updateConfig(String key, String value) {
         try {
+            // KFC easter egg
+            if ("general.kfc".equals(key)) {
+                ConfigUtils.set(key, Boolean.parseBoolean(value));
+                MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set", key, ConfigUtils.get(key)));
+                if (Boolean.parseBoolean(value)) {
+                    MessageUtils.sendToNonPublicChat(TextUtils.literal("§l§c肯德基§f疯狂§c星期四§f，V我§c50"));
+                }
+                return;
+            }
+            // normal
             if (!ConfigGuiLoader.getKey2TypeMappings().containsKey(key)) {
                 // if we don't have that key, we consider it as a string
                 ConfigUtils.set(key, value);

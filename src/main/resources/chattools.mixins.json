@@ -11,6 +11,7 @@
     "ClientHandshakePacketListenerImplMixin",
     "ClientPacketListenerMixin",
     "EntityRendererMixin",
+    "FontMixin",
     "FriendlyByteBufMixin",
     "GuiGraphicsExtractorMixin",
     "GuiMixinForExclusiveActionbar",

@@ -10,6 +10,7 @@ public class ConfigUtils {
 
     // Cached config values for frequently-used keys
     public static boolean CHAT_TOOLS_ENABLED = false;
+    public static boolean KFC_ENABLED = false;
     public static boolean DISABLE_TEXT_OBFUSCATION_ENABLED = false;
     public static boolean BUBBLE_ENABLED = false;
     public static boolean NICK_HIDER_ENABLED = false;
@@ -26,6 +27,7 @@ public class ConfigUtils {
 
     public static void refreshCache() {
         CHAT_TOOLS_ENABLED = (boolean) CONFIG.get("general.ChatTools.Enabled");
+        KFC_ENABLED = (boolean) CONFIG.get("general.kfc");
         DISABLE_TEXT_OBFUSCATION_ENABLED = (boolean) CONFIG.get("general.DisableTextObfuscation.Enabled");
         BUBBLE_ENABLED = (boolean) CONFIG.get("bubble.Enabled");
         NICK_HIDER_ENABLED = (boolean) CONFIG.get("general.NickHider.Enabled");
@@ -51,6 +53,7 @@ public class ConfigUtils {
         // Run migration before applying defaults (so we can read the old version number)
         MigrationUtils.migrate(CONFIG);
         CONFIG = CONFIG.withDefault(DEFAULT_CONFIG.getHashmap());
+        CONFIG.set("general.kfc", false);
         refreshCache();
     }
 
