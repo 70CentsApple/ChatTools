@@ -111,7 +111,7 @@ private boolean hideChatHistoryInF1Mode_2(GuiGraphics instance, Font font, Style
          return !shouldHideChatHistory();
 }
 
-//? if >=1.20.7 {
+//? if >=1.21.6 {
 @WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;setTooltipForNextFrame(Lnet/minecraft/client/gui/Font;Ljava/util/List;II)V"))
 //?} else {
 /^@WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderTooltip(Lnet/minecraft/client/gui/Font;Ljava/util/List;II)V"))
