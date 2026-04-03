@@ -186,7 +186,7 @@ public abstract class ChatComponentMixin {
 
 //? if >=1.21.11 {
 //?} else {
-/*  @Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
+  /*@Inject(method = "getClickedComponentStyleAt", at = @At(value = "RETURN"), cancellable = true)
     public void modifyHoverEvent(double x, double y, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<net.minecraft.network.chat.Style> cir) {
          net.minecraft.network.chat.Style style = cir.getReturnValue();
          if (!ConfigUtils.CHAT_TOOLS_ENABLED) {

@@ -3,8 +3,10 @@
   "minVersion": "0.8",
   "package": "net.apple70cents.chattools.mixins",
   "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
+  "plugin": "net.apple70cents.chattools.ChatToolsMixinPlugin",
   "mixins": [
     "BookViewScreenMixin",
+    "CategoryLabelWidgetMixin",
     "ChatComponentMixin",
     "ChatListenerMixin",
     "ChatScreenMixin",

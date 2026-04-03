@@ -43,5 +43,5 @@ public abstract class GuiGraphicsExtractorMixin {
 //?} else {
 /*// don't do anything
 @org.spongepowered.asm.mixin.Mixin(net.minecraft.client.Minecraft.class)
-public class GuiGraphicsExtractorMixin {}
+public abstract class GuiGraphicsExtractorMixin {}
 *///?}

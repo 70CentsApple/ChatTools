@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.DeltaTracker;
 //?} elif >=1.21 {
-//import net.minecraft.client.gui.GuiGraphics;
-//import net.minecraft.client.DeltaTracker;
-//?} elif >=1.20 {
+/*import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.DeltaTracker;
+*///?} elif >=1.20 {
 /*import net.minecraft.client.gui.GuiGraphics;
 *///?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;

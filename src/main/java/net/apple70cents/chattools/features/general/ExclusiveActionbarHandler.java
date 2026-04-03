@@ -48,8 +48,8 @@ public class ExclusiveActionbarHandler {
 //? if >=26.1 {
     public static void render(GuiGraphicsExtractor context) {
 //?} elif >=1.20 {
-//    public static void render(GuiGraphics context) {
-//?} else {
+    /*public static void render(GuiGraphics context) {
+*///?} else {
         /*public static void render(PoseStack pose) {
 *///?}
         Font font = Minecraft.getInstance().font;
