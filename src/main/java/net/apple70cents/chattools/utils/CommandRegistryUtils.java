@@ -163,6 +163,7 @@ public class CommandRegistryUtils {
                         MessageUtils.sendToActionbar(text, duration);
                         return Command.SINGLE_SUCCESS;
                 })))))
+//? if !LITE_VERSION {
             // chattools download
             .then(literal("download").executes(t -> {
                 LoggerUtils.info("[ChatTools] Command Executed: Trying to download Addon Toast dependencies");
@@ -174,6 +175,7 @@ public class CommandRegistryUtils {
                 }
                 return Command.SINGLE_SUCCESS;
             }))
+//?}
             // chattools opengui
             .then(literal("opengui").executes(t -> {
                 MessageUtils.sendToActionbar(TextUtils.trans("gui.title"));
@@ -323,7 +325,7 @@ public class CommandRegistryUtils {
 
     public static void updateConfig(String key, String value) {
         try {
-            // KFC easter egg
+            // KFC Easter Egg
             if ("general.kfc".equals(key)) {
                 ConfigUtils.set(key, Boolean.parseBoolean(value));
                 MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set", key, ConfigUtils.get(key)));

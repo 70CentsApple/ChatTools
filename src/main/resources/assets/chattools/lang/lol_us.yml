@@ -64,6 +64,7 @@ key:
       variableType: 'var type: %s'
     gui:
       title: Chatz Stuffz Configurashunz
+      title@Lite: Chatz Stuffz Configurashunz - Lite
     category:
       general: Just Stuffz
       notifier: Meowifyer
@@ -179,6 +180,11 @@ key:
           '@Tooltip': |-
             §6ADDON§r: Toasty with extra stuff. Need to grab extra files, yo.
             §6POWERSHELL§r: Toasty with powershell magic
+            §6AWT§r: Toasty with Java AWT (Usually no worky, don't bother, yo)
+            §6TWO_SLICES§r: Toasty with two-slices. (may work on Linux and Mac OS X, bro)
+          '@Tooltip@Lite': |-
+            §6ADDON§r: Nope in this build, yo.
+            §6POWERSHELL§r: Nope in this build, yo.
             §6AWT§r: Toasty with Java AWT (Usually no worky, don't bother, yo)
             §6TWO_SLICES§r: Toasty with two-slices. (may work on Linux and Mac OS X, bro)
       Sound:

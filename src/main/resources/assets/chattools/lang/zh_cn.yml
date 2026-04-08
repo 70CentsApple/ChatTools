@@ -86,6 +86,7 @@ key:
       variableType: 类型：%s
     gui:
       title: 配置 Chat Tools [聊天工具箱]
+      title@Lite: 配置 Chat Tools [聊天工具箱] - Lite
       missingConfigLib: 请安装以下任意模组才能进行配置。
       pressAnyKey: 请按下任意按键或鼠标键...
       currentKey: 当前按键
@@ -334,6 +335,14 @@ key:
 
             §6AWT§r: 使用 Java AWT 库 推送 Toast 通知（通常没用，不建议使用。）
             
+            §6TWO_SLICES§r: 使用 two-slices 库 推送 Toast 通知（可能在 Linux、Mac OS X 上有效）
+          '@Tooltip@Lite': |-
+            §6ADDON§r: 在此版本不可用
+
+            §6POWERSHELL§r: 在此版本不可用
+
+            §6AWT§r: 使用 Java AWT 库 推送 Toast 通知（通常没用，不建议使用。）
+
             §6TWO_SLICES§r: 使用 two-slices 库 推送 Toast 通知（可能在 Linux、Mac OS X 上有效）
       Sound:
         .: 声音

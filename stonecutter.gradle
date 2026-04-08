@@ -10,26 +10,35 @@ stonecutter.parameters {
 	constants.put 'FABRIC', loader == 'fabric'
 	constants.put 'NEOFORGE', loader == 'neoforge'
 	constants.put 'HAS_YACL', node.project.findProperty('yacl_version')?.toString()?.length() > 0
+	constants.put 'LITE_VERSION', rootProject.hasProperty('lite_version')
+}
+
+tasks.register('buildLiteAndGather', Exec) {
+	group = 'other'
+	description = 'Build all versions with CurseForge-compliant (lite) configuration and gather artifacts'
+	def isWindows = System.getProperty('os.name').toLowerCase().contains('win')
+	def gradlewFile = new File(rootProject.rootDir, isWindows ? 'gradlew.bat' : 'gradlew')
+	commandLine gradlewFile.absolutePath, 'buildAndGather', '-Plite_version'
 }
 
 tasks.register('buildAndGather') {
 	def buildTasks = stonecutter.tasks.named('build', Task)
 	dependsOn buildTasks
 	doFirst {
-        println 'Gathering builds based on settings.json...'
+		println 'Gathering builds based on settings.json...'
 		def buildLibs = {
 			p -> p.layout.buildDirectory.get().asFile.toPath().resolve('libs')
 		}
 		delete fileTree(buildLibs(rootProject).toFile()) {
 			include '*'
 		}
-        def settingsFile = rootProject.file('settings.json')
-        if (!settingsFile.exists()) {
-            throw new GradleException("found no settings.json in project root, cannot gather builds")
-        }
-        def jsonSettings = new groovy.json.JsonSlurper().parse(settingsFile)
-        jsonSettings.versions.each { versionName ->
-            def nodeProject = rootProject.project(":${versionName}")
+		def settingsFile = rootProject.file('settings.json')
+		if (!settingsFile.exists()) {
+			throw new GradleException("found no settings.json in project root, cannot gather builds")
+		}
+		def jsonSettings = new groovy.json.JsonSlurper().parse(settingsFile)
+		jsonSettings.versions.each { versionName ->
+			def nodeProject = rootProject.project(":${versionName}")
 			copy {
 				from(buildLibs(nodeProject).toFile()) {
 					include '*.jar'
@@ -40,6 +49,6 @@ tasks.register('buildAndGather') {
 			}
 			delete(buildLibs(nodeProject).toFile())
 		}
-        println 'Builds gathered successfully!'
+		println 'Builds gathered successfully!'
 	}
 }

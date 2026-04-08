@@ -68,3 +68,49 @@ runs:
       with:
         name: Artifacts
         path: gathered-artifacts
+
+    - name: Build CurseForge (lite) with gradle
+      shell: bash
+      run: |
+        echo "Building CurseForge (lite) variant..."
+        
+        MAX_RETRIES=3
+        RETRY_DELAY=10
+        
+        count=0
+        success=false
+
+        while [ $count -lt $MAX_RETRIES ]; do
+          if ./gradlew build -Plite_version; then
+            success=true
+            break
+          fi
+        
+          count=$((count+1))
+          echo "⚠️ Lite build failed. Attempt $count of $MAX_RETRIES..."
+        
+          if [ $count -lt $MAX_RETRIES ]; then
+            echo "Waiting $RETRY_DELAY seconds before retrying..."
+            sleep $RETRY_DELAY
+          fi
+        done
+
+        if [ "$success" = false ]; then
+          echo "❌ Lite build failed after $MAX_RETRIES attempts."
+          exit 1
+        fi
+      env:
+        BUILD_ID: ${{ github.run_number }}
+        BUILD_RELEASE: false
+
+    - name: Gather CurseForge (lite) artifacts
+      shell: bash
+      run: |
+        mkdir -p gathered-artifacts-lite
+        cp -r versions/*/build/libs/* gathered-artifacts-lite/
+
+    - name: Upload CurseForge (lite) artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Artifacts-Lite
+        path: gathered-artifacts-lite

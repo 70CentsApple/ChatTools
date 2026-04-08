@@ -131,18 +131,27 @@ public class TextUtils {
     }
 
     public static Component transWithPrefix(String str, String prefix) {
-//? if >=1.19 {
-        return Component.translatable(prefix + str);
-//?} else {
-       /*return new TranslatableComponent(prefix + str);
-*///?}
+        return transWithPrefix(str, prefix, new Object[0]);
     }
 
     public static Component transWithPrefix(String str, String prefix, Object... args) {
+        String key = prefix + str;
+//? if LITE_VERSION {
+        /*String liteKey = key + "@Lite";
 //? if >=1.19 {
-        return Component.translatable(prefix + str, args);
+        Component lite = Component.translatable(liteKey, args);
 //?} else {
-       /*return new TranslatableComponent(prefix + str, args);
+       /^Component lite = new TranslatableComponent(liteKey, args);
+^///?}
+        if (!liteKey.equals(lite.getString())) {
+            return lite;
+        }
+*///?}
+
+//? if >=1.19 {
+        return Component.translatable(key, args);
+//?} else {
+       /*return new TranslatableComponent(key, args);
 *///?}
     }
 

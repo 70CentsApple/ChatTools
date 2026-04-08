@@ -117,6 +117,14 @@ loom {
     }
 }
 
+tasks.register('runLiteClient', Exec) {
+    group = 'loom'
+    description = 'Run client with CurseForge-compliant (lite) configuration'
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('win')
+    def gradlewFile = new File(rootProject.rootDir, isWindows ? 'gradlew.bat' : 'gradlew')
+    commandLine gradlewFile.absolutePath, ":${project.name}:runClient", '-Plite_version'
+}
+
 String FABRIC_API_MOD_ID = sc.current.parsed.matches('>=1.18') ? 'fabric-api' : 'fabric'
 String CLOTH_CONFIG_MOD_ID = sc.current.parsed.matches('>=1.18') ? 'cloth-config' : 'cloth-config2'
 
@@ -133,7 +141,7 @@ java {
     targetCompatibility = JAVA_COMPATIBILITY
 }
 
-version = 'v' + project.mod_version + '+' + project.minecraft_version + '-' + mod_brand
+version = 'v' + project.mod_version + (rootProject.hasProperty('lite_version') ? '-lite' : '') + '+' + project.minecraft_version + '-' + mod_brand
 group = project.maven_group
 base.archivesName = project.archives_base_name
 

@@ -23,6 +23,7 @@ import javax.net.ssl.X509TrustManager;
  * @author 70CentsApple
  */
 public class DownloadUtils {
+//? if !LITE_VERSION {
     private static final String DOWNLOAD_SITE = "https://70centsapple.top/download/chat_tools/download.php?version=250805&file=";
     public static final Path STORAGE_DIR = Path.of(
 //? if FABRIC {
@@ -36,12 +37,18 @@ public class DownloadUtils {
     private static final String OS = System.getProperty("os.name");
     // whether it is the first scan, or we have no successful scans.
     private static boolean shouldCheckMD5OnJudgingReadiness = true;
+//?}
 
     public static boolean shouldCheckIfFullyReady() {
+//? if !LITE_VERSION {
         return (boolean) ConfigUtils.get("notifier.Toast.Enabled") && "ADDON".equals(
                 (String) ConfigUtils.get("notifier.Toast.Mode"));
+//?} else {
+        /*return false;
+*///?}
     }
 
+//? if !LITE_VERSION {
     public static boolean checkIfFullyReady() {
         Map<String, String> fileNames = getFileNamesMap();
         if (fileNames == null) {
@@ -140,7 +147,9 @@ public class DownloadUtils {
         }
         LoggerUtils.info("[ChatTools] Addons are fully downloaded and ready.");
     }
+//?}
 
+//? if !LITE_VERSION {
     private static void downloadFile(String fileName, Path targetPath, QuadConsumer<String, Integer, Integer, Integer> processSupplier) throws Exception {
         URL url = new URL(DOWNLOAD_SITE + fileName);
         HttpURLConnection connection = createTrustAllConnection(url);
@@ -181,6 +190,7 @@ public class DownloadUtils {
             return reader.readLine();
         }
     }
+//?}
 
     /**
      * Creates an HttpURLConnection that trusts all SSL certificates.
@@ -213,6 +223,7 @@ public class DownloadUtils {
         return connection;
     }
 
+//? if !LITE_VERSION {
     private static boolean checkMD5(Path filePath, String md5) throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         try (InputStream is = Files.newInputStream(filePath)) {
@@ -229,4 +240,5 @@ public class DownloadUtils {
         }
         return sb.toString().equalsIgnoreCase(md5);
     }
+//?}
 }

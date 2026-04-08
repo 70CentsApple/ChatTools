@@ -73,6 +73,7 @@ key:
       variableType: "変数タイプ: %s"
     gui:
       title: "チャットツール設定"
+      title@Lite: "チャットツール設定 - Lite"
     category:
       general: "全般"
       notifier: "通知"
@@ -261,6 +262,11 @@ key:
           '@Tooltip': |-
             §6ADDON§r: アドオンによる通知。追加ファイルが必要です。/chattools downloadで手動DL。
             §6POWERSHELL§r: PowerShellコマンドで通知。
+            §6AWT§r: Java AWTで通知（通常は動作しません。非推奨）
+            §6TWO_SLICES§r: two-slicesで通知（Linux/Mac向け）
+          '@Tooltip@Lite': |-
+            §6ADDON§r: このバージョンでは利用できません。
+            §6POWERSHELL§r: このバージョンでは利用できません。
             §6AWT§r: Java AWTで通知（通常は動作しません。非推奨）
             §6TWO_SLICES§r: two-slicesで通知（Linux/Mac向け）
       Sound:

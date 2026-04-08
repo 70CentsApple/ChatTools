@@ -11,8 +11,26 @@ runs:
         name: Artifacts
         path: gathered-artifacts
 
-    - name: Make build summary
+    - name: Download all lite artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: Artifacts-Lite
+        path: gathered-artifacts-lite
+
+    - name: Make normal build summary
       run: python3 .github/workflows/scripts/summary.py  # ubuntu-22.04 uses Python 3.10.6
       shell: bash
       env:
         TARGET_SUBPROJECT: '' # leaving this empty means all subprojects
+        ARTIFACTS_DIR: gathered-artifacts
+        SUMMARY_TITLE: '## 🍎 Build Artifacts Summary 🍎'
+        SUMMARY_APPEND: 'false'
+
+    - name: Make lite build summary
+      run: python3 .github/workflows/scripts/summary.py
+      shell: bash
+      env:
+        TARGET_SUBPROJECT: '' # leaving this empty means all subprojects
+        ARTIFACTS_DIR: gathered-artifacts-lite
+        SUMMARY_TITLE: '## 🍏 Build Artifacts Summary - Lite 🍏'
+        SUMMARY_APPEND: 'true'

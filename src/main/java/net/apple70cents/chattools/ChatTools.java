@@ -96,6 +96,7 @@ public void onInitialize() {
         ModMenuIntegration.registerConfigScreen();
 //?}
 
+//? if !LITE_VERSION {
         Runnable runnable = () -> {
             if (DownloadUtils.shouldCheckIfFullyReady()) {
                 if (!DownloadUtils.checkIfFullyReady()) {
@@ -110,5 +111,6 @@ public void onInitialize() {
         // Start the file download in a new thread
         Thread downloadThread = new Thread(runnable, "ChatTools-Download-Thread");
         downloadThread.start();
+//?}
     }
 }

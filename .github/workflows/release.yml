@@ -217,6 +217,12 @@ jobs:
           name: Artifacts
           path: gathered-artifacts
 
+      - name: Download CurseForge (lite) Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: Artifacts-Lite
+          path: gathered-artifacts-lite
+
       - name: Download Release Notes
         uses: actions/download-artifact@v4
         with:
@@ -228,6 +234,10 @@ jobs:
           file_path=$(ls gathered-artifacts/*${{ matrix.artifact }}*.jar)
           echo "file_path=${file_path}" >> $GITHUB_ENV
           echo "file_path for this version is: $file_path"
+
+          cf_file_path=$(ls gathered-artifacts-lite/*${{ matrix.artifact }}*.jar)
+          echo "cf_file_path=${cf_file_path}" >> $GITHUB_ENV
+          echo "cf_file_path for this version is: $cf_file_path"
           
           raw_tag_name=${GITHUB_REF#refs/tags/}
           
@@ -268,7 +278,7 @@ jobs:
           token: ${{ secrets.CURSEFORGE_TOKEN }}
           project_id: "1453568"
           game_endpoint: "minecraft"
-          file_path: ${{ env.file_path }}
+          file_path: ${{ env.cf_file_path }}
           # 7499: Modloader - Fabric, 10150: Modloader - NeoForge, 9638: Environment - Client
           game_versions: "${{ matrix.target_game_versions_cf_ids }},Modloader:${{ matrix.modloader }},9638"
           release_type: "release"

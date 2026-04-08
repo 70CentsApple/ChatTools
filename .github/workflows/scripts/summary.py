@@ -33,12 +33,17 @@ def main():
     target_subproject_env = os.environ.get('TARGET_SUBPROJECT', '')
     target_subprojects = list(filter(None, target_subproject_env.split(',') if target_subproject_env != '' else []))
     print(f'target_subprojects: {target_subprojects}')
+    artifacts_dir = os.environ.get('ARTIFACTS_DIR', 'gathered-artifacts')
+    summary_title = os.environ.get('SUMMARY_TITLE', '## 🍎 Build Artifacts Summary 🍎')
+    append_summary = os.environ.get('SUMMARY_APPEND', 'false').lower() == 'true'
+    print(f'artifacts_dir: {artifacts_dir}')
+    print(f'append_summary: {append_summary}')
 
     with open('settings.json') as f:
         settings: dict = json.load(f)
 
-    with open(os.environ['GITHUB_STEP_SUMMARY'], 'w') as f:
-        f.write('## 🍎 Build Artifacts Summary 🍎\n\n')
+    with open(os.environ['GITHUB_STEP_SUMMARY'], 'a' if append_summary else 'w') as f:
+        f.write(f'{summary_title}\n\n')
         f.write('| Subproject | File | Size | SHA-256 |\n')
         f.write('| --- | --- | --- | --- |\n')
 
@@ -49,7 +54,7 @@ def main():
                 print(f'- Skipping {subproject}')
                 continue
             # file_paths = glob.glob(f'/build/libs/{MOD_VERSION}/*{subproject}*.jar')
-            file_paths = glob.glob(f'gathered-artifacts/*+{subproject}*.jar')
+            file_paths = glob.glob(f'{artifacts_dir}/*+{subproject}*.jar')
             file_paths = list(filter(lambda fp: not any(fp.endswith(e) for e in ['-sources.jar','-dev.jar','-shadow.jar']), file_paths))
             if len(file_paths) == 0:
                 file_name = '*NOT FOUND*'

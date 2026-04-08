@@ -26,10 +26,14 @@ public class Toast {
                 toastWithAWT(TITLE, truncatedText);
                 break;
             case "POWERSHELL":
+//? if !LITE_VERSION {
                 toastWithPowershell(TITLE, truncatedText);
+//?}
                 break;
             case "ADDON":
+//? if !LITE_VERSION {
                 toastWithAddon(TITLE, truncatedText);
+//?}
                 break;
             case "TWO_SLICES":
                 toastWithTwoSlices(TITLE, truncatedText);
@@ -51,6 +55,7 @@ public class Toast {
         toastExecutor.run();
     }
 
+//? if !LITE_VERSION {
     public static void toastWithAddon(String caption, String text) {
         if (!DownloadUtils.checkIfFullyReady()) {
             MessageUtils.sendToActionbar(TextUtils.trans("texts.toast.failure"));
@@ -81,6 +86,7 @@ public class Toast {
             }
         });
     }
+//?}
 
     public static void toastWithAWT(String caption, String text) {
         LoggerUtils.info("[ChatTools] Toast Notified with AWT.");
@@ -104,6 +110,7 @@ public class Toast {
         });
     }
 
+//? if !LITE_VERSION {
     public static void toastWithPowershell(String caption, String text) {
         TOAST_EXECUTOR_THREAD_POOL.submit(() -> {
             try {
@@ -130,6 +137,7 @@ public class Toast {
             }
         });
     }
+//?}
 
     public static void toastWithTwoSlices(String caption, String text) {
         LoggerUtils.info("[ChatTools] Toast Notified with Two-Slices.");

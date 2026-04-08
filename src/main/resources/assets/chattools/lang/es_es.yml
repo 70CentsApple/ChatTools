@@ -73,6 +73,7 @@ key:
       variableType: "Tipo de Variable: %s"
     gui:
       title: "Configuración de Herramientas de Chat"
+      title@Lite: "Configuración de Herramientas de Chat - Lite"
     category:
       general: "General"
       notifier: "Notificador"
@@ -277,6 +278,14 @@ key:
             
             §6AWT§r: Notificación usando Java AWT (¡Normalmente no funciona. No recomendado!)
             
+            §6TWO_SLICES§r: Notificación usando two-slices. (Probablemente funciona en Linux y Mac OS X)
+          '@Tooltip@Lite': |-
+            §6ADDON§r: No disponible en esta versión.
+
+            §6POWERSHELL§r: No disponible en esta versión.
+
+            §6AWT§r: Notificación usando Java AWT (¡Normalmente no funciona. No recomendado!)
+
             §6TWO_SLICES§r: Notificación usando two-slices. (Probablemente funciona en Linux y Mac OS X)
       Sound:
         .: "Sonido"
