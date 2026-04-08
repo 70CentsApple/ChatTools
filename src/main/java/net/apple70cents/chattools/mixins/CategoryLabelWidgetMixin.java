@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 //? if >= 1.21.4 {
 import me.shedaniel.math.Rectangle;
 
+// A Cloth Config Mixin
 // fixes https://github.com/shedaniel/cloth-config/issues/300
 @Mixin(MultiElementListEntry.CategoryLabelWidget.class)
 public abstract class CategoryLabelWidgetMixin {

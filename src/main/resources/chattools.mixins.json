@@ -12,6 +12,7 @@
     "ChatScreenMixin",
     "ClientHandshakePacketListenerImplMixin",
     "ClientPacketListenerMixin",
+    "ElementEntryMixin",
     "EntityRendererMixin",
     "FontMixin",
     "FriendlyByteBufMixin",
