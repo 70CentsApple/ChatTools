@@ -61,7 +61,7 @@ runs:
       shell: bash
       run: |
         mkdir -p gathered-artifacts
-        cp -r versions/*/build/libs/* gathered-artifacts/
+        mv versions/*/build/libs/* gathered-artifacts/
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -107,7 +107,7 @@ runs:
       shell: bash
       run: |
         mkdir -p gathered-artifacts-lite
-        cp -r versions/*/build/libs/* gathered-artifacts-lite/
+        mv versions/*/build/libs/* gathered-artifacts-lite/
 
     - name: Upload CurseForge (lite) artifacts
       uses: actions/upload-artifact@v4
