@@ -28,14 +28,10 @@ public class ChatColorEraser {
 
     public static Component work(Component message) {
         String key = message.toString();
-
-        if (cache.containsKey(key)) {
-            return cache.get(key); // get from cache
-        }
-
-        text = message;
-        executor.run();
-        cache.put(key, text);
-        return text;
+        return cache.computeIfAbsent(key, k -> {
+            text = message;
+            executor.run();
+            return text;
+        });
     }
 }

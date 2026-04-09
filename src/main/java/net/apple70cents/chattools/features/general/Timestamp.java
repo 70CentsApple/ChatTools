@@ -23,12 +23,7 @@ public class Timestamp {
                 .getMonth()
                 .getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
         if (ConfigUtils.getBoolean("general.Timestamp.CopyToChatBar.Enabled")) {
-            HoverEvent hoverEvent =
-//? if >=1.21.5 {
-                    new HoverEvent.ShowText(
-//?} else {
-                    /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
+            HoverEvent hoverEvent = TextUtils.showTextHoverEvent(
                     longTimeDisplay.copy().append("\n\n").append(TextUtils.trans("texts.copy.launch")));
             ClickEvent clickEvent =
 //? if >=1.21.5 {
@@ -41,13 +36,7 @@ public class Timestamp {
                                                                                               .withClickEvent(clickEvent));
             return (TextUtils.SPACER.copy().append(timestampText)).append(message);
         } else {
-            HoverEvent hoverEvent =
-//? if >=1.21.5 {
-                    new HoverEvent.ShowText(
-//?} else {
-                    /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
-                    longTimeDisplay);
+            HoverEvent hoverEvent = TextUtils.showTextHoverEvent(longTimeDisplay);
             MutableComponent timestampText = shortTimeDisplay.copy().setStyle(Style.EMPTY.withHoverEvent(hoverEvent));
             return (TextUtils.SPACER.copy().append(timestampText)).append(message);
         }

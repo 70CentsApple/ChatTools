@@ -44,9 +44,7 @@ public class NickHider {
     }).setFailsafeJudgement(() -> ConfigUtils.NICK_HIDER_ENABLED);
 
     public static Component work(Component message) {
-        while (cache.size() > ConfigUtils.NICK_HIDER_CACHE_SIZE) {
-            cache.remove(cache.keySet().iterator().next());
-        }
+        TextUtils.evictOldest(cache, ConfigUtils.NICK_HIDER_CACHE_SIZE);
         LocalPlayer player = Minecraft.getInstance().player;
         nickname = TextUtils.encodeColorCodes(ConfigUtils.NICK_HIDER_NICKNAME);
         if (player != null) {

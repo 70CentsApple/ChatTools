@@ -36,15 +36,21 @@ public class TextUtils {
 //?} else {
 /*new ClickEvent(ClickEvent.Action.OPEN_URL, "https://70centsapple.top/blogs/#/chat-tools-faq")
 *///?}
-    ).withHoverEvent(
-//? if >=1.21.5 {
-            new HoverEvent.ShowText(
-//?} else {
-/*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
+    ).withHoverEvent(showTextHoverEvent(
                     ConfigScreenTooltipUtils.getTooltip("general.FAQ", "FAQ", null)));
     public static final String PREFIX = "key.chattools.";
     public static final Component SPACER = literal("").copy().setStyle(Style.EMPTY);
+
+    /**
+     * Creates a HoverEvent that shows text, abstracting away version differences.
+     */
+    public static HoverEvent showTextHoverEvent(Component text) {
+//? if >=1.21.5 {
+        return new HoverEvent.ShowText(text);
+//?} else {
+        /*return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+*///?}
+    }
 
     public static class MessageUnit {
         public Component message;
@@ -64,6 +70,17 @@ public class TextUtils {
 
     // For a newly received message, the key is its hashcode and the value is its MessageUnit
     public static Map<String, MessageUnit> messageMap = new LinkedHashMap<>();
+
+    /**
+     * Evicts the oldest entries from a LinkedHashMap until its size is within the given limit.
+     */
+    public static <K, V> void evictOldest(Map<K, V> map, int maxSize) {
+        var it = map.keySet().iterator();
+        while (map.size() > maxSize && it.hasNext()) {
+            it.next();
+            it.remove();
+        }
+    }
     public static MessageUnit latestMessage = null;
 
     /**
@@ -93,10 +110,7 @@ public class TextUtils {
 
     public static void putMessageMapWithHashcode(String hashcode, MessageUnit messageUnit) {
         int maxSize = ConfigUtils.getInt("general.MaxHistoryLength");
-        while (messageMap.size() > maxSize) {
-            // pops the first element
-            messageMap.remove(messageMap.keySet().iterator().next());
-        }
+        evictOldest(messageMap, maxSize);
 
         messageMap.put(hashcode, messageUnit);
         setLatestMessage(messageUnit);
