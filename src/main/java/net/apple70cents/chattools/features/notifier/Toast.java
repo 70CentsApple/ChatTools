@@ -82,7 +82,7 @@ public class Toast {
                 }
             } catch (Exception e) {
                 MessageUtils.sendToActionbar(TextUtils.trans("texts.toast.failure"));
-                e.printStackTrace();
+                LoggerUtils.error("[ChatTools] Failed to send toast notification", e);
             }
         });
     }
@@ -103,7 +103,7 @@ public class Toast {
             try {
                 tray.add(trayIcon);
             } catch (AWTException e) {
-                e.printStackTrace();
+                LoggerUtils.error("[ChatTools] Failed to add system tray icon", e);
             }
             trayIcon.displayMessage(caption, text, TrayIcon.MessageType.NONE);
             tray.remove(trayIcon);
@@ -133,7 +133,7 @@ public class Toast {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerUtils.error("[ChatTools] Failed to send PowerShell toast notification", e);
             }
         });
     }

@@ -60,7 +60,7 @@ public class ConfigStorage {
             }
             configMap = GSON.fromJson(reader, Map.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error reading config file", e);
         }
     }
 
@@ -70,12 +70,8 @@ public class ConfigStorage {
         } else if (ConfigUtils.DEFAULT_CONFIG.hasKey(key)) {
             return ConfigUtils.DEFAULT_CONFIG.get(key);
         } else {
-            LoggerUtils.error("[ChatTools] Error occurred when getting variable \"" + key + "\", no such key!");
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            LoggerUtils.error("[ChatTools] Error occurred when getting variable \"" + key + "\", no such key!",
+                    new IllegalArgumentException("No such config key: " + key));
             return null;
         }
     }
@@ -100,8 +96,7 @@ public class ConfigStorage {
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(FILE), StandardCharsets.UTF_8)) {
             GSON.toJson(configMap, writer);
         } catch (Exception e) {
-            LoggerUtils.error("[ChatTools] Couldn't save config.");
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Couldn't save config.", e);
         }
     }
 }

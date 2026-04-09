@@ -15,8 +15,7 @@ public class ChatColorEraser {
         try {
             text = TextUtils.replaceComponentColor(text.copy());
         } catch (Exception e) {
-            LoggerUtils.error("[ChatTools] Error occurred on erasing the color of this text: " + text + ", let's show it raw...");
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error occurred on erasing the color of this text: " + text + ", let's show it raw...", e);
         }
     }).setMaxLimitPerSecond(() -> ConfigUtils.getInt("general.CircuitBreaker.OverrideChatColorThreshold"))
     .setFailsafeFunction(() -> {

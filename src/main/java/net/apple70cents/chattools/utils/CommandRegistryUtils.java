@@ -383,7 +383,7 @@ public class CommandRegistryUtils {
             }
             MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set", key, ConfigUtils.get(key)));
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error setting config value", e);
             MessageUtils.sendToNonPublicChat(TextUtils.literal(e.toString()).copy()
                     .setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED)));
         }

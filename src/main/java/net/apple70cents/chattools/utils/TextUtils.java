@@ -229,7 +229,7 @@ public class TextUtils {
 *///?}
             return jsonElement;
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error serializing component to JSON", e);
             return null;
         }
     }
@@ -245,7 +245,7 @@ public class TextUtils {
             /*return Component.Serializer.fromJson(jsonElement);
 *///?}
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error deserializing JSON to component", e);
             return TextUtils.literal("ERROR").copy();
         }
     }

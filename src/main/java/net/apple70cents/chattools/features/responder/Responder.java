@@ -70,7 +70,7 @@ public class Responder {
             try {
                 Thread.sleep(delayInMilliseconds);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
             // work

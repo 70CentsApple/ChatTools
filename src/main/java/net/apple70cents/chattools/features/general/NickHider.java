@@ -31,8 +31,7 @@ public class NickHider {
                 text = original;
             }
         } catch (Exception e) {
-            LoggerUtils.error("[ChatTools] Error occurred on nick-hiding this text: " + text + ", let's show it raw...");
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error occurred on nick-hiding this text: " + text + ", let's show it raw...", e);
             text = original;
         }
     }).setMaxLimitPerSecond(() -> ConfigUtils.getInt("general.CircuitBreaker.NickHiderThreshold"))

@@ -62,7 +62,7 @@ public class ConfigGuiLoader {
             
             configGuiMapInitialized = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error initializing config GUI map", e);
         }
     }
 
