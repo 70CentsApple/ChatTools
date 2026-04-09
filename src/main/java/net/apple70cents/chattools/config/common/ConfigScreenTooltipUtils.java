@@ -1,5 +1,6 @@
 package net.apple70cents.chattools.config.common;
 
+import net.apple70cents.chattools.utils.LoggerUtils;
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
