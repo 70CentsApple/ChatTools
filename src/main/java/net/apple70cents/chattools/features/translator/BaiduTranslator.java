@@ -6,14 +6,11 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.gui.components.EditBox;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BaiduTranslator extends AbstractTranslator {
     private static final String ENDPOINT = "https://fanyi-api.baidu.com/api/trans/vip/translate";
@@ -81,10 +78,7 @@ public class BaiduTranslator extends AbstractTranslator {
     }
 
     private static String sendPost(Map<String, String> params) throws Exception {
-        String form = params.entrySet().stream()
-                .map(e -> URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8) + "="
-                        + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
-                .collect(Collectors.joining("&"));
+        String form = buildQueryString(params);
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()

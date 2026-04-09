@@ -10,7 +10,7 @@ public class ChatCompactor {
         if (occurrencesCount <= 1) {
             return msg;
         }
-        int maxOccurrence = ((Number) ConfigUtils.get("general.ChatCompactor.MaxOccurrence")).intValue();
+        int maxOccurrence = ConfigUtils.getInt("general.ChatCompactor.MaxOccurrence");
         String tail = "";
         if (occurrencesCount > maxOccurrence) {
             tail = " (" + maxOccurrence + "+)";
@@ -22,12 +22,12 @@ public class ChatCompactor {
 
     public static int calculateOccurrenceCount(Component message) {
         int previousOccurrenceCount = 0;
-        if ((boolean) ConfigUtils.get("general.ChatCompactor.Enabled") && message != null) {
+        if (ConfigUtils.getBoolean("general.ChatCompactor.Enabled") && message != null) {
             TextUtils.MessageUnit latestMessageUnit = TextUtils.getLatestMessage();
             if (latestMessageUnit == null) {
                 return 1;
             }
-            if ((boolean) ConfigUtils.get("general.ChatCompactor.UseStrict")) {
+            if (ConfigUtils.getBoolean("general.ChatCompactor.UseStrict")) {
                 if (message.equals(latestMessageUnit.message)) {
                     previousOccurrenceCount = latestMessageUnit.occurrenceCount;
                 }

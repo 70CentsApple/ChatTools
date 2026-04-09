@@ -60,7 +60,7 @@ public class ConfigScreenTooltipUtils {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerUtils.error("[ChatTools] Error getting tooltip default value", e);
             }
             Component defaults = TextUtils.trans("texts.defaultValue", defaultValue).copy()
                     .withStyle(ChatFormatting.GRAY);

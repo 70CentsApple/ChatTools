@@ -36,4 +36,13 @@ public class LoggerUtils {
         /*System.err.println(s);
 *///?}
     }
+
+    public static void error(String s, Throwable t){
+//? if >=1.18 {
+        LOGGER.error(s, t);
+//?} else {
+        /*System.err.println(s);
+        t.printStackTrace();
+*///?}
+    }
 }

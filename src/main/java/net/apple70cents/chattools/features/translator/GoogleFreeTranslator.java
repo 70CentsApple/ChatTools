@@ -8,11 +8,9 @@ import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class GoogleFreeTranslator extends AbstractTranslator {
     private static final String ENDPOINT = "https://translate.googleapis.com/translate_a/single";
@@ -54,10 +52,7 @@ public class GoogleFreeTranslator extends AbstractTranslator {
     }
 
     private static String sendGet(Map<String, String> params) throws Exception {
-        String queryString = params.entrySet().stream()
-                .map(e -> URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8) + "="
-                        + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
-                .collect(Collectors.joining("&"));
+        String queryString = buildQueryString(params);
         String fullUrl = ENDPOINT + "?" + queryString;
 
         HttpClient client = HttpClient.newBuilder()

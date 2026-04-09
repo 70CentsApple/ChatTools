@@ -43,7 +43,7 @@ public abstract class ClientHandshakePacketListenerImplMixin {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return;
         }
-        if (!(boolean) ConfigUtils.get("customJoinMessage.Enabled")) {
+        if (!ConfigUtils.getBoolean("customJoinMessage.Enabled")) {
             return;
         }
 //? if >=1.19 {

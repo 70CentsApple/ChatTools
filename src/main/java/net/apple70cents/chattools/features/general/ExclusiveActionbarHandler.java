@@ -54,9 +54,9 @@ public class ExclusiveActionbarHandler {
 *///?}
         Font font = Minecraft.getInstance().font;
 
-        float baseSize = ((Number) ConfigUtils.get("general.ExclusiveActionbar.Size")).floatValue();
-        int baseXOffset = ((Number) ConfigUtils.get("general.ExclusiveActionbar.XOffset")).intValue();
-        int baseYOffset = ((Number) ConfigUtils.get("general.ExclusiveActionbar.YOffset")).intValue();
+        float baseSize = ConfigUtils.getFloat("general.ExclusiveActionbar.Size");
+        int baseXOffset = ConfigUtils.getInt("general.ExclusiveActionbar.XOffset");
+        int baseYOffset = ConfigUtils.getInt("general.ExclusiveActionbar.YOffset");
 
         long currentTime = System.currentTimeMillis();
         int index = 0;

@@ -31,13 +31,13 @@ public void restoreMessages(boolean clearHistory, CallbackInfo ci) {
         if (!(ConfigUtils.CHAT_TOOLS_ENABLED)) {
             return;
         }
-        if (!((boolean) ConfigUtils.get("general.RestoreMessages.Enabled"))) {
+        if (!(ConfigUtils.getBoolean("general.RestoreMessages.Enabled"))) {
             return;
         }
 //? if <1.17 {
         /*if(theFirstVisit){ theFirstVisit = false; } else if (clearHistory) {
 *///?}
-        if ((boolean) ConfigUtils.get("general.RestoreMessages.SplitLineEnabled")) {
+        if (ConfigUtils.getBoolean("general.RestoreMessages.SplitLineEnabled")) {
             MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.RestoreMessagesSplitLine"));
         }
         // this cancels the clear function, in other words, restores the message.

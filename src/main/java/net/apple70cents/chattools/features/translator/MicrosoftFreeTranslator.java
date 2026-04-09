@@ -9,10 +9,8 @@ import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MicrosoftFreeTranslator extends AbstractTranslator {
     private static final String ENDPOINT = "https://api-edge.cognitive.microsofttranslator.com/translate";
@@ -62,10 +60,7 @@ public class MicrosoftFreeTranslator extends AbstractTranslator {
     }
 
     private static String sendPost(Map<String, String> params, String text) throws Exception {
-        String queryString = params.entrySet().stream()
-                .map(e -> URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8) + "="
-                        + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
-                .collect(Collectors.joining("&"));
+        String queryString = buildQueryString(params);
         String fullUrl = ENDPOINT + "?" + queryString;
 
         String jsonBody = "[{\"Text\": " + new Gson().toJson(text) + "}]";

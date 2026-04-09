@@ -323,12 +323,7 @@ public class RuleEditScreen extends Screen {
         // Draw field labels
         for (FieldEntry entry : fieldEntries) {
             String capitalizedField = entry.fieldName.substring(0, 1).toUpperCase() + entry.fieldName.substring(1);
-            Style style = Style.EMPTY.withHoverEvent(
-//? if >=1.21.5 {
-                    new HoverEvent.ShowText(
-//?} else {
-/*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
+            Style style = Style.EMPTY.withHoverEvent(TextUtils.showTextHoverEvent(
                     TextUtils.trans(this.configKey + "." + capitalizedField + ".@Tooltip")));
             Component label = TextUtils.trans(this.configKey + "." + capitalizedField).copy().withStyle(style);
 //? if >=26.1 {

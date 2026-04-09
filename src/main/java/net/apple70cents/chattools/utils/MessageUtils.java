@@ -97,7 +97,7 @@ public class MessageUtils {
         }
         updateLastSentMessageTimestamp();
 
-        boolean oldStatus = (boolean) ConfigUtils.get("formatter.Enabled");
+        boolean oldStatus = ConfigUtils.getBoolean("formatter.Enabled");
 
         if (forceDisableFormatter) {
             ConfigUtils.set("formatter.Enabled", false);
@@ -105,7 +105,7 @@ public class MessageUtils {
 
 //? if >=1.19 {
         Minecraft.getInstance().execute(() -> {
-            if ((boolean) ConfigUtils.get("general.UseSendPacketsForSendingMessages")) {
+            if (ConfigUtils.getBoolean("general.UseSendPacketsForSendingMessages")) {
                 ChatScreen tempChatScreen = new ChatScreen(text
 //? if >=1.21.9 {
                         , false

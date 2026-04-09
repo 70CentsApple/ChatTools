@@ -41,8 +41,8 @@ public class DownloadUtils {
 
     public static boolean shouldCheckIfFullyReady() {
 //? if !LITE_VERSION {
-        return (boolean) ConfigUtils.get("notifier.Toast.Enabled") && "ADDON".equals(
-                (String) ConfigUtils.get("notifier.Toast.Mode"));
+        return ConfigUtils.getBoolean("notifier.Toast.Enabled") && "ADDON".equals(
+                ConfigUtils.getString("notifier.Toast.Mode"));
 //?} else {
         /*return false;
 *///?}
@@ -70,7 +70,7 @@ public class DownloadUtils {
                             return false;
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LoggerUtils.error("[ChatTools] Error checking MD5 for addon file", e);
                     }
                 }
             }
@@ -141,8 +141,7 @@ public class DownloadUtils {
                     LoggerUtils.info("[ChatTools] " + fileName + " was downloaded successfully.");
                 }
             } catch (Exception e) {
-                LoggerUtils.error("[ChatTools] Error occurred while downloading \"" + url + "\".");
-                e.printStackTrace();
+                LoggerUtils.error("[ChatTools] Error occurred while downloading \"" + url + "\".", e);
             }
         }
         LoggerUtils.info("[ChatTools] Addons are fully downloaded and ready.");

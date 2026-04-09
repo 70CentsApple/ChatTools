@@ -40,13 +40,7 @@ public class ClickEventsPreviewer {
         // Add two empty lines before it (Also works as a Style Spacer)
         Component textToAppendWithTwoEmptyLinesInFront = TextUtils.literal("\n\n").copy().append(textToAppend);
         if (hoverEvent == null) {
-            style = style.withHoverEvent(
-//? if >=1.21.5 {
-                    new HoverEvent.ShowText(
-//?} else {
-                    /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
-                    textToAppend));
+            style = style.withHoverEvent(TextUtils.showTextHoverEvent(textToAppend));
         } else {
             Component oldHoverComponent =
 //? if >=1.21.5 {
@@ -57,13 +51,7 @@ public class ClickEventsPreviewer {
             // Has Actions.SHOW_TEXT
             if (oldHoverComponent != null && !oldHoverComponent.getString().isBlank()) {
                 Component newHoverComponent = (TextUtils.SPACER.copy().append(oldHoverComponent)).append(textToAppendWithTwoEmptyLinesInFront);
-                style = style.withHoverEvent(
-//? if >=1.21.5 {
-                        new HoverEvent.ShowText(
-//?} else {
-                        /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
-                        newHoverComponent));
+                style = style.withHoverEvent(TextUtils.showTextHoverEvent(newHoverComponent));
             } else {
 //? if >=26.1 {
                 HoverEvent.EntityTooltipInfo entityContent = "show_entity".equals(hoverEvent.action().getSerializedName()) ? ((HoverEvent.ShowEntity) hoverEvent).entity() : null;
@@ -94,21 +82,9 @@ public class ClickEventsPreviewer {
                 }
                 if (oldHoverComponent != null) {
                     Component newHoverComponent = (TextUtils.SPACER.copy().append(oldHoverComponent)).append(textToAppendWithTwoEmptyLinesInFront);
-                    style = style.withHoverEvent(
-//? if >=1.21.5 {
-                            new HoverEvent.ShowText(
-//?} else {
-                            /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
-                                    newHoverComponent));
+                    style = style.withHoverEvent(TextUtils.showTextHoverEvent(newHoverComponent));
                 } else {
-                    style = style.withHoverEvent(
-//? if >=1.21.5 {
-                            new HoverEvent.ShowText(
-//?} else {
-                            /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
-                             textToAppendWithTwoEmptyLinesInFront));
+                    style = style.withHoverEvent(TextUtils.showTextHoverEvent(textToAppendWithTwoEmptyLinesInFront));
                 }
             }
         }

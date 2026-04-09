@@ -10,7 +10,7 @@ import net.minecraft.client.gui.screens.ChatScreen;
 
 public class ChatHistoryNavigator {
     public static boolean shouldWork() {
-        if (!(boolean) ConfigUtils.get("general.ChatHistoryNavigator.Enabled")) {
+        if (!ConfigUtils.getBoolean("general.ChatHistoryNavigator.Enabled")) {
             return false;
         }
         if (!(Minecraft.getInstance().screen instanceof ChatScreen)) {

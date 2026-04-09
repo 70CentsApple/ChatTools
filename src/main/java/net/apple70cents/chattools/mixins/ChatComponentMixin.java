@@ -62,7 +62,7 @@ public abstract class ChatComponentMixin {
             , at = @At(value = "CONSTANT", args = "intValue=100"))
     public int modifyMaxHistorySize(int originalMaxSize) {
         if (ConfigUtils.CHAT_TOOLS_ENABLED) {
-            return ((Number) ConfigUtils.get("general.MaxHistoryLength")).intValue();
+            return ConfigUtils.getInt("general.MaxHistoryLength");
         } else {
             return 100;
         }
@@ -129,12 +129,12 @@ public abstract class ChatComponentMixin {
         if (Responder.shouldWork(message)) {
             Responder.work(message);
         }
-        if ((boolean) ConfigUtils.get("general.OverrideChatColor.Enabled")) {
+        if (ConfigUtils.getBoolean("general.OverrideChatColor.Enabled")) {
             message = ChatColorEraser.work(message);
         }
 
         int occurrenceCount = 1;
-        if ((boolean) ConfigUtils.get("general.ChatCompactor.Enabled")) {
+        if (ConfigUtils.getBoolean("general.ChatCompactor.Enabled")) {
             occurrenceCount = ChatCompactor.calculateOccurrenceCount(message);
             if (occurrenceCount > 1 && !this.allMessages.isEmpty()) {
                 try {
@@ -143,7 +143,7 @@ public abstract class ChatComponentMixin {
                 } catch (Exception e) {
                     // if any error (e.g. UnsupportedOperationException), catch it to avoid crashing
                     LoggerUtils.info("[ChatTools] Failed to remove duplicate message for compaction.");
-                    e.printStackTrace();
+                    LoggerUtils.error("[ChatTools] Compaction error", e);
                 }
             }
         }
@@ -151,8 +151,8 @@ public abstract class ChatComponentMixin {
         Component msgWithoutAdditionalAffixes = message;
         String hashcode = TextUtils.generateHashcode(message);
 
-        if ((boolean) ConfigUtils.get("notifier.Highlight.InsertBeforeTimestamps")) {
-            if ((boolean) ConfigUtils.get("general.Timestamp.Enabled")) {
+        if (ConfigUtils.getBoolean("notifier.Highlight.InsertBeforeTimestamps")) {
+            if (ConfigUtils.getBoolean("general.Timestamp.Enabled")) {
                 message = Timestamp.work(message, hashcode);
             }
             SpecialUnits.NotifierRuleUnit matchedRule = BasicNotifier.shouldWork(message);
@@ -164,12 +164,12 @@ public abstract class ChatComponentMixin {
             if (matchedRule != null) {
                 message = BasicNotifier.work(message, matchedRule);
             }
-            if ((boolean) ConfigUtils.get("general.Timestamp.Enabled")) {
+            if (ConfigUtils.getBoolean("general.Timestamp.Enabled")) {
                 message = Timestamp.work(message, hashcode);
             }
         }
 
-        if ((boolean) ConfigUtils.get("general.ChatCompactor.Enabled")) {
+        if (ConfigUtils.getBoolean("general.ChatCompactor.Enabled")) {
             message = ChatCompactor.appendTrailing(message, occurrenceCount);
         }
 

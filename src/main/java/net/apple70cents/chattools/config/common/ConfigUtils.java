@@ -26,21 +26,21 @@ public class ConfigUtils {
     public static SpecialUnits.KeyModifiers REPEAT_KEY_MODIFIER = SpecialUnits.KeyModifiers.NONE;
 
     public static void refreshCache() {
-        CHAT_TOOLS_ENABLED = (boolean) CONFIG.get("general.ChatTools.Enabled");
-        KFC_ENABLED = (boolean) CONFIG.get("general.kfc");
-        DISABLE_TEXT_OBFUSCATION_ENABLED = (boolean) CONFIG.get("general.DisableTextObfuscation.Enabled");
-        BUBBLE_ENABLED = (boolean) CONFIG.get("bubble.Enabled");
-        NICK_HIDER_ENABLED = (boolean) CONFIG.get("general.NickHider.Enabled");
-        NICK_HIDER_CACHE_SIZE = ((Number) CONFIG.get("general.NickHider.CacheSize")).intValue();
-        NICK_HIDER_NICKNAME = (String) ConfigUtils.get("general.NickHider.Nickname");
-        EXCLUSIVE_ACTIONBAR_ENABLED = (boolean) CONFIG.get("general.ExclusiveActionbar.Enabled");
-        PREVIEW_CLICK_EVENTS_ENABLED = (boolean) CONFIG.get("general.PreviewClickEvents.Enabled");
-        INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED = (boolean) CONFIG.get("general.IncreaseChatFieldMaxLength");
-        MACRO_ENABLED = (boolean) CONFIG.get("chatkeybindings.Macro.Enabled");
-        MACRO_LIST = SpecialUnits.MacroUnit.fromList((List) ConfigUtils.get("chatkeybindings.Macro.List"));
-        REVIEW_LAST_MESSAGE_WITH_UP_ARROW_ONLY_ENABLED = (boolean) CONFIG.get("chatkeybindings.ReviewLastMessageWithUpArrowOnly");
-        REPEAT_KEY = (String) CONFIG.get("chatkeybindings.RepeatKey");
-        REPEAT_KEY_MODIFIER = SpecialUnits.KeyModifiers.valueOf((String) CONFIG.get("chatkeybindings.RepeatKeyModifier"));
+        CHAT_TOOLS_ENABLED = getBoolean("general.ChatTools.Enabled");
+        KFC_ENABLED = getBoolean("general.kfc");
+        DISABLE_TEXT_OBFUSCATION_ENABLED = getBoolean("general.DisableTextObfuscation.Enabled");
+        BUBBLE_ENABLED = getBoolean("bubble.Enabled");
+        NICK_HIDER_ENABLED = getBoolean("general.NickHider.Enabled");
+        NICK_HIDER_CACHE_SIZE = getInt("general.NickHider.CacheSize");
+        NICK_HIDER_NICKNAME = getString("general.NickHider.Nickname");
+        EXCLUSIVE_ACTIONBAR_ENABLED = getBoolean("general.ExclusiveActionbar.Enabled");
+        PREVIEW_CLICK_EVENTS_ENABLED = getBoolean("general.PreviewClickEvents.Enabled");
+        INCREASE_CHAT_FIELD_MAX_LENGTH_ENABLED = getBoolean("general.IncreaseChatFieldMaxLength");
+        MACRO_ENABLED = getBoolean("chatkeybindings.Macro.Enabled");
+        MACRO_LIST = SpecialUnits.MacroUnit.fromList((List) get("chatkeybindings.Macro.List"));
+        REVIEW_LAST_MESSAGE_WITH_UP_ARROW_ONLY_ENABLED = getBoolean("chatkeybindings.ReviewLastMessageWithUpArrowOnly");
+        REPEAT_KEY = getString("chatkeybindings.RepeatKey");
+        REPEAT_KEY_MODIFIER = SpecialUnits.KeyModifiers.valueOf(getString("chatkeybindings.RepeatKeyModifier"));
     }
 
     public static void init(){
@@ -63,6 +63,26 @@ public class ConfigUtils {
 
     public static Object get(String var){
         return CONFIG.get(var);
+    }
+
+    public static boolean getBoolean(String key) {
+        return (boolean) CONFIG.get(key);
+    }
+
+    public static int getInt(String key) {
+        return ((Number) CONFIG.get(key)).intValue();
+    }
+
+    public static long getLong(String key) {
+        return ((Number) CONFIG.get(key)).longValue();
+    }
+
+    public static float getFloat(String key) {
+        return ((Number) CONFIG.get(key)).floatValue();
+    }
+
+    public static String getString(String key) {
+        return (String) CONFIG.get(key);
     }
 
     public static Object getDefault(String var){

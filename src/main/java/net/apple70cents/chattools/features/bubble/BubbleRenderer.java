@@ -84,7 +84,7 @@ public class BubbleRenderer {
                 return;
             }
             Component renderComponent = ConfigUtils.NICK_HIDER_ENABLED ? NickHider.work(text) : text;
-            int yOffset = ((Number) ConfigUtils.get("bubble.YOffset")).intValue();
+            int yOffset = ConfigUtils.getInt("bubble.YOffset");
 
             poseStack.pushPose();
 
@@ -113,7 +113,7 @@ public class BubbleRenderer {
 *///?}
                     , -0.025F, 0.025F);
             Matrix4f pose = poseStack.last().pose();
-            int maxLineWidth = ((Number) ConfigUtils.get("bubble.MaxLineWidth")).intValue();
+            int maxLineWidth = ConfigUtils.getInt("bubble.MaxLineWidth");
             List<FormattedCharSequence> lines = font.split(renderComponent, maxLineWidth);
             int linesAmount = lines.size();
 
@@ -198,8 +198,8 @@ public class BubbleRenderer {
             } else if (!TextUtils.wash(entityDisplayName.getString()).equals(senderName)) {
                 // not the entity being selected
                 continue;
-            } else if (bubbleMap.get(senderName).getLifetime() >= ((Number) ConfigUtils.get("bubble.Lifetime"))
-                    .intValue() * 1000L) {
+            } else if (bubbleMap.get(senderName).getLifetime() >= ConfigUtils.getInt("bubble.Lifetime")
+                    * 1000L) {
                 // the bubble's lifetime is over, let's remove it
                 bubbleMap.remove(senderName);
                 continue;

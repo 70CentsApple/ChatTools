@@ -17,18 +17,13 @@ public class Timestamp {
                                                                                                .getOffset(instant));
         // get zone offset
         String offsetString = ZoneId.systemDefault().getRules().getOffset(instant).getId();
-        Component shortTimeDisplay = TextUtils.of(timeInFormat((String) ConfigUtils.get("general.Timestamp.Pattern")));
+        Component shortTimeDisplay = TextUtils.of(timeInFormat(ConfigUtils.getString("general.Timestamp.Pattern")));
         // yyyy/MM/dd HH:mm:ss UTC±XX:XX
         Component longTimeDisplay = TextUtils.of(String.format("%4d/%d/%d %02d:%02d:%02d\nUTC%s", currentTime.getYear(), currentTime
                 .getMonth()
                 .getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
-        if ((boolean) ConfigUtils.get("general.Timestamp.CopyToChatBar.Enabled")) {
-            HoverEvent hoverEvent =
-//? if >=1.21.5 {
-                    new HoverEvent.ShowText(
-//?} else {
-                    /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
+        if (ConfigUtils.getBoolean("general.Timestamp.CopyToChatBar.Enabled")) {
+            HoverEvent hoverEvent = TextUtils.showTextHoverEvent(
                     longTimeDisplay.copy().append("\n\n").append(TextUtils.trans("texts.copy.launch")));
             ClickEvent clickEvent =
 //? if >=1.21.5 {
@@ -41,13 +36,7 @@ public class Timestamp {
                                                                                               .withClickEvent(clickEvent));
             return (TextUtils.SPACER.copy().append(timestampText)).append(message);
         } else {
-            HoverEvent hoverEvent =
-//? if >=1.21.5 {
-                    new HoverEvent.ShowText(
-//?} else {
-                    /*new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-*///?}
-                    longTimeDisplay);
+            HoverEvent hoverEvent = TextUtils.showTextHoverEvent(longTimeDisplay);
             MutableComponent timestampText = shortTimeDisplay.copy().setStyle(Style.EMPTY.withHoverEvent(hoverEvent));
             return (TextUtils.SPACER.copy().append(timestampText)).append(message);
         }

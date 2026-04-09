@@ -10,7 +10,7 @@ import net.minecraft.client.gui.components.EditBox;
 
 public class Translator {
     public static boolean shouldWork() {
-        if (!(boolean) ConfigUtils.get("translator.Enabled")) {
+        if (!ConfigUtils.getBoolean("translator.Enabled")) {
             return false;
         }
         if (!(Minecraft.getInstance().screen instanceof ChatScreen)) {
@@ -23,27 +23,27 @@ public class Translator {
         if (chat.getValue().isBlank()) {
             return;
         }
-        switch ((String) ConfigUtils.get("translator.Mode")) {
+        switch (ConfigUtils.getString("translator.Mode")) {
             case "BUILTIN":
-                String api = (String) ConfigUtils.get("translator.Builtin.API");
-                boolean usePost = (boolean) ConfigUtils.get("translator.Builtin.PostInstead");
+                String api = ConfigUtils.getString("translator.Builtin.API");
+                boolean usePost = ConfigUtils.getBoolean("translator.Builtin.PostInstead");
                 new BuiltinTranslator(chat, api, usePost).work();
                 break;
             case "BAIDU":
-                String baiduAppId = (String) ConfigUtils.get("translator.Baidu.Appid");
-                String baiduKey = (String) ConfigUtils.get("translator.Baidu.Appkey");
-                String baiduFrom = (String) ConfigUtils.get("translator.Baidu.from");
-                String baiduTo = (String) ConfigUtils.get("translator.Baidu.to");
+                String baiduAppId = ConfigUtils.getString("translator.Baidu.Appid");
+                String baiduKey = ConfigUtils.getString("translator.Baidu.Appkey");
+                String baiduFrom = ConfigUtils.getString("translator.Baidu.from");
+                String baiduTo = ConfigUtils.getString("translator.Baidu.to");
                 new BaiduTranslator(chat, baiduAppId, baiduKey, baiduFrom, baiduTo).work();
                 break;
             case "MICROSOFT_FREE":
-                String microsoftFreeFrom = (String) ConfigUtils.get("translator.MicrosoftFree.from");
-                String microsoftFreeTo = (String) ConfigUtils.get("translator.MicrosoftFree.to");
+                String microsoftFreeFrom = ConfigUtils.getString("translator.MicrosoftFree.from");
+                String microsoftFreeTo = ConfigUtils.getString("translator.MicrosoftFree.to");
                 new MicrosoftFreeTranslator(chat, microsoftFreeFrom, microsoftFreeTo).work();
                 break;
             case "GOOGLE_FREE":
-                String googleFreeSl = (String) ConfigUtils.get("translator.GoogleFree.sl");
-                String googleFreeTl = (String) ConfigUtils.get("translator.GoogleFree.tl");
+                String googleFreeSl = ConfigUtils.getString("translator.GoogleFree.sl");
+                String googleFreeTl = ConfigUtils.getString("translator.GoogleFree.tl");
                 new GoogleFreeTranslator(chat, googleFreeSl, googleFreeTl).work();
                 break;
             default:

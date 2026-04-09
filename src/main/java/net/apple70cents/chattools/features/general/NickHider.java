@@ -31,23 +31,20 @@ public class NickHider {
                 text = original;
             }
         } catch (Exception e) {
-            LoggerUtils.error("[ChatTools] Error occurred on nick-hiding this text: " + text + ", let's show it raw...");
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error occurred on nick-hiding this text: " + text + ", let's show it raw...", e);
             text = original;
         }
-    }).setMaxLimitPerSecond(() -> ((Number) ConfigUtils.get("general.CircuitBreaker.NickHiderThreshold")).intValue())
+    }).setMaxLimitPerSecond(() -> ConfigUtils.getInt("general.CircuitBreaker.NickHiderThreshold"))
     .setFailsafeFunction(() -> {
         ConfigUtils.set("general.NickHider.Enabled", false);
-        int threshold = ((Number) ConfigUtils.get("general.CircuitBreaker.NickHiderThreshold")).intValue();
+        int threshold = ConfigUtils.getInt("general.CircuitBreaker.NickHiderThreshold");
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
         LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold).getString());
     }).setFailsafeJudgement(() -> ConfigUtils.NICK_HIDER_ENABLED);
 
     public static Component work(Component message) {
-        while (cache.size() > ConfigUtils.NICK_HIDER_CACHE_SIZE) {
-            cache.remove(cache.keySet().iterator().next());
-        }
+        TextUtils.evictOldest(cache, ConfigUtils.NICK_HIDER_CACHE_SIZE);
         LocalPlayer player = Minecraft.getInstance().player;
         nickname = TextUtils.encodeColorCodes(ConfigUtils.NICK_HIDER_NICKNAME);
         if (player != null) {

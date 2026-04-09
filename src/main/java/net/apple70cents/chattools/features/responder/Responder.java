@@ -20,11 +20,11 @@ public class Responder {
     public static long lastRequestTimestamp = -1L;
 
     public static boolean shouldWork(Component message) {
-        boolean enabled = ConfigUtils.CHAT_TOOLS_ENABLED && (boolean) ConfigUtils.get("responder.Enabled");
+        boolean enabled = ConfigUtils.CHAT_TOOLS_ENABLED && ConfigUtils.getBoolean("responder.Enabled");
         // obviously, we should not respond to our own messages
         boolean notJustSent = !MessageUtils.hadJustSentMessage();
-        boolean filterPassed = ChatFilter.shouldFilter(message) ? (boolean) ConfigUtils.get("responder.RespondToFilteredMessages") : true;
-        boolean awaitTimePassed = System.currentTimeMillis() - lastRequestTimestamp >= ((Number) ConfigUtils.get("responder.MinAwaitTimeInMilliseconds")).longValue();
+        boolean filterPassed = ChatFilter.shouldFilter(message) ? ConfigUtils.getBoolean("responder.RespondToFilteredMessages") : true;
+        boolean awaitTimePassed = System.currentTimeMillis() - lastRequestTimestamp >= ConfigUtils.getLong("responder.MinAwaitTimeInMilliseconds");
         return enabled && notJustSent && filterPassed && awaitTimePassed;
     }
 
@@ -70,7 +70,8 @@ public class Responder {
             try {
                 Thread.sleep(delayInMilliseconds);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LoggerUtils.error("[ChatTools] Responder thread interrupted", e);
+                Thread.currentThread().interrupt();
             }
 
             // work

@@ -319,7 +319,7 @@ public class CommandRegistryUtils {
             MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.toggle.error", key));
             return;
         }
-        boolean now = (boolean) ConfigUtils.get(key);
+        boolean now = ConfigUtils.getBoolean(key);
         updateConfig(key, String.valueOf(!now));
     }
 
@@ -383,7 +383,7 @@ public class CommandRegistryUtils {
             }
             MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.set", key, ConfigUtils.get(key)));
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerUtils.error("[ChatTools] Error setting config value", e);
             MessageUtils.sendToNonPublicChat(TextUtils.literal(e.toString()).copy()
                     .setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED)));
         }
