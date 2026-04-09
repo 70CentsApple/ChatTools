@@ -93,7 +93,7 @@ public class KeyboardUtils {
         // LAZY mode: verify no other modifier keys are pressed
         if (SpecialUnits.MacroModes.LAZY.equals(mode)) {
             int[] forbiddenKeys = FORBIDDEN_KEYS_IN_LAZY.get(modifier);
-            if (forbiddenKeys != null && isAnyKeyDown(window, forbiddenKeys)) {
+            if (isAnyKeyDown(window, forbiddenKeys)) {
                 return false;
             }
             if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_F3)) {

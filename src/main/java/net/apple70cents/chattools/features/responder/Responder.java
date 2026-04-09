@@ -70,6 +70,7 @@ public class Responder {
             try {
                 Thread.sleep(delayInMilliseconds);
             } catch (InterruptedException e) {
+                LoggerUtils.error("[ChatTools] Responder thread interrupted", e);
                 Thread.currentThread().interrupt();
             }
 
