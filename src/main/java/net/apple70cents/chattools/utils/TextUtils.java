@@ -7,10 +7,7 @@ import net.apple70cents.chattools.config.common.ConfigScreenTooltipUtils;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.minecraft.network.chat.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,7 +72,7 @@ public class TextUtils {
      * Evicts the oldest entries from a LinkedHashMap until its size is within the given limit.
      */
     public static <K, V> void evictOldest(Map<K, V> map, int maxSize) {
-        var it = map.keySet().iterator();
+        Iterator<K> it = map.keySet().iterator();
         while (map.size() > maxSize && it.hasNext()) {
             it.next();
             it.remove();
