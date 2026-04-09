@@ -41,8 +41,8 @@ public class DownloadUtils {
 
     public static boolean shouldCheckIfFullyReady() {
 //? if !LITE_VERSION {
-        return (boolean) ConfigUtils.get("notifier.Toast.Enabled") && "ADDON".equals(
-                (String) ConfigUtils.get("notifier.Toast.Mode"));
+        return ConfigUtils.getBoolean("notifier.Toast.Enabled") && "ADDON".equals(
+                ConfigUtils.getString("notifier.Toast.Mode"));
 //?} else {
         /*return false;
 *///?}

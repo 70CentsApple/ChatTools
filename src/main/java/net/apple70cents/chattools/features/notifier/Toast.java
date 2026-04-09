@@ -21,7 +21,7 @@ public class Toast {
     private static final CircuitBreakerExecutor toastExecutor = CircuitBreakerExecutor.of(() -> {
         final String TITLE = TextUtils.trans("texts.toast.title").getString();
         String truncatedText = truncateWithEllipsis(text, 250);
-        switch ((String) ConfigUtils.get("notifier.Toast.Mode")) {
+        switch (ConfigUtils.getString("notifier.Toast.Mode")) {
             case "AWT":
                 toastWithAWT(TITLE, truncatedText);
                 break;
@@ -41,14 +41,14 @@ public class Toast {
             default:
                 return;
         }
-    }).setMaxLimitPerSecond(() -> ((Number) ConfigUtils.get("general.CircuitBreaker.ToastThreshold")).intValue())
+    }).setMaxLimitPerSecond(() -> ConfigUtils.getInt("general.CircuitBreaker.ToastThreshold"))
     .setFailsafeFunction(() -> {
         ConfigUtils.set("notifier.Toast.Enabled", false);
-        int threshold = ((Number) ConfigUtils.get("general.CircuitBreaker.ToastThreshold")).intValue();
+        int threshold = ConfigUtils.getInt("general.CircuitBreaker.ToastThreshold");
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.Toast", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.Toast", threshold));
         LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.Toast", threshold).getString());
-    }).setFailsafeJudgement(() -> (Boolean) ConfigUtils.get("notifier.Toast.Enabled"));
+    }).setFailsafeJudgement(() -> ConfigUtils.getBoolean("notifier.Toast.Enabled"));
 
     public static void work(String text1) {
         text = text1;

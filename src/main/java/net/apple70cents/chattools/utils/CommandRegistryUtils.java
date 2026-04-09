@@ -319,7 +319,7 @@ public class CommandRegistryUtils {
             MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.config.toggle.error", key));
             return;
         }
-        boolean now = (boolean) ConfigUtils.get(key);
+        boolean now = ConfigUtils.getBoolean(key);
         updateConfig(key, String.valueOf(!now));
     }
 

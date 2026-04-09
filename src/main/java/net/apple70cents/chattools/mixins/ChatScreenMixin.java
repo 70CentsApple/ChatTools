@@ -86,7 +86,7 @@ public abstract class ChatScreenMixin {
         return Minecraft.getInstance().options.hideGui &&
                 ConfigUtils.CHAT_TOOLS_ENABLED &&
                 (Minecraft.getInstance().screen instanceof ChatScreen) &&
-                (boolean) ConfigUtils.get("general.HideChatHistoryInF1Mode");
+                ConfigUtils.getBoolean("general.HideChatHistoryInF1Mode");
     }
 
 //? if >=26.1 {

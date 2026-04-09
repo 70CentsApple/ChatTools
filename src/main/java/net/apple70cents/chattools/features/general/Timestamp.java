@@ -17,12 +17,12 @@ public class Timestamp {
                                                                                                .getOffset(instant));
         // get zone offset
         String offsetString = ZoneId.systemDefault().getRules().getOffset(instant).getId();
-        Component shortTimeDisplay = TextUtils.of(timeInFormat((String) ConfigUtils.get("general.Timestamp.Pattern")));
+        Component shortTimeDisplay = TextUtils.of(timeInFormat(ConfigUtils.getString("general.Timestamp.Pattern")));
         // yyyy/MM/dd HH:mm:ss UTC±XX:XX
         Component longTimeDisplay = TextUtils.of(String.format("%4d/%d/%d %02d:%02d:%02d\nUTC%s", currentTime.getYear(), currentTime
                 .getMonth()
                 .getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
-        if ((boolean) ConfigUtils.get("general.Timestamp.CopyToChatBar.Enabled")) {
+        if (ConfigUtils.getBoolean("general.Timestamp.CopyToChatBar.Enabled")) {
             HoverEvent hoverEvent =
 //? if >=1.21.5 {
                     new HoverEvent.ShowText(

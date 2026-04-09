@@ -35,10 +35,10 @@ public class NickHider {
             e.printStackTrace();
             text = original;
         }
-    }).setMaxLimitPerSecond(() -> ((Number) ConfigUtils.get("general.CircuitBreaker.NickHiderThreshold")).intValue())
+    }).setMaxLimitPerSecond(() -> ConfigUtils.getInt("general.CircuitBreaker.NickHiderThreshold"))
     .setFailsafeFunction(() -> {
         ConfigUtils.set("general.NickHider.Enabled", false);
-        int threshold = ((Number) ConfigUtils.get("general.CircuitBreaker.NickHiderThreshold")).intValue();
+        int threshold = ConfigUtils.getInt("general.CircuitBreaker.NickHiderThreshold");
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold));
         LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.NickHider", threshold).getString());

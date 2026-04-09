@@ -92,7 +92,7 @@ public class TextUtils {
     }
 
     public static void putMessageMapWithHashcode(String hashcode, MessageUnit messageUnit) {
-        int maxSize = ((Number) ConfigUtils.get("general.MaxHistoryLength")).intValue();
+        int maxSize = ConfigUtils.getInt("general.MaxHistoryLength");
         while (messageMap.size() > maxSize) {
             // pops the first element
             messageMap.remove(messageMap.keySet().iterator().next());

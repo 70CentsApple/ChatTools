@@ -18,14 +18,14 @@ public class ChatColorEraser {
             LoggerUtils.error("[ChatTools] Error occurred on erasing the color of this text: " + text + ", let's show it raw...");
             e.printStackTrace();
         }
-    }).setMaxLimitPerSecond(() -> ((Number) ConfigUtils.get("general.CircuitBreaker.OverrideChatColorThreshold")).intValue())
+    }).setMaxLimitPerSecond(() -> ConfigUtils.getInt("general.CircuitBreaker.OverrideChatColorThreshold"))
     .setFailsafeFunction(() -> {
         ConfigUtils.set("general.OverrideChatColor.Enabled", false);
-        int threshold = ((Number) ConfigUtils.get("general.CircuitBreaker.OverrideChatColorThreshold")).intValue();
+        int threshold = ConfigUtils.getInt("general.CircuitBreaker.OverrideChatColorThreshold");
         MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.CircuitBreaker.exceed.OverrideChatColor", threshold));
         MessageUtils.sendToActionbar(TextUtils.trans("texts.CircuitBreaker.exceed.OverrideChatColor", threshold));
         LoggerUtils.warn("[ChatTools] " + TextUtils.trans("texts.CircuitBreaker.exceed.OverrideChatColor", threshold).getString());
-    }).setFailsafeJudgement(() -> (Boolean) ConfigUtils.get("general.OverrideChatColor.Enabled"));
+    }).setFailsafeJudgement(() -> ConfigUtils.getBoolean("general.OverrideChatColor.Enabled"));
 
     public static Component work(Component message) {
         String key = message.toString();

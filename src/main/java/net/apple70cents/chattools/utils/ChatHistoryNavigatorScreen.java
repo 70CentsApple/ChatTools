@@ -222,11 +222,11 @@ public class ChatHistoryNavigatorScreen extends Screen {
             if (this.messageUnit == null) {
                 return TextUtils.literal("§lOutdated message! It should NOT be here!");
             }
-            if (!(boolean) ConfigUtils.get("general.ChatHistoryNavigator.ShowTimestampsEnabled")) {
+            if (!ConfigUtils.getBoolean("general.ChatHistoryNavigator.ShowTimestampsEnabled")) {
                 return this.messageUnit.message;
             } else {
                 LocalDateTime time = LocalDateTime.ofEpochSecond(this.messageUnit.unixTimestamp, 0, ZoneId.systemDefault().getRules().getOffset(Instant.now()));
-                Component timestamp = TextUtils.of(Timestamp.timeInFormat((String) ConfigUtils.get("general.Timestamp.Pattern"), time));
+                Component timestamp = TextUtils.of(Timestamp.timeInFormat(ConfigUtils.getString("general.Timestamp.Pattern"), time));
                 return (TextUtils.SPACER.copy().append(timestamp)).append(this.messageUnit.message);
             }
         }

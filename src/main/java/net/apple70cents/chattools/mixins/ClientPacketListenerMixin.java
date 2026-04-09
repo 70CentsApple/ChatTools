@@ -29,7 +29,7 @@ public abstract class ClientPacketListenerMixin {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return message;
         }
-        if (!(boolean) ConfigUtils.get("formatter.Enabled")) {
+        if (!ConfigUtils.getBoolean("formatter.Enabled")) {
             return message;
         }
         return Formatter.work(message);

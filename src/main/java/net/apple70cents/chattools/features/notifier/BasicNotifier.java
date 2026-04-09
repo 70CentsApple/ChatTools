@@ -48,7 +48,7 @@ public class BasicNotifier {
         }
         // if MatchMyNameEnabled and it does have my name
         LocalPlayer player = Minecraft.getInstance().player;
-        if (((boolean) ConfigUtils.get(
+        if ((ConfigUtils.getBoolean(
                 "notifier.MatchMyNameEnabled")) && player != null && RegExUtils.getOrCompilePattern(
                 Pattern.quote(player.getName().getString()), Pattern.MULTILINE).matcher(washedMessage).find()) {
             // use a default rule with all notifications enabled
@@ -69,7 +69,7 @@ public class BasicNotifier {
     }
 
     public static Component work(Component text, SpecialUnits.NotifierRuleUnit rule) {
-        if ((boolean) ConfigUtils.get("notifier.IgnoreMyMessageEnabled") && MessageUtils.hadJustSentMessage()) {
+        if (ConfigUtils.getBoolean("notifier.IgnoreMyMessageEnabled") && MessageUtils.hadJustSentMessage()) {
             return text;
         }
 
@@ -79,18 +79,18 @@ public class BasicNotifier {
         ClientLevel world = Minecraft.getInstance().level;
 
         // Toast
-        if (rule.toast && (boolean) ConfigUtils.get("notifier.Toast.Enabled") && !Minecraft.getInstance().isWindowActive()) {
+        if (rule.toast && ConfigUtils.getBoolean("notifier.Toast.Enabled") && !Minecraft.getInstance().isWindowActive()) {
             Toast.work(TextUtils.wash(text.getString()));
         }
 
         // Sound
-        if (rule.sound && (boolean) ConfigUtils.get("notifier.Sound.Enabled") && player != null && world != null) {
+        if (rule.sound && ConfigUtils.getBoolean("notifier.Sound.Enabled") && player != null && world != null) {
             Minecraft.getInstance().execute(() -> {
-                String identifier = (String) ConfigUtils.get("notifier.Sound.Type");
-                int volume = ((Number) ConfigUtils.get("notifier.Sound.Volume")).intValue();
-                int pitch = ((Number) ConfigUtils.get("notifier.Sound.Pitch")).intValue();
+                String identifier = ConfigUtils.getString("notifier.Sound.Type");
+                int volume = ConfigUtils.getInt("notifier.Sound.Volume");
+                int pitch = ConfigUtils.getInt("notifier.Sound.Pitch");
 
-                boolean sendFromCameraPos = (boolean) ConfigUtils.get("notifier.Sound.PlaySoundFromCameraPositionEnabled");
+                boolean sendFromCameraPos = ConfigUtils.getBoolean("notifier.Sound.PlaySoundFromCameraPositionEnabled");
 //? if >=1.21.9 {
                 Entity camera = Minecraft.getInstance().getCameraEntity();
 //?} else {
@@ -114,16 +114,16 @@ public class BasicNotifier {
         }
 
         // Actionbar notifications
-        if (rule.actionbar && (boolean) ConfigUtils.get("notifier.Actionbar.Enabled")) {
+        if (rule.actionbar && ConfigUtils.getBoolean("notifier.Actionbar.Enabled")) {
             Minecraft.getInstance().execute(() -> {
                 MessageUtils.sendToActionbar(TextUtils.trans("texts.actionbar.title"));
             });
         }
 
         // Highlight
-        if (rule.highlight && (boolean) ConfigUtils.get("notifier.Highlight.Enabled")) {
-            String prefix = TextUtils.encodeColorCodes((String) ConfigUtils.get("notifier.Highlight.Prefix"));
-            if ((boolean) ConfigUtils.get("notifier.Highlight.OverwriteEnabled")) {
+        if (rule.highlight && ConfigUtils.getBoolean("notifier.Highlight.Enabled")) {
+            String prefix = TextUtils.encodeColorCodes(ConfigUtils.getString("notifier.Highlight.Prefix"));
+            if (ConfigUtils.getBoolean("notifier.Highlight.OverwriteEnabled")) {
                 return TextUtils.of(prefix + text.getString());
             } else {
                 return (TextUtils.SPACER.copy().append(TextUtils.of(prefix))).append(text);

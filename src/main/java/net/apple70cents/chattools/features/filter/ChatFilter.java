@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class ChatFilter {
 
     public static boolean shouldFilter(Component text) {
-        if (!(boolean) ConfigUtils.get("filter.Enabled")) {
+        if (!ConfigUtils.getBoolean("filter.Enabled")) {
             return false;
         }
         // only respond once
@@ -33,7 +33,7 @@ public class ChatFilter {
     }
 
     public static void sendPlaceholderIfActive() {
-        if (!(boolean) ConfigUtils.get("filter.FilteredPlaceholderEnabled")) {
+        if (!ConfigUtils.getBoolean("filter.FilteredPlaceholderEnabled")) {
             return;
         }
         Style style = Style.EMPTY.withHoverEvent(

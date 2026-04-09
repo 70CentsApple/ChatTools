@@ -57,7 +57,7 @@ public void onInitialize() {
 *///?} elif NEOFORGE {
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre event) -> {
 //?}
-            if ((boolean) ConfigUtils.get("general.ShowWelcomeMessageEnabled")) {
+            if (ConfigUtils.getBoolean("general.ShowWelcomeMessageEnabled")) {
                 if (Minecraft.getInstance().player != null) {
                     MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.welcomeMessage").copy().setStyle(TextUtils.WEBSITE_URL_STYLE));
                     LoggerUtils.info("[ChatTools] Shown welcome message.");

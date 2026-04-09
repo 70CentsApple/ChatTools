@@ -32,7 +32,7 @@ public class Formatter {
             }
         }
 
-        if ((boolean) ConfigUtils.get("formatter.PreparsePlaceholdersEnabled")) {
+        if (ConfigUtils.getBoolean("formatter.PreparsePlaceholdersEnabled")) {
             PlaceholderEngine.addNewTempMapping("text", args -> parse(msg));
         } else {
             PlaceholderEngine.addNewTempMapping("text", args -> msg);
@@ -48,7 +48,7 @@ public class Formatter {
         processed = parse(processed);
         PlaceholderEngine.clearTempMappings();
 
-        if (processed.length() <= ((Number) ConfigUtils.get("formatter.DisableThreshold")).intValue()) {
+        if (processed.length() <= ConfigUtils.getInt("formatter.DisableThreshold")) {
             return processed;
         } else {
             return msg;
