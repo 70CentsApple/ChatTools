@@ -31,7 +31,7 @@ jobs:
           tag_name=${raw_tag_name#v}
           echo "tag_name=${tag_name}" >> $GITHUB_ENV
 
-          changelog=$(cat changelog.md)
+          changelog=$(cat CHANGELOG.md)
           echo "changelog<<EOF" >> $GITHUB_ENV
           echo "${changelog}" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
