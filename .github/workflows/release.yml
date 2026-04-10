@@ -73,16 +73,16 @@ jobs:
       matrix:
         include:
           # --- 26.x ---
-          - artifact: "26.1.1-fabric"
-            target_game_versions: "26.1,26.1.1"
-            target_game_versions_cf_ids: "15933,16021"
-            formatted_version_name: "26.1(.1)"
+          - artifact: "26.1.2-fabric"
+            target_game_versions: "26.1,26.1.1,26.1.2"
+            target_game_versions_cf_ids: "15933,16021,16082"
+            formatted_version_name: "26.1(.x)"
             modloader: "fabric"
 
-          - artifact: "26.1.1-neoforge"
-            target_game_versions: "26.1,26.1.1"
-            target_game_versions_cf_ids: "15933,16021"
-            formatted_version_name: "26.1(.1)"
+          - artifact: "26.1.2-neoforge"
+            target_game_versions: "26.1,26.1.1,26.1.2"
+            target_game_versions_cf_ids: "15933,16021,16082"
+            formatted_version_name: "26.1(.x)"
             modloader: "neoforge"
 
           # --- 1.21.x ---
