@@ -23,7 +23,13 @@ import static net.apple70cents.chattools.utils.TextUtils.trans;
  * @author 70CentsApple
  */
 public class ClothEntryBuilderUtils {
-    final static boolean SHOULD_EXPAND_ALL_RULES = false;
+    final static boolean SHOULD_EXPAND_ALL_RULES =
+//? if >=1.21.4 {
+            true
+//?} else {
+            /*false
+*///?}
+            ;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static TooltipListEntry getEntryBuilder(ConfigEntryBuilder eb, String type, String key, String errorSupplier, int... args) {
