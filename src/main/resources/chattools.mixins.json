@@ -6,13 +6,11 @@
   "plugin": "net.apple70cents.chattools.ChatToolsMixinPlugin",
   "mixins": [
     "BookViewScreenMixin",
-    "CategoryLabelWidgetMixin",
     "ChatComponentMixin",
     "ChatListenerMixin",
     "ChatScreenMixin",
     "ClientHandshakePacketListenerImplMixin",
     "ClientPacketListenerMixin",
-    "ElementEntryMixin",
     "EntityRendererMixin",
     "FontMixin",
     "FriendlyByteBufMixin",

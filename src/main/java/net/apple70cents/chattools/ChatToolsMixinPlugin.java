@@ -10,17 +10,6 @@ import java.util.Set;
 public class ChatToolsMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        // this is a mixin for cloth config only
-        if (mixinClassName.equals("net.apple70cents.chattools.mixins.CategoryLabelWidgetMixin") ||
-            mixinClassName.equals("net.apple70cents.chattools.mixins.ElementEntryMixin")) {
-            try {
-                Class.forName("me.shedaniel.clothconfig2.api.ConfigBuilder");
-                // if loaded
-                return true;
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-        }
         return true;
     }
 
