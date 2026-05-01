@@ -27,6 +27,7 @@ repositories {
     maven { url = 'https://neoforged.forgecdn.net/' } // Another NeoForge Maven
     maven { url = 'https://jitpack.io' } // GitHub Repo (for Two Slices)
     maven { url = "https://api.modrinth.com/maven" } // Modrinth (for YACL)
+    maven { url = "https://maven.isxander.dev/releases" } // YACL
 }
 
 // https://github.com/FabricMC/fabric-loader/issues/783
@@ -87,10 +88,15 @@ dependencies {
     }
 
     if (project.findProperty('yacl_version')?.toString()?.size() > 0) {
+        if (mod_brand == 'neoforge') {
+            // required for 1.21.8- NeoForge
+            // see https://docs.neoforged.net/toolchain/docs/dependencies/nonmclibs/
+            forgeRuntimeLibrary "org.quiltmc.parsers:gson:0.2.1"
+        }
         if (noRemap) {
-            api "maven.modrinth:yacl:${project.yacl_version}-${mod_brand}"
+            api "dev.isxander:yet-another-config-lib:${project.yacl_version}-${mod_brand}"
         } else {
-            modApi "maven.modrinth:yacl:${project.yacl_version}-${mod_brand}"
+            modApi "dev.isxander:yet-another-config-lib:${project.yacl_version}-${mod_brand}"
         }
     }
 
