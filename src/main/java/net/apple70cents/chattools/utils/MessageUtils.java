@@ -5,10 +5,12 @@ import net.apple70cents.chattools.features.general.ExclusiveActionbarHandler;
 import net.apple70cents.chattools.mixins.ScreenAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.lang3.StringUtils;
@@ -171,6 +173,32 @@ public class MessageUtils {
                 continue;
             }
             String playerName = player.getDisplayName().getString();
+
+            if (str.contains(playerName) && str.indexOf(playerName) < minIndex) {
+                minIndex = str.indexOf(playerName);
+                firstPlayerName = playerName;
+            }
+        }
+        return firstPlayerName;
+    }
+
+    /**
+     * finds the most front player profile name in the given string
+     *
+     * @param str the string
+     * @return null or the player name
+     */
+    public static String findTheFirstPlayerRealName(String str) {
+        if (Minecraft.getInstance().level == null) {
+            return null;
+        }
+        int minIndex = str.length();
+        String firstPlayerName = null;
+        for (AbstractClientPlayer player : Minecraft.getInstance().level.players()) {
+            if (player.getDisplayName() == null) {
+                continue;
+            }
+            String playerName = player.getPlainTextName();
 
             if (str.contains(playerName) && str.indexOf(playerName) < minIndex) {
                 minIndex = str.indexOf(playerName);

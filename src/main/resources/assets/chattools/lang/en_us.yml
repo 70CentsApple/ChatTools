@@ -583,6 +583,21 @@ key:
             It should include two RegEx groups:
               §6<name>§r: The Nickname
               §6<message>§r: The Separated Message Content
+        Partial:
+          .: Partial Match
+          '@Tooltip': |-
+            If enabled, we will perform a deep, proactive search 
+            for player nicknames within the <name> RegEx group.
+        Profile:
+          .: Match Profile Name
+          '@Tooltip': |-
+            If enabled, the proactive search target will switch 
+            to the player's profile name, instead of their
+            Display Name (nickname). 
+            Applies to "Partial Match" and "Fallback".
+            
+            Note: In this mode, bubbles for non-player entities 
+            and fake players (NPCs) may fail to display.
         Fallback:
           .: Fallback
           '@Tooltip': |-

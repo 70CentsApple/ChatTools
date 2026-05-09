@@ -33,17 +33,23 @@ public class SpecialUnits {
     public static class BubbleRuleUnit {
         public String address;
         public String pattern;
+        public boolean partial;
+        public boolean profile;
         public boolean fallback;
 
         public BubbleRuleUnit() {
             this.address = "*";
             this.pattern = "<(?<name>.*?)> (?<message>.*)";
+            this.partial = false;
+            this.profile = false;
             this.fallback = false;
         }
 
-        public BubbleRuleUnit(String address, String pattern, boolean fallback) {
+        public BubbleRuleUnit(String address, String pattern, boolean partial, boolean profile, boolean fallback) {
             this.address = address;
             this.pattern = pattern;
+            this.partial = partial;
+            this.profile = profile;
             this.fallback = fallback;
         }
 
@@ -51,8 +57,10 @@ public class SpecialUnits {
             if (ele instanceof Map) {
                 String address = (String) ((Map) ele).getOrDefault("address", "*");
                 String pattern = (String) ((Map) ele).getOrDefault("pattern", "<(?<name>.*?)> (?<message>.*)");
+                boolean partial = (boolean) ((Map) ele).getOrDefault("partial", false);
+                boolean profile = (boolean) ((Map) ele).getOrDefault("profile", false);
                 boolean fallback = (boolean) ((Map) ele).getOrDefault("fallback", false);
-                return new BubbleRuleUnit(address, pattern, fallback);
+                return new BubbleRuleUnit(address, pattern, partial, profile, fallback);
             } else if (ele instanceof BubbleRuleUnit) {
                 return (BubbleRuleUnit) ele;
             } else {
@@ -66,7 +74,11 @@ public class SpecialUnits {
 
         @Override
         public String toString() {
-            return "BubbleRuleUnit{address='" + address + "', pattern='" + pattern + "', fallback=" + fallback + '}';
+            return "BubbleRuleUnit{address='" + address
+                + "', pattern='" + pattern
+                + "', partial='" + partial
+                + "', profile='" + profile
+                + "', fallback=" + fallback + '}';
         }
     }
 
