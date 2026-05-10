@@ -1,5 +1,7 @@
 pluginManagement {
 	repositories {
+		mavenCentral()
+		gradlePluginPortal()
 		maven {
 			name = 'Fabric'
 			url = 'https://maven.fabricmc.net/'
@@ -20,8 +22,6 @@ pluginManagement {
 			name = 'KikuGie Snapshots'
 			url = "https://maven.kikugie.dev/snapshots"
 		}
-		mavenCentral()
-		gradlePluginPortal()
 	}
 }
 
