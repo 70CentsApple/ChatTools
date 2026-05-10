@@ -74,6 +74,7 @@
   "bubble.Enabled": true,
   "bubble.Lifetime": 8,
   "bubble.YOffset": 3,
+  "bubble.HideIfInvisibleEnabled": true,
   "bubble.MaxLineWidth": 190,
   "bubble.List": [
     {

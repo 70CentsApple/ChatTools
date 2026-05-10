@@ -558,6 +558,9 @@ key:
       YOffset:
         .: Y Offset
         '@Tooltip': Y offset of the bubble.
+      HideIfInvisibleEnabled:
+        .: Hide If Invisible
+        '@Tooltip': Toggles whether the bubble should be hidden when the speaker is invisible.
       MaxLineWidth:
         .: Max Line Width
         '@Tooltip': |-

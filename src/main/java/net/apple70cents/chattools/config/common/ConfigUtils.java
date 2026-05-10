@@ -13,6 +13,7 @@ public class ConfigUtils {
     public static boolean KFC_ENABLED = false;
     public static boolean DISABLE_TEXT_OBFUSCATION_ENABLED = false;
     public static boolean BUBBLE_ENABLED = false;
+    public static boolean BUBBLE_HIDE_IF_INVISIBLE_ENABLED = false;
     public static boolean NICK_HIDER_ENABLED = false;
     public static int NICK_HIDER_CACHE_SIZE = 0x70Ca;
     public static String NICK_HIDER_NICKNAME = "";
@@ -30,6 +31,7 @@ public class ConfigUtils {
         KFC_ENABLED = getBoolean("general.kfc");
         DISABLE_TEXT_OBFUSCATION_ENABLED = getBoolean("general.DisableTextObfuscation.Enabled");
         BUBBLE_ENABLED = getBoolean("bubble.Enabled");
+        BUBBLE_HIDE_IF_INVISIBLE_ENABLED = getBoolean("bubble.HideIfInvisibleEnabled");
         NICK_HIDER_ENABLED = getBoolean("general.NickHider.Enabled");
         NICK_HIDER_CACHE_SIZE = getInt("general.NickHider.CacheSize");
         NICK_HIDER_NICKNAME = getString("general.NickHider.Nickname");

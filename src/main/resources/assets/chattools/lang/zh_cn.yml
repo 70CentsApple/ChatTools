@@ -537,6 +537,9 @@ key:
       YOffset:
         .: 气泡Y轴偏移量
         '@Tooltip': 气泡的Y轴偏移量。
+      HideIfInvisibleEnabled:
+        .: 隐藏不可见玩家的气泡
+        '@Tooltip': 切换是否应隐藏不可见玩家的气泡。
       MaxLineWidth:
         .: 单行最大长度
         '@Tooltip': |-

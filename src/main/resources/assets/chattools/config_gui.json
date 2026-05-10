@@ -422,6 +422,10 @@
           "max": 20
         },
         {
+          "type": "boolean",
+          "key": "bubble.HideIfInvisibleEnabled"
+        },
+        {
           "type": "intSlider",
           "key": "bubble.MaxLineWidth",
           "min": 20,

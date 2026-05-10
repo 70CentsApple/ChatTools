@@ -381,6 +381,9 @@ key:
       YOffset:
         .: 氣泡Y軸偏移量
         '@Tooltip': 氣泡的Y軸偏移量。
+      HideIfInvisibleEnabled:
+        .: 隱藏不可見玩家的氣泡
+        '@Tooltip': 切換是否應隱藏不可見玩家的氣泡。
       List:
         .: '規則 §6(目前伺服器地址：%s§6)§r'
         '@Tooltip': |-

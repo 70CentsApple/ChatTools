@@ -226,6 +226,11 @@ public class BubbleRenderer {
                 continue;
             }
 
+            if (ConfigUtils.BUBBLE_HIDE_IF_INVISIBLE_ENABLED &&
+                    mc.player != null && entity.isInvisibleTo(mc.player)) {
+                continue;
+            }
+
             // Check if the bubble's lifetime is over.
             if (bubbleMap.get(matchedBubbleKey).getLifetime() >= maxBubbleLifetimeMs) {
                 bubbleMap.remove(matchedBubbleKey);
