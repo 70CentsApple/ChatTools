@@ -186,38 +186,57 @@ public class BubbleRenderer {
         if (bubbleMap.isEmpty() || mc.level == null || entity == null) {
             return;
         }
-        for (AbstractClientPlayer potentialSender : mc.level.players()) {
-            Component senderDisplayName = potentialSender.getDisplayName();
-            Component entityDisplayName = entity.hasCustomName() ? entity.getCustomName() : entity.getDisplayName();
-            if (senderDisplayName == null || entityDisplayName == null) {
-                continue;
-            }
-            String senderName = senderDisplayName.getString();
-            if (bubbleMap.containsKey(senderName)) {
-                if (!TextUtils.wash(entityDisplayName.getString()).equals(senderName)) {
-                    // not the entity being selected
-                    continue;
-                }
-            } else if (bubbleMap.containsKey(potentialSender.getPlainTextName())) {
-                if (entity.getUUID() != potentialSender.getUUID()) {
-                    // not the player being selected
-                    continue;
-                }
-                senderName = potentialSender.getPlainTextName();
-            } else {
+
+        Component renderedEntityNameComponent = entity.hasCustomName() ? entity.getCustomName() : entity.getDisplayName();
+        if (renderedEntityNameComponent == null) {
+            return;
+        }
+        String washedEntityName = TextUtils.wash(renderedEntityNameComponent.getString());
+        long maxBubbleLifetimeMs = ConfigUtils.getInt("bubble.Lifetime") * 1000L;
+
+        // Iterate through the players in the current world to find which player's
+        // chat bubble corresponds to this rendered entity.
+        for (AbstractClientPlayer player : mc.level.players()) {
+            String playerDisplayName = player.getDisplayName().getString();
+            String playerProfileName = player.getGameProfile()
+//? if >=1.21.10 {
+                    .name();
+//?} else {
+                    /*.getName();
+*///?}
+            if (playerDisplayName == null) {
                 continue;
             }
 
-            if (bubbleMap.get(senderName).getLifetime() >= ConfigUtils.getInt("bubble.Lifetime")
-                    * 1000L) {
-                // the bubble's lifetime is over, let's remove it
-                bubbleMap.remove(senderName);
+            // The key used to fetch the bubble from the bubbleMap.
+            String matchedBubbleKey = null;
+
+            // Try to match by the player's display name.
+            if (bubbleMap.containsKey(playerDisplayName) && washedEntityName.equals(playerDisplayName)) {
+                matchedBubbleKey = playerDisplayName;
+            }
+            // Try to match by the player's profile name or UUID
+            if (bubbleMap.containsKey(playerProfileName) && (washedEntityName.equals(playerProfileName)
+                    || entity.getUUID().equals(player.getUUID()))) {
+                matchedBubbleKey = playerProfileName;
+            }
+
+            // If there is no matching bubble for this player, skip to the next player.
+            if (matchedBubbleKey == null) {
                 continue;
             }
 
-            double d = mc.getEntityRenderDispatcher().distanceToSqr(potentialSender);
-            if (d <= 4096.0) {
-                bubbleMap.get(senderName).render(entity, poseStack, multiBufferSource, tickDelta
+            // Check if the bubble's lifetime is over.
+            if (bubbleMap.get(matchedBubbleKey).getLifetime() >= maxBubbleLifetimeMs) {
+                bubbleMap.remove(matchedBubbleKey);
+                continue;
+            }
+
+            // Now we can confirm that this entity corresponds to this player and the bubble is valid.
+            // Check the rendering distance.
+            double distanceToPlayerSqr = mc.getEntityRenderDispatcher().distanceToSqr(player);
+            if (distanceToPlayerSqr <= 4096.0) { // Distance is within 64 blocks (64^2 = 4096)
+                bubbleMap.get(matchedBubbleKey).render(entity, poseStack, multiBufferSource, tickDelta
 //? if >=1.21.9 {
                         , submitNodeCollector
 //?}
@@ -254,21 +273,16 @@ public class BubbleRenderer {
             Matcher matcher = RegExUtils.getOrCompilePattern(pattern).matcher(message);
             if (matcher.find()) {
                 String nameContainer = matcher.group("name");
-                String name = ( partial ? ( profile ?
-                    MessageUtils.findTheFirstPlayerRealName(nameContainer) :
-                    MessageUtils.findTheFirstPlayerName(nameContainer) ) :
-                    matcher.group("name") );
+                String name = partial ? MessageUtils.findTheFirstPlayerName(nameContainer, profile) : nameContainer;
 
                 if (name != null) {
-                    String messageContext = matcher.group("message");
-                    bubbleMap.put(name, new BubbleUnit(messageContext, System.currentTimeMillis()));
+                    String messageContent = matcher.group("message");
+                    bubbleMap.put(name, new BubbleUnit(messageContent, System.currentTimeMillis()));
                     found = true;
                 }
             }
             if (fallback && !found) {
-                String sender = (profile ?
-                    MessageUtils.findTheFirstPlayerRealName(message) :
-                    MessageUtils.findTheFirstPlayerName(message));
+                String sender = MessageUtils.findTheFirstPlayerName(message, profile);
                 if (sender == null) {
                     return;
                 }

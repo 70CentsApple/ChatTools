@@ -141,7 +141,7 @@ public class MessageUtils {
     public static void sendToPublicChatScheduled(String text, long delayInMilliseconds) {
         sendToPublicChatScheduled(text, false, delayInMilliseconds);
     }
-    
+
     public static void sendToPublicChatScheduled(String text, boolean forceDisableFormatter, long delayInMilliseconds) {
         CompletableFuture.runAsync(() -> {
             if (delayInMilliseconds > 0) {
@@ -162,47 +162,37 @@ public class MessageUtils {
      * @param str the string
      * @return null or the player name
      */
-    public static String findTheFirstPlayerName(String str) {
+    public static String findTheFirstPlayerName(String str, boolean useProfile) {
         if (Minecraft.getInstance().level == null) {
             return null;
         }
         int minIndex = str.length();
         String firstPlayerName = null;
         for (AbstractClientPlayer player : Minecraft.getInstance().level.players()) {
-            if (player.getDisplayName() == null) {
+            String playerName = null;
+            if (useProfile) {
+                playerName = player.getGameProfile()
+//? if >=1.21.10 {
+                        .name();
+//?} else {
+                        /*.getName();
+*///?}
+            } else {
+                if (player.getDisplayName() != null) {
+                    playerName = player.getDisplayName().getString();
+                }
+            }
+            if (playerName == null) {
                 continue;
             }
-            String playerName = player.getDisplayName().getString();
 
-            if (str.contains(playerName) && str.indexOf(playerName) < minIndex) {
-                minIndex = str.indexOf(playerName);
-                firstPlayerName = playerName;
-            }
-        }
-        return firstPlayerName;
-    }
-
-    /**
-     * finds the most front player profile name in the given string
-     *
-     * @param str the string
-     * @return null or the player name
-     */
-    public static String findTheFirstPlayerRealName(String str) {
-        if (Minecraft.getInstance().level == null) {
-            return null;
-        }
-        int minIndex = str.length();
-        String firstPlayerName = null;
-        for (AbstractClientPlayer player : Minecraft.getInstance().level.players()) {
-            if (player.getDisplayName() == null) {
-                continue;
-            }
-            String playerName = player.getPlainTextName();
-
-            if (str.contains(playerName) && str.indexOf(playerName) < minIndex) {
-                minIndex = str.indexOf(playerName);
-                firstPlayerName = playerName;
+            int index = str.indexOf(playerName);
+            if (index != -1) {
+                // select the longer one
+                if (index < minIndex || (index == minIndex && playerName.length() > firstPlayerName.length())) {
+                    minIndex = index;
+                    firstPlayerName = playerName;
+                }
             }
         }
         return firstPlayerName;

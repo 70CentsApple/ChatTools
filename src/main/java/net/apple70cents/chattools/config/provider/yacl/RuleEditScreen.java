@@ -360,7 +360,7 @@ public class RuleEditScreen extends Screen {
             case "NotifierList":
                 return Arrays.asList("address", "pattern", "toast", "sound", "actionbar", "highlight");
             case "BubbleList":
-                return Arrays.asList("address", "pattern", "fallback");
+                return Arrays.asList("address", "pattern", "partial", "profile", "fallback");
             case "ResponderList":
                 return Arrays.asList("address", "pattern", "message", "minDelayInMilliseconds", "maxDelayInMilliseconds", "forceDisableFormatter");
             case "FormatterList":

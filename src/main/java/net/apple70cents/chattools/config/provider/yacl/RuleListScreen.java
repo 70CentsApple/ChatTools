@@ -366,6 +366,8 @@ public class RuleListScreen extends Screen {
             case "BubbleList":
                 item.put("address", "*");
                 item.put("pattern", "<(?<name>.*?)> (?<message>.*)");
+                item.put("partial", false);
+                item.put("profile", false);
                 item.put("fallback", false);
                 return item;
             case "ResponderList":

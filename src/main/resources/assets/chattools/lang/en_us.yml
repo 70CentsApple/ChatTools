@@ -585,19 +585,12 @@ key:
               §6<message>§r: The Separated Message Content
         Partial:
           .: Partial Match
-          '@Tooltip': |-
-            If enabled, we will perform a deep, proactive search 
-            for player nicknames within the <name> RegEx group.
+          '@Tooltip': Toggle whether to re-attempt actively searching for player nicknames within the content captured by the §6<name>§r group.
         Profile:
           .: Match Profile Name
           '@Tooltip': |-
-            If enabled, the proactive search target will switch 
-            to the player's profile name, instead of their
-            Display Name (nickname). 
-            Applies to "Partial Match" and "Fallback".
-            
-            Note: In this mode, bubbles for non-player entities 
-            and fake players (NPCs) may fail to display.
+            If enabled, the target for active searching will be the player's real ID instead of their display name (nickname).
+            Applicable to "Partial Match" and "Fallback".
         Fallback:
           .: Fallback
           '@Tooltip': |-

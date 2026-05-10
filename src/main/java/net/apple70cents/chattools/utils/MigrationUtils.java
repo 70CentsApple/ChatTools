@@ -28,6 +28,36 @@ public class MigrationUtils {
         if (version <= 2.319) {
             migrateFrom2_31900(config);
         }
+        if (version <= 2.40202) {
+            migrateFrom2_40202(config);
+        }
+    }
+
+    /**
+     * Migration from v2.4.2.2 to v2.4.3
+     * bubble.List: add boolean fields "partial" and "profile"
+     */
+    @SuppressWarnings("unchecked")
+    private static void migrateFrom2_40202(ConfigStorage config) {
+        LoggerUtils.info("[ChatTools] Migrating config from v2.4.2.2 to v2.4.3...");
+        if (config.hasKey("bubble.List")) {
+            Object listObj = config.get("bubble.List");
+            if (listObj instanceof List) {
+                List<?> list = (List<?>) listObj;
+                for (Object item : list) {
+                    if (item instanceof Map) {
+                        Map<String, Object> map = (Map<String, Object>) item;
+                        if (!map.containsKey("partial")) {
+                            map.put("partial", false);
+                        }
+                        if (!map.containsKey("profile")) {
+                            map.put("profile", false);
+                        }
+                    }
+                }
+            }
+        }
+        LoggerUtils.info("[ChatTools] Migration from v2.4.2.2 to v2.4.3 completed.");
     }
 
     /**
@@ -68,7 +98,7 @@ public class MigrationUtils {
      */
     @SuppressWarnings("unchecked")
     private static void migrateFrom2_31800(ConfigStorage config) {
-        LoggerUtils.info("[ChatTools] Migrating config from v2.31800 to v2.31900...");
+        LoggerUtils.info("[ChatTools] Migrating config from v2.3.18 to v2.3.19...");
 
         // 1. Migrate notifier.AllowList: List<String> -> List<Map> (NotifierRuleUnit format)
         if (config.hasKey("notifier.AllowList")) {
@@ -134,4 +164,5 @@ public class MigrationUtils {
 
         LoggerUtils.info("[ChatTools] Migration from v2.3.18 to v2.3.19 completed.");
     }
+
 }

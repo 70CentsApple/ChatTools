@@ -276,6 +276,9 @@ public class TextUtils {
     }
 
     private static void replaceTextFieldValue(JsonElement jsonElement, Pattern oldValuePattern, String newValue, String parentKey) {
+        if (jsonElement == null) {
+            return;
+        }
         if (jsonElement.isJsonObject()) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             for (Map.Entry<String, JsonElement> ele : jsonObject.entrySet()) {

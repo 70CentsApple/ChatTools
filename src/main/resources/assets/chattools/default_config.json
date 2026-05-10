@@ -79,11 +79,15 @@
     {
       "address": ".*\\.hypixel\\.net",
       "pattern": "(?\u003cname\u003e\\S+): (?\u003cmessage\u003e.*)",
+      "partial": false,
+      "profile": false,
       "fallback": false
     },
     {
       "address": "*",
       "pattern": "\u003c(?\u003cname\u003e.*)\u003e (?\u003cmessage\u003e.*)",
+      "partial": false,
+      "profile": false,
       "fallback": false
     }
   ],
