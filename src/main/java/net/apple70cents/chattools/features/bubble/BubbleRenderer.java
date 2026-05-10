@@ -193,17 +193,28 @@ public class BubbleRenderer {
                 continue;
             }
             String senderName = senderDisplayName.getString();
-            if (!bubbleMap.containsKey(senderName)) {
+            if (bubbleMap.containsKey(senderName)) {
+                if (!TextUtils.wash(entityDisplayName.getString()).equals(senderName)) {
+                    // not the entity being selected
+                    continue;
+                }
+            } else if (bubbleMap.containsKey(potentialSender.getPlainTextName())) {
+                if (entity.getUUID() != potentialSender.getUUID()) {
+                    // not the player being selected
+                    continue;
+                }
+                senderName = potentialSender.getPlainTextName();
+            } else {
                 continue;
-            } else if (!TextUtils.wash(entityDisplayName.getString()).equals(senderName)) {
-                // not the entity being selected
-                continue;
-            } else if (bubbleMap.get(senderName).getLifetime() >= ConfigUtils.getInt("bubble.Lifetime")
+            }
+
+            if (bubbleMap.get(senderName).getLifetime() >= ConfigUtils.getInt("bubble.Lifetime")
                     * 1000L) {
                 // the bubble's lifetime is over, let's remove it
                 bubbleMap.remove(senderName);
                 continue;
             }
+
             double d = mc.getEntityRenderDispatcher().distanceToSqr(potentialSender);
             if (d <= 4096.0) {
                 bubbleMap.get(senderName).render(entity, poseStack, multiBufferSource, tickDelta
@@ -222,6 +233,8 @@ public class BubbleRenderer {
         }
         String pattern = "";
         boolean serverAddressPass = false;
+        boolean partial = false;
+        boolean profile = false;
         boolean fallback = false;
         for (SpecialUnits.BubbleRuleUnit unit : SpecialUnits.BubbleRuleUnit.fromList(
                 (List) ConfigUtils.get("bubble.List"))) {
@@ -229,18 +242,33 @@ public class BubbleRenderer {
                     .matcher(ContextUtils.getSessionIdentifier()).matches()) {
                 serverAddressPass = true;
                 pattern = unit.pattern;
+                partial = unit.partial;
+                profile = unit.profile;
                 fallback = unit.fallback;
                 break;
             }
         }
+
+        boolean found = false;
         if (serverAddressPass && !pattern.isEmpty()) {
             Matcher matcher = RegExUtils.getOrCompilePattern(pattern).matcher(message);
             if (matcher.find()) {
-                String name = matcher.group("name");
-                String messageContext = matcher.group("message");
-                bubbleMap.put(name, new BubbleUnit(messageContext, System.currentTimeMillis()));
-            } else if (fallback) {
-                String sender = MessageUtils.findTheFirstPlayerName(message);
+                String nameContainer = matcher.group("name");
+                String name = ( partial ? ( profile ?
+                    MessageUtils.findTheFirstPlayerRealName(nameContainer) :
+                    MessageUtils.findTheFirstPlayerName(nameContainer) ) :
+                    matcher.group("name") );
+
+                if (name != null) {
+                    String messageContext = matcher.group("message");
+                    bubbleMap.put(name, new BubbleUnit(messageContext, System.currentTimeMillis()));
+                    found = true;
+                }
+            }
+            if (fallback && !found) {
+                String sender = (profile ?
+                    MessageUtils.findTheFirstPlayerRealName(message) :
+                    MessageUtils.findTheFirstPlayerName(message));
                 if (sender == null) {
                     return;
                 }

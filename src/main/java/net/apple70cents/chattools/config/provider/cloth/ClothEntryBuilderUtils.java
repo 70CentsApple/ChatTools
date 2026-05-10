@@ -176,6 +176,14 @@ public class ClothEntryBuilderUtils {
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
                             .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER_REQUIRE_GROUPS).build());
 
+                    entries.add(eb.startBooleanToggle(trans(key + ".Partial"), unit.partial)
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Partial", "boolean", defaultObj.partial))
+                            .setDefaultValue(defaultObj.fallback).setSaveConsumer(v -> unit.partial = v).build());
+
+                    entries.add(eb.startBooleanToggle(trans(key + ".Profile"), unit.profile)
+                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Profile", "boolean", defaultObj.profile))
+                            .setDefaultValue(defaultObj.fallback).setSaveConsumer(v -> unit.profile = v).build());
+
                     entries.add(eb.startBooleanToggle(trans(key + ".Fallback"), unit.fallback)
                             .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Fallback", "boolean", defaultObj.fallback))
                             .setDefaultValue(defaultObj.fallback).setSaveConsumer(v -> unit.fallback = v).build());
