@@ -1,20 +1,23 @@
 package net.apple70cents.chattools.features.general;
 
-import net.minecraft.client.Minecraft;
-
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
- * Runtime helpers for the chat slide-in animation. Lives outside the
- * mixin class because mixin classes are loaded by SpongePowered Mixin's
- * own transformer and cannot reliably be referenced as plain runtime
- * classes from injected code (FML treats such loads as "invalid").
+ * Pure-Java runtime helpers for the chat slide-in animation. Lives outside
+ * the mixin class because mixin classes are loaded by SpongePowered Mixin's
+ * own transformer and cannot reliably be referenced as plain runtime classes
+ * from injected code (FML treats such loads as "invalid").
  *
- * <p>All work here is reflection-only: we never name the package-private
- * {@code ChatComponent.LineConsumer} interface in our bytecode — we look
- * it up from the delegate's implemented-interfaces list at runtime, and
- * build a JDK {@link Proxy} against the same set.
+ * <p>Intentionally contains no reflection against Minecraft types — those
+ * names get remapped (intermediary on Fabric, SRG/etc on older Forge) so
+ * looking them up by string would silently fail in production. All MC-typed
+ * access happens in the mixin (where {@code @Shadow} / direct typed calls go
+ * through the refmap properly) and the results are handed in here as plain
+ * Java values / lambdas.
  *
  * @author 70CentsApple
  */
@@ -22,12 +25,21 @@ public final class ChatAnimationProxy {
     private ChatAnimationProxy() {}
 
     /**
-     * Wraps {@code delegate} (a {@code ChatComponent$LineConsumer}) so that
-     * each {@code accept(GuiMessage.Line, int, float)} call is bracketed by
-     * a {@code graphics.updatePose} translate / un-translate that drags
-     * just that line to its current animation offset.
+     * Wraps {@code delegate} (a {@code ChatComponent$LineConsumer}) so that each
+     * {@code accept(...)} call applies the per-line offset before delegating.
+     *
+     * @param delegate       the original LineConsumer (3-arg or 6-arg flavour)
+     * @param offsetQuery    {@code line -> {dx, dy}} (chat-space pixels) or {@code null}
+     *                       for "no offset" — supplied by the mixin so all MC-typed
+     *                       field access goes through {@code @Shadow}
+     * @param poseTranslate  {@code (dx, dy) -> graphics.updatePose(p -> p.translate(dx, dy))};
+     *                       only used by the 3-arg LineConsumer flavour, which has no
+     *                       coords to mutate. {@code null} is fine for the 6-arg flavour.
      */
-    public static Object decorate(Object delegate, Object graphics) {
+    public static Object decorate(
+            Object delegate,
+            Function<Object, float[]> offsetQuery,
+            BiConsumer<Float, Float> poseTranslate) {
         if (delegate == null) return null;
         Class<?>[] interfaces = delegate.getClass().getInterfaces();
         if (interfaces.length == 0) {
@@ -42,20 +54,19 @@ public final class ChatAnimationProxy {
                     // LineConsumer is package-private; bypass Java's reflective access
                     // check so we can dispatch its abstract accept(...) cleanly.
                     try { method.setAccessible(true); } catch (Throwable ignored) {}
-                    // Only accept(...) needs offsetting; toString/equals/hashCode etc. go through.
+                    // Only accept(...) needs offsetting; toString/equals/hashCode etc.
+                    // go straight through. Two LineConsumer flavours exist across versions:
+                    //   3-arg  accept(Line, int lineIndex, float alpha)               [1.21.11+ / 26.1+]
+                    //   6-arg  accept(int x, int startY, int endY, Line, idx, fade)   [1.21.6 – 1.21.10]
+                    // The 3-arg flavour gives us no coords to mutate, so we sandwich it
+                    // with the supplied {@code poseTranslate}. The 6-arg flavour lets us
+                    // shift x / startY / endY directly — much cleaner.
                     if ("accept".equals(method.getName()) && args != null) {
-                        // Two LineConsumer flavours exist across versions:
-                        //   3-arg  accept(Line, int lineIndex, float alpha)               [1.21.11+ / 26.1+]
-                        //   6-arg  accept(int x, int startY, int endY, Line, int idx, float fade)  [1.21.6 – 1.21.10]
-                        // The 3-arg flavour gives us no coords to mutate, so we sandwich
-                        // it with a pose translate via graphics.updatePose. The 6-arg
-                        // flavour lets us shift x/startY/endY directly — much cleaner and
-                        // doesn't need the graphics reference.
                         if (args.length == 3) {
-                            return invokeWithOffset(delegate, method, args, graphics);
+                            return invokeWithPoseOffset(delegate, method, args, offsetQuery, poseTranslate);
                         }
                         if (args.length == 6) {
-                            return invokeWithSixArgOffset(delegate, method, args);
+                            return invokeWithCoordOffset(delegate, method, args, offsetQuery);
                         }
                     }
                     return method.invoke(delegate, args);
@@ -63,16 +74,15 @@ public final class ChatAnimationProxy {
     }
 
     /**
-     * 6-arg LineConsumer (1.21.6 – 1.21.10):
-     * {@code accept(int x, int startY, int endY, GuiMessage.Line line, int idx, float fade)}.
+     * 6-arg LineConsumer: {@code accept(int x, int startY, int endY, Line, idx, fade)}.
      * The lambda body uses x/startY/endY to position both the background fill and the
      * text draw, so a single arg edit moves everything for that line.
      */
-    private static Object invokeWithSixArgOffset(Object delegate, java.lang.reflect.Method method,
-                                                 Object[] args) throws Throwable {
+    private static Object invokeWithCoordOffset(
+            Object delegate, Method method, Object[] args,
+            Function<Object, float[]> offsetQuery) throws Throwable {
         Object line = args[3];
-        List<Object> trimmedMessages = readTrimmedMessages();
-        float[] off = lineOffset(trimmedMessages, line);
+        float[] off = offsetQuery == null ? null : offsetQuery.apply(line);
         if (off == null) return method.invoke(delegate, args);
         int dx = Math.round(off[0]);
         int dy = Math.round(off[1]);
@@ -83,46 +93,44 @@ public final class ChatAnimationProxy {
         return method.invoke(delegate, shifted);
     }
 
-    private static Object invokeWithOffset(Object delegate, java.lang.reflect.Method method,
-                                           Object[] args, Object graphics) throws Throwable {
+    /**
+     * 3-arg LineConsumer: {@code accept(Line, int lineIndex, float alpha)}.
+     * No coords to mutate — sandwich the call with a pose translate that the mixin
+     * supplies (so we never touch {@code ChatGraphicsAccess} or {@code Matrix3x2f}
+     * by name from here).
+     */
+    private static Object invokeWithPoseOffset(
+            Object delegate, Method method, Object[] args,
+            Function<Object, float[]> offsetQuery,
+            BiConsumer<Float, Float> poseTranslate) throws Throwable {
         Object line = args[0];
-        // Re-read trimmedMessages via reflection; the field is package-private and
-        // we already have an AT widening getScale() but not the field itself. A
-        // single per-line lookup per render frame is negligible.
-        List<Object> trimmedMessages = readTrimmedMessages();
-        float[] off = lineOffset(trimmedMessages, line);
-        if (off == null) {
+        float[] off = offsetQuery == null ? null : offsetQuery.apply(line);
+        if (off == null || poseTranslate == null) {
             return method.invoke(delegate, args);
         }
         final float dx = off[0];
         final float dy = off[1];
-        applyPose(graphics, dx, dy);
+        poseTranslate.accept(dx, dy);
         try {
             return method.invoke(delegate, args);
         } finally {
-            applyPose(graphics, -dx, -dy);
-        }
-    }
-
-    /** Reflectively reach {@code ChatComponent#trimmedMessages} on the live HUD. */
-    @SuppressWarnings("unchecked")
-    private static List<Object> readTrimmedMessages() {
-        try {
-            Object chat = Minecraft.getInstance().gui.getChat();
-            java.lang.reflect.Field f = chat.getClass().getDeclaredField("trimmedMessages");
-            f.setAccessible(true);
-            return (List<Object>) f.get(chat);
-        } catch (Throwable t) {
-            return java.util.Collections.emptyList();
+            poseTranslate.accept(-dx, -dy);
         }
     }
 
     /**
-     * @return {x, y} per-line offset, or {@code null} for a fully-arrived line
-     *         that sits above all in-progress ones.
+     * Per-line offset math used by both the LineConsumer Proxy (above) and the
+     * inline-render {@code @WrapOperation} branches in the mixin (1.20.x / 1.19.x /
+     * 1.16-1.18). Caller supplies the current {@code trimmedMessages} list and the
+     * entry-height in chat-space pixels, all obtained via {@code @Shadow} so no
+     * remapped string lookup is involved.
+     *
+     * @return {@code {dx, dy}} chat-space offset, or {@code null} for a line that
+     *         has no offset to apply right now.
      */
-    private static float[] lineOffset(List<Object> trimmedMessages, Object target) {
-        if (trimmedMessages.isEmpty()) return null;
+    public static float[] offsetFor(Object target, List<?> trimmedMessages, double entryHeight) {
+        if (target == null || trimmedMessages == null || trimmedMessages.isEmpty()) return null;
+
         float belowIncomingSum = 0.0F;
         float selfIncoming = 0.0F;
         boolean found = false;
@@ -136,8 +144,8 @@ public final class ChatAnimationProxy {
                 found = true;
                 break;
             }
-            // Chat Compactor replacements don't change the stack height, so they
-            // must not push older lines around even though they themselves slide in.
+            // Chat Compactor replacements don't change the stack height, so they must
+            // not push older lines around even though they themselves slide in.
             if (ChatAnimator.isNoPush(line)) continue;
             belowIncomingSum += 1.0F - ChatAnimator.easedProgress(line);
         }
@@ -145,62 +153,7 @@ public final class ChatAnimationProxy {
         if (belowIncomingSum <= 0.0F && selfIncoming <= 0.0F) return null;
 
         float dx = -selfIncoming * ChatAnimator.SLIDE_DISTANCE;
-        float dy = belowIncomingSum * (float) entryHeight();
+        float dy = belowIncomingSum * (float) entryHeight;
         return new float[] { dx, dy };
-    }
-
-    /**
-     * Public single-line offset query for use from mixin call-site wrappers
-     * (1.20.5 – 1.21.5 path, where we shift {@code GuiGraphics.fill} /
-     * {@code GuiGraphics.drawString} args directly rather than going through
-     * a LineConsumer proxy).
-     */
-    public static float[] offsetFor(Object line) {
-        if (line == null) return null;
-        return lineOffset(readTrimmedMessages(), line);
-    }
-
-    private static double entryHeight() {
-        // chatLineSpacing is an OptionInstance<Double> on 1.18+ and a primitive
-        // double field on 1.16/1.17 — go through reflection so this helper stays
-        // version-agnostic.
-        try {
-            Object options = Minecraft.getInstance().options;
-            try {
-                java.lang.reflect.Method m = options.getClass().getMethod("chatLineSpacing");
-                Object inst = m.invoke(options);
-                Object value = inst.getClass().getMethod("get").invoke(inst);
-                return 9.0 * (((Number) value).doubleValue() + 1.0);
-            } catch (NoSuchMethodException nsme) {
-                java.lang.reflect.Field f = options.getClass().getField("chatLineSpacing");
-                return 9.0 * (f.getDouble(options) + 1.0);
-            }
-        } catch (Throwable t) {
-            // Sensible default: 9 px line height (chatLineSpacing = 0).
-            return 9.0;
-        }
-    }
-
-    /**
-     * Apply a 2D translation through the {@code graphics.updatePose(Consumer)} hook
-     * on {@code ChatComponent$ChatGraphicsAccess}. Reflective so we don't have to
-     * name the access interface; the method is invoked once per call site.
-     */
-    private static void applyPose(Object graphics, float dx, float dy) {
-        try {
-            java.lang.reflect.Method updatePose = graphics.getClass().getMethod("updatePose", java.util.function.Consumer.class);
-            try { updatePose.setAccessible(true); } catch (Throwable ignored) {}
-            java.util.function.Consumer<Object> translate = pose -> {
-                try {
-                    // pose is org.joml.Matrix3x2f; translate(float, float) exists.
-                    java.lang.reflect.Method m = pose.getClass().getMethod("translate", float.class, float.class);
-                    try { m.setAccessible(true); } catch (Throwable ignored) {}
-                    m.invoke(pose, dx, dy);
-                } catch (Throwable ignored) {
-                }
-            };
-            updatePose.invoke(graphics, translate);
-        } catch (Throwable ignored) {
-        }
     }
 }

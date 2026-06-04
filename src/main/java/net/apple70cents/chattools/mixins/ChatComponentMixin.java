@@ -81,11 +81,11 @@ public abstract class ChatComponentMixin {
     // addMessage(Component, MessageSignature, int addedTime, GuiMessageTag tag, boolean onlyTrim).
     // The boolean tells us whether this is a refresh replay.
     @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V", at = @At("HEAD"))
-    public void chatTools$onAddHead(net.minecraft.network.chat.Component msg, net.minecraft.network.chat.MessageSignature sig, int addedTime, net.minecraft.client.GuiMessageTag tag, boolean onlyTrim, CallbackInfo ci) {
+    public void chatTools$onAddHead(Component msg, MessageSignature sig, int addedTime, GuiMessageTag tag, boolean onlyTrim, CallbackInfo ci) {
         if (onlyTrim) ChatAnimator.pushReplaying();
     }
     @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V", at = @At("RETURN"))
-    public void chatTools$onAddReturn(net.minecraft.network.chat.Component msg, net.minecraft.network.chat.MessageSignature sig, int addedTime, net.minecraft.client.GuiMessageTag tag, boolean onlyTrim, CallbackInfo ci) {
+    public void chatTools$onAddReturn(Component msg, MessageSignature sig, int addedTime, GuiMessageTag tag, boolean onlyTrim, CallbackInfo ci) {
         try {
             chatTools$markFreshLines();
         } finally {
@@ -95,11 +95,11 @@ public abstract class ChatComponentMixin {
 *///?} else {
     /*// 1.16.5 - 1.18.2: addMessage(Component, int chatLineId, int addedTime, boolean refresh).
     @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V", at = @At("HEAD"))
-    public void chatTools$onAddHead(net.minecraft.network.chat.Component msg, int chatLineId, int addedTime, boolean refresh, CallbackInfo ci) {
+    public void chatTools$onAddHead(Component msg, int chatLineId, int addedTime, boolean refresh, CallbackInfo ci) {
         if (refresh) ChatAnimator.pushReplaying();
     }
     @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V", at = @At("RETURN"))
-    public void chatTools$onAddReturn(net.minecraft.network.chat.Component msg, int chatLineId, int addedTime, boolean refresh, CallbackInfo ci) {
+    public void chatTools$onAddReturn(Component msg, int chatLineId, int addedTime, boolean refresh, CallbackInfo ci) {
         try {
             chatTools$markFreshLines();
         } finally {

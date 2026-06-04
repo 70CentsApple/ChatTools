@@ -125,23 +125,4 @@ public final class ChatAnimator {
         float inv = 1.0F - t;
         return 1.0F - inv * inv * inv;
     }
-
-    /** X offset (positive = pushed right of resting position). */
-    public static float xOffsetFor(Object line) {
-        return (1.0F - easedProgress(line)) * SLIDE_DISTANCE;
-    }
-
-    /**
-     * Cumulative Y offset to apply to a line that sits {@code stepsAbove}
-     * positions above an animating line. Used to push older messages up
-     * smoothly as new ones slide in below them.
-     *
-     * @param incomingEased the eased progress of the line that just entered
-     * @param entryHeight the per-line vertical step, in chat-coordinate pixels
-     * @return positive value to add to the entry's bottom-Y (which shifts
-     *         the line downward toward its old visual position)
-     */
-    public static float yPushFor(float incomingEased, int entryHeight) {
-        return (1.0F - incomingEased) * (float) entryHeight;
-    }
 }
