@@ -254,6 +254,7 @@ key:
         Enabled:
           .: 启用聊天动画
           '@Tooltip': 新消息抵达聊天栏时，让它从左侧滑入，原有消息缓缓上移。
+    translator:
       .: 翻译器
       Enabled:
         .: 启用翻译器
