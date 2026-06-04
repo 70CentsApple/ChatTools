@@ -250,7 +250,10 @@ key:
         Enabled:
           .: 禁用文本混淆样式
           '@Tooltip': 切换是否禁用文本混淆样式渲染
-    translator:
+      ChatAnimation:
+        Enabled:
+          .: 启用聊天动画
+          '@Tooltip': 新消息抵达聊天栏时，让它从左侧滑入，原有消息缓缓上移。
       .: 翻译器
       Enabled:
         .: 启用翻译器

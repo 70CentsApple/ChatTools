@@ -51,6 +51,80 @@ public abstract class ChatComponentMixin {
     @Final
     private List<GuiMessage> allMessages;
 
+    @Shadow
+    @Final
+    private List<
+//? if >=1.19 {
+            GuiMessage.Line
+//?} else {
+            /*GuiMessage<net.minecraft.util.FormattedCharSequence>
+*///?}
+            > trimmedMessages;
+
+//? if >=1.20.5 {
+    @Inject(method = "refreshTrimmedMessages", at = @At("HEAD"))
+    public void chatTools$onRefreshHead(CallbackInfo ci) {
+        ChatAnimator.pushReplaying();
+    }
+
+    @Inject(method = "refreshTrimmedMessages", at = @At("RETURN"))
+    public void chatTools$onRefreshReturn(CallbackInfo ci) {
+        ChatAnimator.popReplaying();
+    }
+
+    @Inject(method = "addMessageToDisplayQueue", at = @At("RETURN"))
+    public void chatTools$onAddToDisplayQueue(GuiMessage message, CallbackInfo ci) {
+        chatTools$markFreshLines();
+    }
+//?} elif >=1.19 {
+    /*// Pre-1.20.5: addition + refresh both go through the same private overload
+    // addMessage(Component, MessageSignature, int addedTime, GuiMessageTag tag, boolean onlyTrim).
+    // The boolean tells us whether this is a refresh replay.
+    @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V", at = @At("HEAD"))
+    public void chatTools$onAddHead(net.minecraft.network.chat.Component msg, net.minecraft.network.chat.MessageSignature sig, int addedTime, net.minecraft.client.GuiMessageTag tag, boolean onlyTrim, CallbackInfo ci) {
+        if (onlyTrim) ChatAnimator.pushReplaying();
+    }
+    @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/GuiMessageTag;Z)V", at = @At("RETURN"))
+    public void chatTools$onAddReturn(net.minecraft.network.chat.Component msg, net.minecraft.network.chat.MessageSignature sig, int addedTime, net.minecraft.client.GuiMessageTag tag, boolean onlyTrim, CallbackInfo ci) {
+        try {
+            chatTools$markFreshLines();
+        } finally {
+            if (onlyTrim) ChatAnimator.popReplaying();
+        }
+    }
+*///?} else {
+    /*// 1.16.5 - 1.18.2: addMessage(Component, int chatLineId, int addedTime, boolean refresh).
+    @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V", at = @At("HEAD"))
+    public void chatTools$onAddHead(net.minecraft.network.chat.Component msg, int chatLineId, int addedTime, boolean refresh, CallbackInfo ci) {
+        if (refresh) ChatAnimator.pushReplaying();
+    }
+    @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;IIZ)V", at = @At("RETURN"))
+    public void chatTools$onAddReturn(net.minecraft.network.chat.Component msg, int chatLineId, int addedTime, boolean refresh, CallbackInfo ci) {
+        try {
+            chatTools$markFreshLines();
+        } finally {
+            if (refresh) ChatAnimator.popReplaying();
+        }
+    }
+*///?}
+
+    private void chatTools$markFreshLines() {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
+            ChatAnimator.clearNextLineNoPush();
+            return;
+        }
+        // The SEEN set must be populated even when the animation is off or replaying,
+        // so the first real activation does not retroactively flag pre-existing lines.
+        for (int i = 0; i < this.trimmedMessages.size(); i++) {
+            Object line = this.trimmedMessages.get(i);
+            if (ChatAnimator.isTracked(line)) break;
+            ChatAnimator.onNewLine(line);
+        }
+        // Consume the one-shot "do not push older lines" flag set by the Chat Compactor
+        // path so it does not accidentally bleed into the next, unrelated insertion.
+        ChatAnimator.clearNextLineNoPush();
+    }
+
     @ModifyExpressionValue(method =
 //? if >=1.20.5 {
             {"addMessageToQueue", "addMessageToDisplayQueue", "addMessage*", "addRecentChat"}
@@ -140,6 +214,10 @@ public abstract class ChatComponentMixin {
                 try {
                     this.allMessages.remove(0);
                     this.rescaleChat();
+                    // Net stack height does not change for a compactor replacement
+                    // (we just removed one and will add one). Tell the animator not
+                    // to push older lines upward when this next line gets registered.
+                    ChatAnimator.markNextLineNoPush();
                 } catch (Exception e) {
                     // if any error (e.g. UnsupportedOperationException), catch it to avoid crashing
                     LoggerUtils.info("[ChatTools] Failed to remove duplicate message for compaction.");

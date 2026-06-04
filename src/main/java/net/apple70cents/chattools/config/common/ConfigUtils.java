@@ -12,6 +12,7 @@ public class ConfigUtils {
     public static boolean CHAT_TOOLS_ENABLED = false;
     public static boolean KFC_ENABLED = false;
     public static boolean DISABLE_TEXT_OBFUSCATION_ENABLED = false;
+    public static boolean CHAT_ANIMATION_ENABLED = false;
     public static boolean BUBBLE_ENABLED = false;
     public static boolean BUBBLE_HIDE_IF_INVISIBLE_ENABLED = false;
     public static boolean NICK_HIDER_ENABLED = false;
@@ -30,6 +31,7 @@ public class ConfigUtils {
         CHAT_TOOLS_ENABLED = getBoolean("general.ChatTools.Enabled");
         KFC_ENABLED = getBoolean("general.kfc");
         DISABLE_TEXT_OBFUSCATION_ENABLED = getBoolean("general.DisableTextObfuscation.Enabled");
+        CHAT_ANIMATION_ENABLED = getBoolean("general.ChatAnimation.Enabled");
         BUBBLE_ENABLED = getBoolean("bubble.Enabled");
         BUBBLE_HIDE_IF_INVISIBLE_ENABLED = getBoolean("bubble.HideIfInvisibleEnabled");
         NICK_HIDER_ENABLED = getBoolean("general.NickHider.Enabled");

@@ -173,6 +173,10 @@
         {
           "type": "boolean",
           "key": "general.DisableTextObfuscation.Enabled"
+        },
+        {
+          "type": "boolean",
+          "key": "general.ChatAnimation.Enabled"
         }
       ]
     },

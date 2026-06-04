@@ -259,6 +259,12 @@ key:
         Enabled:
           .: Disable Text Obfuscation
           '@Tooltip': Toggles whether we should disable text obfuscations.
+      ChatAnimation:
+        Enabled:
+          .: Enable Chat Animation
+          '@Tooltip': |-
+            When a new message arrives in the chat HUD, slide it in
+            from the left and gently push the existing messages up.
     translator:
       .: Translator
       Enabled:
