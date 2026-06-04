@@ -231,8 +231,13 @@ public class TextUtils {
     public static JsonElement component2JsonElement(MutableComponent text) {
         try {
 //? if >=1.21.6 {
-            JsonElement jsonElement = ComponentSerialization.CODEC.encode(text,
-                    RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE), null).result().orElse(null);
+            // Use encodeStart(ops, input) — the public Mojang-recommended entry point that
+            // internally passes ops.empty() as the prefix. The lower-level encode(input, ops,
+            // prefix) overload requires a valid (non-null) prefix; passing literal null breaks
+            // the Either/RecordCodec merge chain and silently yields an empty result Optional,
+            // which then turns into a downstream NPE in jsonElement2Component.
+            JsonElement jsonElement = ComponentSerialization.CODEC.encodeStart(
+                    RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE), text).result().orElse(null);
 //?} elif >=1.20.5 {
             /*JsonElement jsonElement = new Component.SerializerAdapter(VanillaRegistries.createLookup()).serialize(text, null, null);
 *///?} else {
@@ -246,23 +251,33 @@ public class TextUtils {
     }
 
     public static MutableComponent jsonElement2Component(JsonElement jsonElement) {
+        MutableComponent ERROR_COMPONENT = literal("ERROR").copy();
+        if (jsonElement == null) {
+            return ERROR_COMPONENT;
+        }
         try {
 //? if >=1.21.6 {
-            return ComponentSerialization.CODEC.parse(RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE),
-                    jsonElement).result().orElse(null).copy();
+            Component parsed = ComponentSerialization.CODEC.parse(
+                    RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE),
+                    jsonElement).result().orElse(null);
+            return parsed != null ? parsed.copy() : ERROR_COMPONENT;
 //?} elif >=1.20.5 {
-            /*return new Component.SerializerAdapter(VanillaRegistries.createLookup()).deserialize(jsonElement, null, null);
+            /*MutableComponent parsed = new Component.SerializerAdapter(VanillaRegistries.createLookup()).deserialize(jsonElement, null, null);
+            return parsed != null ? parsed : ERROR_COMPONENT;
 *///?} else {
-            /*return Component.Serializer.fromJson(jsonElement);
+            /*MutableComponent parsed = Component.Serializer.fromJson(jsonElement);
+            return parsed != null ? parsed : ERROR_COMPONENT;
 *///?}
         } catch (Exception e) {
             LoggerUtils.error("[ChatTools] Error deserializing JSON to component", e);
-            return TextUtils.literal("ERROR").copy();
+            return ERROR_COMPONENT;
         }
     }
 
     /**
-     * replace keywords in a {@link MutableComponent}
+     * Replace keywords in a {@link MutableComponent}. Always returns a usable component
+     * (never null, never an "ERROR" sentinel): if the JSON round-trip cannot complete,
+     * falls back to the original {@code text} so the caller's render path stays clean.
      *
      * @param text             the text
      * @param oldStringPattern the RegEx pattern of the old string
@@ -271,8 +286,19 @@ public class TextUtils {
      */
     public static MutableComponent replaceComponentText(MutableComponent text, Pattern oldStringPattern, String newString) {
         JsonElement jsonElement = component2JsonElement(text);
+        if (jsonElement == null) {
+            return text;
+        }
+        if (jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isString()) {
+            String replaced = oldStringPattern.matcher(jsonElement.getAsString()).replaceAll(newString);
+            return literal(replaced).copy();
+        }
         replaceTextFieldValue(jsonElement, oldStringPattern, newString, null);
-        return jsonElement2Component(jsonElement);
+        MutableComponent result = jsonElement2Component(jsonElement);
+        if (result == null || "ERROR".equals(result.getString())) {
+            return text;
+        }
+        return result;
     }
 
     private static void replaceTextFieldValue(JsonElement jsonElement, Pattern oldValuePattern, String newValue, String parentKey) {
