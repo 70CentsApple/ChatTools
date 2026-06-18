@@ -2,8 +2,7 @@ package net.apple70cents.chattools.mixins;
 
 import net.apple70cents.chattools.features.general.ExclusiveActionbarHandler;
 import net.apple70cents.chattools.config.common.ConfigUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.apple70cents.chattools.utils.McUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +24,13 @@ import net.minecraft.client.DeltaTracker;
  * @author 70CentsApple
  */
 
+//? if >=26.2 {
+import net.minecraft.client.gui.Hud;
+@Mixin(Hud.class)
+//?} else {
+/*import net.minecraft.client.gui.Gui;
 @Mixin(Gui.class)
+*///?}
 public abstract class GuiMixinForExclusiveActionbar {
 //? if >=26.1 {
     @Inject(method = "extractOverlayMessage", at = @At(value = "HEAD"))
@@ -40,7 +45,7 @@ public abstract class GuiMixinForExclusiveActionbar {
     /*@Inject(method = "render", at = @At(value = "HEAD"))
     public void renderExclusiveActionbar(PoseStack context, float tickDelta, CallbackInfo ci) {
 *///?}
-        if (Minecraft.getInstance().options.hideGui) {
+        if (McUtils.isGuiHidden()) {
             return;
         }
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {

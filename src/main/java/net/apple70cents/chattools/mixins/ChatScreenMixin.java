@@ -3,6 +3,7 @@ package net.apple70cents.chattools.mixins;
 import net.apple70cents.chattools.features.general.ChatHistoryNavigator;
 import net.apple70cents.chattools.features.translator.Translator;
 import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.utils.McUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.ChatComponent;
@@ -83,9 +84,9 @@ public abstract class ChatScreenMixin {
 //? if >=1.20.5 {
     @Unique
     private boolean shouldHideChatHistory() {
-        return Minecraft.getInstance().options.hideGui &&
+        return McUtils.isGuiHidden() &&
                 ConfigUtils.CHAT_TOOLS_ENABLED &&
-                (Minecraft.getInstance().screen instanceof ChatScreen) &&
+                (McUtils.getScreen() instanceof ChatScreen) &&
                 ConfigUtils.getBoolean("general.HideChatHistoryInF1Mode");
     }
 

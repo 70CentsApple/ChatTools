@@ -3,7 +3,7 @@ package net.apple70cents.chattools.features.translator;
 import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.KeyboardUtils;
-import net.minecraft.client.Minecraft;
+import net.apple70cents.chattools.utils.McUtils;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.components.EditBox;
 
@@ -13,7 +13,7 @@ public class Translator {
         if (!ConfigUtils.getBoolean("translator.Enabled")) {
             return false;
         }
-        if (!(Minecraft.getInstance().screen instanceof ChatScreen)) {
+        if (!(McUtils.getScreen() instanceof ChatScreen)) {
             return false;
         }
         return KeyboardUtils.isKeyPressingWithModifier("key.keyboard.tab", SpecialUnits.KeyModifiers.SHIFT, SpecialUnits.MacroModes.LAZY);

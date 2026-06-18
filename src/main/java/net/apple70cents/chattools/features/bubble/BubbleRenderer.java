@@ -8,7 +8,6 @@ import net.apple70cents.chattools.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
+
+//? if <26.2 {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+*///?}
 
 //? if >=1.21.11 {
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -73,7 +76,11 @@ public class BubbleRenderer {
             return "BubbleUnit{" + "text=" + text + ", startTime=" + startTime + '}';
         }
 
-        public void render(Entity entity, PoseStack poseStack, MultiBufferSource multiBufferSource, float tickDelta
+        public void render(Entity entity, PoseStack poseStack
+//? if <26.2 {
+                /*, MultiBufferSource multiBufferSource
+*///?}
+                , float tickDelta
 //? if >=1.21.9 {
                 , SubmitNodeCollector renderQueue
 //?}
@@ -97,9 +104,11 @@ public class BubbleRenderer {
             /*poseStack.translate(0.0F, entity.getBbHeight() + 0.5F + yOffset / 10.0F, 0.0F);
 *///?}
             poseStack.mulPose(
-//? if >=26.1 {
-                    mc.gameRenderer.getGameRenderState().levelRenderState.cameraRenderState.orientation
-//?} elif >=1.21.9 {
+//? if >=26.2 {
+                    mc.gameRenderer.gameRenderState().levelRenderState.cameraRenderState.orientation
+//?} elif >=26.1 {
+                    /*mc.gameRenderer.getGameRenderState().levelRenderState.cameraRenderState.orientation
+*///?} elif >=1.21.9 {
                     /*mc.gameRenderer.getLevelRenderState().cameraRenderState.orientation
 *///?} else {
                     /*mc.getEntityRenderDispatcher().cameraOrientation()
@@ -177,7 +186,11 @@ public class BubbleRenderer {
 
     private static Map<String, BubbleUnit> bubbleMap = new HashMap<>();
 
-    public static void render(Entity entity, PoseStack poseStack, MultiBufferSource multiBufferSource, float tickDelta
+    public static void render(Entity entity, PoseStack poseStack
+//? if <26.2 {
+            /*, MultiBufferSource multiBufferSource
+*///?}
+            , float tickDelta
 //? if >=1.21.9 {
             , SubmitNodeCollector submitNodeCollector
 //?}
@@ -241,7 +254,11 @@ public class BubbleRenderer {
             // Check the rendering distance.
             double distanceToPlayerSqr = mc.getEntityRenderDispatcher().distanceToSqr(player);
             if (distanceToPlayerSqr <= 4096.0) { // Distance is within 64 blocks (64^2 = 4096)
-                bubbleMap.get(matchedBubbleKey).render(entity, poseStack, multiBufferSource, tickDelta
+                bubbleMap.get(matchedBubbleKey).render(entity, poseStack
+//? if <26.2 {
+                        /*, multiBufferSource
+*///?}
+                        , tickDelta
 //? if >=1.21.9 {
                         , submitNodeCollector
 //?}

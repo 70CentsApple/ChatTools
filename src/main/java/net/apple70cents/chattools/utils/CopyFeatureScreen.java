@@ -50,7 +50,7 @@ public class CopyFeatureScreen extends Screen {
 
     public CopyFeatureScreen(TextUtils.MessageUnit unit) {
         super(TextUtils.trans("texts.copy.title"));
-        this.oldScreen = Minecraft.getInstance().screen;
+        this.oldScreen = McUtils.getScreen();
         this.messageSplit = MultiLineLabel.EMPTY;
         this.unit = unit;
         this.buttons = new HashMap<>();
@@ -99,7 +99,7 @@ public class CopyFeatureScreen extends Screen {
 //?} else {
             /*ChatScreen chatScreen = new ChatScreen("");
 *///?}
-            mc.setScreen(chatScreen);
+            McUtils.setScreen(chatScreen);
 
             List<TextUtils.MessageUnit> messages = new ArrayList<>(TextUtils.messageMap.values());
             List<TextUtils.MessageUnit> messagesAfter = messages.stream().skip(messages.indexOf(unit) + 1L).toList();
@@ -116,7 +116,7 @@ public class CopyFeatureScreen extends Screen {
                 }
                 lines += ComponentRenderUtils.wrapComponents(msg.visualMessage, maxLineLength, mc.font).size();
             }
-            mc.gui.getChat().scrollChat(lines);
+            McUtils.getChat().scrollChat(lines);
         });
         addCenterButton("cancel", this.height - 30, 0, 20, 200, (button) -> {
             if (oldScreen instanceof ChatHistoryNavigatorScreen) {
@@ -127,7 +127,7 @@ public class CopyFeatureScreen extends Screen {
                     oldNavScreen.chatUnitListWidget.setKeyword("");
                 }
             }
-            Minecraft.getInstance().setScreen(oldScreen);
+            McUtils.setScreen(oldScreen);
         });
     }
 

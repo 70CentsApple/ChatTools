@@ -7,19 +7,24 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-//? if >=1.21.9 {
+//? if >=26.2 {
 import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
+@Mixin(NameTagFeatureRenderer.Submit.class)
+//?} elif >=1.21.9 {
+/*import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
 @Mixin(NameTagFeatureRenderer.Storage.class)
-//?} else {
+*///?} else {
 /*@Mixin(net.minecraft.client.renderer.entity.EntityRenderer.class)
 *///?}
 public abstract class NameTagFeatureRendererStorageMixin {
-//? if >=1.21.9 {
-    @ModifyVariable(method = "add", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
-//?} else {
-/*@ModifyVariable(method = "renderNameTag", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
+//? if >=26.2 {
+    @ModifyVariable(method = "<init>", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
+//?} elif >=1.21.9 {
+    /*@ModifyVariable(method = "add", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
+*///?} else {
+    /*@ModifyVariable(method = "renderNameTag", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
 *///?}
-    public Component nickHiderChangeLabel(Component text) {
+    private static Component nickHiderChangeLabel(Component text) {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             return text;
         } else if (!ConfigUtils.NICK_HIDER_ENABLED) {

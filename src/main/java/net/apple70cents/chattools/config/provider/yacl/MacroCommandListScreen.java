@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.config.provider.yacl;
 
+import net.apple70cents.chattools.utils.McUtils;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -168,7 +168,7 @@ public class MacroCommandListScreen extends Screen {
                 CommonComponents.GUI_DONE,
                 button -> {
                     saveCommands();
-                    Minecraft.getInstance().setScreen(parent);
+                    McUtils.setScreen(parent);
                 }
         ).bounds(this.width / 2 + 10, this.height - 52, 110, 20).build());
 //?} elif >=1.17 {
@@ -183,7 +183,7 @@ public class MacroCommandListScreen extends Screen {
                 }));
         this.addRenderableWidget(new Button(this.width / 2 + 10, this.height - 52, 110, 20,
                 CommonComponents.GUI_DONE,
-                button -> { saveCommands(); Minecraft.getInstance().setScreen(parent); }));
+                button -> { saveCommands(); McUtils.setScreen(parent); }));
 *///?} else {
         /*this.addButton(new Button(this.width / 2 - 120, this.height - 52, 110, 20,
                 TextUtils.literal("§a+ ").copy().append(trans("gui.addNew")),
@@ -196,7 +196,7 @@ public class MacroCommandListScreen extends Screen {
                 }));
         this.addButton(new Button(this.width / 2 + 10, this.height - 52, 110, 20,
                 CommonComponents.GUI_DONE,
-                button -> { saveCommands(); Minecraft.getInstance().setScreen(parent); }));
+                button -> { saveCommands(); McUtils.setScreen(parent); }));
 *///?}
     }
 
@@ -255,6 +255,6 @@ public class MacroCommandListScreen extends Screen {
     @Override
     public void onClose() {
         saveCommands();
-        Minecraft.getInstance().setScreen(parent);
+        McUtils.setScreen(parent);
     }
 }

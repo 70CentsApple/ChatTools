@@ -1,7 +1,7 @@
 package net.apple70cents.chattools.config.screen;
 
+import net.apple70cents.chattools.utils.McUtils;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -93,7 +93,7 @@ public class MissingConfigLibScreen extends Screen {
 
         this.addButton(new Button(centerX - 80, centerY + 50, 160, 20,
                 CommonComponents.GUI_DONE,
-                button -> Minecraft.getInstance().setScreen(parent)));
+                button -> McUtils.setScreen(parent)));
 *///?}
     }
 
@@ -139,6 +139,6 @@ public class MissingConfigLibScreen extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft.getInstance().setScreen(parent);
+        McUtils.setScreen(parent);
     }
 }

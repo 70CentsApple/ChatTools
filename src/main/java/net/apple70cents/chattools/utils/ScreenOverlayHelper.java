@@ -1,6 +1,5 @@
 package net.apple70cents.chattools.utils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -18,12 +17,10 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 public abstract class ScreenOverlayHelper extends Overlay {
 
     private final Overlay oldOverlay;
-    private final Minecraft client;
     private final Screen screenToOpen;
 
-    public ScreenOverlayHelper(Minecraft client, Screen screenToOpen) {
-        this.client = client;
-        this.oldOverlay = client.getOverlay();
+    public ScreenOverlayHelper(Screen screenToOpen) {
+        this.oldOverlay = McUtils.getOverlay();
         this.screenToOpen = screenToOpen;
     }
 
@@ -34,9 +31,9 @@ public abstract class ScreenOverlayHelper extends Overlay {
 *///?} else {
     /*public void render(PoseStack context, int mouseX, int mouseY, float delta) {
 *///?}
-        if (client.screen == null) {
-            client.setScreen(screenToOpen);
-            client.setOverlay(oldOverlay);
+        if (McUtils.getScreen() == null) {
+            McUtils.setScreen(screenToOpen);
+            McUtils.setOverlay(oldOverlay);
         }
     }
 }

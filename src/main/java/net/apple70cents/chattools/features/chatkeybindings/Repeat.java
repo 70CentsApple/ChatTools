@@ -13,12 +13,13 @@ public class Repeat {
     public static void tick() {
         String key = ConfigUtils.REPEAT_KEY;
         SpecialUnits.KeyModifiers modifier = ConfigUtils.REPEAT_KEY_MODIFIER;
-        if (KeyboardUtils.isKeyPressingWithModifier(key, modifier, SpecialUnits.MacroModes.GREEDY) && Minecraft.getInstance().screen == null) {
+        if (KeyboardUtils.isKeyPressingWithModifier(key, modifier, SpecialUnits.MacroModes.GREEDY) &&
+                McUtils.getScreen() == null) {
             if (!keyWasPressed) {
                 keyWasPressed = true;
                 LoggerUtils.info("[ChatTools] Triggered the latest command.");
                 Minecraft mc = Minecraft.getInstance();
-                List<String> history = mc.gui.getChat().getRecentChat();
+                List<String> history = McUtils.getChat().getRecentChat();
                 if (history.isEmpty()) {
                     MessageUtils.sendToActionbar(TextUtils.trans("texts.repeat.failure.empty"));
                 } else {

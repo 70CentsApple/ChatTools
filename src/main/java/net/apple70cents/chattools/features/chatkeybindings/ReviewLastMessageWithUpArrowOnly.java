@@ -4,7 +4,7 @@ import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.mixins.ScreenAccessor;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.KeyboardUtils;
-import net.minecraft.client.Minecraft;
+import net.apple70cents.chattools.utils.McUtils;
 import net.minecraft.client.gui.screens.ChatScreen;
 
 public class ReviewLastMessageWithUpArrowOnly {
@@ -16,9 +16,8 @@ public class ReviewLastMessageWithUpArrowOnly {
         }
         if (KeyboardUtils.isKeyPressingWithModifier(UP, SpecialUnits.KeyModifiers.NONE,
                 SpecialUnits.MacroModes.GREEDY)) {
-            Minecraft mc = Minecraft.getInstance();
             // only if no screen is open
-            if (mc.screen != null) {
+            if (McUtils.getScreen() != null) {
                 return;
             }
 //? if >=1.21.9 {
@@ -29,10 +28,10 @@ public class ReviewLastMessageWithUpArrowOnly {
             ((ScreenAccessor) chatScreen).invokeInit(
 //? if >=1.21.11 {
 //?} else {
-                    /*mc,
+                    /*net.minecraft.client.Minecraft.getInstance(),
 *///?}
                     1, 1);
-            mc.setScreen(chatScreen);
+            McUtils.setScreen(chatScreen);
             chatScreen.moveInHistory(-1);
         }
     }

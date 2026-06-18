@@ -9,7 +9,6 @@ import net.apple70cents.chattools.config.common.ConfigScreenTooltipUtils;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.utils.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 import java.net.URI;
@@ -107,7 +106,7 @@ public class YACLConfigScreenGenerator {
                 Component btnText = TextUtils.literal(
                         InputConstants.getKey((String) ConfigUtils.get(key)).getDisplayName().getString());
                  return ButtonOption.createBuilder().name(trans(key)).description(desc).text(btnText)
-                        .action((screen, opt) -> Minecraft.getInstance().setScreen(new KeyCaptureScreen(screen, key)))
+                        .action((screen, opt) -> McUtils.setScreen(new KeyCaptureScreen(screen, key)))
                         .build();
             case "EnumKeyModifiers":
                 return Option.<SpecialUnits.KeyModifiers>createBuilder().name(trans(key)).description(desc)
@@ -160,7 +159,7 @@ public class YACLConfigScreenGenerator {
         return ButtonOption.createBuilder().name(SERVER_LABELED_KEY)
                 .description(OptionDescription.of(ConfigScreenTooltipUtils.getTooltip(key, type)))
                 .text(TextUtils.literal("§e✎ " + ((List) ConfigUtils.get(key)).size() + " ▸"))
-                .action((screen, opt) -> Minecraft.getInstance().setScreen(new RuleListScreen(screen, key, type)))
+                .action((screen, opt) -> McUtils.setScreen(new RuleListScreen(screen, key, type)))
                 .build();
     }
 }

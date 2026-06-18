@@ -2,8 +2,8 @@ package net.apple70cents.chattools.config.provider.yacl;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.utils.McUtils;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -64,11 +64,11 @@ public class KeyCaptureScreen extends Screen {
  *///?}
         if ("key.keyboard.escape".equals(key2.getName())) {
             // Escape cancels
-            Minecraft.getInstance().setScreen(parent);
+            McUtils.setScreen(parent);
             return true;
         }
         onCapture.accept(key2.getName());
-        Minecraft.getInstance().setScreen(parent);
+        McUtils.setScreen(parent);
         return true;
     }
 
@@ -81,7 +81,7 @@ public class KeyCaptureScreen extends Screen {
  *///?}
         InputConstants.Key key = InputConstants.Type.MOUSE.getOrCreate(button);
         onCapture.accept(key.getName());
-        Minecraft.getInstance().setScreen(parent);
+        McUtils.setScreen(parent);
         return true;
     }
 
@@ -133,6 +133,6 @@ public class KeyCaptureScreen extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft.getInstance().setScreen(parent);
+        McUtils.setScreen(parent);
     }
 }

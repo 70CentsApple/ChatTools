@@ -212,7 +212,7 @@ public class ChatHistoryNavigatorScreen extends Screen {
 *///?}
             // left click
             if (button == 0) {
-                Minecraft.getInstance().setScreen(new CopyFeatureScreen(messageUnit));
+                McUtils.setScreen(new CopyFeatureScreen(messageUnit));
                 return true;
             }
             return false;

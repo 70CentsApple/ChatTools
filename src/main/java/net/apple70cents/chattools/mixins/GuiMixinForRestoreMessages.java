@@ -3,7 +3,6 @@ package net.apple70cents.chattools.mixins;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.MessageUtils;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,9 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * @author 70CentsApple
  */
 
-//? if >=1.17 {
+//? if >=26.2{
+import net.minecraft.client.gui.Hud;
+@Mixin(Hud.class)
+//?} elif >=1.17 {
+/*import net.minecraft.client.gui.Gui;
 @Mixin(Gui.class)
-//?} else {
+*///?} else {
 /*import net.minecraft.client.gui.components.ChatComponent;
 @Mixin(ChatComponent.class)
 *///?}

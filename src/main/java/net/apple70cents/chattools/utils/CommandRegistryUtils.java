@@ -17,7 +17,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
-import net.minecraft.util.Tuple;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -27,8 +26,12 @@ import net.minecraft.util.Util;
 //?} else {
 /*import net.minecraft.Util;
 *///?}
-//? if >=26.1 {
-//?}
+
+//? if >=26.2 {
+import com.mojang.datafixers.util.Pair;
+//?} else {
+/*import net.minecraft.util.Tuple;
+*///?}
 
 //? if >=1.21.5 {
 import com.mojang.serialization.JavaOps;
@@ -179,8 +182,7 @@ public class CommandRegistryUtils {
             // chattools opengui
             .then(literal("opengui").executes(t -> {
                 MessageUtils.sendToActionbar(TextUtils.trans("gui.title"));
-                Minecraft.getInstance()
-                               .setOverlay(new ScreenOverlayHelper(Minecraft.getInstance(),
+                McUtils.setOverlay(new ScreenOverlayHelper(
                                        ConfigScreenFactory.createScreen(null)) {
                                });
                 LoggerUtils.info("[ChatTools] Command Executed: GUI opened");
@@ -207,7 +209,7 @@ public class CommandRegistryUtils {
                 TextUtils.MessageUnit messageUnit = TextUtils.getMessageUnitByHash(hash);
                 if (messageUnit != null) {
                     LoggerUtils.info(String.format("[ChatTools] Time:%d Text:%s", messageUnit.unixTimestamp, messageUnit.message));
-                    Minecraft.getInstance().setScreen(new CopyFeatureScreen(messageUnit));
+                    McUtils.setScreen(new CopyFeatureScreen(messageUnit));
                 } else {
                     Component errorText = TextUtils.literal("[ChatTools] Failed to get message by hash: " + hash).copy().withStyle(ChatFormatting.RED);
                     LoggerUtils.error(errorText.getString());
@@ -282,17 +284,28 @@ public class CommandRegistryUtils {
             .then(literal("regex_checker")
                 // one arg
                 .then(argument("regex", StringArgumentType.string()).executes(t -> {
-                        Tuple<Boolean, String> result = checkRegex(StringArgumentType.getString(t, "regex"));
+//? if >=26.2 {
+                        Pair<Boolean, String> result = checkRegex(StringArgumentType.getString(t, "regex"));
+                        MessageUtils.sendToNonPublicChat(TextUtils.literal(result.getSecond()).copy().withStyle(result.getFirst() ? ChatFormatting.GREEN : ChatFormatting.RED));
+//?} else {
+                        /*Tuple<Boolean, String> result = checkRegex(StringArgumentType.getString(t, "regex"));
                         MessageUtils.sendToNonPublicChat(TextUtils.literal(result.getB()).copy().withStyle(result.getA() ? ChatFormatting.GREEN : ChatFormatting.RED));
+*///?}
                         return Command.SINGLE_SUCCESS;
                     })
                     // two args
                     .then(argument("test_context", StringArgumentType.string()).executes(t -> {
                         String regex = StringArgumentType.getString(t, "regex");
                         String testContext = StringArgumentType.getString(t, "test_context");
-                        Tuple<Boolean, String> result = checkRegex(regex);
+//? if >=26.2 {
+                        Pair<Boolean,String> result = checkRegex(regex);
+                        if (!result.getFirst()) {
+                            MessageUtils.sendToNonPublicChat(TextUtils.literal(result.getSecond()).copy().withStyle(ChatFormatting.RED));
+//?} else {
+                        /*Tuple<Boolean, String> result = checkRegex(regex);
                         if (!result.getA()) {
                             MessageUtils.sendToNonPublicChat(TextUtils.literal(result.getB()).copy().withStyle(ChatFormatting.RED));
+*///?}
                             return Command.SINGLE_SUCCESS;
                         }
                         if (Pattern.compile(regex).matcher(testContext).find()) {
@@ -305,13 +318,30 @@ public class CommandRegistryUtils {
         // @formatter:on
     }
 
-    public static Tuple<Boolean, String> checkRegex(String pattern) {
+//? if >=26.2 {
+    public static Pair<Boolean, String> checkRegex(String pattern) {
+//?} else {
+    /*public static Tuple<Boolean, String> checkRegex(String pattern) {
+*///?}
         try {
             Pattern.compile(pattern);
         } catch (PatternSyntaxException e) {
-            return new Tuple<>(false, e.getMessage().replace("\r", ""));
+            return
+
+//? if >=26.2 {
+                    Pair.of
+//?} else {
+                    /*new Tuple<>
+*///?}
+                    (false, e.getMessage().replace("\r", ""));
         }
-        return new Tuple<>(true, "There's nothing wrong with the RegEx pattern.");
+        return
+//? if >=26.2 {
+                Pair.of
+//?} else {
+                /*new Tuple<>
+*///?}
+                (true, "There's nothing wrong with the RegEx pattern.");
     }
 
     public static void toggleBooleanConfig(String key) {

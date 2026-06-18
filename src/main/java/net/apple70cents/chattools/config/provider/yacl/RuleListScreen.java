@@ -4,8 +4,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.ContextUtils;
 import net.apple70cents.chattools.utils.RegExUtils;
+import net.apple70cents.chattools.utils.McUtils;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -81,7 +81,7 @@ public class RuleListScreen extends Screen {
 //? if >=1.19 {
             this.addRenderableWidget(Button.builder(
                     TextUtils.literal("§f" + (index + 1) + ". " + summary),
-                    button -> Minecraft.getInstance().setScreen(
+                    button -> McUtils.setScreen(
                             new RuleEditScreen(this, configKey, type, currentList, index))
             ).bounds(30, y, this.width - 110, 20).build());
 
@@ -121,7 +121,7 @@ public class RuleListScreen extends Screen {
 //?} elif >=1.17 {
             /*this.addRenderableWidget(new Button(30, y, this.width - 110, 20,
                     TextUtils.literal("§f" + (index + 1) + ". " + summary),
-                    button -> Minecraft.getInstance().setScreen(
+                    button -> McUtils.setScreen(
                             new RuleEditScreen(this, configKey, type, currentList, index))));
             final int fi = index;
             this.addRenderableWidget(new Button(this.width - 75, y, 20, 20,
@@ -131,7 +131,7 @@ public class RuleListScreen extends Screen {
             /*final int fi = index;
             this.addButton(new Button(30, y, this.width - 110, 20,
                     TextUtils.literal("§f" + (index + 1) + ". " + summary),
-                    button -> Minecraft.getInstance().setScreen(
+                    button -> McUtils.setScreen(
                             new RuleEditScreen(this, configKey, type, currentList, fi))));
             this.addButton(new Button(this.width - 75, y, 20, 20,
                     TextUtils.literal("§c✕"),
@@ -157,7 +157,7 @@ public class RuleListScreen extends Screen {
                 CommonComponents.GUI_DONE,
                 button -> {
                     saveList();
-                    Minecraft.getInstance().setScreen(parent);
+                    McUtils.setScreen(parent);
                 }
         ).bounds(this.width / 2 + 10, this.height - 52, 110, 20).build());
 //?} elif >=1.17 {
@@ -171,7 +171,7 @@ public class RuleListScreen extends Screen {
                 }));
         this.addRenderableWidget(new Button(this.width / 2 + 10, this.height - 52, 110, 20,
                 CommonComponents.GUI_DONE,
-                button -> { saveList(); Minecraft.getInstance().setScreen(parent); }));
+                button -> { saveList(); McUtils.setScreen(parent); }));
 *///?} else {
         /*this.addButton(new Button(this.width / 2 - 120, this.height - 52, 110, 20,
                 TextUtils.literal("§a+ ").copy().append(trans("gui.addNew")),
@@ -183,7 +183,7 @@ public class RuleListScreen extends Screen {
                 }));
         this.addButton(new Button(this.width / 2 + 10, this.height - 52, 110, 20,
                 CommonComponents.GUI_DONE,
-                button -> { saveList(); Minecraft.getInstance().setScreen(null); }));
+                button -> { saveList(); McUtils.setScreen(null); }));
 *///?}
     }
 
@@ -251,7 +251,7 @@ public class RuleListScreen extends Screen {
     @Override
     public void onClose() {
         saveList();
-        Minecraft.getInstance().setScreen(parent);
+        McUtils.setScreen(parent);
     }
 
     // ---- Utility methods ----

@@ -4,19 +4,16 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.ContextUtils;
+import net.apple70cents.chattools.utils.McUtils;
 import net.apple70cents.chattools.utils.TextUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 
 //? if >=1.21.9 {
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 //?}
 
 //? if >=26.1 {
@@ -94,7 +91,7 @@ public class RuleEditScreen extends Screen {
                         TextUtils.literal("§e✎ " + trans("gui.editCommands").getString() + " (" + commands.size() + ")"),
                         button -> {
                             saveItem();
-                            Minecraft.getInstance().setScreen(new MacroCommandListScreen(this, item));
+                            McUtils.setScreen(new MacroCommandListScreen(this, item));
                         }
                 ).bounds(fieldX, y, fieldWidth, 20).build();
                 this.addRenderableWidget(cmdButton);
@@ -102,13 +99,13 @@ public class RuleEditScreen extends Screen {
                 /*List<?> commands = (List<?>) value;
                 Button cmdButton = new Button(fieldX, y, fieldWidth, 20,
                         TextUtils.literal("§e✎ " + trans("gui.editCommands").getString() + " (" + commands.size() + ")"),
-                        button -> { saveItem(); Minecraft.getInstance().setScreen(new MacroCommandListScreen(this, item)); });
+                        button -> { saveItem(); McUtils.setScreen(new MacroCommandListScreen(this, item)); });
                 this.addRenderableWidget(cmdButton);
 *///?} else {
                 /*List<?> commands = (List<?>) value;
                 Button cmdButton = new Button(fieldX, y, fieldWidth, 20,
                         TextUtils.literal("§e✎ " + trans("gui.editCommands").getString() + " (" + commands.size() + ")"),
-                        button -> { saveItem(); Minecraft.getInstance().setScreen(new MacroCommandListScreen(this, item)); });
+                        button -> { saveItem(); McUtils.setScreen(new MacroCommandListScreen(this, item)); });
                 this.addButton(cmdButton);
 *///?}
                 fieldEntries.add(new FieldEntry(fieldName, null, null, y));
@@ -146,7 +143,7 @@ public class RuleEditScreen extends Screen {
 //? if >=1.19 {
                 Button keyBtn = Button.builder(
                         TextUtils.literal("§e" + keyName),
-                        button -> Minecraft.getInstance().setScreen(new KeyCaptureScreen(this,
+                        button -> McUtils.setScreen(new KeyCaptureScreen(this,
                                 newVal -> item.put(fieldName, newVal),
                                 () -> item.get(fieldName).toString()))
                 ).bounds(fieldX, y, fieldWidth, 20).build();
@@ -154,12 +151,12 @@ public class RuleEditScreen extends Screen {
 //?} elif >=1.17 {
                 /*Button keyBtn = new Button(fieldX, y, fieldWidth, 20,
                         TextUtils.literal("§e" + keyName),
-                        button -> {Minecraft.getInstance().setScreen(RuleEditScreen.this);});
+                        button -> {McUtils.setScreen(RuleEditScreen.this);});
                 this.addRenderableWidget(keyBtn);
 *///?} else {
                 /*Button keyBtn = new Button(fieldX, y, fieldWidth, 20,
                         TextUtils.literal("§e" + keyName),
-                        button -> {Minecraft.getInstance().setScreen(RuleEditScreen.this);});
+                        button -> {McUtils.setScreen(RuleEditScreen.this);});
                 this.addButton(keyBtn);
 *///?}
                 fieldEntries.add(new FieldEntry(fieldName, null, null, y));
@@ -270,17 +267,17 @@ public class RuleEditScreen extends Screen {
                 CommonComponents.GUI_DONE,
                 button -> {
                     saveItem();
-                    Minecraft.getInstance().setScreen(parent);
+                    McUtils.setScreen(parent);
                 }
         ).bounds(this.width / 2 - 80, this.height - 30, 160, 20).build());
 //?} elif >=1.17 {
         /*this.addRenderableWidget(new Button(this.width / 2 - 80, this.height - 30, 160, 20,
                 CommonComponents.GUI_DONE,
-                button -> { saveItem(); Minecraft.getInstance().setScreen(parent); }));
+                button -> { saveItem(); McUtils.setScreen(parent); }));
 *///?} else {
         /*this.addButton(new Button(this.width / 2 - 80, this.height - 30, 160, 20,
                 CommonComponents.GUI_DONE,
-                button -> { saveItem(); Minecraft.getInstance().setScreen(parent); }));
+                button -> { saveItem(); McUtils.setScreen(parent); }));
 *///?}
     }
 
@@ -339,7 +336,7 @@ public class RuleEditScreen extends Screen {
     @Override
     public void onClose() {
         saveItem();
-        Minecraft.getInstance().setScreen(parent);
+        McUtils.setScreen(parent);
     }
 
     private static Object parseFieldValue(Object original, String newVal) {
