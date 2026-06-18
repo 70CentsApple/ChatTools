@@ -1,13 +1,13 @@
 ## Chinese (Simplified)
-### v2.4.2.1
-- 修复 回退对 Cloth Config API 的注入
-
-### v2.4.2.2
-- 新增 1.21.x 版本的 Minecraft 也支持 YACL 作为配置界面库
+### v2.4.3
+- 新增 气泡规则 匹配真实 ID 和 部分匹配 选项 @ESEAbsolute
+- 新增 隐藏不可见玩家气泡选项
+- 新增 聊天进入动画选项
+- 更新 26.2
 
 ## English
-### v2.4.2.1
-- Fixed: Rollback of mixins to Cloth Config API
-
-### v2.4.2.2
-- Added: Support for YACL as a config screen library for Minecraft 1.21.x
+### v2.4.3
+- Added: Bubble Rule - Match Profile Name and Partial Match options @ESEAbsolute
+- Added: Hide Invisible Player Bubbles option
+- Added: Chat Animation option
+- Updated: Bumped to 26.2
