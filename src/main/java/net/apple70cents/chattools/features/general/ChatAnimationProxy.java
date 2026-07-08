@@ -1,5 +1,7 @@
 package net.apple70cents.chattools.features.general;
 
+import net.apple70cents.chattools.config.common.ConfigUtils;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
@@ -129,6 +131,7 @@ public final class ChatAnimationProxy {
      *         has no offset to apply right now.
      */
     public static float[] offsetFor(Object target, List<?> trimmedMessages, double entryHeight) {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED || !ConfigUtils.CHAT_ANIMATION_ENABLED) return null;
         if (target == null || trimmedMessages == null || trimmedMessages.isEmpty()) return null;
 
         float belowIncomingSum = 0.0F;
