@@ -1,13 +1,9 @@
 ## Chinese (Simplified)
-### v2.4.3
-- 新增 气泡规则 匹配真实 ID 和 部分匹配 选项 @ESEAbsolute
-- 新增 隐藏不可见玩家气泡选项
-- 新增 聊天进入动画选项
-- 更新 26.2
+### v2.4.3.1
+- 修复 百度机器翻译 MD5 计算应使用 UTF-8 编码
+- 修复 在一些版本无法正确禁用聊天动画
 
 ## English
-### v2.4.3
-- Added: Bubble Rule - Match Profile Name and Partial Match options @ESEAbsolute
-- Added: Hide Invisible Player Bubbles option
-- Added: Chat Animation option
-- Updated: Bumped to 26.2
+### v2.4.3.1
+- Fixed: Baidu translator MD5 calculation should use UTF-8 encoding
+- Fixed: Unable to properly disable Chat Animations in some versions
