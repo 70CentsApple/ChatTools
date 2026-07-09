@@ -69,6 +69,9 @@ public abstract class ChatComponentMixin {
 
     @Inject(method = "refreshTrimmedMessages", at = @At("RETURN"))
     public void chatTools$onRefreshReturn(CallbackInfo ci) {
+        for (Object line : this.trimmedMessages) {
+            ChatAnimator.onNewLine(line);
+        }
         ChatAnimator.popReplaying();
     }
 
