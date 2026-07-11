@@ -4,6 +4,7 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
+    - uses: gradle/actions/wrapper-validation@v4
 
     - name: Minify JSON files
       run: python3 .github/workflows/scripts/minify_json_files.py
