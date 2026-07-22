@@ -23,7 +23,7 @@ public class ConfigGuiLoader {
     
     public static Map<String, Object> configGuiMap;
     public static boolean configGuiMapInitialized = false;
-    private static int GUI_VERSION = -1;
+    private static double GUI_VERSION = -1;
     
     private static final Map<String, String> key2TypeMappings = new HashMap<>();
 
@@ -42,7 +42,7 @@ public class ConfigGuiLoader {
             if (inputStream == null) return;
             Reader reader = new InputStreamReader(inputStream);
             configGuiMap = GSON.fromJson(reader, Map.class);
-            GUI_VERSION = ((Number) configGuiMap.get("version")).intValue();
+            GUI_VERSION = ((Number) configGuiMap.get("version")).doubleValue();
             
             // Populate key2TypeMappings
             for (Object categoryInfo : (List<?>) configGuiMap.get("content")) {
