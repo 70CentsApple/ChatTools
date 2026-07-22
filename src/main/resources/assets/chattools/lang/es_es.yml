@@ -107,10 +107,15 @@ key:
             {hour} -> Hora
             {minute} -> Minuto
             {second} -> Segundo
-        CopyToChatBar:
-          Enabled:
-            .: "Activar Menú de Copia"
-            '@Tooltip': "Si está activado, puedes abrir un menú de copia haciendo clic en la marca de tiempo de un mensaje."
+      CopyMenu:
+        .: "Menú de Copia"
+        '@Tooltip': "El Menú de Copia permite copiar un mensaje del chat en varios formatos. Estas opciones controlan cómo se abre."
+        TimestampEnabled:
+          .: "Abrir al Hacer Clic en la Marca de Tiempo"
+          '@Tooltip': "Si está activado, puedes abrir el Menú de Copia haciendo clic en la marca de tiempo de un mensaje."
+        CtrlCEnabled:
+          .: "Abrir con Ctrl-C"
+          '@Tooltip': "Si está activado, al pulsar Ctrl-C en la barra de chat sin nada seleccionado se abre el menú de copia del mensaje bajo el cursor."
       RestoreMessages:
         .: "Restaurar Mensajes"
         '@Tooltip': "Restaura los mensajes de la sesión anterior."

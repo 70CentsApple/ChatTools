@@ -9,13 +9,17 @@ import net.apple70cents.chattools.features.notifier.BasicNotifier;
 import net.apple70cents.chattools.features.responder.Responder;
 import net.apple70cents.chattools.config.common.ConfigUtils;
 import net.apple70cents.chattools.utils.LoggerUtils;
+import net.apple70cents.chattools.utils.ChatComponentDuck;
 import net.apple70cents.chattools.utils.MessageUtils;
 import net.apple70cents.chattools.utils.TextUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -41,7 +45,7 @@ import net.minecraft.network.chat.MessageSignature;
  * @author 70CentsApple
  */
 @Mixin(ChatComponent.class)
-public abstract class ChatComponentMixin {
+public abstract class ChatComponentMixin implements ChatComponentDuck {
 
     @Shadow
     public abstract void rescaleChat();
@@ -60,6 +64,108 @@ public abstract class ChatComponentMixin {
             /*GuiMessage<net.minecraft.util.FormattedCharSequence>
 *///?}
             > trimmedMessages;
+
+    @Shadow
+    protected abstract double getScale();
+
+    @Shadow
+    protected abstract int getWidth();
+
+    @Shadow
+    public abstract int getLinesPerPage();
+
+    @Shadow
+    private int chatScrollbarPos;
+
+//? if >=1.19 {
+    @Shadow
+    protected abstract int getLineHeight();
+//?}
+
+    /**
+     * Resolves which on-screen chat message the mouse is currently over.
+     * <p>
+     * The line row under the cursor is found with the same math vanilla uses for chat hit-testing
+     * (invert the chat scale, then map the vertical offset to a line row). Mapping that line back to
+     * its source message differs by version: 1.19+ tag each line with an {@code endOfEntry} flag, so
+     * we count entry boundaries from the bottom up; older versions carry no such flag, so we re-wrap
+     * the stored messages with the same width to line the counts up. Either way we return the
+     * message's displayed component, which is the exact reference tracked in {@code messageMap}.
+     */
+    @Override
+    public Component chatTools$hoveredMessageAtCursor() {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
+            return null;
+        }
+        Minecraft mc = Minecraft.getInstance();
+        double scale = this.getScale();
+        if (scale <= 0.0) {
+            return null;
+        }
+        com.mojang.blaze3d.platform.Window window = mc.getWindow();
+        if (window.getScreenWidth() <= 0 || window.getScreenHeight() <= 0) {
+            return null;
+        }
+        // raw cursor position -> GUI-scaled coordinates
+        double mouseX = mc.mouseHandler.xpos() * window.getGuiScaledWidth() / (double) window.getScreenWidth();
+        double mouseY = mc.mouseHandler.ypos() * window.getGuiScaledHeight() / (double) window.getScreenHeight();
+
+        // horizontal bounds of the chat box (chat-local X, matching vanilla's screenToChatX)
+        double chatX = mouseX / scale - 4.0;
+        if (chatX < -4.0 || chatX > Mth.floor(this.getWidth() / scale)) {
+            return null;
+        }
+
+        double lineHeight =
+//? if >=1.19 {
+                this.getLineHeight();
+//?} else {
+                /*9.0 * (mc.options.chatLineSpacing + 1.0);
+*///?}
+        if (lineHeight <= 0.0) {
+            return null;
+        }
+        // vertical offset -> line row (0 = bottom-most visible line), matching vanilla's screenToChatY
+        double row = (window.getGuiScaledHeight() - mouseY - 40.0) / (scale * lineHeight);
+        int visibleLines = Math.min(this.getLinesPerPage(), this.trimmedMessages.size());
+        if (!(row >= 0.0 && row < visibleLines)) {
+            return null;
+        }
+        int lineIndex = Mth.floor(row) + this.chatScrollbarPos;
+        if (lineIndex < 0 || lineIndex >= this.trimmedMessages.size()) {
+            return null;
+        }
+
+//? if >=1.19 {
+        // Each message contributes exactly one endOfEntry line (its bottom line), so counting them
+        // from index 0 up to the hovered line yields the message's 1-based position from newest.
+        int ordinal = 0;
+        for (int k = 0; k <= lineIndex; k++) {
+            if (this.trimmedMessages.get(k).endOfEntry()) {
+                ordinal++;
+            }
+        }
+        if (ordinal <= 0 || ordinal > this.allMessages.size()) {
+            return null;
+        }
+        return this.allMessages.get(ordinal - 1).content();
+//?} else {
+        /*// Pre-1.19 lines carry no entry boundary; re-wrap each stored message with the same width
+        // vanilla used and accumulate line counts until the hovered line falls inside a message.
+        int wrapWidth = Mth.floor(this.getWidth() / scale);
+        int cumulative = 0;
+        for (int m = 0; m < this.allMessages.size(); m++) {
+            Component content = (Component) this.allMessages.get(m).getMessage();
+            int lineCount = net.minecraft.client.gui.components.ComponentRenderUtils
+                    .wrapComponents(content, wrapWidth, mc.font).size();
+            if (lineIndex < cumulative + lineCount) {
+                return content;
+            }
+            cumulative += lineCount;
+        }
+        return null;
+        *///?}
+    }
 
 //? if >=1.20.5 {
     @Inject(method = "refreshTrimmedMessages", at = @At("HEAD"))
@@ -111,6 +217,7 @@ public abstract class ChatComponentMixin {
     }
 *///?}
 
+    @Unique
     private void chatTools$markFreshLines() {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
             ChatAnimator.clearNextLineNoPush();

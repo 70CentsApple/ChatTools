@@ -103,10 +103,15 @@ key:
             {hour} -> 小時
             {minute} -> 分鐘
             {second} -> 秒
-        CopyToChatBar:
-          Enabled:
-            .: 啟用複製菜單
-            '@Tooltip': 啟用複製之後，點擊時間戳，可以打開複製菜單。
+      CopyMenu:
+        .: 複製菜單
+        '@Tooltip': 複製菜單可以把聊天訊息以多種格式複製出來。這些選項控制它的打開方式。
+        TimestampEnabled:
+          .: 點擊時間戳打開
+          '@Tooltip': 啟用後，點擊訊息的時間戳即可打開複製菜單。
+        CtrlCEnabled:
+          .: 用 Ctrl-C 打開
+          '@Tooltip': 啟用後，在聊天欄沒有選取文字時按下 Ctrl-C，會為滑鼠指向的訊息打開複製菜單。
       RestoreMessages:
         .: 儲存聊天記錄
         '@Tooltip': 即使在切換到其他會話後也能恢復之前的會話。

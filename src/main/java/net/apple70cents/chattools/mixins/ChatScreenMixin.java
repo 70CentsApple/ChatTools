@@ -3,8 +3,11 @@ package net.apple70cents.chattools.mixins;
 import net.apple70cents.chattools.features.general.ChatHistoryNavigator;
 import net.apple70cents.chattools.features.translator.Translator;
 import net.apple70cents.chattools.config.common.ConfigUtils;
+import net.apple70cents.chattools.utils.ChatComponentDuck;
+import net.apple70cents.chattools.utils.CopyFeatureScreen;
 import net.apple70cents.chattools.utils.McUtils;
-import net.minecraft.client.Minecraft;
+import net.apple70cents.chattools.utils.TextUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -80,10 +83,55 @@ public abstract class ChatScreenMixin {
         }
     }
 
+    // A Ctrl-C that has nothing to copy (no text selected in the chat input) is otherwise a no-op;
+    // repurpose it to open the Copy Menu for the message under the mouse cursor. This is an
+    // alternative to clicking a timestamp, so it works even when timestamps are disabled.
+    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+//? if >=1.21.9 {
+    private void chatTools$copyHoveredOnCtrlC(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
+        if (chatTools$tryOpenCopyMenuForHovered(keyEvent.isCopy())) {
+            cir.setReturnValue(true);
+        }
+    }
+//?} else {
+/*private void chatTools$copyHoveredOnCtrlC(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        if (chatTools$tryOpenCopyMenuForHovered(net.minecraft.client.gui.screens.Screen.isCopy(keyCode))) {
+            cir.setReturnValue(true);
+        }
+    }
+*///?}
+
+    @Unique
+    private boolean chatTools$tryOpenCopyMenuForHovered(boolean isCopy) {
+        if (!isCopy) {
+            return false;
+        }
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
+            return false;
+        }
+        if (!ConfigUtils.getBoolean("general.CopyMenu.CtrlCEnabled")) {
+            return false;
+        }
+        // Only take over when the copy would be a no-op; a real selection must still copy as usual.
+        if (this.input == null || !this.input.getHighlighted().isEmpty()) {
+            return false;
+        }
+        Component hovered = ((ChatComponentDuck) McUtils.getChat()).chatTools$hoveredMessageAtCursor();
+        if (hovered == null) {
+            return false;
+        }
+        TextUtils.MessageUnit unit = TextUtils.getMessageUnitByVisualMessage(hovered);
+        if (unit == null) {
+            return false;
+        }
+        McUtils.setScreen(new CopyFeatureScreen(unit));
+        return true;
+    }
+
 
 //? if >=1.20.5 {
     @Unique
-    private boolean shouldHideChatHistory() {
+    private boolean chatTools$shouldHideChatHistory() {
         return McUtils.isGuiHidden() &&
                 ConfigUtils.CHAT_TOOLS_ENABLED &&
                 (McUtils.getScreen() instanceof ChatScreen) &&
@@ -101,7 +149,7 @@ public abstract class ChatScreenMixin {
     private boolean hideChatHistoryInF1Mode_1(ChatComponent instance, GuiGraphics context, int i1, int i2, int i3, boolean b) {
 *///?}
         // if addition conditions are satisfied, don't make it render
-        return !shouldHideChatHistory();
+        return !chatTools$shouldHideChatHistory();
     }
 
 //? if >=1.21.11 {
@@ -109,7 +157,7 @@ public abstract class ChatScreenMixin {
 /*@WrapWithCondition(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderComponentHoverEffect(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Style;II)V"))
 private boolean hideChatHistoryInF1Mode_2(GuiGraphics instance, Font font, Style style, int i, int j) {
          // if addition conditions are satisfied, don't make it render
-         return !shouldHideChatHistory();
+         return !chatTools$shouldHideChatHistory();
 }
 
 //? if >=1.21.6 {
@@ -119,13 +167,13 @@ private boolean hideChatHistoryInF1Mode_2(GuiGraphics instance, Font font, Style
 ^///?}
 private boolean hideChatHistoryInF1Mode_3(GuiGraphics instance, Font font, java.util.List list, int i, int j) {
          // if addition conditions are satisfied, don't make it render
-         return !shouldHideChatHistory();
+         return !chatTools$shouldHideChatHistory();
 }
 
 @Inject(method = "getComponentStyleAt", at = @At(value = "HEAD"), cancellable = true)
 private void hideChatHistoryInF1Mode_4(double x, double y, CallbackInfoReturnable<Style> cir) {
          // if addition conditions are satisfied, don't consume its click
-         if (shouldHideChatHistory()) {
+         if (chatTools$shouldHideChatHistory()) {
              cir.setReturnValue(null);
          }
 }
@@ -135,7 +183,7 @@ private void hideChatHistoryInF1Mode_4(double x, double y, CallbackInfoReturnabl
     @Inject(method = "handleComponentClicked", at = @At("HEAD"), cancellable = true)
     private void hideChatHistoryInF1Mode_2(Style style, boolean bl, CallbackInfoReturnable<Boolean> cir) {
         // if addition conditions are satisfied, don't consume its click
-        if (shouldHideChatHistory()) {
+        if (chatTools$shouldHideChatHistory()) {
             cir.setReturnValue(false);
             cir.cancel();
         }

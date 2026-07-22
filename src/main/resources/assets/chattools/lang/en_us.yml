@@ -142,10 +142,15 @@ key:
             {hour} -> Hour
             {minute} -> Minute
             {second} -> Second
-        CopyToChatBar:
-          Enabled:
-            .: Enable Copy Menu
-            '@Tooltip': If enabled, you can open a copy menu by clicking a message's timestamp.
+      CopyMenu:
+        .: Copy Menu
+        '@Tooltip': The Copy Menu lets you copy a chat message in various formats. These options control how it can be opened.
+        TimestampEnabled:
+          .: Open by Clicking Timestamp
+          '@Tooltip': If enabled, you can open the Copy Menu by clicking a message's timestamp.
+        CtrlCEnabled:
+          .: Open via Ctrl-C
+          '@Tooltip': If enabled, pressing Ctrl-C in the chat bar with nothing selected opens the Copy Menu for the message under your cursor.
       RestoreMessages:
         .: Restore Messages
         '@Tooltip': Restores messages from the previous session.

@@ -132,6 +132,30 @@ public class TextUtils {
         }
     }
 
+    /**
+     * Finds the tracked {@link MessageUnit} whose displayed component is the given one.
+     * <p>
+     * The component stored in a message's {@code GuiMessage} is the exact same reference
+     * placed into {@link MessageUnit#visualMessage} while the message was being processed,
+     * so identity comparison uniquely resolves the on-screen message the cursor is over
+     * (two messages sent within the same second may render identically, hence no equals()
+     * fallback here).
+     *
+     * @param visualMessage the displayed component, e.g. the content of a hovered chat line
+     * @return the matching MessageUnit, or null if the component is not (or no longer) tracked
+     */
+    public static MessageUnit getMessageUnitByVisualMessage(Component visualMessage) {
+        if (visualMessage == null) {
+            return null;
+        }
+        for (MessageUnit unit : messageMap.values()) {
+            if (unit.visualMessage == visualMessage) {
+                return unit;
+            }
+        }
+        return null;
+    }
+
 
     public static Component literal(String str) {
 //? if >=1.19 {

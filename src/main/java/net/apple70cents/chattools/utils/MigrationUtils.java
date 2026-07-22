@@ -31,6 +31,25 @@ public class MigrationUtils {
         if (version <= 2.40202) {
             migrateFrom2_40202(config);
         }
+        if (version <= 2.40301) {
+            migrateFrom2_40301(config);
+        }
+    }
+
+    /**
+     * Migration from v2.4.3.1 to v2.4.4:
+     * The Copy Menu options were pulled out of the Timestamp section into their own CopyMenu section:
+     * general.Timestamp.CopyToChatBar.Enabled     -> general.CopyMenu.TimestampEnabled
+     */
+    private static void migrateFrom2_40301(ConfigStorage config) {
+        LoggerUtils.info("[ChatTools] Migrating config from v2.4.3.1 to v2.4.4...");
+
+        if (config.hasKey("general.Timestamp.CopyToChatBar.Enabled")) {
+            config.set("general.CopyMenu.TimestampEnabled", config.get("general.Timestamp.CopyToChatBar.Enabled"));
+            config.remove("general.Timestamp.CopyToChatBar.Enabled");
+        }
+
+        LoggerUtils.info("[ChatTools] Migration from v2.4.3.1 to v2.4.4 completed.");
     }
 
     /**

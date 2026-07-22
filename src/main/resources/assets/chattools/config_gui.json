@@ -41,10 +41,20 @@
             {
               "type": "String",
               "key": "general.Timestamp.Pattern"
+            }
+          ]
+        },
+        {
+          "type": "sub",
+          "key": "general.CopyMenu",
+          "content": [
+            {
+              "type": "boolean",
+              "key": "general.CopyMenu.TimestampEnabled"
             },
             {
               "type": "boolean",
-              "key": "general.Timestamp.CopyToChatBar.Enabled"
+              "key": "general.CopyMenu.CtrlCEnabled"
             }
           ]
         },

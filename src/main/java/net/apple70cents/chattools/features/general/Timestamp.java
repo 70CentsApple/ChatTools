@@ -22,7 +22,7 @@ public class Timestamp {
         Component longTimeDisplay = TextUtils.of(String.format("%4d/%d/%d %02d:%02d:%02d\nUTC%s", currentTime.getYear(), currentTime
                 .getMonth()
                 .getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
-        if (ConfigUtils.getBoolean("general.Timestamp.CopyToChatBar.Enabled")) {
+        if (ConfigUtils.getBoolean("general.CopyMenu.TimestampEnabled")) {
             HoverEvent hoverEvent = TextUtils.showTextHoverEvent(
                     longTimeDisplay.copy().append("\n\n").append(TextUtils.trans("texts.copy.launch")));
             ClickEvent clickEvent =

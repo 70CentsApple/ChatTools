@@ -91,10 +91,15 @@ key:
         Pattern:
           .: How It Lookz
           '@Tooltip': "Da wayz da time lookz, yo.\n& -> Colorz Thingy\n\\& -> Just &\n{hour} -> What Hourz\n{minute} -> Da Minutez\n{second} -> Da Secondz"
-        CopyToChatBar:
-          Enabled:
-            .: Copy menu
-            '@Tooltip': If it's on, a menu 4 copying may pop up by clicking its timez stampz.
+      CopyMenu:
+        .: Copy menu
+        '@Tooltip': Da copy menu lets ya yoink a chat meow in lotsa formats. Deez control how it opens.
+        TimestampEnabled:
+          .: Click da timez stampz
+          '@Tooltip': If it's on, a menu 4 copying may pop up by clicking its timez stampz.
+        CtrlCEnabled:
+          .: Ctrl-C 4 copy menu
+          '@Tooltip': If it's on, mashin Ctrl-C in da chat box wif nothin selected pops da copy menu 4 da meow ur pointin at.
       RestoreMessages:
         .: Get Back Old Meows
         '@Tooltip': Brings back old chatz even if ya switchin' places.
