@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
+//? if >=26.3 {
+import net.minecraft.util.ARGB;
+import net.minecraft.client.renderer.SubmitNodeCollection;
+import net.minecraft.client.renderer.feature.TextFeatureRenderer;
+//?}
+
 //? if <26.2 {
 /*import net.minecraft.client.renderer.MultiBufferSource;
 *///?}
@@ -103,7 +109,11 @@ public class BubbleRenderer {
 //?} else {
             /*poseStack.translate(0.0F, entity.getBbHeight() + 0.5F + yOffset / 10.0F, 0.0F);
 *///?}
-            poseStack.mulPose(
+//? if >=26.3 {
+            poseStack.rotate(
+//?} else {
+            /*poseStack.mulPose(
+ *///?}
 //? if >=26.2 {
                     mc.gameRenderer.gameRenderState().levelRenderState.cameraRenderState.orientation
 //?} elif >=26.1 {
@@ -137,14 +147,27 @@ public class BubbleRenderer {
             float x2 = maxWidth / 2.0F + 3;
             float y2 = 1;
 
-//? if >=1.21.11 {
+//? if >=26.3 {
+            ((SubmitNodeCollection)renderQueue.order(0)).solid.submit(
+                    new TextFeatureRenderer.Submit(
+                            new Matrix4f(poseStack.last().pose()),
+                            Font.DisplayMode.SEE_THROUGH,
+                            0xF000F0,
+                            new TextFeatureRenderer.Content.StandaloneBackground(
+                                    x1, y1, x2, y2,
+                                    ARGB.color(0.18F, 0xFF000000)
+                            )
+                    )
+            );
+//?} else {
+/*//? if >=1.21.11 {
             renderQueue.order(0).submitCustomGeometry(poseStack, RenderTypes.textBackgroundSeeThrough(), (pose1, buffer) -> {
 //?} elif >=1.21.9 {
-            /*renderQueue.order(0).submitCustomGeometry(poseStack, RenderType.textBackgroundSeeThrough(), (pose1, buffer) -> {
-*///?} else {
-            /*VertexConsumer buffer = multiBufferSource.getBuffer(RenderType.textBackgroundSeeThrough());
+            /^renderQueue.order(0).submitCustomGeometry(poseStack, RenderType.textBackgroundSeeThrough(), (pose1, buffer) -> {
+^///?} else {
+            /^VertexConsumer buffer = multiBufferSource.getBuffer(RenderType.textBackgroundSeeThrough());
             Matrix4f pose1 = pose;
-*///?}
+^///?}
                 buffer.addVertex(pose1, x1, y1, -0.1F).setColor(0F, 0F, 0F, 0.18F).setUv2(15, 15);
                 buffer.addVertex(pose1, x1, y2, -0.1F).setColor(0F, 0F, 0F, 0.18F).setUv2(15, 15);
                 buffer.addVertex(pose1, x2, y2, -0.1F).setColor(0F, 0F, 0F, 0.18F).setUv2(15, 15);
@@ -152,6 +175,7 @@ public class BubbleRenderer {
 //? if >=1.21.9 {
             });
 //?}
+*///?}
 
 //?}
 

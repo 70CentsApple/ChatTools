@@ -6,8 +6,8 @@ import net.minecraft.client.gui.screens.Screen;
 
 import net.apple70cents.chattools.config.provider.cloth.ClothConfigScreenGenerator;
 //? if HAS_YACL {
-import net.apple70cents.chattools.config.provider.yacl.YACLConfigScreenGenerator;
-//?}
+/*import net.apple70cents.chattools.config.provider.yacl.YACLConfigScreenGenerator;
+*///?}
 
 /**
  * Factory that determines which config library to use at runtime.
@@ -51,11 +51,11 @@ public class ConfigScreenFactory {
                 return ClothProvider.getScreen(parent);
             }
 //? if HAS_YACL {
-            // has yacl
+            /*// has yacl
             if (isYACLLoaded()) {
                 return YACLProvider.getScreen(parent);
             }
-//?}
+*///?}
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -69,10 +69,10 @@ public class ConfigScreenFactory {
     }
 
 //? if HAS_YACL {
-    private static class YACLProvider {
+    /*private static class YACLProvider {
         static Screen getScreen(Screen parent) {
             return YACLConfigScreenGenerator.getConfigBuilder().build().generateScreen(parent);
         }
     }
-//?}
+*///?}
 }

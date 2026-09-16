@@ -24,6 +24,7 @@ description = '''
 A toolkit that provides great chat-related features.
 '''
 logoFile = "icon.png"
+iconFile = "icon.png"
 
 [[dependencies."${id}"]]
 modId = "minecraft"

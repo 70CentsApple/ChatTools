@@ -1,5 +1,5 @@
 //? if HAS_YACL {
-package net.apple70cents.chattools.config.provider.yacl;
+/*package net.apple70cents.chattools.config.provider.yacl;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.isxander.yacl3.api.*;
@@ -17,12 +17,12 @@ import java.util.Map;
 
 import static net.apple70cents.chattools.utils.TextUtils.trans;
 
-/**
+/^*
  * YACL-based config screen generator.
  * Reads the same config_gui.json as ConfigScreenGenerator but produces a YACL screen.
  *
  * @author 70CentsApple
- */
+ ^/
 public class YACLConfigScreenGenerator {
 
     public static YetAnotherConfigLib.Builder getConfigBuilder() {
@@ -136,8 +136,8 @@ public class YACLConfigScreenGenerator {
 //? if >=1.21.11 {
                             net.minecraft.util.Util.getPlatform()
 //?} else {
-                            /*net.minecraft.Util.getPlatform()
-*///?}
+                            /^net.minecraft.Util.getPlatform()
+^///?}
                                     .openUri(URI.create("https://70centsapple.top/blogs/#/chat-tools-faq"));
                         }).build();
             default:
@@ -163,4 +163,4 @@ public class YACLConfigScreenGenerator {
                 .build();
     }
 }
-//?}
+*///?}

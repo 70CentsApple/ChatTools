@@ -51,7 +51,12 @@ public class KeyboardUtils {
 //? if >=1.21.9 {
     private static boolean isAnyKeyDown(Window window, int[] keys) {
         for (int key : keys) {
-            if (InputConstants.isKeyDown(window, key)) return true;
+            if (InputConstants.isKeyDown(
+//? if >=26.3 {
+//?} else {
+                    /*window,
+*///?}
+                    key)) return true;
         }
         return false;
     }
@@ -96,13 +101,23 @@ public class KeyboardUtils {
             if (isAnyKeyDown(window, forbiddenKeys)) {
                 return false;
             }
-            if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_F3)) {
+//? if >= 26.3 {
+            boolean f3Down = InputConstants.isKeyDown(GLFW.GLFW_KEY_F3);
+//?} else {
+            /*boolean f3Down = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_F3);
+*///?}
+            if (f3Down) {
                 return false;
             }
         }
 
-        if (key.getType().equals(InputConstants.Type.KEYSYM)) {
+//? if >= 26.3 {
+        if (key.getType().equals(InputConstants.Type.KEYBOARD)) {
+            return InputConstants.isKeyDown(keyCode);
+//?} else {
+        /*if (key.getType().equals(InputConstants.Type.KEYSYM)) {
             return InputConstants.isKeyDown(window, keyCode);
+*///?}
         } else if (key.getType().equals(InputConstants.Type.MOUSE)) {
             return GLFW.glfwGetMouseButton(
 //? if >=1.21.9 {

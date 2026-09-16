@@ -7,6 +7,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
+//? if >=26.3 {
+import com.mojang.blaze3d.Blaze3D;
+import java.net.URI;
+//?}
+
 //? if >=26.1 {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 //?} elif >=1.20 {
@@ -49,15 +54,26 @@ public class MissingConfigLibScreen extends Screen {
 //? if >=1.19 {
 
 //? if HAS_YACL {
-        this.addRenderableWidget(Button.builder(
+        /*this.addRenderableWidget(Button.builder(
                 TextUtils.literal("§a⬇ YetAnotherConfigLib (YACL)"),
-                button -> Util.getPlatform().openUri(YACL_URL)
+                button ->
+//? if >=26.3 {
+                Blaze3D.openUri(URI.create(YACL_URL))
+//?} else {
+                /^Util.getPlatform().openUri(YACL_URL)
+^///?}
         ).bounds(centerX - 120, centerY - 10, 240, 20).build());
-//?}
+*///?}
 
         this.addRenderableWidget(Button.builder(
                 TextUtils.literal("§e⬇ Cloth Config"),
-                button -> Util.getPlatform().openUri(CLOTH_CONFIG_URL)
+                button -> {
+//? if >=26.3 {
+                    Blaze3D.openUri(URI.create(CLOTH_CONFIG_URL));
+//?} else {
+                    /*Util.getPlatform().openUri(CLOTH_CONFIG_URL);
+*///?}
+                }
         ).bounds(centerX - 120, centerY + 15, 240, 20).build());
 
         this.addRenderableWidget(Button.builder(

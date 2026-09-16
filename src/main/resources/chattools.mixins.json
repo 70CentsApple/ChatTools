@@ -18,10 +18,10 @@
     "GuiGraphicsExtractorMixin",
     "GuiMixinForExclusiveActionbar",
     "GuiMixinForRestoreMessages",
-    "NameTagFeatureRendererStorageMixin",
     "ScreenAccessor",
     "ServerboundChatPacketMixin",
-    "StyleMixin"
+    "StyleMixin",
+    "SubmitNodeCollectionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

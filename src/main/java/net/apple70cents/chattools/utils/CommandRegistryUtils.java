@@ -221,7 +221,11 @@ public class CommandRegistryUtils {
             .then(literal("config")
                 // chattools config openfile
                 .then(literal("openfile").executes(t -> {
-                    Util.getPlatform().openFile(ConfigStorage.FILE);
+//? if >=26.3 {
+                    com.mojang.blaze3d.Blaze3D.openPath(ConfigStorage.FILE.toPath());
+//?} else {
+                    /*Util.getPlatform().openFile(ConfigStorage.FILE);
+*///?}
                     MessageUtils.sendToNonPublicChat(TextUtils.trans("texts.requireReload"));
                     return Command.SINGLE_SUCCESS;
                 }))
@@ -506,7 +510,13 @@ public class CommandRegistryUtils {
 //?} else {
                     /*4
 *///?}
-                    , player.getScoreboardName(), player.getName(), null, player);
+                    ,
+//?if >= 26.3 {
+                    null,
+//?} else {
+                    /*player.getScoreboardName(), player.getName(), null,
+*///?}
+                    player);
         }
     }
 }

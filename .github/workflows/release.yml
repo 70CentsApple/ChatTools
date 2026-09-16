@@ -73,6 +73,18 @@ jobs:
       matrix:
         include:
           # --- 26.x ---
+          - artifact: "26.3-fabric"
+            target_game_versions: "26.3"
+            target_game_versions_cf_ids: "17045"
+            formatted_version_name: "26.3"
+            modloader: "fabric"
+
+          - artifact: "26.3-neoforge"
+            target_game_versions: "26.3"
+            target_game_versions_cf_ids: "17045"
+            formatted_version_name: "26.3"
+            modloader: "neoforge"
+
           - artifact: "26.2-fabric"
             target_game_versions: "26.2"
             target_game_versions_cf_ids: "16498"
