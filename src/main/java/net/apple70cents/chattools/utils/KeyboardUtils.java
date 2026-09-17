@@ -4,7 +4,11 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import net.apple70cents.chattools.config.common.SpecialUnits;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.glfw.GLFW;
+//? if >=26.3 {
+import org.lwjgl.sdl.SDLMouse;
+//?} else {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -15,15 +19,22 @@ import java.util.Map;
  */
 public class KeyboardUtils {
 
-    private static final int[] ALT_KEYS = {GLFW.GLFW_KEY_LEFT_ALT, GLFW.GLFW_KEY_RIGHT_ALT};
-    private static final int[] CTRL_KEYS = {GLFW.GLFW_KEY_LEFT_CONTROL, GLFW.GLFW_KEY_RIGHT_CONTROL};
-    private static final int[] SHIFT_KEYS = {GLFW.GLFW_KEY_LEFT_SHIFT, GLFW.GLFW_KEY_RIGHT_SHIFT};
-
-    private static final int[] ALL_MODIFIER_KEYS = {
-            GLFW.GLFW_KEY_LEFT_ALT, GLFW.GLFW_KEY_RIGHT_ALT,
-            GLFW.GLFW_KEY_LEFT_CONTROL, GLFW.GLFW_KEY_RIGHT_CONTROL,
-            GLFW.GLFW_KEY_LEFT_SHIFT, GLFW.GLFW_KEY_RIGHT_SHIFT
+    // Resolve names through Minecraft so each version supplies its own keycodes/scancodes.
+    private static final int[] ALT_KEYS = {
+            InputConstants.getKey("key.keyboard.left.alt").getValue(),
+            InputConstants.getKey("key.keyboard.right.alt").getValue()
     };
+    private static final int[] CTRL_KEYS = {
+            InputConstants.getKey("key.keyboard.left.control").getValue(),
+            InputConstants.getKey("key.keyboard.right.control").getValue()
+    };
+    private static final int[] SHIFT_KEYS = {
+            InputConstants.getKey("key.keyboard.left.shift").getValue(),
+            InputConstants.getKey("key.keyboard.right.shift").getValue()
+    };
+    private static final int F3_KEY = InputConstants.getKey("key.keyboard.f3").getValue();
+
+    private static final int[] ALL_MODIFIER_KEYS = concat(concat(ALT_KEYS, CTRL_KEYS), SHIFT_KEYS);
 
     // Maps each modifier to the keys that MUST be pressed for it
     private static final Map<SpecialUnits.KeyModifiers, int[]> REQUIRED_KEYS = new EnumMap<>(SpecialUnits.KeyModifiers.class);
@@ -102,9 +113,9 @@ public class KeyboardUtils {
                 return false;
             }
 //? if >= 26.3 {
-            boolean f3Down = InputConstants.isKeyDown(GLFW.GLFW_KEY_F3);
+            boolean f3Down = InputConstants.isKeyDown(F3_KEY);
 //?} else {
-            /*boolean f3Down = InputConstants.isKeyDown(window, GLFW.GLFW_KEY_F3);
+            /*boolean f3Down = InputConstants.isKeyDown(window, F3_KEY);
 *///?}
             if (f3Down) {
                 return false;
@@ -119,13 +130,14 @@ public class KeyboardUtils {
             return InputConstants.isKeyDown(window, keyCode);
 *///?}
         } else if (key.getType().equals(InputConstants.Type.MOUSE)) {
-            return GLFW.glfwGetMouseButton(
-//? if >=1.21.9 {
-                    window.handle()
-//?} else {
-                    /*window
+//? if >=26.3 {
+            return keyCode >= 1 && keyCode <= Integer.SIZE
+                    && (SDLMouse.SDL_GetMouseState(null, null) & (1 << (keyCode - 1))) != 0;
+//?} elif >=1.21.9 {
+            /*return GLFW.glfwGetMouseButton(window.handle(), keyCode) == GLFW.GLFW_PRESS;
+*///?} else {
+            /*return GLFW.glfwGetMouseButton(window, keyCode) == GLFW.GLFW_PRESS;
 *///?}
-                    , keyCode) == GLFW.GLFW_PRESS;
         }
         return false;
     }
