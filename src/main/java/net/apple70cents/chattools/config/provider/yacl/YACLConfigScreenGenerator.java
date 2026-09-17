@@ -24,7 +24,7 @@ import static net.apple70cents.chattools.utils.TextUtils.trans;
  * @author 70CentsApple
  ^/
 public class YACLConfigScreenGenerator {
-
+    static String FAQ_URL = "https://70centsapple.top/blogs/#/chat-tools-faq";
     public static YetAnotherConfigLib.Builder getConfigBuilder() {
         ConfigGuiLoader.initializeConfigGuiMapIfNecessary();
         Map<String, Object> guiMap = ConfigGuiLoader.configGuiMap;
@@ -133,12 +133,13 @@ public class YACLConfigScreenGenerator {
                 return ButtonOption.createBuilder().name(trans(key).copy().setStyle(TextUtils.WEBSITE_URL_STYLE))
                         .description(desc)
                         .action((screen, opt) -> {
-//? if >=1.21.11 {
-                            net.minecraft.util.Util.getPlatform()
-//?} else {
-                            /^net.minecraft.Util.getPlatform()
+//? if >=26.3 {
+                            com.mojang.blaze3d.Blaze3D.openUri(URI.create(FAQ_URL));
+//?} elif >=1.21.11 {
+                            /^net.minecraft.util.Util.getPlatform().openUri(URI.create(FAQ_URL));
+^///?} else {
+                            /^net.minecraft.Util.getPlatform().openUri(URI.create(FAQ_URL));
 ^///?}
-                                    .openUri(URI.create("https://70centsapple.top/blogs/#/chat-tools-faq"));
                         }).build();
             default:
                 return null;
