@@ -54,16 +54,16 @@ public class MissingConfigLibScreen extends Screen {
 //? if >=1.19 {
 
 //? if HAS_YACL {
-        /*this.addRenderableWidget(Button.builder(
+        this.addRenderableWidget(Button.builder(
                 TextUtils.literal("§a⬇ YetAnotherConfigLib (YACL)"),
                 button ->
 //? if >=26.3 {
                 Blaze3D.openUri(URI.create(YACL_URL))
 //?} else {
-                /^Util.getPlatform().openUri(YACL_URL)
-^///?}
-        ).bounds(centerX - 120, centerY - 10, 240, 20).build());
+                /*Util.getPlatform().openUri(YACL_URL)
 *///?}
+        ).bounds(centerX - 120, centerY - 10, 240, 20).build());
+//?}
 
         this.addRenderableWidget(Button.builder(
                 TextUtils.literal("§e⬇ Cloth Config"),
