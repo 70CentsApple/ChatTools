@@ -91,7 +91,9 @@ public class RuleEditScreen extends Screen {
                         TextUtils.literal("§e✎ " + trans("gui.editCommands").getString() + " (" + commands.size() + ")"),
                         button -> {
                             saveItem();
-                            McUtils.setScreen(new MacroCommandListScreen(this, item));
+                            McUtils.setScreen(type.equals("MacroList")
+                                    ? new MacroCommandListScreen(this, item)
+                                    : new ResponderCommandListScreen(this, item));
                         }
                 ).bounds(fieldX, y, fieldWidth, 20).build();
                 this.addRenderableWidget(cmdButton);
@@ -99,13 +101,15 @@ public class RuleEditScreen extends Screen {
                 /*List<?> commands = (List<?>) value;
                 Button cmdButton = new Button(fieldX, y, fieldWidth, 20,
                         TextUtils.literal("§e✎ " + trans("gui.editCommands").getString() + " (" + commands.size() + ")"),
-                        button -> { saveItem(); McUtils.setScreen(new MacroCommandListScreen(this, item)); });
+                        button -> { saveItem(); McUtils.setScreen(type.equals("MacroList")
+                                ? new MacroCommandListScreen(this, item) : new ResponderCommandListScreen(this, item)); });
                 this.addRenderableWidget(cmdButton);
 *///?} else {
                 /*List<?> commands = (List<?>) value;
                 Button cmdButton = new Button(fieldX, y, fieldWidth, 20,
                         TextUtils.literal("§e✎ " + trans("gui.editCommands").getString() + " (" + commands.size() + ")"),
-                        button -> { saveItem(); McUtils.setScreen(new MacroCommandListScreen(this, item)); });
+                        button -> { saveItem(); McUtils.setScreen(type.equals("MacroList")
+                                ? new MacroCommandListScreen(this, item) : new ResponderCommandListScreen(this, item)); });
                 this.addButton(cmdButton);
 *///?}
                 fieldEntries.add(new FieldEntry(fieldName, null, null, y));
@@ -359,7 +363,7 @@ public class RuleEditScreen extends Screen {
             case "BubbleList":
                 return Arrays.asList("address", "pattern", "partial", "profile", "fallback");
             case "ResponderList":
-                return Arrays.asList("address", "pattern", "message", "minDelayInMilliseconds", "maxDelayInMilliseconds", "forceDisableFormatter");
+                return Arrays.asList("address", "pattern", "commands");
             case "FormatterList":
                 return Arrays.asList("address", "formatter");
             case "CustomJoinMessageList":

@@ -287,18 +287,18 @@ public class RuleListScreen extends Screen {
             }
             case "ResponderList": {
                 String pattern = (String) map.getOrDefault("pattern", "");
-                String message = (String) map.getOrDefault("message", "");
-                boolean forceDisableFormatter = (Boolean) map.getOrDefault("forceDisableFormatter", false);
-                long minDelay = ((Number) map.getOrDefault("minDelayInMilliseconds", 50.0)).longValue();
-                long maxDelay = ((Number) map.getOrDefault("maxDelayInMilliseconds", 50.0)).longValue();
+                List<?> commands = (List<?>) map.getOrDefault("commands", Collections.emptyList());
+                String command = "";
+                if (!commands.isEmpty() && commands.get(0) instanceof Map) {
+                    command = (String) ((Map) commands.get(0)).getOrDefault("command", "");
+                }
 
-                if ("*".equals(address) && "Repeat my words:(?<word>.*)".equals(pattern) && "You said {word}.".equals(message)) {
+                if ("*".equals(address) && "Repeat my words:(?<word>.*)".equals(pattern)
+                        && "You said {word}.".equals(command)) {
                     return trans(configKey + ".@New").getString();
                 }
 
-                String delayInMillisecondsText = maxDelay > minDelay ? minDelay + "~" + maxDelay : String.valueOf(minDelay);
-                return trans(configKey + ".@Display", colorPrefix + address,
-                        forceDisableFormatter ? "§a✔" : "§c✘", delayInMillisecondsText, pattern, message).getString();
+                return trans(configKey + ".@Display", colorPrefix + address, pattern, command).getString();
             }
             case "FormatterList": {
                 String formatter = (String) map.getOrDefault("formatter", "{text}");
@@ -373,10 +373,14 @@ public class RuleListScreen extends Screen {
             case "ResponderList":
                 item.put("address", "*");
                 item.put("pattern", "Repeat my words:(?<word>.*)");
-                item.put("message", "You said {word}.");
-                item.put("minDelayInMilliseconds", 50.0);
-                item.put("maxDelayInMilliseconds", 50.0);
-                item.put("forceDisableFormatter", false);
+                List<Map<String, Object>> responderCommands = new ArrayList<>();
+                Map<String, Object> responderCommand = new LinkedHashMap<>();
+                responderCommand.put("command", "You said {word}.");
+                responderCommand.put("minDelayInMilliseconds", 50.0);
+                responderCommand.put("maxDelayInMilliseconds", 50.0);
+                responderCommand.put("forceDisableFormatter", false);
+                responderCommands.add(responderCommand);
+                item.put("commands", responderCommands);
                 return item;
             case "FormatterList":
                 item.put("address", "*");

@@ -206,13 +206,9 @@ public class ClothEntryBuilderUtils {
                                 .matcher(ContextUtils.getSessionIdentifier()).matches();
                         String colorPrefix = isSessionMatch ? "§a" : "§6";
 
-                        String delayInMillisecondsText = unit.maxDelayInMilliseconds > unit.minDelayInMilliseconds ?
-                                unit.minDelayInMilliseconds + "~" + unit.maxDelayInMilliseconds :
-                                String.valueOf(unit.minDelayInMilliseconds);
-
+                        String firstCommand = unit.commands.isEmpty() ? "" : unit.commands.get(0).command;
                         displayText = trans(key + ".@Display", colorPrefix + unit.address,
-                                unit.forceDisableFormatter ? "§a✔" : "§c✘", delayInMillisecondsText, unit.pattern,
-                                unit.message);
+                                unit.pattern, firstCommand);
                     }
 
                     List<AbstractConfigListEntry<?>> entries = new ArrayList<>();
@@ -228,25 +224,32 @@ public class ClothEntryBuilderUtils {
                             .setDefaultValue(defaultObj.pattern).setSaveConsumer(v -> unit.pattern = v)
                             .setErrorSupplier(ConfigScreenTooltipUtils.ErrorSuppliers.REGEX_COMPILE_ERROR_SUPPLIER).build());
 
-                    entries.add(eb.startStrField(trans(key + ".Message"), unit.message)
-                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".Message", "String", defaultObj.message))
-                            .setDefaultValue(defaultObj.message).setSaveConsumer(v -> unit.message = v).build());
-
-                    entries.add(eb.startLongField(trans(key + ".MinDelayInMilliseconds"), unit.minDelayInMilliseconds)
-                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".MinDelayInMilliseconds", "longField", defaultObj.minDelayInMilliseconds))
-                            .setDefaultValue(defaultObj.minDelayInMilliseconds)
-                            .setSaveConsumer(v -> unit.minDelayInMilliseconds = v).build());
-
-                    entries.add(eb.startLongField(trans(key + ".MaxDelayInMilliseconds"), unit.maxDelayInMilliseconds)
-                            .setTooltip(ConfigScreenTooltipUtils.getTooltip(key + ".MaxDelayInMilliseconds", "longField", defaultObj.maxDelayInMilliseconds))
-                            .setDefaultValue(defaultObj.maxDelayInMilliseconds)
-                            .setSaveConsumer(v -> unit.maxDelayInMilliseconds = v).build());
-
-                    entries.add(eb.startBooleanToggle(trans(key + ".ForceDisableFormatter"), unit.forceDisableFormatter)
-                            .setTooltip(
-                                    ConfigScreenTooltipUtils.getTooltip(key + ".ForceDisableFormatter", "boolean", defaultObj.forceDisableFormatter))
-                            .setDefaultValue(defaultObj.forceDisableFormatter)
-                            .setSaveConsumer(v -> unit.forceDisableFormatter = v).build());
+                    String commandsKey = key + ".Commands";
+                    entries.add(new NestedListListEntry<SpecialUnits.ResponderCommandEntry, MultiElementListEntry<SpecialUnits.ResponderCommandEntry>>(
+                            trans(commandsKey), unit.commands, false,
+                            () -> Optional.of(new Component[]{trans(commandsKey + ".@Tooltip")}),
+                            v -> { unit.commands.clear(); unit.commands.addAll(v); },
+                            () -> defaultObj.commands, eb.getResetButtonKey(), true, false, (passedCmd, ignored2) -> {
+                        SpecialUnits.ResponderCommandEntry cmd = passedCmd == null
+                                ? new SpecialUnits.ResponderCommandEntry() : passedCmd;
+                        Component cmdDisplayText = passedCmd == null || cmd.command.isEmpty()
+                                ? trans(commandsKey + ".@New") : trans(commandsKey + ".@Display", cmd.command);
+                        List<AbstractConfigListEntry<?>> cmdEntries = new ArrayList<>();
+                        SpecialUnits.ResponderCommandEntry cmdDefault = new SpecialUnits.ResponderCommandEntry();
+                        cmdEntries.add(eb.startStrField(trans(commandsKey + ".Command"), cmd.command)
+                                .setTooltip(ConfigScreenTooltipUtils.getTooltip(commandsKey + ".Command", "String", cmdDefault.command))
+                                .setDefaultValue(cmdDefault.command).setSaveConsumer(v -> cmd.command = v).build());
+                        cmdEntries.add(eb.startLongField(trans(commandsKey + ".MinDelayInMilliseconds"), cmd.minDelayInMilliseconds)
+                                .setTooltip(ConfigScreenTooltipUtils.getTooltip(commandsKey + ".MinDelayInMilliseconds", "longField", cmdDefault.minDelayInMilliseconds))
+                                .setDefaultValue(cmdDefault.minDelayInMilliseconds).setSaveConsumer(v -> cmd.minDelayInMilliseconds = v).build());
+                        cmdEntries.add(eb.startLongField(trans(commandsKey + ".MaxDelayInMilliseconds"), cmd.maxDelayInMilliseconds)
+                                .setTooltip(ConfigScreenTooltipUtils.getTooltip(commandsKey + ".MaxDelayInMilliseconds", "longField", cmdDefault.maxDelayInMilliseconds))
+                                .setDefaultValue(cmdDefault.maxDelayInMilliseconds).setSaveConsumer(v -> cmd.maxDelayInMilliseconds = v).build());
+                        cmdEntries.add(eb.startBooleanToggle(trans(commandsKey + ".ForceDisableFormatter"), cmd.forceDisableFormatter)
+                                .setTooltip(ConfigScreenTooltipUtils.getTooltip(commandsKey + ".ForceDisableFormatter", "boolean", cmdDefault.forceDisableFormatter))
+                                .setDefaultValue(cmdDefault.forceDisableFormatter).setSaveConsumer(v -> cmd.forceDisableFormatter = v).build());
+                        return new MultiElementListEntry<>(cmdDisplayText, cmd, cmdEntries, SHOULD_EXPAND_ALL_RULES);
+                    }));
 
                     return new MultiElementListEntry<>(displayText, unit, entries, SHOULD_EXPAND_ALL_RULES);
                 });

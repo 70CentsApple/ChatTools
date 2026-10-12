@@ -637,7 +637,7 @@ key:
           The upper content has higher priority.
           It will only respond once.
         '@New': New Rule
-        '@Display': '§e[ %s§e ] [ Override: %s§e ] [%s§rms§e]§r %s §e→§r %s'
+        '@Display': '§e[ %s§e ]§r %s §e→§r %s'
         Address:
           .: Session Identifier
           '@Tooltip': |-
@@ -670,6 +670,24 @@ key:
         ForceDisableFormatter:
           .: Disable Formatter (Override)
           '@Tooltip': Toggles whether Formatter should be off when responding.
+        Commands:
+          .: Command List
+          '@Tooltip': Define the commands sent when this rule is triggered.
+          '@New': New Command
+          '@Display': '%s'
+          Command:
+            .: Command
+            '@Tooltip': The message or command to send.
+          MinDelayInMilliseconds:
+            .: Minimum Delay (in milliseconds)
+            '@Tooltip': Minimum waiting time before sending this command.
+          MaxDelayInMilliseconds:
+            .: Maximum Delay (in milliseconds)
+            '@Tooltip': Maximum waiting time before sending this command.
+          ForceDisableFormatter:
+            .: Disable Formatter (Override)
+            '@Tooltip': Toggles whether Formatter should be disabled when sending this command.
+
     filter:
       Enabled:
         .: Enable Chat Filter

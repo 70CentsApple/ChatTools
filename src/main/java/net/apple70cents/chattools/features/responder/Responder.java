@@ -30,32 +30,21 @@ public class Responder {
 
     public static void work(Component text) {
         String messageReceived = TextUtils.wash(text.getString());
-        boolean shouldRespond = false;
-        String pattern = "";
-        String message = "";
-        long minDelayInMilliseconds = 0;
-        long maxDelayInMilliseconds = 0;
-        boolean forceDisableFormatter = false;
         for (SpecialUnits.ResponderRuleUnit unit : SpecialUnits.ResponderRuleUnit.fromList((List) ConfigUtils.get("responder.List"))) {
             if ("*".equals(unit.address) || RegExUtils.getOrCompilePattern(unit.address)
                     .matcher(ContextUtils.getSessionIdentifier()).matches()) {
                 if (RegExUtils.getOrCompilePattern(unit.pattern, Pattern.MULTILINE).matcher(messageReceived).find()) {
-                    shouldRespond = true;
-                    pattern = unit.pattern;
-                    message = unit.message;
-                    minDelayInMilliseconds = unit.minDelayInMilliseconds;
-                    maxDelayInMilliseconds = unit.maxDelayInMilliseconds;
-                    forceDisableFormatter = unit.forceDisableFormatter;
+                    for (SpecialUnits.ResponderCommandEntry entry : unit.commands) {
+                        long delayInMilliseconds = entry.minDelayInMilliseconds;
+                        if (entry.maxDelayInMilliseconds > entry.minDelayInMilliseconds) {
+                            delayInMilliseconds = java.util.concurrent.ThreadLocalRandom.current()
+                                    .nextLong(entry.minDelayInMilliseconds, entry.maxDelayInMilliseconds + 1);
+                        }
+                        makeMessageSchedule(text, unit.pattern, entry.command, delayInMilliseconds, entry.forceDisableFormatter);
+                    }
                     break;
                 }
             }
-        }
-        if (shouldRespond) {
-            long delayInMilliseconds = minDelayInMilliseconds;
-            if (maxDelayInMilliseconds > minDelayInMilliseconds) {
-                delayInMilliseconds = java.util.concurrent.ThreadLocalRandom.current().nextLong(minDelayInMilliseconds, maxDelayInMilliseconds + 1);
-            }
-            makeMessageSchedule(text, pattern, message, delayInMilliseconds, forceDisableFormatter);
         }
     }
 
@@ -72,22 +61,28 @@ public class Responder {
             } catch (InterruptedException e) {
                 LoggerUtils.error("[ChatTools] Responder thread interrupted", e);
                 Thread.currentThread().interrupt();
+                return;
             }
 
-            // work
-            String message = msg;
-            submitAllGroupsToPlaceholderEngine(TextUtils.wash(messageReceived.getString()), pattern);
-            PlaceholderEngine.addNewTempMapping("unix_time_on_request", args -> String.valueOf(timeOnRequest));
-            PlaceholderEngine.addNewTempMapping("original_text_component", args -> jsonString);
-            PlaceholderEngine.addNewTempMapping("original_text_raw", args -> messageReceived.getString());
-            PlaceholderEngine.addNewTempMapping("original_text_string", args -> TextUtils.wash(messageReceived.getString()));
-            PlaceholderEngine.addNewTempMapping("object_data", args -> messageReceived.toString());
-            message = PlaceholderEngine.apply(message);
-            PlaceholderEngine.clearTempMappings();
+            // Resolve placeholders and send on the client thread so commands do not share temporary mappings.
+            mc.execute(() -> {
+                String message;
+                try {
+                    submitAllGroupsToPlaceholderEngine(TextUtils.wash(messageReceived.getString()), pattern);
+                    PlaceholderEngine.addNewTempMapping("unix_time_on_request", args -> String.valueOf(timeOnRequest));
+                    PlaceholderEngine.addNewTempMapping("original_text_component", args -> jsonString);
+                    PlaceholderEngine.addNewTempMapping("original_text_raw", args -> messageReceived.getString());
+                    PlaceholderEngine.addNewTempMapping("original_text_string", args -> TextUtils.wash(messageReceived.getString()));
+                    PlaceholderEngine.addNewTempMapping("object_data", args -> messageReceived.toString());
+                    message = PlaceholderEngine.apply(msg);
+                } finally {
+                    PlaceholderEngine.clearTempMappings();
+                }
 
-            LoggerUtils.info("[ChatTools] Respond to `" + pattern + "`, with message `" + message + "`");
-            message = message.replace("\\{", "{").replace("\\}", "}");
-            MessageUtils.sendToPublicChat(message, forceDisableFormatter);
+                LoggerUtils.info("[ChatTools] Respond to `" + pattern + "`, with message `" + message + "`");
+                message = message.replace("\\{", "{").replace("\\}", "}");
+                MessageUtils.sendToPublicChat(message, forceDisableFormatter);
+            });
         }).start();
     }
 

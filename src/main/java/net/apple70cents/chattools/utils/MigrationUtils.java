@@ -34,6 +34,44 @@ public class MigrationUtils {
         if (version <= 2.40301) {
             migrateFrom2_40301(config);
         }
+        if (version <= 2.40400) {
+            migrateFrom2_40400(config);
+        }
+    }
+
+    /**
+     * Migration from v2.4.4:
+     * responder.List: message and its send options -> commands (List<Map>)
+     */
+    @SuppressWarnings("unchecked")
+    private static void migrateFrom2_40400(ConfigStorage config) {
+        LoggerUtils.info("[ChatTools] Migrating responder rules to command lists...");
+        if (config.hasKey("responder.List")) {
+            Object listObj = config.get("responder.List");
+            if (listObj instanceof List) {
+                for (Object item : (List<?>) listObj) {
+                    if (item instanceof Map) {
+                        Map<String, Object> map = (Map<String, Object>) item;
+                        if (!map.containsKey("commands")) {
+                            Object minDelay = map.getOrDefault("minDelayInMilliseconds", 50);
+                            Map<String, Object> commandEntry = new LinkedHashMap<>();
+                            commandEntry.put("command", map.getOrDefault("message", "You said {word}."));
+                            commandEntry.put("minDelayInMilliseconds", minDelay);
+                            commandEntry.put("maxDelayInMilliseconds", map.getOrDefault("maxDelayInMilliseconds", minDelay));
+                            commandEntry.put("forceDisableFormatter", map.getOrDefault("forceDisableFormatter", false));
+                            List<Map<String, Object>> commandsList = new ArrayList<>();
+                            commandsList.add(commandEntry);
+                            map.put("commands", commandsList);
+                            map.remove("message");
+                            map.remove("minDelayInMilliseconds");
+                            map.remove("maxDelayInMilliseconds");
+                            map.remove("forceDisableFormatter");
+                        }
+                    }
+                }
+            }
+        }
+        LoggerUtils.info("[ChatTools] Migration of responder command lists completed.");
     }
 
     /**

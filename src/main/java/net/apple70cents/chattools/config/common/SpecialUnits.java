@@ -85,39 +85,40 @@ public class SpecialUnits {
     public static class ResponderRuleUnit {
         public String address;
         public String pattern;
-        public String message;
-        public long minDelayInMilliseconds;
-        public long maxDelayInMilliseconds;
-        public boolean forceDisableFormatter;
+        public List<ResponderCommandEntry> commands;
 
         public ResponderRuleUnit() {
             this.address = "*";
             this.pattern = "Repeat my words:(?<word>.*)";
-            this.message = "You said {word}.";
-            this.minDelayInMilliseconds = 50;
-            this.maxDelayInMilliseconds = 50;
-            this.forceDisableFormatter = false;
+            this.commands = new ArrayList<>();
+            this.commands.add(new ResponderCommandEntry());
         }
 
-        public ResponderRuleUnit(String address, String pattern, String message, long minDelayInMilliseconds,
-                 long maxDelayInMilliseconds, boolean forceDisableFormatter) {
+        public ResponderRuleUnit(String address, String pattern, List<ResponderCommandEntry> commands) {
             this.address = address;
             this.pattern = pattern;
-            this.message = message;
-            this.minDelayInMilliseconds = minDelayInMilliseconds;
-            this.maxDelayInMilliseconds = maxDelayInMilliseconds;
-            this.forceDisableFormatter = forceDisableFormatter;
+            this.commands = commands;
         }
 
         public static ResponderRuleUnit of(Object ele) {
             if (ele instanceof Map) {
                 String address = (String) ((Map) ele).getOrDefault("address", "*");
                 String pattern = (String) ((Map) ele).getOrDefault("pattern", "Repeat my words:(?<word>.*)");
-                String message = (String) ((Map) ele).getOrDefault("message", "You said {word}.");
-                long minDelayInMilliseconds = ((Number) ((Map) ele).getOrDefault("minDelayInMilliseconds", 50)).longValue();
-                long maxDelayInMilliseconds = ((Number) ((Map) ele).getOrDefault("maxDelayInMilliseconds", minDelayInMilliseconds)).longValue();
-                boolean forceDisableFormatter = (boolean) ((Map) ele).getOrDefault("forceDisableFormatter", false);
-                return new ResponderRuleUnit(address, pattern, message, minDelayInMilliseconds, maxDelayInMilliseconds, forceDisableFormatter);
+                Map map = (Map) ele;
+                Object commandsObject = map.get("commands");
+                List<ResponderCommandEntry> commands;
+                if (commandsObject instanceof List) {
+                    commands = ResponderCommandEntry.fromList((List) commandsObject);
+                } else {
+                    Map<String, Object> legacyCommand = new java.util.LinkedHashMap<>();
+                    legacyCommand.put("command", map.getOrDefault("message", "You said {word}."));
+                    Object minDelay = map.getOrDefault("minDelayInMilliseconds", 50);
+                    legacyCommand.put("minDelayInMilliseconds", minDelay);
+                    legacyCommand.put("maxDelayInMilliseconds", map.getOrDefault("maxDelayInMilliseconds", minDelay));
+                    legacyCommand.put("forceDisableFormatter", map.getOrDefault("forceDisableFormatter", false));
+                    commands = ResponderCommandEntry.fromList(java.util.Collections.singletonList(legacyCommand));
+                }
+                return new ResponderRuleUnit(address, pattern, commands);
             } else if (ele instanceof ResponderRuleUnit) {
                 return (ResponderRuleUnit) ele;
             } else {
@@ -131,8 +132,73 @@ public class SpecialUnits {
 
         @Override
         public String toString() {
-            return "ResponderRuleUnit{address='" + address + "', pattern='" + pattern + "', message='" + message
-                    + "', minDelayInMilliseconds=" + minDelayInMilliseconds + ", maxDelayInMilliseconds=" + maxDelayInMilliseconds
+            return "ResponderRuleUnit{address='" + address + "', pattern='" + pattern + "', commands=" + commands + '}';
+        }
+    }
+
+    public static class ResponderCommandEntry {
+        public String command;
+        public long minDelayInMilliseconds;
+        public long maxDelayInMilliseconds;
+        public boolean forceDisableFormatter;
+
+        public ResponderCommandEntry() {
+            this.command = "You said {word}.";
+            this.minDelayInMilliseconds = 50;
+            this.maxDelayInMilliseconds = 50;
+            this.forceDisableFormatter = false;
+        }
+
+        public ResponderCommandEntry(String command, long minDelayInMilliseconds, long maxDelayInMilliseconds,
+                boolean forceDisableFormatter) {
+            this.command = command;
+            this.minDelayInMilliseconds = minDelayInMilliseconds;
+            this.maxDelayInMilliseconds = maxDelayInMilliseconds;
+            this.forceDisableFormatter = forceDisableFormatter;
+        }
+
+        public static ResponderCommandEntry of(Object ele) {
+            if (ele instanceof Map) {
+                String command = (String) ((Map) ele).getOrDefault("command", "You said {word}.");
+                long minDelayInMilliseconds = ((Number) ((Map) ele).getOrDefault("minDelayInMilliseconds", 50)).longValue();
+                long maxDelayInMilliseconds = ((Number) ((Map) ele).getOrDefault("maxDelayInMilliseconds", minDelayInMilliseconds)).longValue();
+                boolean forceDisableFormatter = (boolean) ((Map) ele).getOrDefault("forceDisableFormatter", false);
+                return new ResponderCommandEntry(command, minDelayInMilliseconds, maxDelayInMilliseconds, forceDisableFormatter);
+            } else if (ele instanceof ResponderCommandEntry) {
+                return (ResponderCommandEntry) ele;
+            } else {
+                throw new IllegalArgumentException("Unexpected element type of Object: " + ele);
+            }
+        }
+
+        public static List<ResponderCommandEntry> fromList(List list) {
+            return SpecialUnits.map(list, ResponderCommandEntry::of);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            ResponderCommandEntry that = (ResponderCommandEntry) o;
+            return minDelayInMilliseconds == that.minDelayInMilliseconds
+                    && maxDelayInMilliseconds == that.maxDelayInMilliseconds
+                    && forceDisableFormatter == that.forceDisableFormatter
+                    && command.equals(that.command);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(command, minDelayInMilliseconds, maxDelayInMilliseconds, forceDisableFormatter);
+        }
+
+        @Override
+        public String toString() {
+            return "ResponderCommandEntry{command='" + command + "', minDelayInMilliseconds=" + minDelayInMilliseconds
+                    + ", maxDelayInMilliseconds=" + maxDelayInMilliseconds
                     + ", forceDisableFormatter=" + forceDisableFormatter + '}';
         }
     }

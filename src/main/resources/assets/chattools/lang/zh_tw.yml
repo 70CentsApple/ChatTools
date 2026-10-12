@@ -438,7 +438,7 @@ key:
           靠上的內容優先度更高。
           響應至多一次。
         '@New': 新規則
-        '@Display': '§e[ %s§e ] [關閉注入：%s§e] [%s§rms§e]§r %s §e→§r %s'
+        '@Display': '§e[ %s§e ]§r %s §e→§r %s'
         Address:
           .: 地址
           '@Tooltip': |-
@@ -459,6 +459,24 @@ key:
         ForceDisableFormatter:
           .: 停用聊天注入
           '@Tooltip': 切換是否在響應時臨時關閉聊天注入的嘗試。
+        Commands:
+          .: 指令列表
+          '@Tooltip': 定義觸發此規則時發送的指令。
+          '@New': 新指令
+          '@Display': '%s'
+          Command:
+            .: 指令
+            '@Tooltip': 要發送的訊息或指令。
+          MinDelayInMilliseconds:
+            .: 最小延遲（毫秒）
+            '@Tooltip': 發送此指令前的最小等待時間。
+          MaxDelayInMilliseconds:
+            .: 最大延遲（毫秒）
+            '@Tooltip': 發送此指令前的最大等待時間。
+          ForceDisableFormatter:
+            .: 停用聊天注入
+            '@Tooltip': 切換是否在發送此指令時暫時關閉聊天注入的嘗試。
+
     filter:
       Enabled:
         .: 啟用聊天過濾

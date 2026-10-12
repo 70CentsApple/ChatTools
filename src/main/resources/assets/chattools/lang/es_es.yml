@@ -522,7 +522,7 @@ key:
           El contenido superior tiene mayor prioridad.
           Solo responderá una vez.
         '@New': "Nueva Regla"
-        '@Display': "§e[ %s§e ] [ Override: %s§e ] [%s§rms§e]§r %s §e→§r %s"
+        '@Display': '§e[ %s§e ]§r %s §e→§r %s'
         Address:
           .: "Identificador de Sesión"
           '@Tooltip': |-

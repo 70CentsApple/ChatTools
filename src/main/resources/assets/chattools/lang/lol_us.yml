@@ -346,7 +346,7 @@ key:
         .: 'Rules §6(Current Server: %s §6)§r'
         '@Tooltip': "Sets da rules for auto-meowing.\nTop stuff is boss, meows once only."
         '@New': New Meow
-        '@Display': '§e[ %s§e ] [ Override: %s§e ] [%s§rms§e]§r %s §e→§r %s'
+        '@Display': '§e[ %s§e ]§r %s §e→§r %s'
         Address:
           .: Where It's At
           '@Tooltip': "Server address for this rule, yo.\nRegEx makes it cooler."
@@ -365,6 +365,24 @@ key:
         ForceDisableFormatter:
           .: Turn Off Fancy Talk (Override)
           '@Tooltip': Choosy to not fancy talk when meowing back.
+        Commands:
+          .: Command List
+          '@Tooltip': Define the commands sent when this rule is triggered.
+          '@New': New Command
+          '@Display': '%s'
+          Command:
+            .: Command
+            '@Tooltip': The message or command to send.
+          MinDelayInMilliseconds:
+            .: Minimum Delay (in milliseconds)
+            '@Tooltip': Minimum waiting time before sending this command.
+          MaxDelayInMilliseconds:
+            .: Maximum Delay (in milliseconds)
+            '@Tooltip': Maximum waiting time before sending this command.
+          ForceDisableFormatter:
+            .: Disable Formatter (Override)
+            '@Tooltip': Toggles whether Formatter should be disabled when sending this command.
+
     filter:
       Enabled:
         .: let it disappear!

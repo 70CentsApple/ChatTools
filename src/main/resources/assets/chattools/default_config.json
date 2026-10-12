@@ -101,10 +101,14 @@
     {
       "address": "*",
       "pattern": "Repeat my words:(?\u003cword\u003e.*)",
-      "message": "You said {word}.",
-      "minDelayInMilliseconds": 50,
-      "maxDelayInMilliseconds": 70,
-      "forceDisableFormatter": false
+      "commands": [
+        {
+          "command": "You said {word}.",
+          "minDelayInMilliseconds": 50,
+          "maxDelayInMilliseconds": 70,
+          "forceDisableFormatter": false
+        }
+      ]
     }
   ],
   "filter.Enabled": false,

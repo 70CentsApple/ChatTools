@@ -493,7 +493,7 @@ key:
           上にあるものほど優先度が高いです。
           1度だけ応答します。
         '@New': "新規ルール"
-        '@Display': "§e[ %s§e ] [ 上書き: %s§e ] [%s§rms§e]§r %s §e→§r %s"
+        '@Display': '§e[ %s§e ]§r %s §e→§r %s'
         Address:
           .: "セッションID"
           '@Tooltip': |-
