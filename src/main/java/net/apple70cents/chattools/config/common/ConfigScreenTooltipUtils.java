@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -32,33 +33,8 @@ public class ConfigScreenTooltipUtils {
         // check if F3+H is on
         if (Minecraft.getInstance().options.advancedItemTooltips) {
             try {
-                if (variableType.endsWith("List")) {
-                    if (!((List<?>) ConfigUtils.getDefault(key)).isEmpty()) {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("[");
-                        for (int i = 0; i < ((List<?>) ConfigUtils.getDefault(key)).size(); i++) {
-                            String ele = ((List<?>) ConfigUtils.getDefault(key)).get(i).toString();
-                            // if this is not the first element, we add a comma to the front
-                            if (i != 0) sb.append(",");
-                            // check if the list's type is raw string
-                            if ("StringList".equals(variableType)) {
-                                sb.append("\n  §r§f").append(ele).append("§r§7");
-                            } else {
-                                // we need to do pretty-printing further
-                                sb.append("\n  {");
-                                String[] keyAndValuePairs = ele.substring(1, ele.length() - 1).split(", ");
-                                for (int j = 0; j < keyAndValuePairs.length; j++) {
-                                    String ele2 = keyAndValuePairs[j];
-                                    int idx = ele2.indexOf("=");
-                                    sb.append("\n    §e").append(ele2, 0, idx).append("§r§7 = §f").append(ele2.substring(
-                                            idx + 1)).append("§r§7");
-                                }
-                                sb.append("\n  }");
-                            }
-                        }
-                        sb.append("\n]");
-                        defaultValue = sb.toString();
-                    }
+                if (variableType.endsWith("List") && defaultVal instanceof List<?>) {
+                    defaultValue = prettyPrintDefaultValue(defaultVal);
                 }
             } catch (Exception e) {
                 LoggerUtils.error("[ChatTools] Error getting tooltip default value", e);
@@ -75,6 +51,60 @@ public class ConfigScreenTooltipUtils {
             return tooltip;
         } else {
             return trans(key + ".@Tooltip");
+        }
+    }
+
+    /**
+     * Format the actual value hierarchy rather than parsing Object.toString().
+     * Map/List string representations do not quote string values, so splitting
+     * them on commas or brackets can corrupt regular expressions and commands.
+     */
+    private static String prettyPrintDefaultValue(Object value) {
+        StringBuilder sb = new StringBuilder();
+        appendPrettyValue(sb, value, 0);
+        return sb.toString();
+    }
+
+    private static void appendPrettyValue(StringBuilder sb, Object value, int depth) {
+        if (value instanceof Map<?, ?>) {
+            Map<?, ?> map = (Map<?, ?>) value;
+            sb.append("§r§7{");
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                appendIndentedLine(sb, depth + 1);
+                sb.append("§r§e").append(entry.getKey()).append("§r§7 = ");
+                appendPrettyValue(sb, entry.getValue(), depth + 1);
+            }
+            if (!map.isEmpty()) {
+                appendIndentedLine(sb, depth);
+            }
+            sb.append("§r§7}");
+        } else if (value instanceof List<?>) {
+            List<?> list = (List<?>) value;
+            sb.append("§r§7[");
+            boolean first = true;
+            for (Object element : list) {
+                if (!first) {
+                    sb.append("§r§7,");
+                }
+                first = false;
+                appendIndentedLine(sb, depth + 1);
+                appendPrettyValue(sb, element, depth + 1);
+            }
+            if (!list.isEmpty()) {
+                appendIndentedLine(sb, depth);
+            }
+            sb.append("§r§7]");
+        } else {
+            // Strings (including StringList elements) and unknown types are leaves.
+            // Never guess a structure from their text; String.valueOf handles null.
+            sb.append("§r§f").append(value).append("§r§7");
+        }
+    }
+
+    private static void appendIndentedLine(StringBuilder sb, int depth) {
+        sb.append('\n');
+        for (int i = 0; i < depth; i++) {
+            sb.append("  ");
         }
     }
 
