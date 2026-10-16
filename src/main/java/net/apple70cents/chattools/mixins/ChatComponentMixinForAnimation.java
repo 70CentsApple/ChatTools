@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 //? if >=26.1 {
 import net.minecraft.client.multiplayer.chat.GuiMessage;
@@ -134,6 +132,9 @@ public abstract class ChatComponentMixinForAnimation {
     }
 
 //? if >=26.1 {
+    @Unique
+    private static final ThreadLocal<ChatComponent.ChatGraphicsAccess> chatTools$CURRENT_GRAPHICS = new ThreadLocal<>();
+
     @WrapOperation(
             method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
             at = @At(
@@ -150,14 +151,51 @@ public abstract class ChatComponentMixinForAnimation {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED || !ConfigUtils.CHAT_ANIMATION_ENABLED) {
             return original.call(self, alphaCalculator, lineConsumer);
         }
-        final double eh = chatTools$entryHeight();
-        Function<Object, float[]> offsetQuery = line -> ChatAnimationProxy.offsetFor(line, this.trimmedMessages, eh);
-        BiConsumer<Float, Float> poseTranslate = (dx, dy) -> graphics.updatePose(p -> p.translate(dx, dy));
-        return original.call(self, alphaCalculator,
-                ChatAnimationProxy.decorate(lineConsumer, offsetQuery, poseTranslate));
+        chatTools$CURRENT_GRAPHICS.set(graphics);
+        try {
+            return original.call(self, alphaCalculator, lineConsumer);
+        } finally {
+            chatTools$CURRENT_GRAPHICS.remove();
+        }
+    }
+
+    @WrapOperation(
+            method = "forEachLine(Lnet/minecraft/client/gui/components/ChatComponent$AlphaCalculator;Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;)I",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;accept(Lnet/minecraft/client/multiplayer/chat/GuiMessage$Line;IF)V"
+            )
+    )
+    private void chatTools$wrapLineConsumerAccept(
+            @Coerce Object consumer,
+            GuiMessage.Line line,
+            int lineIndex,
+            float alpha,
+            Operation<Void> original) {
+        ChatComponent.ChatGraphicsAccess graphics = chatTools$CURRENT_GRAPHICS.get();
+        if (graphics == null) {
+            original.call(consumer, line, lineIndex, alpha);
+            return;
+        }
+        float[] off = ChatAnimationProxy.offsetFor(line, this.trimmedMessages, chatTools$entryHeight());
+        if (off == null) {
+            original.call(consumer, line, lineIndex, alpha);
+            return;
+        }
+        float dx = off[0];
+        float dy = off[1];
+        graphics.updatePose(p -> p.translate(dx, dy));
+        try {
+            original.call(consumer, line, lineIndex, alpha);
+        } finally {
+            graphics.updatePose(p -> p.translate(-dx, -dy));
+        }
     }
 //?} elif >=1.21.11 {
     /*// 1.21.11: same LineConsumer shape as 26.1+, only the outer is render(...).
+    @Unique
+    private static final ThreadLocal<ChatComponent.ChatGraphicsAccess> chatTools$CURRENT_GRAPHICS = new ThreadLocal<>();
+
     @WrapOperation(
             method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
             at = @At(
@@ -174,35 +212,73 @@ public abstract class ChatComponentMixinForAnimation {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED || !ConfigUtils.CHAT_ANIMATION_ENABLED) {
             return original.call(self, alphaCalculator, lineConsumer);
         }
-        final double eh = chatTools$entryHeight();
-        Function<Object, float[]> offsetQuery = line -> ChatAnimationProxy.offsetFor(line, this.trimmedMessages, eh);
-        BiConsumer<Float, Float> poseTranslate = (dx, dy) -> graphics.updatePose(p -> p.translate(dx, dy));
-        return original.call(self, alphaCalculator,
-                ChatAnimationProxy.decorate(lineConsumer, offsetQuery, poseTranslate));
+        chatTools$CURRENT_GRAPHICS.set(graphics);
+        try {
+            return original.call(self, alphaCalculator, lineConsumer);
+        } finally {
+            chatTools$CURRENT_GRAPHICS.remove();
+        }
+    }
+
+    @WrapOperation(
+            method = "forEachLine(Lnet/minecraft/client/gui/components/ChatComponent$AlphaCalculator;Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;)I",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;accept(Lnet/minecraft/client/multiplayer/chat/GuiMessage$Line;IF)V"
+            )
+    )
+    private void chatTools$wrapLineConsumerAccept_1_21_11(
+            @Coerce Object consumer,
+            GuiMessage.Line line,
+            int lineIndex,
+            float alpha,
+            Operation<Void> original) {
+        ChatComponent.ChatGraphicsAccess graphics = chatTools$CURRENT_GRAPHICS.get();
+        if (graphics == null) {
+            original.call(consumer, line, lineIndex, alpha);
+            return;
+        }
+        float[] off = ChatAnimationProxy.offsetFor(line, this.trimmedMessages, chatTools$entryHeight());
+        if (off == null) {
+            original.call(consumer, line, lineIndex, alpha);
+            return;
+        }
+        float dx = off[0];
+        float dy = off[1];
+        graphics.updatePose(p -> p.translate(dx, dy));
+        try {
+            original.call(consumer, line, lineIndex, alpha);
+        } finally {
+            graphics.updatePose(p -> p.translate(-dx, -dy));
+        }
     }
 *///?} elif >=1.21.6 {
     /*// 1.21.6 – 1.21.10: 6-arg LineConsumer.accept(x, startY, endY, Line, idx, fade).
-    // The decorator mutates the int coords in-place — both background and text inside
-    // the lambda read from them, so they slide together for free. No pose translate
-    // needed for this flavour.
+    // Mutate the int coords via @WrapOperation directly — both background and text
+    // inside the lambda read from them, so they slide together for free.
     @WrapOperation(
-            method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V",
+            method = "forEachLine(IIZILnet/minecraft/client/gui/components/ChatComponent$LineConsumer;)I",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/ChatComponent;forEachLine(IIZILnet/minecraft/client/gui/components/ChatComponent$LineConsumer;)I"
+                    target = "Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;accept(IIILnet/minecraft/client/GuiMessage$Line;IF)V"
             )
     )
-    private int chatTools$wrapForEachLine_six(
-            ChatComponent self, int linesPerPage, int tickCount, boolean focused, int bottomY,
-            @Coerce Object lineConsumer,
-            Operation<Integer> original) {
+    private void chatTools$wrapLineConsumerAccept_six(
+            @Coerce Object consumer,
+            int x, int startY, int endY, @Coerce Object line, int idx, float fade,
+            Operation<Void> original) {
         if (!ConfigUtils.CHAT_TOOLS_ENABLED || !ConfigUtils.CHAT_ANIMATION_ENABLED) {
-            return original.call(self, linesPerPage, tickCount, focused, bottomY, lineConsumer);
+            original.call(consumer, x, startY, endY, line, idx, fade);
+            return;
         }
-        final double eh = chatTools$entryHeight();
-        Function<Object, float[]> offsetQuery = line -> ChatAnimationProxy.offsetFor(line, this.trimmedMessages, eh);
-        return original.call(self, linesPerPage, tickCount, focused, bottomY,
-                ChatAnimationProxy.decorate(lineConsumer, offsetQuery, null));
+        float[] off = ChatAnimationProxy.offsetFor(line, this.trimmedMessages, chatTools$entryHeight());
+        if (off == null) {
+            original.call(consumer, x, startY, endY, line, idx, fade);
+            return;
+        }
+        int dx = Math.round(off[0]);
+        int dy = Math.round(off[1]);
+        original.call(consumer, x + dx, startY + dy, endY + dy, line, idx, fade);
     }
 *///?} elif >=1.20.5 {
     /*// 1.20.5 – 1.21.5: render() is an inline for-loop with no LineConsumer to wrap.

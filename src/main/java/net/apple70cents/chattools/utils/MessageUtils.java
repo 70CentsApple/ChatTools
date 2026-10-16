@@ -5,13 +5,9 @@ import net.apple70cents.chattools.features.general.ExclusiveActionbarHandler;
 import net.apple70cents.chattools.mixins.ScreenAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -99,43 +95,56 @@ public class MessageUtils {
         }
         updateLastSentMessageTimestamp();
 
-        boolean oldStatus = ConfigUtils.getBoolean("formatter.Enabled");
-
-        if (forceDisableFormatter) {
-            ConfigUtils.set("formatter.Enabled", false);
-        }
-
 //? if >=1.19 {
         Minecraft.getInstance().execute(() -> {
-            if (ConfigUtils.getBoolean("general.UseSendPacketsForSendingMessages")) {
-                ChatScreen tempChatScreen = new ChatScreen(text
+            boolean oldStatus = ConfigUtils.getBoolean("formatter.Enabled");
+            if (forceDisableFormatter) {
+                ConfigUtils.set("formatter.Enabled", false);
+            }
+            try {
+                if (ConfigUtils.getBoolean("general.UseSendPacketsForSendingMessages")) {
+                    ChatScreen tempChatScreen = new ChatScreen(text
 //? if >=1.21.9 {
-                        , false
+                            , false
 //?}
-                );
-                ((ScreenAccessor) tempChatScreen).invokeInit(
+                    );
+                    ((ScreenAccessor) tempChatScreen).invokeInit(
 //? if >=1.21.11 {
 //?} else {
-                        /*Minecraft.getInstance(),
-*///?}
-                        1, 1);
-                tempChatScreen.handleChatInput(text, false);
-            } else {
-                String text2 = StringUtils.normalizeSpace(text.trim());
-                if (!text2.isEmpty()) {
-                    McUtils.getChat().addRecentChat(text);
-                    if (text2.startsWith("/")) {
-                        player.connection.sendCommand(text2.substring(1));
-                    } else {
-                        player.connection.sendChat(text2);
+                            /*Minecraft.getInstance(),
+    *///?}
+                            1, 1);
+                    tempChatScreen.handleChatInput(text, false);
+                } else {
+                    String text2 = StringUtils.normalizeSpace(text.trim());
+                    if (!text2.isEmpty()) {
+                        McUtils.getChat().addRecentChat(text);
+                        if (text2.startsWith("/")) {
+                            player.connection.sendCommand(text2.substring(1));
+                        } else {
+                            player.connection.sendChat(text2);
+                        }
                     }
+                }
+            } finally {
+                if (forceDisableFormatter) {
+                    ConfigUtils.set("formatter.Enabled", oldStatus);
                 }
             }
         });
 //?} else {
-        /*player.chat(text);
+        /*boolean oldStatus = ConfigUtils.getBoolean("formatter.Enabled");
+        if (forceDisableFormatter) {
+            ConfigUtils.set("formatter.Enabled", false);
+        }
+        try {
+            player.chat(text);
+        } finally {
+            if (forceDisableFormatter) {
+                ConfigUtils.set("formatter.Enabled", oldStatus);
+            }
+        }
 *///?}
-        ConfigUtils.set("formatter.Enabled", oldStatus);
     }
 
     public static void sendToPublicChatScheduled(String text, long delayInMilliseconds) {
@@ -143,17 +152,9 @@ public class MessageUtils {
     }
 
     public static void sendToPublicChatScheduled(String text, boolean forceDisableFormatter, long delayInMilliseconds) {
-        CompletableFuture.runAsync(() -> {
-            if (delayInMilliseconds > 0) {
-                try {
-                    Thread.sleep(delayInMilliseconds);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-            }
+        TaskScheduler.schedule(() -> {
             Minecraft.getInstance().execute(() -> MessageUtils.sendToPublicChat(text, forceDisableFormatter));
-        });
+        }, delayInMilliseconds);
     }
 
     /**

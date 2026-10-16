@@ -312,7 +312,7 @@ public class CommandRegistryUtils {
 *///?}
                             return Command.SINGLE_SUCCESS;
                         }
-                        if (Pattern.compile(regex).matcher(testContext).find()) {
+                        if (RegExUtils.getOrCompilePattern(regex).matcher(testContext).find()) {
                             MessageUtils.sendToNonPublicChat(TextUtils.literal(String.format("[ChatTools] Context [%s] could pass the RegEx test!", testContext)).copy().withStyle(ChatFormatting.GREEN));
                         } else {
                             MessageUtils.sendToNonPublicChat(TextUtils.literal(String.format("[ChatTools] Context [%s] could NOT pass the RegEx test!", testContext)).copy().withStyle(ChatFormatting.RED));

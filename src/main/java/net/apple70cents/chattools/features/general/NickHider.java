@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -14,7 +15,14 @@ import java.util.regex.Pattern;
  * @author 70CentsApple
  */
 public class NickHider {
-    private static final Map<String, Component> cache = new LinkedHashMap<>();
+    private static final Map<String, Component> cache = Collections.synchronizedMap(
+            new LinkedHashMap<String, Component>(128, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, Component> eldest) {
+                    return size() > ConfigUtils.NICK_HIDER_CACHE_SIZE;
+                }
+            }
+    );
     private static Component text;
     private static String playerName;
     private static String nickname;
@@ -38,18 +46,40 @@ public class NickHider {
     }).setFailsafeJudgement(() -> ConfigUtils.NICK_HIDER_ENABLED);
 
     public static Component work(Component message) {
-        TextUtils.evictOldest(cache, ConfigUtils.NICK_HIDER_CACHE_SIZE);
-        LocalPlayer player = Minecraft.getInstance().player;
-        nickname = TextUtils.encodeColorCodes(ConfigUtils.NICK_HIDER_NICKNAME);
-        if (player != null) {
-            playerName = player.getName().getString();
-            String key = nickname + "|" + playerName + "|" + message.toString();
-            return cache.computeIfAbsent(key, k -> {
-                text = message.copy();
-                executor.run();
-                return text;
-            });
+        if (message == null) {
+            return null;
         }
-        return message;
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return message;
+        }
+
+        String curPlayerName = player.getName().getString();
+        String plainText = message.getString();
+        if (!plainText.contains(curPlayerName)) {
+            return message;
+        }
+
+        String curNickname = TextUtils.encodeColorCodes(ConfigUtils.NICK_HIDER_NICKNAME);
+        String key = curNickname + "|" + curPlayerName + "|" + plainText + "#" + message.hashCode();
+
+        Component cached = cache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+
+        synchronized (NickHider.class) {
+            cached = cache.get(key);
+            if (cached != null) {
+                return cached;
+            }
+            playerName = curPlayerName;
+            nickname = curNickname;
+            text = message.copy();
+            executor.run();
+            Component result = text;
+            cache.put(key, result);
+            return result;
+        }
     }
 }

@@ -66,19 +66,8 @@ public class TextUtils {
     }
 
     // For a newly received message, the key is its hashcode and the value is its MessageUnit
-    public static Map<String, MessageUnit> messageMap = new LinkedHashMap<>();
-
-    /**
-     * Evicts the oldest entries from a LinkedHashMap until its size is within the given limit.
-     */
-    public static <K, V> void evictOldest(Map<K, V> map, int maxSize) {
-        Iterator<K> it = map.keySet().iterator();
-        while (map.size() > maxSize && it.hasNext()) {
-            it.next();
-            it.remove();
-        }
-    }
-    public static MessageUnit latestMessage = null;
+    public static final Map<String, MessageUnit> messageMap = Collections.synchronizedMap(new LinkedHashMap<>());
+    public static volatile MessageUnit latestMessage = null;
 
     /**
      * Generates a random string conducted by 0-9,a-z
@@ -106,20 +95,32 @@ public class TextUtils {
     }
 
     public static void putMessageMapWithHashcode(String hashcode, MessageUnit messageUnit) {
-        int maxSize = ConfigUtils.getInt("general.MaxHistoryLength");
-        evictOldest(messageMap, maxSize);
+        synchronized (messageMap) {
+            int maxSize = ConfigUtils.getInt("general.MaxHistoryLength");
 
-        messageMap.put(hashcode, messageUnit);
-        setLatestMessage(messageUnit);
+            // ensure cache size is within max size
+            synchronized (messageMap) {
+                Iterator<String> it = messageMap.keySet().iterator();
+                while (messageMap.size() > maxSize && it.hasNext()) {
+                    it.next();
+                    it.remove();
+                }
+            }
+
+            messageMap.put(hashcode, messageUnit);
+            setLatestMessage(messageUnit);
+        }
     }
 
     public static String generateHashcode(Component message) {
         // TODO The `hashcode` is NOT REALLY a hashcode, but actually just a random string
         String hashcode = generateRandomString(6);
         int retries = 0;
-        while (messageMap.containsKey(hashcode) && retries < 10) {
-            hashcode = generateRandomString(6);
-            retries++;
+        synchronized (messageMap) {
+            while (messageMap.containsKey(hashcode) && retries < 10) {
+                hashcode = generateRandomString(6);
+                retries++;
+            }
         }
         return hashcode;
     }
@@ -148,9 +149,11 @@ public class TextUtils {
         if (visualMessage == null) {
             return null;
         }
-        for (MessageUnit unit : messageMap.values()) {
-            if (unit.visualMessage == visualMessage) {
-                return unit;
+        synchronized (messageMap) {
+            for (MessageUnit unit : messageMap.values()) {
+                if (unit.visualMessage == visualMessage) {
+                    return unit;
+                }
             }
         }
         return null;

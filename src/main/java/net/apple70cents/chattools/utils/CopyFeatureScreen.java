@@ -9,11 +9,9 @@ import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.apple70cents.chattools.features.general.Timestamp;
 import net.minecraft.util.Mth;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +99,10 @@ public class CopyFeatureScreen extends Screen {
 *///?}
             McUtils.setScreen(chatScreen);
 
-            List<TextUtils.MessageUnit> messages = new ArrayList<>(TextUtils.messageMap.values());
+            List<TextUtils.MessageUnit> messages;
+            synchronized (TextUtils.messageMap) {
+                messages = new ArrayList<>(TextUtils.messageMap.values());
+            }
             List<TextUtils.MessageUnit> messagesAfter = messages.stream().skip(messages.indexOf(unit) + 1L).toList();
             int lines = 0;
 //? if >=1.19.4 {
@@ -216,15 +217,7 @@ public class CopyFeatureScreen extends Screen {
     }
 
     private String getLongTimeDisplay(long timestamp) {
-        Instant instant = Instant.ofEpochSecond(timestamp);
-        LocalDateTime currentTime = LocalDateTime.ofEpochSecond(timestamp, 0,
-                ZoneId.systemDefault().getRules().getOffset(instant));
-        String offsetString = ZoneId.systemDefault().getRules().getOffset(instant).getId();
-        // yyyy/MM/dd HH:mm:ss UTC±XX:XX
-        String longTimeDisplay = String.format("%4d/%d/%d %02d:%02d:%02d\nUTC%s", currentTime.getYear(),
-                currentTime.getMonth().getValue(), currentTime.getDayOfMonth(), currentTime.getHour(),
-                currentTime.getMinute(), currentTime.getSecond(), offsetString);
-        return longTimeDisplay;
+        return Timestamp.formatLongTime(timestamp);
     }
 
 }

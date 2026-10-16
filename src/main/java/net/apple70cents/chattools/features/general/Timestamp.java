@@ -11,17 +11,9 @@ import java.time.ZoneId;
 public class Timestamp {
     public static Component work(Component message, String hashcode) {
         Instant instant = Instant.now();
-        long currentUnixTimestamp = instant.getEpochSecond();
-        LocalDateTime currentTime = LocalDateTime.ofEpochSecond(currentUnixTimestamp, 0, ZoneId.systemDefault()
-                                                                                               .getRules()
-                                                                                               .getOffset(instant));
-        // get zone offset
-        String offsetString = ZoneId.systemDefault().getRules().getOffset(instant).getId();
         Component shortTimeDisplay = TextUtils.of(timeInFormat(ConfigUtils.getString("general.Timestamp.Pattern")));
         // yyyy/MM/dd HH:mm:ss UTC±XX:XX
-        Component longTimeDisplay = TextUtils.of(String.format("%4d/%d/%d %02d:%02d:%02d\nUTC%s", currentTime.getYear(), currentTime
-                .getMonth()
-                .getValue(), currentTime.getDayOfMonth(), currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond(), offsetString));
+        Component longTimeDisplay = TextUtils.of(formatLongTime(instant.getEpochSecond()));
         if (ConfigUtils.getBoolean("general.CopyMenu.TimestampEnabled")) {
             HoverEvent hoverEvent = TextUtils.showTextHoverEvent(
                     longTimeDisplay.copy().append("\n\n").append(TextUtils.trans("texts.copy.launch")));
@@ -40,6 +32,20 @@ public class Timestamp {
             MutableComponent timestampText = shortTimeDisplay.copy().setStyle(Style.EMPTY.withHoverEvent(hoverEvent));
             return (TextUtils.SPACER.copy().append(timestampText)).append(message);
         }
+    }
+
+    public static String formatLongTime(long unixTimestamp, String delimiter) {
+        Instant instant = Instant.ofEpochSecond(unixTimestamp);
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime time = LocalDateTime.ofInstant(instant, zone);
+        String offsetString = zone.getRules().getOffset(instant).getId();
+        return String.format("%4d/%d/%d %02d:%02d:%02d" + delimiter + "UTC%s",
+                time.getYear(), time.getMonthValue(), time.getDayOfMonth(),
+                time.getHour(), time.getMinute(), time.getSecond(), offsetString);
+    }
+
+    public static String formatLongTime(long unixTimestamp) {
+        return formatLongTime(unixTimestamp, "\n");
     }
 
     public static String timeInFormat(String formatter, LocalDateTime time) {

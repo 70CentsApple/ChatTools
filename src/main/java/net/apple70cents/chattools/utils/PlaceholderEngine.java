@@ -2,6 +2,7 @@ package net.apple70cents.chattools.utils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import net.apple70cents.chattools.features.general.Timestamp;
 import net.minecraft.client.Minecraft;
 //? if >=1.19.3 {
 import net.minecraft.core.registries.Registries;
@@ -53,6 +54,41 @@ public final class PlaceholderEngine {
 
     protected static final Map<String, Resolver> MAPPINGS = new ConcurrentHashMap<>();
     protected static final Map<String, Resolver> TempMappings = new ConcurrentHashMap<>();
+
+    private static final Map<String, String> REQUEST_CACHE = new ConcurrentHashMap<>();
+    private static final Set<String> PENDING_REQUESTS = ConcurrentHashMap.newKeySet();
+
+    private static String fetchHttp(String urlStr, String method) throws Exception {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = DownloadUtils.createTrustAllConnection(url);
+        conn.setRequestMethod(method.toUpperCase());
+        conn.setInstanceFollowRedirects(true);
+        conn.setConnectTimeout(3000);
+        conn.setReadTimeout(3000);
+        conn.setRequestProperty("Accept-Charset", "utf-8");
+
+        LoggerUtils.info("[ChatTools] Placeholder Engine Visiting \"" + url + "\" with method: " + method);
+        InputStream inStream = conn.getResponseCode() >= 400 ? conn.getErrorStream() : conn.getInputStream();
+        String response = "";
+        if (inStream != null) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(inStream, StandardCharsets.UTF_8))) {
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = in.readLine()) != null) {
+                    sb.append(line).append('\n');
+                }
+                response = sb.toString().replace("\n", "");
+            }
+        }
+        return response;
+    }
+
+    public static boolean isTruthy(String condition) {
+        if (condition == null || condition.isEmpty()) {
+            return false;
+        }
+        return !condition.equals("0") && !condition.equalsIgnoreCase("false");
+    }
 
     public static void addNewTempMapping(String string, Resolver resolver) {
         TempMappings.put(string, resolver);
@@ -127,14 +163,7 @@ public final class PlaceholderEngine {
         );
         MAPPINGS.put("game_time", args -> String.valueOf(Minecraft.getInstance().level.getGameTime()));
         MAPPINGS.put("real_time_unix", args -> String.valueOf(java.time.Instant.now().getEpochSecond()));
-        MAPPINGS.put("real_time_long", args -> {
-            java.time.Instant instant = java.time.Instant.now();
-            java.time.ZonedDateTime currentTime = java.time.ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
-            String offsetString = ZoneId.systemDefault().getRules().getOffset(instant).getId();
-            return String.format("%4d/%d/%d %02d:%02d:%02d UTC%s", currentTime.getYear(),
-                    currentTime.getMonth().getValue(), currentTime.getDayOfMonth(), currentTime.getHour(),
-                    currentTime.getMinute(), currentTime.getSecond(), offsetString);
-        });
+        MAPPINGS.put("real_time_long", args -> Timestamp.formatLongTime(java.time.Instant.now().getEpochSecond(), " "));
         MAPPINGS.put("real_time_short", args -> {
             java.time.Instant instant = java.time.Instant.now();
             java.time.ZonedDateTime currentTime = java.time.ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
@@ -239,29 +268,58 @@ public final class PlaceholderEngine {
             return element.isJsonPrimitive() ? element.getAsString() : element.toString();
         });
         MAPPINGS.put("request", args -> {
-            String method = args.length <= 1 || args[1] == null ? "GET" : args[1].trim().toUpperCase();
-            URL url = new URL(args[0]);
-            HttpURLConnection conn = DownloadUtils.createTrustAllConnection(url);
-            conn.setRequestMethod(method.toUpperCase());
-            conn.setInstanceFollowRedirects(true);
-            conn.setConnectTimeout(3000);
-            conn.setReadTimeout(3000);
-            conn.setRequestProperty("Accept-Charset", "utf-8");
+            if (args.length == 0 || args[0] == null || args[0].trim().isEmpty()) {
+                return "";
+            }
+            String urlStr = args[0].trim();
+            String method = args.length <= 1 || args[1] == null || args[1].trim().isEmpty() ? "GET" : args[1].trim().toUpperCase();
+            boolean useCache = args.length <= 2 || args[2] == null || args[2].trim().isEmpty() || isTruthy(args[2].trim());
+            String cacheKey = method + "|" + urlStr;
 
-            LoggerUtils.info("[ChatTools] Placeholder Engine Visiting \"" + url + "\" with method: " + method);
-            InputStream inStream = conn.getResponseCode() >= 400 ? conn.getErrorStream() : conn.getInputStream();
-            String response = "";
-            if (inStream != null) {
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(inStream, StandardCharsets.UTF_8))) {
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        sb.append(line).append('\n');
+            Minecraft mc = Minecraft.getInstance();
+            boolean isRenderThread = mc != null && mc.isSameThread();
+
+            if (!isRenderThread) {
+                if (useCache) {
+                    String cached = REQUEST_CACHE.get(cacheKey);
+                    if (cached != null) {
+                        return cached;
                     }
-                    response = sb.toString().replace("\n", "");
+                }
+                try {
+                    String res = fetchHttp(urlStr, method);
+                    if (useCache) {
+                        REQUEST_CACHE.put(cacheKey, res);
+                    }
+                    return res;
+                } catch (Exception e) {
+                    LoggerUtils.error("[ChatTools] HTTP request failed for " + urlStr, e);
+                    return useCache ? REQUEST_CACHE.getOrDefault(cacheKey, "") : "";
                 }
             }
-            return response;
+
+            if (useCache) {
+                String cached = REQUEST_CACHE.get(cacheKey);
+                if (cached != null) {
+                    return cached;
+                }
+            }
+
+            if (PENDING_REQUESTS.add(cacheKey)) {
+                java.util.concurrent.CompletableFuture.runAsync(() -> {
+                    try {
+                        String res = fetchHttp(urlStr, method);
+                        if (useCache) {
+                            REQUEST_CACHE.put(cacheKey, res);
+                        }
+                    } catch (Exception e) {
+                        LoggerUtils.error("[ChatTools] Async HTTP request failed for " + urlStr, e);
+                    } finally {
+                        PENDING_REQUESTS.remove(cacheKey);
+                    }
+                });
+            }
+            return "[Loading...]";
         });
         MAPPINGS.put("encode_rfc3986", args -> {
             StringBuilder sb = new StringBuilder();
@@ -364,12 +422,7 @@ public final class PlaceholderEngine {
         // conditionals
         MAPPINGS.put("is_true", args -> {
             if (args.length == 0) return "false";
-            String condition = args[0];
-            if (!condition.isEmpty() && !condition.equals("0") && !condition.equalsIgnoreCase("false")) {
-                return "true";
-            } else {
-                return "false";
-            }
+            return isTruthy(args[0]) ? "true" : "false";
         });
         MAPPINGS.put("eq", args -> {
             if (args.length < 2) return "false";
@@ -379,11 +432,11 @@ public final class PlaceholderEngine {
         });
         MAPPINGS.put("not", args -> {
             if (args.length == 0) return "true";
-            return MAPPINGS.get("is_true").resolve(args[0]).equals("true") ? "false" : "true";
+            return isTruthy(args[0]) ? "false" : "true";
         });
         MAPPINGS.put("or", args -> {
             for (String s : args) {
-                if (MAPPINGS.get("is_true").resolve(s).equals("true")) {
+                if (isTruthy(s)) {
                     return "true";
                 }
             }
@@ -391,18 +444,18 @@ public final class PlaceholderEngine {
         });
         MAPPINGS.put("and", args -> {
             for (String s : args) {
-                if (MAPPINGS.get("is_true").resolve(s).equals("false")) {
+                if (!isTruthy(s)) {
                     return "false";
                 }
             }
             return "true";
         });
         MAPPINGS.put("if", args -> {
-            String condition = MAPPINGS.get("is_true").resolve(args[0]);
-            if (args.length == 1) return condition;
+            boolean condition = isTruthy(args[0]);
+            if (args.length == 1) return condition ? "true" : "false";
             String thenPart = args[1];
             String elsePart = args.length >= 3 ? args[2] : "";
-            if ("true".equals(condition)) {
+            if (condition) {
                 return thenPart;
             } else {
                 return elsePart;

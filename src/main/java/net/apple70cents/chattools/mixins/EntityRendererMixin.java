@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -36,13 +37,15 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
 //? if >=1.21.2 {
-    Entity entity;
-    float tickDelta;
+    @Unique
+    Entity chatTools$entity;
+    @Unique
+    float chatTools$tickDelta;
 
     @Inject(method = "extractRenderState", at = @At(value = "HEAD"))
     private void updateEntityAndTickDelta(Entity entity, EntityRenderState state, float tickDelta, CallbackInfo ci) {
-        this.entity = entity;
-        this.tickDelta = tickDelta;
+        this.chatTools$entity = entity;
+        this.chatTools$tickDelta = tickDelta;
     }
 //?}
 
@@ -50,35 +53,44 @@ public abstract class EntityRendererMixin {
     @Inject(method = "submit", at = @At(value = "HEAD"))
     private void submit(EntityRenderState entityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
         if (entityRenderState instanceof AvatarRenderState && Minecraft.getInstance().level != null) {
-            entity = Minecraft.getInstance().level.getEntity(((AvatarRenderState) entityRenderState).id);
+            chatTools$entity = Minecraft.getInstance().level.getEntity(((AvatarRenderState) entityRenderState).id);
         }
 //?} elif >=1.21.9 {
     /*@Inject(method = "submit", at = @At(value = "HEAD"))
     private void submit(EntityRenderState entityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, CallbackInfo ci) {
         MultiBufferSource multiBufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         if (entityRenderState instanceof AvatarRenderState && Minecraft.getInstance().level != null) {
-            entity = Minecraft.getInstance().level.getEntity(((AvatarRenderState) entityRenderState).id);
+            chatTools$entity = Minecraft.getInstance().level.getEntity(((AvatarRenderState) entityRenderState).id);
         }
 *///?} elif >=1.21.2 {
 /*@Inject(method = "render", at = @At(value = "HEAD"))
 private void render(EntityRenderState entityRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 *///?} else {
 /*@Inject(method = "render", at = @At(value = "HEAD"))
-private void render(Entity entity, float yaw, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
+private void render(Entity chatTools$entity, float yaw, float chatTools$tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
 *///?}
         if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
+//? if >=1.21.2 {
+            this.chatTools$entity = null;
+//?}
             return;
         }
-        if (ConfigUtils.BUBBLE_ENABLED) {
-            BubbleRenderer.render(entity, poseStack
+        try {
+            if (ConfigUtils.BUBBLE_ENABLED) {
+                BubbleRenderer.render(chatTools$entity, poseStack
 //? if <26.2 {
-                    /*, multiBufferSource
+                        /*, multiBufferSource
 *///?}
-                    , tickDelta
+                        , chatTools$tickDelta
 //? if >=1.21.9 {
-                    , submitNodeCollector
+                        , submitNodeCollector
 //?}
-            );
+                );
+            }
+        } finally {
+//? if >=1.21.2 {
+            this.chatTools$entity = null;
+//?}
         }
     }
 }

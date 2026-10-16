@@ -25,15 +25,15 @@ public final class ChatAnimator {
     public static final float SLIDE_DISTANCE = 24.0F;
 
     // Weak so deleted lines drop out without an explicit cleanup pass
-    private static final Map<Object, Long> START_TIMES = new WeakHashMap<>();
+    private static final Map<Object, Long> START_TIMES = Collections.synchronizedMap(new WeakHashMap<>());
     // Lines we've already inspected at least once — distinguishes "freshly inserted"
     // from "older, already-on-screen" lines without depending on whether the animation
     // is still in progress.
-    private static final Set<Object> SEEN = Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<Object> SEEN = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
     // Lines that should NOT push older lines upward — set when a Chat Compactor
     // "replace previous duplicate" happens, because the net effect on the chat stack
     // height is zero (1 line removed + 1 line added) so older content stays put.
-    private static final Set<Object> NO_PUSH = Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<Object> NO_PUSH = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
 
     private static int replayDepth = 0;
     private static boolean nextLineNoPush = false;

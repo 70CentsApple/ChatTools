@@ -225,22 +225,15 @@ public class ChatHistoryNavigatorScreen extends Screen {
             if (!ConfigUtils.getBoolean("general.ChatHistoryNavigator.ShowTimestampsEnabled")) {
                 return this.messageUnit.message;
             } else {
-                LocalDateTime time = LocalDateTime.ofEpochSecond(this.messageUnit.unixTimestamp, 0, ZoneId.systemDefault().getRules().getOffset(Instant.now()));
+                Instant instant = Instant.ofEpochSecond(this.messageUnit.unixTimestamp);
+                LocalDateTime time = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
                 Component timestamp = TextUtils.of(Timestamp.timeInFormat(ConfigUtils.getString("general.Timestamp.Pattern"), time));
                 return (TextUtils.SPACER.copy().append(timestamp)).append(this.messageUnit.message);
             }
         }
 
         public Component getTooltip() {
-            LocalDateTime time = LocalDateTime.ofEpochSecond(this.messageUnit.unixTimestamp, 0, ZoneId.systemDefault()
-                                                                                                      .getRules()
-                                                                                                      .getOffset(Instant.now()));
-            String offsetString = ZoneId.systemDefault().getRules().getOffset(Instant.now()).getId();
-            // yyyy/MM/dd HH:mm:ss UTC±XX:XX
-            Component longTimeDisplay = TextUtils.of(String.format("%4d/%d/%d %02d:%02d:%02d\nUTC%s", time.getYear(), time
-                    .getMonth()
-                    .getValue(), time.getDayOfMonth(), time.getHour(), time.getMinute(), time.getSecond(), offsetString));
-            return longTimeDisplay;
+            return TextUtils.of(Timestamp.formatLongTime(this.messageUnit.unixTimestamp));
         }
 
 //? if >=1.17 {
@@ -330,15 +323,17 @@ public class ChatHistoryNavigatorScreen extends Screen {
                     break;
                 case REGEX:
                     try {
-                        filter = entry -> Pattern.compile(keyword, Pattern.MULTILINE)
+                        filter = entry -> RegExUtils.getOrCompilePattern(keyword, Pattern.MULTILINE)
                                                  .matcher(TextUtils.wash(entry.getValue().message.getString())).find();
                     } catch (PatternSyntaxException e) {
                         return;
                     }
                     break;
             }
-            Stream<Map.Entry<String, TextUtils.MessageUnit>> stream = TextUtils.messageMap.entrySet().stream();
-            hashcodeResultList = stream.filter(filter).map(Map.Entry::getKey).collect(Collectors.toList());
+            synchronized (TextUtils.messageMap) {
+                Stream<Map.Entry<String, TextUtils.MessageUnit>> stream = TextUtils.messageMap.entrySet().stream();
+                hashcodeResultList = stream.filter(filter).map(Map.Entry::getKey).collect(Collectors.toList());
+            }
         }
 
         protected void refreshUnitEntries() {

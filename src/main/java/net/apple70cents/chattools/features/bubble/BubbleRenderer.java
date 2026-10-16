@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -27,7 +26,11 @@ import net.minecraft.client.renderer.feature.TextFeatureRenderer;
 /*import net.minecraft.client.renderer.MultiBufferSource;
 *///?}
 
-//? if >=1.21.11 {
+//? if >=26.3 {
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.phys.Vec3;
+//?} elif >=1.21.11 {
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.phys.Vec3;
@@ -56,8 +59,14 @@ import org.joml.Matrix4f;
 public class BubbleRenderer {
 
     protected static class BubbleUnit {
-        Component text;
-        long startTime;
+        final Component text;
+        final long startTime;
+        Component cachedRenderComponent;
+        List<FormattedCharSequence> cachedLines;
+        int cachedMaxWidth = -1;
+        int cachedLinesAmount = 0;
+        int lastMaxLineWidth = -1;
+        boolean lastNickHiderEnabled = false;
 
         BubbleUnit(Component text, long startTime) {
             this.text = text;
@@ -78,8 +87,30 @@ public class BubbleRenderer {
             return System.currentTimeMillis() - startTime;
         }
 
+        public boolean isExpired(long maxLifetimeMs) {
+            return getLifetime() >= maxLifetimeMs;
+        }
+
         public String toString() {
             return "BubbleUnit{" + "text=" + text + ", startTime=" + startTime + '}';
+        }
+
+        private void ensureLayout(Font font) {
+            boolean nickHiderEnabled = ConfigUtils.NICK_HIDER_ENABLED;
+            int maxLineWidth = ConfigUtils.getInt("bubble.MaxLineWidth");
+            if (cachedLines == null || maxLineWidth != lastMaxLineWidth
+                    || nickHiderEnabled != lastNickHiderEnabled) {
+                lastMaxLineWidth = maxLineWidth;
+                lastNickHiderEnabled = nickHiderEnabled;
+                cachedRenderComponent = nickHiderEnabled ? NickHider.work(text) : text;
+                cachedLines = font.split(cachedRenderComponent, maxLineWidth);
+                cachedLinesAmount = cachedLines.size();
+                int width = 0;
+                for (FormattedCharSequence line : cachedLines) {
+                    width = Math.max(width, font.width(line));
+                }
+                cachedMaxWidth = width;
+            }
         }
 
         public void render(Entity entity, PoseStack poseStack
@@ -96,7 +127,10 @@ public class BubbleRenderer {
             if (mc.player == null) {
                 return;
             }
-            Component renderComponent = ConfigUtils.NICK_HIDER_ENABLED ? NickHider.work(text) : text;
+            ensureLayout(font);
+            List<FormattedCharSequence> lines = cachedLines;
+            int linesAmount = cachedLinesAmount;
+            int maxWidth = cachedMaxWidth;
             int yOffset = ConfigUtils.getInt("bubble.YOffset");
 
             poseStack.pushPose();
@@ -132,16 +166,9 @@ public class BubbleRenderer {
 *///?}
                     , -0.025F, 0.025F);
             Matrix4f pose = poseStack.last().pose();
-            int maxLineWidth = ConfigUtils.getInt("bubble.MaxLineWidth");
-            List<FormattedCharSequence> lines = font.split(renderComponent, maxLineWidth);
-            int linesAmount = lines.size();
 
 //? if >=1.21 {
             // draw background
-            int maxWidth = 0;
-            for (FormattedCharSequence line : lines) {
-                maxWidth = Math.max(maxWidth, font.width(line));
-            }
             float x1 = -maxWidth / 2.0F - 3;
             float y1 = -linesAmount * 9 - 3;
             float x2 = maxWidth / 2.0F + 3;
@@ -208,7 +235,13 @@ public class BubbleRenderer {
         }
     }
 
-    private static Map<String, BubbleUnit> bubbleMap = new HashMap<>();
+    private static final Map<java.util.UUID, BubbleUnit> bubbleByUuid = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final Map<String, BubbleUnit> pendingByName = new java.util.concurrent.ConcurrentHashMap<>();
+
+    public static void clear() {
+        bubbleByUuid.clear();
+        pendingByName.clear();
+    }
 
     public static void render(Entity entity, PoseStack poseStack
 //? if <26.2 {
@@ -220,74 +253,72 @@ public class BubbleRenderer {
 //?}
     ) {
         Minecraft mc = Minecraft.getInstance();
-        if (bubbleMap.isEmpty() || mc.level == null || entity == null) {
+        if (entity == null || mc.level == null || mc.player == null) {
+            return;
+        }
+        if (bubbleByUuid.isEmpty() && pendingByName.isEmpty()) {
             return;
         }
 
-        Component renderedEntityNameComponent = entity.hasCustomName() ? entity.getCustomName() : entity.getDisplayName();
-        if (renderedEntityNameComponent == null) {
-            return;
-        }
-        String washedEntityName = TextUtils.wash(renderedEntityNameComponent.getString());
+        java.util.UUID entityUuid = entity.getUUID();
         long maxBubbleLifetimeMs = ConfigUtils.getInt("bubble.Lifetime") * 1000L;
+        BubbleUnit unit = bubbleByUuid.get(entityUuid);
 
-        // Iterate through the players in the current world to find which player's
-        // chat bubble corresponds to this rendered entity.
-        for (AbstractClientPlayer player : mc.level.players()) {
-            String playerDisplayName = player.getDisplayName().getString();
-            String playerProfileName = player.getGameProfile()
+        // if UUID cache missed (have pending names to deal with)
+        if (unit == null && !pendingByName.isEmpty()) {
+            Component renderedEntityNameComponent = entity.hasCustomName() ? entity.getCustomName() : entity.getDisplayName();
+            if (renderedEntityNameComponent != null) {
+                String washedEntityName = TextUtils.wash(renderedEntityNameComponent.getString());
+                unit = pendingByName.get(washedEntityName);
+                if (unit == null && entity instanceof AbstractClientPlayer) {
+                    String playerProfileName = ((AbstractClientPlayer) entity).getGameProfile()
 //? if >=1.21.10 {
-                    .name();
+                            .name();
 //?} else {
-                    /*.getName();
+                            /*.getName();
 *///?}
-            if (playerDisplayName == null) {
-                continue;
+                    if (playerProfileName != null) {
+                        unit = pendingByName.get(playerProfileName);
+                    }
+                }
+                if (unit != null) {
+                    if (unit.isExpired(maxBubbleLifetimeMs)) {
+                        pendingByName.values().remove(unit);
+                        unit = null;
+                    } else {
+                        bubbleByUuid.put(entityUuid, unit);
+                    }
+                }
             }
+        }
 
-            // The key used to fetch the bubble from the bubbleMap.
-            String matchedBubbleKey = null;
+        if (unit == null) {
+            return;
+        }
 
-            // Try to match by the player's display name.
-            if (bubbleMap.containsKey(playerDisplayName) && washedEntityName.equals(playerDisplayName)) {
-                matchedBubbleKey = playerDisplayName;
-            }
-            // Try to match by the player's profile name or UUID
-            if (bubbleMap.containsKey(playerProfileName) && (washedEntityName.equals(playerProfileName)
-                    || entity.getUUID().equals(player.getUUID()))) {
-                matchedBubbleKey = playerProfileName;
-            }
+        // Check lifecycle
+        if (unit.isExpired(maxBubbleLifetimeMs)) {
+            bubbleByUuid.remove(entityUuid);
+            pendingByName.values().remove(unit);
+            return;
+        }
 
-            // If there is no matching bubble for this player, skip to the next player.
-            if (matchedBubbleKey == null) {
-                continue;
-            }
+        if (ConfigUtils.BUBBLE_HIDE_IF_INVISIBLE_ENABLED && entity.isInvisibleTo(mc.player)) {
+            return;
+        }
 
-            if (ConfigUtils.BUBBLE_HIDE_IF_INVISIBLE_ENABLED &&
-                    mc.player != null && entity.isInvisibleTo(mc.player)) {
-                continue;
-            }
-
-            // Check if the bubble's lifetime is over.
-            if (bubbleMap.get(matchedBubbleKey).getLifetime() >= maxBubbleLifetimeMs) {
-                bubbleMap.remove(matchedBubbleKey);
-                continue;
-            }
-
-            // Now we can confirm that this entity corresponds to this player and the bubble is valid.
-            // Check the rendering distance.
-            double distanceToPlayerSqr = mc.getEntityRenderDispatcher().distanceToSqr(player);
-            if (distanceToPlayerSqr <= 4096.0) { // Distance is within 64 blocks (64^2 = 4096)
-                bubbleMap.get(matchedBubbleKey).render(entity, poseStack
+        // Check the rendering distance
+        double distanceSqr = mc.getEntityRenderDispatcher().distanceToSqr(entity);
+        if (distanceSqr <= 4096.0) {
+            unit.render(entity, poseStack
 //? if <26.2 {
-                        /*, multiBufferSource
+                    /*, multiBufferSource
 *///?}
-                        , tickDelta
+                    , tickDelta
 //? if >=1.21.9 {
-                        , submitNodeCollector
+                    , submitNodeCollector
 //?}
-                );
-            }
+            );
         }
     }
 
@@ -323,7 +354,7 @@ public class BubbleRenderer {
 
                 if (name != null) {
                     String messageContent = matcher.group("message");
-                    bubbleMap.put(name, new BubbleUnit(messageContent, System.currentTimeMillis()));
+                    pendingByName.put(name, new BubbleUnit(messageContent, System.currentTimeMillis()));
                     found = true;
                 }
             }
@@ -332,7 +363,7 @@ public class BubbleRenderer {
                 if (sender == null) {
                     return;
                 }
-                bubbleMap.put(sender, new BubbleUnit(text, System.currentTimeMillis()));
+                pendingByName.put(sender, new BubbleUnit(text, System.currentTimeMillis()));
             }
         }
     }

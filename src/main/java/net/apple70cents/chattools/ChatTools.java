@@ -6,16 +6,20 @@ import net.apple70cents.chattools.features.chatkeybindings.Macro;
 import net.apple70cents.chattools.features.chatkeybindings.Repeat;
 import net.apple70cents.chattools.features.chatkeybindings.ReviewLastMessageWithUpArrowOnly;
 import net.apple70cents.chattools.utils.*;
+import net.apple70cents.chattools.features.bubble.BubbleRenderer;
+import net.apple70cents.chattools.features.customjoinmessage.CustomJoinMessageSender;
 
 import net.minecraft.client.Minecraft;
 
 //? if FABRIC {
 /*import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 *///?} elif NEOFORGE {
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 //?}
 
 /**
@@ -92,12 +96,21 @@ public void onInitialize() {
         // register commands
         CommandRegistryUtils.register();
 
+        // network events (join & disconnect)
+//? if FABRIC {
+/*        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> onJoin());
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> onDisconnect());
+*///?} elif NEOFORGE {
+        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingIn event) -> onJoin());
+        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> onDisconnect());
+//?}
+
 //? if NEOFORGE {
         ModMenuIntegration.registerConfigScreen();
 //?}
 
 //? if !LITE_VERSION {
-        Runnable runnable = () -> {
+        Runnable checkAddonsRunnable = () -> {
             if (DownloadUtils.shouldCheckIfFullyReady()) {
                 if (!DownloadUtils.checkIfFullyReady()) {
                     DownloadUtils.startDownload();
@@ -108,9 +121,21 @@ public void onInitialize() {
                 LoggerUtils.info("[ChatTools] No need to check addons readiness.");
             }
         };
-        // Start the file download in a new thread
-        Thread downloadThread = new Thread(runnable, "ChatTools-Download-Thread");
-        downloadThread.start();
+        TaskScheduler.schedule(checkAddonsRunnable, 0);
 //?}
+    }
+
+    public static void onJoin() {
+        if (!ConfigUtils.CHAT_TOOLS_ENABLED) {
+            return;
+        }
+        if (ConfigUtils.getBoolean("customJoinMessage.Enabled")) {
+            CustomJoinMessageSender.work(ContextUtils.getSessionIdentifier());
+        }
+    }
+
+    public static void onDisconnect() {
+        TaskScheduler.cancelAll();
+        BubbleRenderer.clear();
     }
 }

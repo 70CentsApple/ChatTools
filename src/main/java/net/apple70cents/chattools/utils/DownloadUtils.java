@@ -97,7 +97,7 @@ public class DownloadUtils {
     }
 
     public static void startDownloadWithCallback(QuadConsumer<String, Integer, Integer, Integer> processSupplier) {
-        Runnable runnable = () -> {
+        Runnable downloadRunnable = () -> {
             switch (OS) {
                 case "Windows 7":
                 case "Windows 8.1":
@@ -111,9 +111,7 @@ public class DownloadUtils {
                     LoggerUtils.warn(String.format("[ChatTools] Addon toast is not available on %s", OS));
             }
         };
-        // Start the file download in a new thread
-        Thread downloadThread = new Thread(runnable, "ChatTools-Download-Thread");
-        downloadThread.start();
+        TaskScheduler.schedule(downloadRunnable, 0);
     }
 
     public static void downloadAndCheckFiles(List<String> filesToDownload, Path downloadDirectory, QuadConsumer<String, Integer, Integer, Integer> processSupplier) {

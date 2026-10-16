@@ -12,11 +12,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Toast {
-    private static final ExecutorService TOAST_EXECUTOR_THREAD_POOL = Executors.newCachedThreadPool();
     private static String text;
     private static final CircuitBreakerExecutor toastExecutor = CircuitBreakerExecutor.of(() -> {
         final String TITLE = TextUtils.trans("texts.toast.title").getString();
@@ -62,7 +59,7 @@ public class Toast {
             return;
         }
         LoggerUtils.info("[ChatTools] Trying to toast with addon.");
-        TOAST_EXECUTOR_THREAD_POOL.submit(() -> {
+        Runnable toastRunnable = () -> {
             Map<String, String> map = DownloadUtils.getFileNamesMap();
             if (map == null || map.isEmpty()) {
                 return;
@@ -84,7 +81,8 @@ public class Toast {
                 MessageUtils.sendToActionbar(TextUtils.trans("texts.toast.failure"));
                 LoggerUtils.error("[ChatTools] Failed to send toast notification", e);
             }
-        });
+        };
+        TaskScheduler.schedule(toastRunnable, 0);
     }
 //?}
 
@@ -110,20 +108,46 @@ public class Toast {
         });
     }
 
+    /**
+     * Escapes text safely for embedding inside PowerShell single-quoted string expressions.
+     * In PowerShell single-quoted literals, single quotes are escaped via doubling (' -> '').
+     * Variables, backticks, and other special characters are not evaluated.
+     */
+    private static String escapeForPowerShellLiteral(String str) {
+        if (str == null) {
+            return "";
+        }
+        // Remove null characters to prevent string truncation
+        str = str.replace("\0", "");
+        // In PowerShell single-quoted string literals, single quotes are escaped by doubling them
+        str = str.replace("'", "''");
+        // Safe newline handling via PowerShell [Environment]::NewLine concatenation
+        str = str.replace("\r", "").replace("\n", "' + [Environment]::NewLine + '");
+        return str;
+    }
+
 //? if !LITE_VERSION {
     public static void toastWithPowershell(String caption, String text) {
-        TOAST_EXECUTOR_THREAD_POOL.submit(() -> {
+        TaskScheduler.schedule(() -> {
             try {
                 LoggerUtils.info("[ChatTools] Toast Notified with Powershell.");
-                final String COMMAND_TEMPLATE = "powershell.exe -ExecutionPolicy Bypass -Command \"" +
+                String safeCaption = escapeForPowerShellLiteral(caption);
+                String safeText = escapeForPowerShellLiteral(text);
+
+                String script =
                         "[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null;" +
                         "$template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02);" +
-                        "$xml = New-Object Windows.Data.Xml.Dom.XmlDocument;" + "$xml.LoadXml($template.GetXml());" +
-                        "$texts = $xml.GetElementsByTagName('text');" + "$texts.Item(0).AppendChild($xml.CreateTextNode('%s')) > $null;" +
-                        "$texts.Item(1).AppendChild($xml.CreateTextNode('%s')) > $null;" + "$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);" +
-                        "$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('%s');" + "$notifier.Show($toast);\"";
-                String command = String.format(COMMAND_TEMPLATE, caption, text.replace("\n", "'+\\\"`r`n\\\"+'"), "Chat Tools Toast");
-                ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
+                        "$xml = New-Object Windows.Data.Xml.Dom.XmlDocument;" +
+                        "$xml.LoadXml($template.GetXml());" +
+                        "$texts = $xml.GetElementsByTagName('text');" +
+                        "$texts.Item(0).AppendChild($xml.CreateTextNode('" + safeCaption + "')) > $null;" +
+                        "$texts.Item(1).AppendChild($xml.CreateTextNode('" + safeText + "')) > $null;" +
+                        "$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);" +
+                        "$notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Chat Tools Toast');" +
+                        "$notifier.Show($toast);";
+
+                String encodedScript = java.util.Base64.getEncoder().encodeToString(script.getBytes(StandardCharsets.UTF_16LE));
+                ProcessBuilder builder = new ProcessBuilder("powershell.exe", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-EncodedCommand", encodedScript);
                 builder.redirectErrorStream(true);
                 Process process = builder.start();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
@@ -135,16 +159,16 @@ public class Toast {
             } catch (Exception e) {
                 LoggerUtils.error("[ChatTools] Failed to send PowerShell toast notification", e);
             }
-        });
+        }, 0);
     }
 //?}
 
     public static void toastWithTwoSlices(String caption, String text) {
         LoggerUtils.info("[ChatTools] Toast Notified with Two-Slices.");
         System.setProperty("java.awt.headless", "false");
-        TOAST_EXECUTOR_THREAD_POOL.submit(() -> {
+        TaskScheduler.schedule(() -> {
             com.sshtools.twoslices.Toast.toast(ToastType.INFO, caption, text);
-        });
+        }, 0);
     }
 
     private static String truncateWithEllipsis(String input, int maxLength) {

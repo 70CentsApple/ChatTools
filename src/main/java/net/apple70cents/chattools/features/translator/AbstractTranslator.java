@@ -1,6 +1,7 @@
 package net.apple70cents.chattools.features.translator;
 
 import net.apple70cents.chattools.utils.LoggerUtils;
+import net.apple70cents.chattools.utils.TaskScheduler;
 import net.apple70cents.chattools.utils.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
@@ -30,7 +31,7 @@ public abstract class AbstractTranslator {
     public void work() {
         String text = editBox.getValue();
         editBox.setValue(TextUtils.trans("texts.translator.await").getString());
-        new Thread(() -> {
+        Runnable translatorRunnable = () -> {
             Minecraft mc = Minecraft.getInstance();
             try {
                 LoggerUtils.info("[ChatTools] Start translating: " + text);
@@ -41,7 +42,8 @@ public abstract class AbstractTranslator {
                 LoggerUtils.error("[ChatTools] Error occurred when translating: " + text, e);
                 mc.execute(() -> editBox.setValue(TextUtils.trans("texts.translator.error", e).getString()));
             }
-        }, "Chat-Tools-Translation").start();
+        }        ;
+        TaskScheduler.schedule(translatorRunnable, 0);
     }
 
     protected abstract String translate(String text) throws Exception;

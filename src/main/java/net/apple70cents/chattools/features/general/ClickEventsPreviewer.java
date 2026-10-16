@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Style;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +90,6 @@ public class ClickEventsPreviewer {
         return style;
     }
 
-    @Unique
     private static Component getComponentToAppend(Style style) {
         boolean hasInsertion = style.getInsertion() != null && !style.getInsertion().isBlank();
         boolean hasClickEvent = style.getClickEvent() != null;
@@ -194,7 +192,6 @@ public class ClickEventsPreviewer {
         return TextUtils.textArray2text(texts);
     }
 
-    @Unique
     private static Boolean isModified(Style style) {
         HoverEvent hoverEvent = style.getHoverEvent();
         if (hoverEvent == null) {

@@ -10,7 +10,6 @@
     "ChatComponentMixinForAnimation",
     "ChatListenerMixin",
     "ChatScreenMixin",
-    "ClientHandshakePacketListenerImplMixin",
     "ClientPacketListenerMixin",
     "EntityRendererMixin",
     "FontMixin",

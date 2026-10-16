@@ -54,16 +54,7 @@ public class Responder {
         long timeOnRequest = java.time.Instant.now().getEpochSecond();
         JsonElement jsonElement = TextUtils.component2JsonElement(messageReceived.copy());
         String jsonString = jsonElement != null ? jsonElement.toString() : "ERROR";
-        new Thread(() -> {
-            // delay
-            try {
-                Thread.sleep(delayInMilliseconds);
-            } catch (InterruptedException e) {
-                LoggerUtils.error("[ChatTools] Responder thread interrupted", e);
-                Thread.currentThread().interrupt();
-                return;
-            }
-
+        TaskScheduler.schedule(() -> {
             // Resolve placeholders and send on the client thread so commands do not share temporary mappings.
             mc.execute(() -> {
                 String message;
@@ -83,7 +74,7 @@ public class Responder {
                 message = message.replace("\\{", "{").replace("\\}", "}");
                 MessageUtils.sendToPublicChat(message, forceDisableFormatter);
             });
-        }).start();
+        }, delayInMilliseconds);
     }
 
     /**

@@ -1,11 +1,11 @@
 package net.apple70cents.chattools.utils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 public class RegExUtils {
-    private static Map<String, Pattern> patternCache = new HashMap<>();
+    private static final Map<String, Pattern> patternCache = new ConcurrentHashMap<>();
 
     public static Pattern getOrCompilePattern(String regex) {
         return getOrCompilePattern(regex, 0);
