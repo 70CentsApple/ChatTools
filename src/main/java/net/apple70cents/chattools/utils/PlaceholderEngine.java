@@ -59,8 +59,12 @@ public final class PlaceholderEngine {
     private static final Set<String> PENDING_REQUESTS = ConcurrentHashMap.newKeySet();
 
     private static String fetchHttp(String urlStr, String method) throws Exception {
+        return fetchHttp(urlStr, method, false);
+    }
+
+    private static String fetchHttp(String urlStr, String method, boolean allowInsecure) throws Exception {
         URL url = new URL(urlStr);
-        HttpURLConnection conn = DownloadUtils.createTrustAllConnection(url);
+        HttpURLConnection conn = DownloadUtils.createUserConnection(url, allowInsecure);
         conn.setRequestMethod(method.toUpperCase());
         conn.setInstanceFollowRedirects(true);
         conn.setConnectTimeout(3000);
@@ -272,12 +276,13 @@ public final class PlaceholderEngine {
                 return "";
             }
             String urlStr = args[0].trim();
-            String method = args.length <= 1 || args[1] == null || args[1].trim().isEmpty() ? "GET" : args[1].trim().toUpperCase();
-            boolean useCache = args.length <= 2 || args[2] == null || args[2].trim().isEmpty() || isTruthy(args[2].trim());
-            String cacheKey = method + "|" + urlStr;
+            String method = args.length > 1 && args[1] != null && !args[1].trim().isEmpty() ? args[1].trim().toUpperCase() : "GET";
+            boolean useCache = args.length > 2 && args[2] != null ? isTruthy(args[2].trim()) : true;
+            boolean allowInsecure = args.length > 3 && args[3] != null ? isTruthy(args[3].trim()) : false;
+            String cacheKey = method + "|" + (allowInsecure ? "insecure|" : "") + urlStr;
 
             Minecraft mc = Minecraft.getInstance();
-            boolean isRenderThread = mc != null && mc.isSameThread();
+            boolean isRenderThread = mc.isSameThread();
 
             if (!isRenderThread) {
                 if (useCache) {
@@ -287,7 +292,7 @@ public final class PlaceholderEngine {
                     }
                 }
                 try {
-                    String res = fetchHttp(urlStr, method);
+                    String res = fetchHttp(urlStr, method, allowInsecure);
                     if (useCache) {
                         REQUEST_CACHE.put(cacheKey, res);
                     }
@@ -308,7 +313,7 @@ public final class PlaceholderEngine {
             if (PENDING_REQUESTS.add(cacheKey)) {
                 java.util.concurrent.CompletableFuture.runAsync(() -> {
                     try {
-                        String res = fetchHttp(urlStr, method);
+                        String res = fetchHttp(urlStr, method, allowInsecure);
                         if (useCache) {
                             REQUEST_CACHE.put(cacheKey, res);
                         }
