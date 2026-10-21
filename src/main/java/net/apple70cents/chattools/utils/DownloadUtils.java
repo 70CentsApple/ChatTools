@@ -32,7 +32,7 @@ import javax.net.ssl.X509TrustManager;
  */
 public class DownloadUtils {
 //? if !LITE_VERSION {
-    private static final String DOWNLOAD_SITE = "https://70centsapple.top/download/chat_tools/download.php?version=250805&file=";
+    private static final String DOWNLOAD_SITE = "https://70centsapple.top/download/chat_tools/download.php?version=261022&file=";
     public static final Path STORAGE_DIR = Path.of(
 //? if FABRIC {
             /*net.fabricmc.loader.api.FabricLoader.getInstance().getGameDir()
