@@ -110,6 +110,8 @@ public final class PlaceholderEngine {
         MAPPINGS.put("PI", args -> String.valueOf(Math.PI));
         MAPPINGS.put("TAU", args -> String.valueOf(Math.PI * 2));
         MAPPINGS.put("E", args -> String.valueOf(Math.E));
+        MAPPINGS.put("true", args -> "1");
+        MAPPINGS.put("false", args -> "0");
 
         // variables
         MAPPINGS.put("pitch", args -> String.valueOf(Minecraft.getInstance().player.
